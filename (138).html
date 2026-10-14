@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Капитанский маршрут — Квест Final Review</title>
+<meta property="og:title" content="Капитанский маршрут — Квест Final Review">
+<meta property="og:description" content="Финальный квест по Spotlight Starter: питомцы, действия, части тела, цвета, числа. Пройди все острова и собери словарный запас.">
+<meta property="og:image" content="https://missanytka1994-ops.github.io/spotlightstarter/lesson-final-quest-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://missanytka1994-ops.github.io/spotlightstarter/lesson-final-quest.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Spotlight Starter — Домашние уроки">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(180deg, #0b1d3a 0%, #14375e 50%, #1a5276 100%);
+  min-height: 100vh;
+  padding: 24px 14px 90px;
+  color: #fff;
+}
+h1 {
+  text-align: center;
+  font-size: 1.7rem;
+  color: #f5d67b;
+  margin-bottom: 20px;
+  text-shadow: 0 2px 10px rgba(0,0,0,.5);
+}
+.intro-screen {
+  max-width: 620px;
+  margin: 0 auto 36px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 24px;
+  padding: 46px 32px 50px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.35);
+  text-align: center;
+}
+.intro-screen h2 {
+  font-size: 1.4rem;
+  color: #f5d67b;
+  margin-bottom: 24px;
+}
+.intro-screen p {
+  color: #c8e6f8;
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 16px;
+  text-align: left;
+  padding-left: 12px;
+}
+.intro-screen .start-btn {
+  margin-top: 28px;
+  padding: 14px 36px;
+  background: #f5d67b;
+  color: #0b1d3a;
+  border: none;
+  border-radius: 16px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow: 0 4px 14px rgba(245,214,123,.4);
+}
+.intro-screen .start-btn:hover {
+  background: #f7dc6f;
+  transform: translateY(-2px);
+}
+.progress-wrap {
+  max-width: 640px;
+  margin: 0 auto 44px;
+  position: relative;
+  display: none;
+}
+.progress-wrap.visible {
+  display: block;
+}
+.progress-track {
+  position: relative;
+  height: 12px;
+  background: #1a3a5c;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,.4);
+}
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #1a6fa8, #2e86c1, #5dade2, #aed6f1);
+  border-radius: 6px;
+  transition: width .5s ease;
+  box-shadow: 0 0 14px rgba(93,173,226,.5);
+}
+.progress-boat {
+  position: absolute;
+  top: -24px;
+  left: 0%;
+  font-size: 1.9rem;
+  transition: left .5s ease;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,.4));
+  transform: translateX(-50%);
+}
+.progress-pct {
+  text-align: center;
+  color: #f5d67b;
+  font-size: .88rem;
+  margin-top: 10px;
+  font-weight: 700;
+}
+.stage {
+  max-width: 660px;
+  margin: 0 auto 34px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 24px;
+  padding: 46px 32px 54px;
+  display: none;
+  box-shadow: 0 10px 40px rgba(0,0,0,.35);
+  animation: fadeIn .4s ease;
+}
+.stage.active {
+  display: block;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.step-tag {
+  display: inline-block;
+  background: #f5d67b;
+  color: #0b1d3a;
+  font-size: .76rem;
+  font-weight: 700;
+  padding: 5px 16px;
+  border-radius: 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 3px 10px rgba(245,214,123,.35);
+}
+.mech-tag {
+  display: inline-block;
+  background: rgba(93,173,226,.25);
+  color: #aed6f1;
+  font-size: .73rem;
+  padding: 5px 13px;
+  border-radius: 12px;
+  margin-left: 10px;
+  margin-bottom: 14px;
+  border: 1px solid rgba(93,173,226,.35);
+}
+.hero-emoji {
+  font-size: 3.8rem;
+  text-align: center;
+  margin-bottom: 22px;
+  filter: drop-shadow(0 5px 10px rgba(0,0,0,.3));
+}
+.stage h2 {
+  font-size: 1.35rem;
+  color: #f5d67b;
+  margin-bottom: 18px;
+  text-align: center;
+}
+.instruction {
+  text-align: center;
+  color: #c8e6f8;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  margin-bottom: 34px;
+  padding: 0 12px;
+}
+.speak-wrap {
+  text-align: center;
+  margin-bottom: 26px;
+}
+.speak-btn {
+  background: radial-gradient(circle at 35% 35%, #fdf6e3, #e8c56a);
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.4rem;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(245,214,123,.5);
+  transition: transform .15s;
+}
+.speak-btn:hover {
+  transform: scale(1.12);
+}
+.speak-btn:active {
+  transform: scale(.92);
+}
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  margin-bottom: 34px;
+}
+.options button {
+  background: rgba(255,255,255,.12);
+  border: 2px solid #5dade2;
+  color: #fff;
+  padding: 14px 26px;
+  border-radius: 16px;
+  font-size: 1.02rem;
+  cursor: pointer;
+  transition: all .22s;
+  box-shadow: 0 4px 10px rgba(0,0,0,.2);
+}
+.options button:hover {
+  background: #5dade2;
+  color: #0b1d3a;
+  transform: translateY(-3px);
+}
+.options button.correct {
+  background: #27ae60;
+  border-color: #27ae60;
+  color: #fff;
+  transform: scale(1.05);
+}
+.options button.wrong {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  color: #fff;
+  animation: shake .4s ease;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+.feedback {
+  display: none;
+  text-align: center;
+  padding: 22px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  font-size: 1.02rem;
+  font-weight: 600;
+}
+.feedback.good {
+  display: block;
+  background: rgba(39,174,96,.22);
+  border: 2px solid #27ae60;
+  color: #a9dfbf;
+  animation: fadeIn .3s ease;
+}
+.feedback.bad {
+  display: block;
+  background: rgba(231,76,60,.18);
+  border: 2px solid #e74c3c;
+  color: #f5b7b1;
+  animation: fadeIn .3s ease;
+}
+.nav-btns {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 34px;
+  flex-wrap: wrap;
+}
+.nav-btns button {
+  padding: 13px 30px;
+  border-radius: 14px;
+  border: none;
+  font-size: .97rem;
+  cursor: pointer;
+  font-weight: 700;
+  transition: all .2s;
+}
+.btn-back {
+  background: rgba(255,255,255,.18);
+  color: #fff;
+}
+.btn-back:hover {
+  background: rgba(255,255,255,.3);
+}
+.btn-retry {
+  background: #f39c12;
+  color: #0b1d3a;
+}
+.btn-retry:hover {
+  background: #f5b041;
+}
+.btn-next {
+  background: #f5d67b;
+  color: #0b1d3a;
+}
+.btn-next:hover {
+  background: #f7dc6f;
+}
+.stars {
+  text-align: center;
+  font-size: 1.7rem;
+  margin-top: 20px;
+}
+.final-screen {
+  max-width: 660px;
+  margin: 0 auto;
+  text-align: center;
+  display: none;
+}
+.final-screen.active {
+  display: block;
+  animation: fadeIn .5s ease;
+}
+.final-screen h2 {
+  color: #f5d67b;
+  font-size: 1.7rem;
+  margin-bottom: 26px;
+}
+.final-intro {
+  color: #a8d4f0;
+  margin-bottom: 36px;
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+.vocab-list {
+  text-align: left;
+  max-width: 540px;
+  margin: 0 auto 44px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.15);
+  border-radius: 18px;
+  padding: 28px;
+}
+.vocab-list div {
+  padding: 6px 4px;
+  border-bottom: 1px dotted rgba(255,255,255,.28);
+  font-size: .96rem;
+  color: #d4e8f7;
+  line-height: 1.6;
+}
+.vocab-list div:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+.final-screen .nav-btns {
+  margin-top: 50px;
+}
+.match-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  max-width: 480px;
+  margin: 0 auto 34px;
+}
+.match-grid button {
+  background: rgba(255,255,255,.12);
+  border: 2px solid #5dade2;
+  color: #fff;
+  padding: 13px;
+  border-radius: 13px;
+  cursor: pointer;
+  font-size: .97rem;
+  transition: all .2s;
+}
+.match-grid button:hover {
+  background: rgba(93,173,226,.25);
+}
+.match-grid button.selected {
+  border-color: #f5d67b;
+  background: rgba(245,214,123,.22);
+}
+.match-grid button.matched {
+  border-color: #27ae60;
+  background: rgba(39,174,96,.22);
+  cursor: default;
+  opacity: .7;
+}
+.fill-input {
+  background: rgba(255,255,255,.12);
+  border: 2px solid #5dade2;
+  border-radius: 13px;
+  padding: 13px 20px;
+  color: #fff;
+  font-size: 1.08rem;
+  width: 230px;
+  text-align: center;
+  margin: 12px;
+  transition: all .25s;
+}
+.fill-input:focus {
+  outline: none;
+  border-color: #f5d67b;
+  background: rgba(255,255,255,.18);
+}
+.fill-input.correct {
+  border-color: #27ae60;
+  background: rgba(39,174,96,.15);
+}
+.fill-input.wrong {
+  border-color: #e74c3c;
+  background: rgba(231,76,60,.15);
+  animation: shake .4s ease;
+}
+.order-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 26px;
+}
+.order-items button {
+  background: rgba(255,255,255,.12);
+  border: 2px solid #5dade2;
+  color: #fff;
+  padding: 13px 22px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: 1.02rem;
+  transition: all .2s;
+}
+.order-items button:hover {
+  background: rgba(93,173,226,.25);
+}
+.order-items button.placed {
+  opacity: .35;
+  cursor: default;
+}
+.order-slots {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+.order-slots div {
+  width: 70px;
+  height: 50px;
+  border: 2px dashed #5dade2;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .97rem;
+  color: #f5d67b;
+  background: rgba(93,173,226,.08);
+}
+.order-slots div.filled {
+  border-style: solid;
+  border-color: #f5d67b;
+  background: rgba(245,214,123,.12);
+}
+.cargo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 26px;
+}
+.cargo-grid button {
+  background: rgba(255,255,255,.12);
+  border: 2px solid #5dade2;
+  color: #fff;
+  padding: 13px 20px;
+  border-radius: 14px;
+  cursor: pointer;
+  font-size: .97rem;
+  transition: all .2s;
+}
+.cargo-grid button:hover {
+  background: rgba(93,173,226,.25);
+}
+.cargo-grid button.loaded {
+  border-color: #27ae60;
+  background: rgba(39,174,96,.22);
+}
+.cargo-zone {
+  border: 2px dashed #f5d67b;
+  border-radius: 18px;
+  min-height: 74px;
+  padding: 18px;
+  margin-bottom: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(245,214,123,.04);
+}
+.cargo-zone span {
+  background: rgba(245,214,123,.22);
+  padding: 7px 16px;
+  border-radius: 10px;
+  font-size: .92rem;
+  color: #f5d67b;
+  border: 1px solid rgba(245,214,123,.4);
+}
+.cargo-zone .empty-hint {
+  color: #5a8ab5;
+  font-size: .9rem;
+}
+.sail-options {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  margin-bottom: 34px;
+}
+.sail-options button {
+  background: rgba(255,255,255,.12);
+  border: 2px solid #5dade2;
+  color: #fff;
+  padding: 18px 26px;
+  border-radius: 16px;
+  cursor: pointer;
+  font-size: 1.6rem;
+  transition: all .2s;
+}
+.sail-options button:hover {
+  background: rgba(93,173,226,.25);
+  transform: translateY(-3px);
+}
+.sail-options button.correct {
+  border-color: #27ae60;
+  background: rgba(39,174,96,.25);
+}
+.sail-options button.wrong {
+  border-color: #e74c3c;
+  background: rgba(231,76,60,.18);
+  animation: shake .4s ease;
+}
+.visual-row {
+  text-align: center;
+  font-size: 2.4rem;
+  margin-bottom: 26px;
+  letter-spacing: 6px;
+}
+.sentence-display {
+  text-align: center;
+  font-size: 1.15rem;
+  color: #f5d67b;
+  margin-bottom: 22px;
+  font-weight: 600;
+}
+footer {
+  text-align: center;
+  margin-top: 60px;
+  color: #5a8ab5;
+  font-size: .87rem;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,.1);
+}
+@media (max-width: 600px) {
+  .stage, .intro-screen {
+    padding: 38px 18px 46px;
+  }
+  h1 { font-size: 1.4rem; }
+  .options button { padding: 12px 18px; font-size: .92rem; }
+  .sail-options button { padding: 14px 20px; font-size: 1.3rem; }
+  .match-grid { grid-template-columns: 1fr; }
+  .vocab-list { padding: 20px; }
+  .hero-emoji { font-size: 3rem; }
+}
+</style>
+</head>
+<body>
+
+<h1>⛵ Капитанский маршрут</h1>
+
+<!-- ЭКРАН ИНСТРУКЦИИ -->
+<div class="intro-screen" id="intro">
+  <h2>Как играть</h2>
+  <p>🚢 Ты — капитан. Твой корабль плывёт от острова к острову.</p>
+  <p>🔊 Нажимай на золотую кнопку, чтобы услышать слово или фразу.</p>
+  <p>👆 Выбирай ответ, соединяй пары, вписывай слова — на каждом острове своё задание.</p>
+  <p>✅ Ответил верно — жми «Дальше». Ошибся — жми «Ещё раз» и попробуй заново.</p>
+  <p>⭐ За каждый верный ответ ты получаешь звезду.</p>
+  <p>🏁 Когда пройдёшь все острова — увидишь полный список слов. Это и есть конец маршрута.</p>
+  <button class="start-btn" onclick="startQuest()">Поднять паруса!</button>
+</div>
+
+<!-- ПРОГРЕСС -->
+<div class="progress-wrap" id="progress-wrap">
+  <div class="progress-boat" id="pboat">⛵</div>
+  <div class="progress-track"><div class="progress-fill" id="pfill"></div></div>
+  <div class="progress-pct" id="ppct">0%</div>
+</div>
+
+<!-- ШАГИ -->
+<div id="stages"></div>
+
+<!-- ФИНАЛ -->
+<div class="final-screen" id="final">
+  <h2>🏁 Конец маршрута</h2>
+  <p class="final-intro">Все острова пройдены. Вот весь словарь, который ты знаешь.</p>
+  <div class="vocab-list" id="vocab-final"></div>
+  <div class="nav-btns">
+    <button class="btn-retry" onclick="restartQuest()">🔄 Пройти заново</button>
+  </div>
+</div>
+
+<footer>Spotlight Starter · Final Review · Капитанский маршрут</footer>
+
+<script>
+var voicesReady = false;
+var voicesList = [];
+function loadVoices() {
+  voicesList = window.speechSynthesis.getVoices();
+  if (voicesList.length > 0) { voicesReady = true; }
+}
+if (window.speechSynthesis) {
+  loadVoices();
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+}
+function speakText(t) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  var u = new SpeechSynthesisUtterance(t);
+  u.lang = "en-GB";
+  u.rate = 0.85;
+  u.pitch = 1.0;
+  if (!voicesReady) { loadVoices(); }
+  if (voicesList.length > 0) {
+    var gb = null;
+    var us = null;
+    for (var i = 0; i < voicesList.length; i++) {
+      if (voicesList[i].lang === "en-GB" && !gb) { gb = voicesList[i]; }
+      if (voicesList[i].lang === "en-US" && !us) { us = voicesList[i]; }
+    }
+    if (gb) { u.voice = gb; }
+    else if (us) { u.voice = us; }
+  }
+  window.speechSynthesis.speak(u);
+}
+
+var TOTAL = 17;
+var current = 0;
+var score = 0;
+var started = false;
+
+function startQuest() {
+  started = true;
+  document.getElementById("intro").style.display = "none";
+  document.getElementById("progress-wrap").classList.add("visible");
+  goStage(0);
+}
+
+var stages = [
+  { n: "Отплытие", mech: "choice", emoji: "⚓", title: "Якорь поднят", inst: "Какой питомец умеет плавать? Выбери верный ответ.", speak: "Which pet can swim?", opts: ["A rabbit can swim", "A fish can swim", "A parrot can swim"], ans: 1 },
+  { n: "Риф", mech: "yesno", emoji: "🪸", title: "Верно или нет?", inst: "Послушай фразу и реши: правда ли это?", speak: "A monkey can climb", opts: ["Yes", "No"], ans: 0 },
+  { n: "Бухта", mech: "count", emoji: "🐠", title: "Сосчитай рыбок", inst: "Сколько рыбок в аквариуме? Посчитай и выбери число.", speak: "How many fish are there?", visual: "🐟🐟🐟🐟🐟🐟🐟", opts: ["five", "six", "seven", "eight"], ans: 2 },
+  { n: "Остров попугаев", mech: "spell", emoji: "🦜", title: "Собери слово", inst: "Нажимай на буквы по порядку, чтобы получилось название птицы.", speak: "Spell the bird name", letters: ["p","a","r","r","o","t"], ans: "parrot" },
+  { n: "Маяк", mech: "listen", emoji: "🗼", title: "Что сказал маяк?", inst: "Послушай фразу и выбери правильную картинку.", speak: "The cat is under the table", opts: ["🐱⬆️🪑", "🐱⬇️🪑", "🐱📦"], ans: 1 },
+  { n: "Пролив", mech: "cancant", emoji: "🐧", title: "Can или Can't?", inst: "Пингвин и полёт. Выбери верное слово.", speak: "A penguin can not fly", sentence: "A penguin ___ fly", opts: ["can", "can't"], ans: 1 },
+  { n: "Грот", mech: "match", emoji: "🗺️", title: "Соедини пары", inst: "Нажми на животное слева, потом на часть тела справа.", speak: "Match the animals with their body parts", pairs: [["elephant","long nose"],["rabbit","long ears"],["bird","wings"],["dog","tail"]] },
+  { n: "Лагуна", mech: "order", emoji: "🔢", title: "Порядок чисел", inst: "Нажимай на числа по порядку — от одного до пяти.", speak: "Order the numbers from one to five", items: ["three","one","five","two","four"], ans: ["one","two","three","four","five"] },
+  { n: "Коралловый сад", mech: "choice", emoji: "🐸", title: "Какого цвета?", inst: "Какого цвета лягушка?", speak: "What colour is the frog?", opts: ["It is red", "It is green", "It is purple"], ans: 1 },
+  { n: "Порт", mech: "fill", emoji: "🚢", title: "Заполни пропуск", inst: "Впиши недостающее слово.", speak: "I have got a hamster", sentence: "I've ___ a hamster", ans: "got" },
+  { n: "Шторм", mech: "yesno", emoji: "🌊", title: "Правда в шторм?", inst: "Послушай и реши: верно ли?", speak: "A snake has got four legs", opts: ["Yes", "No"], ans: 1 },
+  { n: "Архипелаг", mech: "pick", emoji: "🏝️", title: "Выбери лишнего", inst: "Кто здесь НЕ питомец?", speak: "Which one is not a pet?", opts: ["cat", "dog", "lion", "rabbit"], ans: 2 },
+  { n: "Флагман", mech: "sail", emoji: "🧭", title: "Проложи курс", inst: "Слон стоит справа. Куда плыть?", speak: "The elephant is on the right", opts: ["⬅️","⬆️","➡️"], ans: 2 },
+  { n: "Трюм", mech: "cargo", emoji: "📦", title: "Загрузи трюм", inst: "Нажми только на тех, кто умеет летать. Потом жми «Отплыть».", speak: "Load only the animals that can fly", cargo: ["parrot","fish","eagle","turtle","bat","frog"], correct: ["parrot","eagle","bat"] },
+  { n: "Мыс", mech: "match", emoji: "🌅", title: "Действие и герой", inst: "Соедини: кто что умеет.", speak: "Match the animals with their actions", pairs: [["fish","swim"],["bird","fly"],["monkey","climb"],["horse","run"]] },
+  { n: "Гавань", mech: "fill", emoji: "⛵", title: "Последний пропуск", inst: "Впиши слово.", speak: "It has got two ears and a tail", sentence: "It has ___ two ears and a tail", ans: "got" },
+  { n: "Фейерверк", mech: "choice", emoji: "🎆", title: "Финальный салют", inst: "Что ты скажешь про себя?", speak: "What do you say about yourself?", opts: ["I can't do anything", "I can do it!", "I has got nothing"], ans: 1 }
+];
+
+var vocabAll = [
+  "cat /kæt/ — кошка","dog /dɒɡ/ — собака","fish /fɪʃ/ — рыба","horse /hɔːs/ — лошадь",
+  "rabbit /ˈræbɪt/ — кролик","parrot /ˈpærət/ — попугай","frog /frɒɡ/ — лягушка",
+  "turtle /ˈtɜːtl/ — черепаха","hamster /ˈhæmstə/ — хомяк","monkey /ˈmʌŋki/ — обезьяна",
+  "elephant /ˈelɪfənt/ — слон","lion /ˈlaɪən/ — лев","tiger /ˈtaɪɡə/ — тигр",
+  "bear /beə/ — медведь","snake /sneɪk/ — змея","penguin /ˈpeŋɡwɪn/ — пингвин",
+  "jump /dʒʌmp/ — прыгать","run /rʌn/ — бегать","swim /swɪm/ — плавать",
+  "fly /flaɪ/ — летать","climb /klaɪm/ — лазать","dance /dɑːns/ — танцевать",
+  "sing /sɪŋ/ — петь","walk /wɔːk/ — ходить","head /hed/ — голова","eyes /aɪz/ — глаза",
+  "ears /ɪəz/ — уши","nose /nəʊz/ — нос","mouth /maʊθ/ — рот","arms /ɑːmz/ — руки",
+  "legs /leɡz/ — ноги","tail /teɪl/ — хвост","wings /wɪŋz/ — крылья",
+  "can /kæn/ — умею","can't /kɑːnt/ — не умею","I've got /aɪv ɡɒt/ — у меня есть",
+  "It has got /ɪt hæz ɡɒt/ — у него есть","in /ɪn/ — в","on /ɒn/ — на","under /ˈʌndə/ — под",
+  "red /red/ — красный","blue /bluː/ — синий","green /ɡriːn/ — зелёный",
+  "yellow /ˈjeləʊ/ — жёлтый","black /blæk/ — чёрный","white /waɪt/ — белый",
+  "orange /ˈɒrɪndʒ/ — оранжевый","pink /pɪŋk/ — розовый","purple /ˈpɜːpl/ — фиолетовый",
+  "brown /braʊn/ — коричневый","one /wʌn/ — один","two /tuː/ — два","three /θriː/ — три",
+  "four /fɔː/ — четыре","five /faɪv/ — пять","six /sɪks/ — шесть","seven /ˈsevn/ — семь",
+  "eight /eɪt/ — восемь","nine /naɪn/ — девять","ten /ten/ — десять"
+];
+
+function updateProgress() {
+  var pct = Math.round((current / TOTAL) * 100);
+  document.getElementById("pfill").style.width = pct + "%";
+  document.getElementById("pboat").style.left = pct + "%";
+  document.getElementById("ppct").textContent = pct + "%";
+}
+
+function renderStage(i) {
+  var s = stages[i];
+  var html = "<div class=\"stage active\">";
+  html += "<span class=\"step-tag\">Остров " + (i+1) + " из " + TOTAL + "</span>";
+  html += "<span class=\"mech-tag\">" + s.mech + "</span>";
+  html += "<div class=\"hero-emoji\">" + s.emoji + "</div>";
+  html += "<h2>" + s.n + ": " + s.title + "</h2>";
+  html += "<p class=\"instruction\">" + s.inst + "</p>";
+  if (s.speak) {
+    html += "<div class=\"speak-wrap\"><button class=\"speak-btn\" onclick=\"speakText('" + s.speak.replace(/'/g, "\\'") + "')\">🔊</button></div>";
+  }
+  if (s.sentence) {
+    html += "<div class=\"sentence-display\">" + s.sentence + "</div>";
+  }
+  if (s.visual) {
+    html += "<div class=\"visual-row\">" + s.visual + "</div>";
+  }
+  if (s.mech === "choice" || s.mech === "yesno" || s.mech === "cancant" || s.mech === "count" || s.mech === "pick" || s.mech === "listen") {
+    html += "<div class=\"options\">";
+    for (var oi = 0; oi < s.opts.length; oi++) {
+      html += "<button onclick=\"checkOpt(" + i + "," + oi + ")\">" + s.opts[oi] + "</button>";
+    }
+    html += "</div>";
+  }
+  if (s.mech === "spell") {
+    html += "<div class=\"options\" id=\"spell-letters\">";
+    for (var li = 0; li < s.letters.length; li++) {
+      html += "<button onclick=\"spellPick(" + i + "," + li + ")\">" + s.letters[li] + "</button>";
+    }
+    html += "</div>";
+    html += "<div style=\"text-align:center;margin-bottom:26px\"><span id=\"spell-word\" style=\"font-size:1.6rem;color:#f5d67b;letter-spacing:5px;min-height:36px;display:inline-block\"></span></div>";
+    html += "<div style=\"text-align:center\"><button class=\"btn-next\" style=\"background:#5dade2;color:#fff\" onclick=\"checkSpell(" + i + ")\">Проверить</button></div>";
+  }
+  if (s.mech === "match") {
+    html += "<div class=\"match-grid\" id=\"match-grid-" + i + "\">";
+    for (var mi = 0; mi < s.pairs.length; mi++) {
+      html += "<button data-side=\"l\" data-idx=\"" + mi + "\" onclick=\"matchPick(" + i + ",'l'," + mi + ")\">" + s.pairs[mi][0] + "</button>";
+    }
+    for (var ri = 0; ri < s.pairs.length; ri++) {
+      html += "<button data-side=\"r\" data-idx=\"" + ri + "\" onclick=\"matchPick(" + i + ",'r'," + ri + ")\">" + s.pairs[ri][1] + "</button>";
+    }
+    html += "</div>";
+  }
+  if (s.mech === "order") {
+    html += "<div class=\"order-items\" id=\"order-items-" + i + "\">";
+    for (var oii = 0; oii < s.items.length; oii++) {
+      html += "<button onclick=\"orderPick(" + i + "," + oii + ")\">" + s.items[oii] + "</button>";
+    }
+    html += "</div>";
+    html += "<div class=\"order-slots\" id=\"order-slots-" + i + "\">";
+    for (var s2 = 0; s2 < s.ans.length; s2++) { html += "<div></div>"; }
+    html += "</div>";
+  }
+  if (s.mech === "fill") {
+    html += "<div style=\"text-align:center;margin-bottom:30px\"><input class=\"fill-input\" id=\"fill-" + i + "\" placeholder=\"...\" autocomplete=\"off\"></div>";
+    html += "<div style=\"text-align:center\"><button class=\"btn-next\" style=\"background:#5dade2;color:#fff\" onclick=\"checkFill(" + i + ")\">Проверить</button></div>";
+  }
+  if (s.mech === "sail") {
+    html += "<div class=\"sail-options\">";
+    for (var soi = 0; soi < s.opts.length; soi++) {
+      html += "<button onclick=\"checkOpt(" + i + "," + soi + ")\">" + s.opts[soi] + "</button>";
+    }
+    html += "</div>";
+  }
+  if (s.mech === "cargo") {
+    html += "<div class=\"cargo-zone\" id=\"cargo-zone-" + i + "\"><span class=\"empty-hint\">Трюм пуст</span></div>";
+    html += "<div class=\"cargo-grid\" id=\"cargo-grid-" + i + "\">";
+    for (var ci = 0; ci < s.cargo.length; ci++) {
+      html += "<button onclick=\"cargoPick(" + i + "," + ci + ")\">" + s.cargo[ci] + "</button>";
+    }
+    html += "</div>";
+    html += "<div style=\"text-align:center\"><button class=\"btn-next\" style=\"background:#5dade2;color:#fff\" onclick=\"checkCargo(" + i + ")\">Отплыть</button></div>";
+  }
+  html += "<div class=\"feedback\" id=\"fb-" + i + "\"></div>";
+  html += "<div class=\"nav-btns\" id=\"nav-" + i + "\" style=\"display:none\">";
+  if (i > 0) { html += "<button class=\"btn-back\" onclick=\"goStage(" + (i-1) + ")\">← Назад</button>"; }
+  html += "<button class=\"btn-retry\" onclick=\"retryStage(" + i + ")\">🔄 Ещё раз</button>";
+  html += "<button class=\"btn-next\" onclick=\"goStage(" + (i+1) + ")\">Дальше →</button>";
+  html += "</div>";
+  html += "<div class=\"stars\" id=\"stars-" + i + "\"></div>";
+  html += "</div>";
+  return html;
+}
+
+var spellBuffer = [];
+function spellPick(si, li) {
+  var btns = document.querySelectorAll("#spell-letters button");
+  if (btns[li].classList.contains("placed")) return;
+  btns[li].classList.add("placed");
+  spellBuffer.push(stages[si].letters[li]);
+  document.getElementById("spell-word").textContent = spellBuffer.join("");
+}
+function checkSpell(si) {
+  var w = spellBuffer.join("");
+  var fb = document.getElementById("fb-" + si);
+  if (w === stages[si].ans) {
+    fb.className = "feedback good";
+    fb.textContent = "Верно! " + stages[si].ans + " ✅";
+    score++;
+    document.getElementById("nav-" + si).style.display = "flex";
+    document.getElementById("stars-" + si).textContent = "⭐";
+    speakText(stages[si].ans);
+  } else {
+    fb.className = "feedback bad";
+    fb.textContent = "Пока не то. Нажми «Ещё раз».";
+  }
+}
+
+var matchState = { l: null, r: null, done: 0 };
+function matchPick(si, side, idx) {
+  var grid = document.getElementById("match-grid-" + si);
+  var btn = grid.querySelector("button[data-side=\"" + side + "\"][data-idx=\"" + idx + "\"]");
+  if (!btn || btn.classList.contains("matched")) return;
+  if (side === "l") { matchState.l = idx; } else { matchState.r = idx; }
+  var allSel = grid.querySelectorAll(".selected");
+  for (var i = 0; i < allSel.length; i++) { allSel[i].classList.remove("selected"); }
+  if (matchState.l !== null) { grid.querySelector("button[data-side=\"l\"][data-idx=\"" + matchState.l + "\"]").classList.add("selected"); }
+  if (matchState.r !== null) { grid.querySelector("button[data-side=\"r\"][data-idx=\"" + matchState.r + "\"]").classList.add("selected"); }
+  if (matchState.l !== null && matchState.r !== null) {
+    if (matchState.l === matchState.r) {
+      grid.querySelector("button[data-side=\"l\"][data-idx=\"" + matchState.l + "\"]").classList.add("matched");
+      grid.querySelector("button[data-side=\"r\"][data-idx=\"" + matchState.r + "\"]").classList.add("matched");
+      grid.querySelector("button[data-side=\"l\"][data-idx=\"" + matchState.l + "\"]").classList.remove("selected");
+      grid.querySelector("button[data-side=\"r\"][data-idx=\"" + matchState.r + "\"]").classList.remove("selected");
+      matchState.done++;
+      if (matchState.done === stages[si].pairs.length) {
+        var fb = document.getElementById("fb-" + si);
+        fb.className = "feedback good";
+        fb.textContent = "Все пары найдены! ✅";
+        score++;
+        document.getElementById("nav-" + si).style.display = "flex";
+        document.getElementById("stars-" + si).textContent = "⭐";
+      }
+    } else {
+      var fb2 = document.getElementById("fb-" + si);
+      fb2.className = "feedback bad";
+      fb2.textContent = "Не та пара.";
+      setTimeout(function() { fb2.className = "feedback"; }, 1200);
+    }
+    matchState.l = null;
+    matchState.r = null;
+  }
+}
+
+var orderBuffer = [];
+function orderPick(si, ii) {
+  var btns = document.querySelectorAll("#order-items-" + si + " button");
+  if (btns[ii].classList.contains("placed")) return;
+  btns[ii].classList.add("placed");
+  orderBuffer.push(stages[si].items[ii]);
+  var slots = document.querySelectorAll("#order-slots-" + si + " div");
+  if (orderBuffer.length <= slots.length) {
+    slots[orderBuffer.length - 1].textContent = stages[si].items[ii];
+    slots[orderBuffer.length - 1].classList.add("filled");
+  }
+  if (orderBuffer.length === stages[si].ans.length) {
+    var ok = true;
+    for (var i = 0; i < orderBuffer.length; i++) {
+      if (orderBuffer[i] !== stages[si].ans[i]) { ok = false; break; }
+    }
+    var fb = document.getElementById("fb-" + si);
+    if (ok) {
+      fb.className = "feedback good";
+      fb.textContent = "Порядок верный! ✅";
+      score++;
+      document.getElementById("nav-" + si).style.display = "flex";
+      document.getElementById("stars-" + si).textContent = "⭐";
+    } else {
+      fb.className = "feedback bad";
+      fb.textContent = "Не тот порядок. Нажми «Ещё раз».";
+    }
+  }
+}
+
+function checkFill(si) {
+  var inp = document.getElementById("fill-" + si);
+  var val = inp.value.trim().toLowerCase();
+  var fb = document.getElementById("fb-" + si);
+  if (val === stages[si].ans) {
+    inp.classList.remove("wrong");
+    inp.classList.add("correct");
+    fb.className = "feedback good";
+    fb.textContent = "Верно! ✅";
+    score++;
+    document.getElementById("nav-" + si).style.display = "flex";
+    document.getElementById("stars-" + si).textContent = "⭐";
+  } else {
+    inp.classList.remove("correct");
+    inp.classList.add("wrong");
+    fb.className = "feedback bad";
+    fb.textContent = "Не то слово. Попробуй ещё.";
+  }
+}
+
+function cargoPick(si, ci) {
+  var btns = document.querySelectorAll("#cargo-grid-" + si + " button");
+  if (btns[ci].classList.contains("loaded")) return;
+  btns[ci].classList.add("loaded");
+  var zone = document.getElementById("cargo-zone-" + si);
+  var hint = zone.querySelector(".empty-hint");
+  if (hint) { zone.innerHTML = ""; }
+  var sp = document.createElement("span");
+  sp.textContent = stages[si].cargo[ci];
+  zone.appendChild(sp);
+}
+
+function checkCargo(si) {
+  var zone = document.getElementById("cargo-zone-" + si);
+  var spans = zone.querySelectorAll("span:not(.empty-hint)");
+  var loaded = [];
+  for (var i = 0; i < spans.length; i++) { loaded.push(spans[i].textContent); }
+  var allCorrect = true;
+  if (loaded.length !== stages[si].correct.length) { allCorrect = false; }
+  else {
+    for (var j = 0; j < stages[si].correct.length; j++) {
+      if (loaded.indexOf(stages[si].correct[j]) === -1) { allCorrect = false; break; }
+    }
+  }
+  var fb = document.getElementById("fb-" + si);
+  if (allCorrect) {
+    fb.className = "feedback good";
+    fb.textContent = "Трюм загружен верно! ✅";
+    score++;
+    document.getElementById("nav-" + si).style.display = "flex";
+    document.getElementById("stars-" + si).textContent = "⭐";
+  } else {
+    fb.className = "feedback bad";
+    fb.textContent = "Есть лишние или кого-то не хватает. Нажми «Ещё раз».";
+  }
+}
+
+function checkOpt(si, oi) {
+  var s = stages[si];
+  var btns = document.querySelectorAll(".stage.active .options button, .stage.active .sail-options button");
+  var fb = document.getElementById("fb-" + si);
+  if (oi === s.ans) {
+    btns[oi].classList.add("correct");
+    fb.className = "feedback good";
+    fb.textContent = "Верно! ✅";
+    score++;
+    document.getElementById("nav-" + si).style.display = "flex";
+    document.getElementById("stars-" + si).textContent = "⭐";
+    for (var i = 0; i < btns.length; i++) { btns[i].disabled = true; }
+  } else {
+    btns[oi].classList.add("wrong");
+    fb.className = "feedback bad";
+    fb.textContent = "Не то. Попробуй ещё.";
+    setTimeout(function() { btns[oi].classList.remove("wrong"); }, 900);
+  }
+}
+
+function goStage(i) {
+  if (i >= TOTAL) {
+    document.getElementById("stages").innerHTML = "";
+    document.getElementById("final").classList.add("active");
+    document.getElementById("progress-wrap").classList.remove("visible");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+  current = i;
+  matchState = { l: null, r: null, done: 0 };
+  orderBuffer = [];
+  spellBuffer = [];
+  document.getElementById("stages").innerHTML = renderStage(i);
+  updateProgress();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function retryStage(i) {
+  matchState = { l: null, r: null, done: 0 };
+  orderBuffer = [];
+  spellBuffer = [];
+  document.getElementById("stages").innerHTML = renderStage(i);
+}
+
+function restartQuest() {
+  score = 0;
+  current = 0;
+  document.getElementById("final").classList.remove("active");
+  document.getElementById("progress-wrap").classList.add("visible");
+  goStage(0);
+}
+
+var vf = document.getElementById("vocab-final");
+for (var vi = 0; vi < vocabAll.length; vi++) {
+  var d = document.createElement("div");
+  d.textContent = vocabAll[vi];
+  vf.appendChild(d);
+}
+</script>
+</body>
+</html>

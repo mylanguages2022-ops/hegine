@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик-окошки — Дорога домой</title>
+
+<meta property="og:title" content="Словарик-окошки — Дорога домой">
+<meta property="og:description" content="Говорящие окошки девятой части The Ugly Duckling: house, family, home, фразы Come with me, I've got a family и тёплые слова. Британское произношение по клику.">
+<meta property="og:image" content="https://spotlight-lessons.example.com/og/ud9-dictionary-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Тёплые окошки со словами">
+<meta property="og:url" content="https://spotlight-lessons.example.com/ud9/dictionary">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Spotlight — уроки для родителя и ребёнка">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Интерактивный словарик девятой части The Ugly Duckling в виде тёплых окошек с озвучкой en-GB: дом, семья и фразы возвращения.">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
+    background:linear-gradient(180deg,#2a1f3d 0%,#3d2952 55%,#4a3560 100%);
+    color:#f8e8c8;padding:30px 14px 70px;min-height:100vh;
+    background-image:
+      radial-gradient(rgba(255,215,0,.08) 1px, transparent 1.6px);
+    background-size:80px 80px;
+    background-position:20px 30px;
+  }
+  .wrap{max-width:940px;margin:0 auto}
+  header{text-align:center;margin-bottom:26px}
+  header h1{
+    font-size:clamp(1.5rem,4.5vw,2.3rem);color:#ffd700;letter-spacing:.3px;
+  }
+  header h1::before{content:'🏡 ';}
+  header p{margin-top:8px;font-size:1rem;color:#d8c098;line-height:1.5}
+  .hint{
+    background:rgba(255,244,222,.08);border:3px dashed #ffd700;border-radius:14px;
+    padding:14px 18px;margin:18px 0 30px;font-size:.97rem;color:#ffd700;line-height:1.55;
+  }
+  .filters{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:36px}
+  .filters button{
+    border:2px solid #ffd700;background:transparent;color:#ffd700;
+    padding:9px 18px;border-radius:999px;font-size:.92rem;font-weight:700;
+    cursor:pointer;font-family:inherit;transition:.18s;
+  }
+  .filters button:hover{background:rgba(255,215,0,.15);transform:translateY(-2px)}
+  .filters button.active{background:#ffd700;color:#2a1f3d;box-shadow:0 4px 0 #b8960a}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:44px 24px}
+
+  /* ---------- ОКОШКО ---------- */
+  .card{
+    cursor:pointer;position:relative;transition:.18s;padding:14px 10px;
+    display:flex;flex-direction:column;align-items:center;
+  }
+  .card:hover{transform:translateY(-5px)}
+  .card:active{transform:translateY(0)}
+  .card.playing{animation:open .6s}
+  @keyframes open{0%{transform:scale(1)}40%{transform:scale(1.05)}100%{transform:scale(1)}}
+  .window{
+    width:150px;height:150px;position:relative;
+    background:
+      radial-gradient(circle at 50% 60%, rgba(255,200,100,.9) 0 40px, rgba(255,180,80,.6) 40px 70px, rgba(255,160,60,.3) 70px 90px, transparent 90px),
+      linear-gradient(180deg,#1a1228 0%,#2a1f3d 100%);
+    border:8px solid #8b6914;
+    border-radius:8px 8px 4px 4px;
+    box-shadow:
+      inset 0 0 30px rgba(255,200,100,.5),
+      0 6px 12px rgba(0,0,0,.4);
+    display:flex;align-items:center;justify-content:center;font-size:3.2rem;
+  }
+  /* занавески */
+  .window::before,.window::after{
+    content:'';position:absolute;top:0;width:35px;height:60px;
+    background:linear-gradient(180deg,#c0392b 0%,#a02818 100%);
+    border-radius:0 0 50% 50%;
+    z-index:2;
+  }
+  .window::before{left:0;border-top-left-radius:8px}
+  .window::after{right:0;border-top-right-radius:8px}
+  /* подоконник */
+  .window-bottom{
+    position:absolute;bottom:-12px;left:-8px;right:-8px;height:14px;
+    background:linear-gradient(180deg,#8b6914 0%,#6a4a10 100%);
+    border-radius:0 0 4px 4px;
+    box-shadow:0 4px 6px rgba(0,0,0,.3);
+  }
+  .card .en{
+    display:block;text-align:center;font-size:1.08rem;font-weight:700;color:#ffd700;
+    line-height:1.25;word-break:break-word;padding:16px 4px 0;
+  }
+  .card .tr{
+    display:block;text-align:center;font-size:.82rem;color:#b8a078;margin-top:2px;
+    font-family:"Segoe UI",Arial,sans-serif;letter-spacing:.2px;
+  }
+  .card .ru{
+    display:block;text-align:center;font-size:.98rem;color:#f8e8c8;margin-top:5px;font-weight:600;
+  }
+  .speak-btn{
+    position:absolute;top:18px;right:14px;width:36px;height:36px;border-radius:50%;
+    border:2px solid #ffd700;background:rgba(255,255,255,.15);color:#ffd700;font-size:1rem;
+    cursor:pointer;box-shadow:0 3px 0 #b8960a;transition:.15s;
+    display:flex;align-items:center;justify-content:center;
+    backdrop-filter:blur(2px);z-index:3;
+  }
+  .speak-btn:hover{background:#ffd700;color:#2a1f3d;transform:scale(1.1) rotate(-8deg)}
+  .speak-btn:active{transform:scale(.94)}
+  .cat-home .window{background:
+      radial-gradient(circle at 50% 60%, rgba(255,200,100,.9) 0 40px, rgba(255,180,80,.6) 40px 70px, rgba(255,160,60,.3) 70px 90px, transparent 90px),
+      linear-gradient(180deg,#1a1228 0%,#2a1f3d 100%);}
+  .cat-feel .window{background:
+      radial-gradient(circle at 50% 60%, rgba(255,180,200,.8) 0 40px, rgba(255,160,180,.5) 40px 70px, rgba(255,140,160,.2) 70px 90px, transparent 90px),
+      linear-gradient(180deg,#1a1228 0%,#2a1f3d 100%);}
+  .cat-feel .window::before,.cat-feel .window::after{background:linear-gradient(180deg,#e67e22 0%,#d35400 100%)}
+  .cat-phrase .window{background:
+      radial-gradient(circle at 50% 60%, rgba(180,220,255,.8) 0 40px, rgba(160,200,240,.5) 40px 70px, rgba(140,180,220,.2) 70px 90px, transparent 90px),
+      linear-gradient(180deg,#1a1228 0%,#2a1f3d 100%);}
+  .cat-phrase .window::before,.cat-phrase .window::after{background:linear-gradient(180deg,#27ae60 0%,#1e8449 100%)}
+  .empty{
+    text-align:center;padding:40px 20px;color:#b8a078;font-size:1.05rem;
+    background:rgba(255,255,255,.05);border-radius:14px;border:3px dashed #ffd700;
+  }
+  footer{text-align:center;margin-top:46px;font-size:.9rem;color:#b8a078;line-height:1.6}
+  @media (max-width:560px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:38px 14px}
+    .window{width:118px;height:118px;font-size:2.5rem;border-width:6px}
+    .window::before,.window::after{width:28px;height:48px}
+    .window-bottom{height:11px;bottom:-10px}
+    .card .en{font-size:.98rem}
+    .speak-btn{width:30px;height:30px;font-size:.88rem;top:14px;right:10px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Дорога домой</h1>
+    <p>словарик-окошки · дом, семья и фразы возвращения</p>
+  </header>
+
+  <div class="hint">
+    🏡 Нажмите на окошко — и услышите слово британским голосом. Играйте в «возвращение»: ребёнок «заглядывает» в каждое окошко и говорит, что там видит — дом, семью или тёплую фразу.
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">На этой улице окошек пока нет.</div>
+
+  <footer>
+    Spotlight · Module 4 · The Ugly Duckling (9)<br>
+    В окошках всегда горит свет: заглядывайте когда угодно.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var RATE = 0.85;
+  var voices = [];
+
+  function loadVoices(){
+    if(!('speechSynthesis' in window)) return;
+    voices = window.speechSynthesis.getVoices() || [];
+  }
+  loadVoices();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    setTimeout(loadVoices, 300);
+    setTimeout(loadVoices, 1200);
+  }
+
+  function pickVoice(){
+    if(!voices.length) loadVoices();
+    var v;
+    v = voices.find(function(x){ return x.lang === 'en-GB'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en-gb') === 0; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang === 'en-US'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en') === 0; });
+    return v || null;
+  }
+
+  var speakingCard = null;
+
+  function speak(text, cardEl){
+    if(!('speechSynthesis' in window)){
+      if(cardEl) flash(cardEl);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    if(speakingCard){ speakingCard.classList.remove('playing'); speakingCard = null; }
+
+    var u = new SpeechSynthesisUtterance(text);
+    var v = pickVoice();
+    if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+    u.rate = RATE;
+    u.pitch = 1.05;
+    u.volume = 1;
+
+    if(cardEl){
+      cardEl.classList.add('playing');
+      speakingCard = cardEl;
+      u.onend = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+      u.onerror = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+    }
+    window.speechSynthesis.speak(u);
+  }
+
+  function flash(el){
+    el.classList.add('playing');
+    setTimeout(function(){ el.classList.remove('playing'); }, 600);
+  }
+
+  var CATS = {
+    all:    '🏡 Вся улица',
+    home:   '🏠 Дом и семья',
+    feel:   '💛 Чувства',
+    phrase: '🤝 Тёплые фразы'
+  };
+
+  var WORDS = [
+    {c:'home', e:'🏠', en:'house',    ipa:'/haʊs/',      ru:'дом'},
+    {c:'home', e:'👨‍👩‍👧', en:'family',  ipa:'/ˈfæmɪli/',  ru:'семья'},
+    {c:'home', e:'💛', en:'home',     ipa:'/həʊm/',      ru:'дом (домой)'},
+
+    {c:'feel', e:'😊', en:'happy',    ipa:'/ˈhæpi/',    ru:'счастливый'},
+    {c:'feel', e:'🛡️', en:'safe',     ipa:'/seɪf/',     ru:'в безопасности'},
+    {c:'feel', e:'👥', en:'together', ipa:'/təˈɡeðə/',  ru:'вместе'},
+    {c:'feel', e:'😢', en:'lonely',   ipa:'/ˈləʊnli/',  ru:'одинокий'},
+
+    {c:'phrase', e:'🤝', en:'Come with me.',       ipa:'/kʌm wɪð miː/',       ru:'пойдём со мной'},
+    {c:'phrase', e:'🤗', en:"Don't be lonely.",    ipa:'/dəʊnt biː ˈləʊnli/', ru:'не будь одиноким'},
+    {c:'phrase', e:'🏠', en:"I've got a house.",   ipa:'/aɪv ɡɒt ə haʊs/',    ru:'у меня есть дом'},
+    {c:'phrase', e:'👨‍👩‍👧', en:"I've got a family.", ipa:'/aɪv ɡɒt ə ˈfæmɪli/', ru:'у меня есть семья'},
+    {c:'phrase', e:'👥', en:"We've got a family.", ipa:'/wiːv ɡɒt ə ˈfæmɪli/', ru:'у нас есть семья'},
+    {c:'phrase', e:'🙋', en:"This is my family.",  ipa:'/ðɪs ɪz maɪ ˈfæmɪli/', ru:'это моя семья'},
+    {c:'phrase', e:'💛', en:"We're together.",     ipa:'/wɪə təˈɡeðə/',       ru:'мы вместе'}
+  ];
+
+  var filtersBox = document.getElementById('filters');
+  var current = 'all';
+
+  Object.keys(CATS).forEach(function(key){
+    var b = document.createElement('button');
+    b.textContent = CATS[key];
+    b.dataset.cat = key;
+    if(key === 'all') b.classList.add('active');
+    b.addEventListener('click', function(){
+      current = key;
+      Array.prototype.forEach.call(filtersBox.children, function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      render();
+    });
+    filtersBox.appendChild(b);
+  });
+
+  var grid  = document.getElementById('grid');
+  var empty = document.getElementById('empty');
+
+  function render(){
+    grid.innerHTML = '';
+    var list = WORDS.filter(function(w){ return current === 'all' || w.c === current; });
+    empty.style.display = list.length ? 'none' : 'block';
+
+    list.forEach(function(w){
+      var card = document.createElement('div');
+      card.className = 'card cat-' + w.c;
+      card.setAttribute('role','button');
+      card.setAttribute('tabindex','0');
+
+      var sp = document.createElement('button');
+      sp.className = 'speak-btn';
+      sp.innerHTML = '🔊';
+      sp.title = 'Прослушать произношение';
+      sp.setAttribute('aria-label','Прослушать ' + w.en);
+      sp.addEventListener('click', function(ev){
+        ev.stopPropagation();
+        speak(w.en, card);
+      });
+
+      var win = document.createElement('div');
+      win.className = 'window';
+      win.textContent = w.e;
+
+      var bottom = document.createElement('div');
+      bottom.className = 'window-bottom';
+
+      var en = document.createElement('span');
+      en.className = 'en';
+      en.textContent = w.en;
+
+      var tr = document.createElement('span');
+      tr.className = 'tr';
+      tr.textContent = w.ipa;
+
+      var ru = document.createElement('span');
+      ru.className = 'ru';
+      ru.textContent = w.ru;
+
+      card.appendChild(sp);
+      card.appendChild(win);
+      win.appendChild(bottom);
+      card.appendChild(en);
+      card.appendChild(tr);
+      card.appendChild(ru);
+
+      card.addEventListener('click', function(){ speak(w.en, card); });
+      card.addEventListener('keydown', function(ev){
+        if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); speak(w.en, card); }
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  render();
+
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = function(){ loadVoices(); };
+  }
+})();
+</script>
+</body>
+</html>

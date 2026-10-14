@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Квест — Стадион супергероев</title>
+
+<meta property="og:title" content="Квест — Стадион супергероев">
+<meta property="og:description" content="Квест урока 12a Spotlight: 16 репортажей, десять механик включая «can или can't», действия, герои и фразы can/can't. Британская озвучка.">
+<meta property="og:image" content="https://spotlight-lessons.example.com/og/12a-quest-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Стадион с трибунами и беговой дорожкой">
+<meta property="og:url" content="https://spotlight-lessons.example.com/12a/quest">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Spotlight — уроки для родителя и ребёнка">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Квест по уроку 12a Spotlight: 16 шагов, десять механик, озвучка en-GB, прогресс-бар и возврат при ошибке.">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
+    background:#0a1020;
+    background-image:
+      linear-gradient(180deg, rgba(255,210,62,.05) 0%, transparent 30%),
+      radial-gradient(rgba(255,255,255,.04) 1px, transparent 1.5px);
+    background-size:100% 100%, 80px 80px;
+    color:#e8eef5;min-height:100vh;padding:20px 12px 80px;
+  }
+  .wrap{max-width:780px;margin:0 auto}
+
+  /* ---------- СТАДИОН ---------- */
+  .topbar{
+    background:linear-gradient(180deg,#1a2540 0%,#0e1726 100%);
+    border-radius:16px;padding:18px 18px 22px;
+    border:3px solid #ffd23e;
+    box-shadow:0 10px 30px rgba(0,0,0,.5), inset 0 0 30px rgba(255,210,62,.08);
+    margin-bottom:28px;position:relative;overflow:hidden;
+  }
+  .topbar::before,.topbar::after{
+    content:'';position:absolute;top:0;bottom:0;width:60px;
+    background:repeating-linear-gradient(0deg, rgba(255,210,62,.15) 0 10px, transparent 10px 20px);
+  }
+  .topbar::before{left:0}
+  .topbar::after{right:0}
+  .topbar h1{
+    font-size:clamp(1.05rem,4vw,1.45rem);color:#ffd23e;text-align:center;line-height:1.35;
+    letter-spacing:1px;position:relative;z-index:1;
+  }
+  .topbar h1::before{content:'🏟️ ';}
+  .bar-wrap{margin-top:16px;position:relative;z-index:1}
+  .bar-label{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:.8rem;color:#ffd23e;margin-bottom:8px;font-weight:700;letter-spacing:1px;
+  }
+  .bar-track{
+    height:26px;background:#2a3450;border-radius:13px;overflow:hidden;
+    border:2px solid #ffd23e;position:relative;
+    background-image:repeating-linear-gradient(90deg, transparent 0 48px, rgba(255,255,255,.15) 48px 50px);
+  }
+  .bar-fill{
+    height:100%;width:0%;
+    background:linear-gradient(90deg,#ffd23e,#e0a820);
+    transition:width .5s cubic-bezier(.34,1.4,.64,1);
+  }
+  .bar-runner{
+    position:absolute;top:-10px;left:0;font-size:1.5rem;
+    transform:translateX(-50%);transition:left .5s cubic-bezier(.34,1.4,.64,1);
+    filter:drop-shadow(0 0 6px rgba(255,210,62,.7));
+  }
+  .stars{margin-top:12px;text-align:center;font-size:1.05rem;letter-spacing:4px;color:#ffd23e;position:relative;z-index:1}
+
+  /* ---------- КОММЕНТАТОРСКАЯ БУДКА ---------- */
+  .stage{
+    background:#fff;border-radius:14px;padding:38px 22px 44px;position:relative;
+    border:3px solid #1a2540;color:#0e1726;
+    box-shadow:0 10px 30px rgba(0,0,0,.5);
+    animation:pop .35s ease;
+  }
+  .stage::before{
+    content:'🎤';position:absolute;top:-18px;left:20px;font-size:1.6rem;
+    background:#ffd23e;padding:4px 8px;border-radius:10px;border:2px solid #1a2540;
+  }
+  @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+  .stage.shake{animation:shake .45s}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-9px)}40%{transform:translateX(9px)}
+    60%{transform:translateX(-6px)}80%{transform:translateX(6px)}
+  }
+  .step-tag{
+    display:inline-block;background:#1a2540;color:#ffd23e;
+    font-size:.76rem;font-weight:700;padding:5px 14px;border-radius:999px;
+    letter-spacing:1.5px;margin-bottom:14px;
+  }
+  .mech-tag{
+    display:inline-block;background:#fff4d8;color:#8a5a10;
+    font-size:.72rem;font-weight:700;padding:3px 11px;border-radius:999px;
+    border:2px solid #ffd23e;margin-left:6px;margin-bottom:14px;letter-spacing:.3px;
+  }
+  .hero{font-size:3.1rem;text-align:center;display:block;margin:4px 0 12px;line-height:1.15}
+  .stage h2{font-size:clamp(1.05rem,3.8vw,1.4rem);color:#1a2540;text-align:center;margin-bottom:14px;line-height:1.35}
+
+  .task-text{
+    font-size:1rem;line-height:1.65;color:#33475a;text-align:center;
+    margin:0 auto 22px;max-width:540px;
+  }
+  .en-inline{font-weight:700;color:#1a2540}
+
+  .speak-line{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:16px 0 22px}
+  .speak-big{
+    background:#1a2540;color:#ffd23e;border:none;border-radius:999px;
+    padding:12px 22px;font-size:1rem;font-weight:700;cursor:pointer;
+    font-family:inherit;box-shadow:0 4px 0 #0a1020;transition:.15s;
+    display:inline-flex;align-items:center;gap:9px;letter-spacing:.4px;
+  }
+  .speak-big:hover{background:#0e1726;transform:translateY(-2px)}
+  .speak-big:active{transform:translateY(1px);box-shadow:0 2px 0 #0a1020}
+  .speak-mini{
+    width:36px;height:36px;border-radius:50%;border:2px solid #1a2540;
+    background:#ffd23e;color:#1a2540;font-size:.95rem;cursor:pointer;
+    box-shadow:0 3px 0 #b08020;transition:.15s;
+    display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+  }
+  .speak-mini:hover{transform:scale(1.1) rotate(-8deg);background:#ffc855}
+  .speak-mini:active{transform:scale(.94)}
+
+  .opts{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+  .opts.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .opt{
+    background:#fff;border:2px solid #c8d0e0;border-left:8px solid #1a2540;border-radius:10px;
+    padding:14px 15px;cursor:pointer;font-family:inherit;font-size:1.02rem;
+    color:#0e1726;text-align:left;display:flex;align-items:center;gap:10px;
+    transition:.16s;font-weight:600;line-height:1.4;box-shadow:0 2px 0 rgba(26,37,64,.25);
+  }
+  .opt:hover{border-color:#1a2540;background:#f4f8ff;transform:translateX(3px)}
+  .opt .mark{
+    flex:0 0 30px;height:30px;border-radius:50%;background:#1a2540;color:#ffd23e;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;
+  }
+  .opt.correct{background:#eafff0;border-color:#2e8b57;border-left-color:#2e8b57;animation:bounce .45s}
+  .opt.wrong{background:#fff0f0;border-color:#c0392b;border-left-color:#c0392b;animation:shake .4s}
+  @keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+  .opt:disabled{cursor:default}
+
+  .yesno-scene,.cancant-scene{
+    background:#f4f8ff;border:3px dashed #1a2540;border-radius:14px;
+    padding:22px 14px;text-align:center;margin-bottom:20px;
+  }
+  .yesno-scene .big,.cancant-scene .big{font-size:2.6rem;letter-spacing:6px;display:block;margin-bottom:10px}
+  .yesno-row,.cancant-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .yesno-btn,.cancant-btn{
+    flex:1 1 160px;max-width:240px;border-radius:12px;padding:16px 12px;
+    font-family:inherit;font-size:1.05rem;font-weight:700;cursor:pointer;transition:.15s;
+    border:3px solid;letter-spacing:.5px;
+  }
+  .yesno-btn.yes{background:#eafff0;border-color:#2e8b57;color:#1f6b41;box-shadow:0 4px 0 #1f6b41}
+  .yesno-btn.no{background:#fff4f4;border-color:#c0392b;color:#8e2a1f;box-shadow:0 4px 0 #8e2a1f}
+  .cancant-btn.can{background:#eafff0;border-color:#2e8b57;color:#1f6b41;box-shadow:0 4px 0 #1f6b41}
+  .cancant-btn.cant{background:#fff4f4;border-color:#c0392b;color:#8e2a1f;box-shadow:0 4px 0 #8e2a1f}
+  .yesno-btn:hover,.cancant-btn:hover{transform:translateY(-2px)}
+  .yesno-btn.correct,.cancant-btn.correct{animation:bounce .45s}
+  .yesno-btn.wrong,.cancant-btn.wrong{animation:shake .4s}
+  .cancant-hint{font-size:.86rem;color:#5a6a80;margin-top:10px;line-height:1.45}
+
+  .countbox{
+    background:#f4f8ff;border:3px dashed #1a2540;border-radius:14px;
+    padding:22px 14px;text-align:center;margin-bottom:20px;
+  }
+  .countbox .items{font-size:2.4rem;letter-spacing:9px;line-height:1.6;word-break:break-word}
+
+  .match-area{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+  .mcol{display:flex;flex-direction:column;gap:12px}
+  .mcol h4{text-align:center;font-size:.82rem;color:#5a6a80;font-weight:700;margin-bottom:2px;letter-spacing:1px}
+  .mitem{
+    background:#fff;border:2px solid #c8d0e0;border-radius:10px;padding:12px 8px;
+    cursor:pointer;font-family:inherit;font-size:1rem;font-weight:700;color:#0e1726;
+    text-align:center;transition:.16s;display:flex;align-items:center;justify-content:center;gap:7px;
+    min-height:58px;box-shadow:0 2px 0 rgba(26,37,64,.2);
+  }
+  .mitem:hover{border-color:#1a2540;background:#f4f8ff}
+  .mitem.sel{background:#f4f8ff;box-shadow:0 0 0 3px rgba(26,37,64,.2)}
+  .mitem.done{background:#eafff0;border-color:#2e8b57;color:#1f6b41;cursor:default;opacity:.85}
+  .mitem.bad{animation:shake .4s;border-color:#c0392b;background:#fff0f0}
+  .mitem .pic{font-size:1.6rem}
+
+  .order-pool,.order-slots{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .order-slots{
+    min-height:70px;background:#f4f8ff;border:3px dashed #1a2540;border-radius:14px;
+    padding:14px 10px;margin-bottom:20px;align-items:center;
+  }
+  .order-slots.empty-pool::after{content:'выкладывайте реплики ниже ⬇️';color:#8a94a4;font-size:.88rem}
+  .otile{
+    background:#fff;border:2px solid #1a2540;border-radius:10px;padding:10px 14px;
+    cursor:pointer;font-family:inherit;font-size:.98rem;font-weight:700;color:#1a2540;
+    transition:.15s;display:flex;align-items:center;gap:7px;box-shadow:0 3px 0 #0a1020;
+  }
+  .otile:hover{transform:translateY(-2px);background:#f4f8ff}
+  .otile.placed{border-color:#2e8b57;background:#eafff0;color:#1f6b41;box-shadow:0 3px 0 #1f6b41}
+  .otile.bad{animation:shake .4s;border-color:#c0392b;background:#fff0f0}
+  .otile.used{opacity:.3;pointer-events:none}
+  .otile .num{font-size:1.4rem}
+
+  .spell-slots{display:flex;gap:10px;justify-content:center;margin:8px 0 22px;flex-wrap:wrap}
+  .slot{
+    width:52px;height:60px;border-radius:10px;background:#f4f8ff;
+    border:3px dashed #1a2540;display:flex;align-items:center;justify-content:center;
+    font-size:1.75rem;font-weight:700;color:#1a2540;text-transform:uppercase;
+  }
+  .slot.filled{border-style:solid;border-color:#2e8b57;background:#eafff0}
+  .slot.bad{border-color:#c0392b;background:#fff0f0;animation:shake .4s}
+  .letter-pool{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .letter{
+    width:54px;height:60px;border-radius:10px;border:3px solid #ffd23e;background:#fff4d8;
+    font-family:inherit;font-size:1.7rem;font-weight:700;color:#8a5a10;cursor:pointer;
+    text-transform:uppercase;box-shadow:0 4px 0 #b08020;transition:.14s;
+  }
+  .letter:hover{transform:translateY(-3px);background:#ffe4b8}
+  .letter.used{opacity:.25;pointer-events:none;box-shadow:none;transform:none}
+
+  .drag-zone{
+    background:#f4f8ff;border:3px dashed #1a2540;border-radius:14px;
+    padding:22px 14px;text-align:center;margin-bottom:20px;min-height:130px;
+  }
+  .drag-item{
+    display:inline-block;background:#fff;border:2px solid #1a2540;border-radius:10px;
+    padding:10px 16px;margin:6px;cursor:pointer;font-family:inherit;font-size:1.02rem;
+    font-weight:700;color:#1a2540;box-shadow:0 3px 0 #0a1020;transition:.15s;
+  }
+  .drag-item:hover{transform:translateY(-3px);background:#f4f8ff}
+  .drag-item.chosen{background:#eafff0;border-color:#2e8b57;color:#1f6b41;box-shadow:0 3px 0 #1f6b41}
+  .drag-item.bad{animation:shake .4s;border-color:#c0392b;background:#fff0f0}
+
+  .fb{
+    margin-top:24px;padding:18px 20px;border-radius:12px;font-size:1rem;
+    line-height:1.6;text-align:center;display:none;font-weight:600;
+  }
+  .fb.show{display:block;animation:pop .3s}
+  .fb.good{background:#eafff0;border:3px double #2e8b57;color:#1f6b41}
+  .fb.bad{background:#fff4f4;border:3px double #c0392b;color:#8e2a1f}
+  .fb .again{
+    margin-top:12px;background:#fff;border:2px solid #c0392b;color:#8e2a1f;
+    border-radius:999px;padding:7px 16px;font-family:inherit;font-weight:700;
+    font-size:.9rem;cursor:pointer;
+  }
+  .fb .again:hover{background:#ffeaea}
+
+  .nav{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+  .nav button{
+    border:none;border-radius:999px;padding:13px 26px;font-family:inherit;
+    font-size:1rem;font-weight:700;cursor:pointer;transition:.16s;
+    display:inline-flex;align-items:center;gap:8px;letter-spacing:.3px;
+  }
+  .btn-next{background:#1a2540;color:#ffd23e;box-shadow:0 5px 0 #0a1020}
+  .btn-next:hover{background:#0e1726;transform:translateY(-2px)}
+  .btn-back{background:#fff;color:#1a2540;border:3px dashed #c8d0e0 !important;box-shadow:0 5px 0 #c8d0e0}
+  .btn-back:hover{background:#f4f8ff}
+  .btn-back:disabled,.btn-next:disabled{opacity:.4;cursor:default;transform:none}
+  .btn-replay{background:#ffd23e;color:#1a2540;box-shadow:0 5px 0 #b08020}
+  .btn-replay:hover{background:#ffc855}
+
+  .final{text-align:center}
+  .final .big{
+    font-size:3.4rem;display:inline-block;margin-bottom:16px;
+    background:radial-gradient(circle at 30% 25%, rgba(255,255,255,.35) 0 14px, transparent 20px),
+      linear-gradient(145deg,#ffd23e 0%,#e0a820 50%,#b08020 100%);
+    border-radius:50%;width:110px;height:110px;line-height:110px;
+    border:5px double #1a2540;animation:float 2.4s ease-in-out infinite;
+    box-shadow:0 8px 0 rgba(0,0,0,.4);
+  }
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  .final h2{font-size:clamp(1.25rem,4.5vw,1.8rem);color:#1a2540;margin-bottom:14px}
+  .final p{font-size:1.02rem;line-height:1.7;color:#33475a;margin-bottom:16px}
+  .reward{
+    background:#f4f8ff;border:3px dashed #1a2540;border-radius:14px;
+    padding:28px 22px 34px;margin:28px 0 32px;
+  }
+  .reward .head{font-weight:700;margin-bottom:14px;color:#1a2540;font-size:1.05rem}
+  .reward .words{font-size:1.02rem;line-height:2;color:#33475a;text-align:left;padding-bottom:6px}
+  .reward .words b{color:#1a2540}
+  .reward .words div{padding:6px 0;border-bottom:1px dotted #c8d0e0;margin-bottom:5px}
+  .reward .words div:last-child{border-bottom:none;margin-bottom:0}
+  .restart{background:#1a2540;color:#ffd23e;box-shadow:0 5px 0 #0a1020}
+  .restart:hover{background:#0e1726}
+
+  .start-screen{text-align:center}
+  .start-screen .cast{font-size:2.6rem;letter-spacing:6px;margin:16px 0 8px}
+  .start-screen ul{
+    list-style:none;text-align:left;margin:18px auto;max-width:440px;
+    background:#f4f8ff;border:3px dashed #1a2540;border-radius:14px;padding:18px 20px;
+  }
+  .start-screen li{
+    padding:8px 0 8px 32px;position:relative;font-size:.97rem;color:#33475a;line-height:1.5;
+    border-bottom:1px dotted #c8d0e0;
+  }
+  .start-screen li:last-child{border-bottom:none}
+  .start-screen li::before{content:'🏟️';position:absolute;left:0;top:8px;font-size:.95rem}
+  .sound-note{
+    background:#fff4d8;border:2px solid #ffd23e;border-radius:12px;padding:12px 16px;
+    font-size:.88rem;color:#8a5a10;margin-top:18px;line-height:1.55;
+  }
+
+  @media (max-width:560px){
+    .match-area{grid-template-columns:1fr 1fr;gap:8px}
+    .mitem{font-size:.88rem;min-height:52px;padding:9px 5px}
+    .mitem .pic{font-size:1.3rem}
+    .slot,.letter{width:44px;height:52px;font-size:1.4rem}
+    .countbox .items{font-size:1.9rem;letter-spacing:5px}
+    .hero{font-size:2.6rem}
+    .nav button{padding:12px 18px;font-size:.95rem}
+    .stage{padding:32px 14px 38px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <h1>Стадион супергероев</h1>
+    <div class="bar-wrap">
+      <div class="bar-label">
+        <span id="stepLabel">РЕПОРТАЖ 0 ИЗ 16</span>
+        <span id="pctLabel">0%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" id="barFill"></div>
+        <div class="bar-runner" id="barRunner">🏅</div>
+      </div>
+      <div class="stars" id="stars"></div>
+    </div>
+  </div>
+
+  <div id="stageHost"></div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var RATE = 0.85;
+  var voices = [];
+
+  function loadVoices(){
+    if(!('speechSynthesis' in window)) return;
+    voices = window.speechSynthesis.getVoices() || [];
+  }
+  loadVoices();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    setTimeout(loadVoices, 350);
+    setTimeout(loadVoices, 1400);
+  }
+
+  function pickVoice(){
+    if(!voices.length) loadVoices();
+    var v;
+    v = voices.find(function(x){ return x.lang === 'en-GB'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en-gb') === 0; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang === 'en-US'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en') === 0; });
+    return v || null;
+  }
+
+  function speak(text, delay){
+    if(!('speechSynthesis' in window)) return;
+    var go = function(){
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      var v = pickVoice();
+      if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+      u.rate = RATE; u.pitch = 1.06; u.volume = 1;
+      window.speechSynthesis.speak(u);
+    };
+    if(delay){ setTimeout(go, delay); } else { go(); }
+  }
+
+  function speakSeq(arr){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    arr.forEach(function(t, i){
+      setTimeout(function(){
+        var u = new SpeechSynthesisUtterance(t);
+        var v = pickVoice();
+        if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+        u.rate = RATE; u.pitch = 1.06;
+        window.speechSynthesis.speak(u);
+      }, i * 1500);
+    });
+  }
+
+  var STEPS = [
+
+  /* 1 */ {
+    kind:'intro', emoji:'🏟️', mech:'Выход на арену',
+    title:'Стадион супергероев',
+    text:'Сегодня ты комментатор на стадионе. На арене Китти и Дэнни соревнуются: кто умеет бегать, кто умеет прыгать, а кто лезть на дерево. Твоя задача — рассказать трибунам про каждое действие: **Kitty can jump! Danny can't climb!** Шестнадцать репортажей — и ты главный комментатор стадиона.',
+    say:'Kitty can jump! Danny can\'t climb!',
+    sayRu:'Китти умеет прыгать! Дэнни не умеет лазать!',
+    cta:'🏟️ Выйти на арену!'
+  },
+
+  /* 2 */ {
+    kind:'listen', emoji:'👂', mech:'Аудирование',
+    title:'Репортаж 1: первое действие',
+    text:'Нажми на микрофон и выбери действие, которое прозвучало.',
+    say:'Kitty can jump.',
+    opts:[
+      {t:'Kitty can jump. /ˈkɪti kæn dʒʌmp/ — Китти умеет прыгать', say:'Kitty can jump.'},
+      {t:'Kitty can run. /ˈkɪti kæn rʌn/ — Китти умеет бегать', say:'Kitty can run.'},
+      {t:'Kitty can climb. /ˈkɪti kæn klaɪm/ — Китти умеет лазать', say:'Kitty can climb.'}
+    ],
+    correct:0,
+    ok:'Да, она прыгает: **Kitty can jump.** /ˈkɪti kæn dʒʌmp/',
+    no:'Послушай ещё раз: Китти делает прыжок.'
+  },
+
+  /* 3 */ {
+    kind:'spell', emoji:'🏃', mech:'Сборка слова',
+    title:'Репортаж 2: слово «бегать»',
+    text:'Собери слово **run** /rʌn/ — бегать.',
+    word:'run', hint:'🏃', say:'run',
+    ok:'Собрано: **run** /rʌn/ — бегать.',
+    no:'Буква не та. Слушай: r-u-n.'
+  },
+
+  /* 4 */ {
+    kind:'cancant', emoji:'🐱', mech:'Can или can\'t',
+    title:'Репортаж 3: умеет или нет?',
+    text:'Посмотри на картинку и выбери: Китти умеет это делать или нет?',
+    scene:'🐱 🦘',
+    say:'Kitty can jump.',
+    answer:'can',
+    ok:'Верно: **Kitty can jump** /ˈkɪti kæn dʒʌmp/ — Китти умеет прыгать!',
+    no:'Посмотри, что делает Китти. Она прыгает — значит умеет или нет?'
+  },
+
+  /* 5 */ {
+    kind:'cancant', emoji:'🐶', mech:'Can или can\'t',
+    title:'Репортаж 4: а Дэнни?',
+    text:'Теперь посмотри на Дэнни. Он смотрит на дерево и качает головой.',
+    scene:'🐶 🌳 ❌',
+    say:"Danny can't climb.",
+    answer:'cant',
+    ok:'Верно: **Danny can\'t climb** /ˈdæni kɑːnt klaɪm/ — Дэнни не умеет лазать.',
+    no:'Дэнни качает головой — значит он умеет это или нет?'
+  },
+
+  /* 6 */ {
+    kind:'count', emoji:'🌳', mech:'Счёт',
+    title:'Репортаж 5: сосиски на дереве',
+    text:'На дереве висят награды — сосиски! Сосчитай их. **How many sausages?**',
+    ask:'How many sausages?',
+    items:'🌭🌭🌭🌭',
+    say:'How many sausages? One, two, three, four. Four sausages!',
+    opts:[
+      {t:'three /θriː/ — три', say:'three'},
+      {t:'four /fɔː/ — четыре', say:'four'},
+      {t:'five /faɪv/ — пять', say:'five'}
+    ],
+    correct:1,
+    ok:'Четыре сосиски: **Four sausages!** /fɔː ˈsɒsɪdʒɪz/',
+    no:'Считаем по одной сосиске.'
+  },
+
+  /* 7 */ {
+    kind:'match', emoji:'🔗', mech:'Пары',
+    title:'Репортаж 6: герой и действие',
+    text:'Соедини героя с действием, которое он умеет или не умеет.',
+    say:'Kitty can jump, Kitty can climb, Danny can run, Danny can\'t climb',
+    pairs:[
+      {left:'Kitty', say:'Kitty can jump', right:'🐱 🦘'},
+      {left:'Kitty', say:'Kitty can climb', right:'🐱 🧗'},
+      {left:'Danny', say:'Danny can run', right:'🐶 🏃'},
+      {left:'Danny', say:"Danny can't climb", right:'🐶 🌳 ❌'}
+    ],
+    ok:'Все пары сошлись: у каждого героя свои способности.',
+    no:'Не та пара. Послушай фразу и посмотри на картинку.'
+  },
+
+  /* 8 */ {
+    kind:'spell', emoji:'🦘', mech:'Сборка слова',
+    title:'Репортаж 7: слово «прыгать»',
+    text:'Собери слово **jump** /dʒʌmp/ — прыгать.',
+    word:'jump', hint:'🦘', say:'jump',
+    ok:'Собрано: **jump** /dʒʌmp/ — прыгать.',
+    no:'Буква не та. Слушай: j-u-m-p.'
+  },
+
+  /* 9 */ {
+    kind:'choice', emoji:'❓', mech:'Выбор ответа',
+    title:'Репортаж 8: вопрос трибун',
+    text:'Трибуны кричат вопрос: умеет ли Китти бегать? Как он звучит?',
+    say:'Can Kitty run?',
+    opts:[
+      {t:'Can Kitty run? /kæn ˈkɪti rʌn/ — Китти умеет бегать?', say:'Can Kitty run?'},
+      {t:'Can Kitty jump? /kæn ˈkɪti dʒʌmp/ — Китти умеет прыгать?', say:'Can Kitty jump?'},
+      {t:'Can Danny climb? /kæn ˈdæni klaɪm/ — Дэнни умеет лазать?', say:'Can Danny climb?'}
+    ],
+    correct:0,
+    ok:'Верно: **Can Kitty run?** /kæn ˈkɪti rʌn/ — Китти умеет бегать?',
+    no:'Вопрос про бег. Какая фраза про run?'
+  },
+
+  /* 10 */ {
+    kind:'choice', emoji:'✅', mech:'Выбор ответа',
+    title:'Репортаж 9: ответ Китти',
+    text:'Китти выходит на беговую дорожку. Как отвечает комментатор?',
+    say:'Yes, he can.',
+    opts:[
+      {t:'Yes, he can. /jes hiː kæn/ — да, умеет', say:'Yes, he can.'},
+      {t:"No, he can't. /nəʊ hiː kɑːnt/ — нет, не умеет", say:"No, he can't."},
+      {t:'Yes, she can. /jes ʃiː kæn/ — да, умеет (она)', say:'Yes, she can.'}
+    ],
+    correct:0,
+    ok:'Правильный ответ: **Yes, he can.** /jes hiː kæn/',
+    no:'Китти умеет бегать — значит ответ «да». Какая фраза?'
+  },
+
+  /* 11 */ {
+    kind:'pick', emoji:'🐱', mech:'Отбор',
+    title:'Репортаж 10: что умеет Китти?',
+    text:'Отметь все действия, которые Китти умеет. То, что не умеет — оставь.',
+    say:'Kitty can!',
+    pool:[
+      {t:'🦘 jump', say:'jump', good:true},
+      {t:'🌭 eat sausages', say:'eat sausages', good:false},
+      {t:'🧗 climb', say:'climb', good:true},
+      {t:'🌳 be a tree', say:'be a tree', good:false},
+      {t:'🏃 run', say:'run', good:true}
+    ],
+    ok:'Три способности Китти: **jump, climb, run**!',
+    no:'Одна из отметок — не про Китти. Проверь список.'
+  },
+
+  /* 12 */ {
+    kind:'order', emoji:'💬', mech:'Склейка диалога',
+    title:'Репортаж 11: интервью с Китти',
+    text:'Склей интервью комментатора с Китти по порядку.',
+    say:'Can you run? Yes, I can. Can you climb? Yes, I can.',
+    items:[
+      {t:'Can you run?', n:'🏃', say:'Can you run?'},
+      {t:'Yes, I can.', n:'✅', say:'Yes, I can.'},
+      {t:'Can you climb?', n:'🧗', say:'Can you climb?'},
+      {t:'Yes, I can.', n:'✅', say:'Yes, I can.'}
+    ],
+    ok:'Интервью в эфире: **Can you run? — Yes, I can. — Can you climb? — Yes, I can.**',
+    no:'Порядок сбился: сначала вопрос, потом ответ.'
+  },
+
+  /* 13 */ {
+    kind:'spell', emoji:'🧗', mech:'Сборка слова',
+    title:'Репортаж 12: слово «лазать»',
+    text:'Собери слово **climb** /klaɪm/ — лазать.',
+    word:'climb', hint:'🧗', say:'climb',
+    ok:'Собрано: **climb** /klaɪm/ — лазать.',
+    no:'Буква не та. Слушай: c-l-i-m-b.'
+  },
+
+  /* 14 */ {
+    kind:'yesno', emoji:'✅', mech:'Верно / неверно',
+    title:'Репортаж 13: проверка трибун',
+    text:'Трибуны кричат про Дэнни. Правда ли это?',
+    scene:'🐶 🌳 ❌',
+    say:'Danny can climb the tree.',
+    answer:false,
+    ok:'Неправда: **Danny can\'t climb.** /ˈdæni kɑːnt klaɪm/ — он не умеет лазать.',
+    no:'Посмотри: Дэнни качает головой у дерева. Он умеет лазать?'
+  },
+
+  /* 15 */ {
+    kind:'choice', emoji:'🙋', mech:'Выбор ответа',
+    title:'Репортаж 14: твой выход',
+    text:'Трибуны спрашивают тебя: что умеешь ты? Какая фраза твоя?',
+    say:'I can jump!',
+    opts:[
+      {t:'I can jump! /aɪ kæn dʒʌmp/ — я умею прыгать!', say:'I can jump!'},
+      {t:'Kitty can jump! /ˈkɪti kæn dʒʌmp/ — Китти умеет прыгать!', say:'Kitty can jump!'},
+      {t:"I can't jump. /aɪ kɑːnt dʒʌmp/ — я не умею прыгать", say:"I can't jump."}
+    ],
+    correct:0,
+    ok:'Правильно: **I can jump!** /aɪ kæn dʒʌmp/ — это про тебя!',
+    no:'Фраза должна быть про тебя. Какая начинается с I can?'
+  },
+
+  /* 16 */ {
+    kind:'final', emoji:'🏅', mech:'Главный комментатор',
+    title:'Золотая медаль комментатора!',
+    text:'Шестнадцать репортажей позади: ты рассказал про все действия Китти и Дэнни, различил can и can\'t, ответил на вопросы трибун и сам вышел на арену. Золотая медаль комментатора — твоя.',
+    say:'You are the champion commentator! Well done!',
+    allWords:[
+      {en:'run', ipa:'/rʌn/', ru:'бегать'},
+      {en:'jump', ipa:'/dʒʌmp/', ru:'прыгать'},
+      {en:'climb', ipa:'/klaɪm/', ru:'лазать'},
+      {en:'tree', ipa:'/triː/', ru:'дерево'},
+      {en:'sausages', ipa:'/ˈsɒsɪdʒɪz/', ru:'сосиски'},
+      {en:'Kitty', ipa:'/ˈkɪti/', ru:'Китти'},
+      {en:'Danny', ipa:'/ˈdæni/', ru:'Дэнни'},
+      {en:'can', ipa:'/kæn/', ru:'может'},
+      {en:"can't", ipa:'/kɑːnt/', ru:'не может'},
+      {en:'Kitty can jump.', ipa:'/ˈkɪti kæn dʒʌmp/', ru:'Китти умеет прыгать'},
+      {en:"Danny can't climb.", ipa:'/ˈdæni kɑːnt klaɪm/', ru:'Дэнни не умеет лазать'},
+      {en:'Can Kitty run?', ipa:'/kæn ˈkɪti rʌn/', ru:'Китти умеет бегать?'},
+      {en:'Yes, he can.', ipa:'/jes hiː kæn/', ru:'да, умеет'},
+      {en:"No, he can't.", ipa:'/nəʊ hiː kɑːnt/', ru:'нет, не умеет'},
+      {en:'I can jump!', ipa:'/aɪ kæn dʒʌmp/', ru:'я умею прыгать!'}
+    ]
+  }
+  ];
+
+  var TOTAL = STEPS.length;
+  var idx = 0;
+  var history = [];
+  var score = 0;
+  var stageHost = document.getElementById('stageHost');
+  var barFill = document.getElementById('barFill');
+  var barRunner = document.getElementById('barRunner');
+  var stepLabel = document.getElementById('stepLabel');
+  var pctLabel = document.getElementById('pctLabel');
+  var starsBox = document.getElementById('stars');
+
+  function bold(str){
+    return String(str).replace(/\*\*(.+?)\*\*/g, '<span class="en-inline">$1</span>');
+  }
+
+  function updateBar(){
+    var pct = Math.round((idx / (TOTAL - 1)) * 100);
+    if(pct < 0) pct = 0; if(pct > 100) pct = 100;
+    barFill.style.width = pct + '%';
+    barRunner.style.left = pct + '%';
+    stepLabel.textContent = idx === 0 ? 'РЕПОРТАЖ 0 ИЗ ' + (TOTAL - 1) : ('РЕПОРТАЖ ' + idx + ' ИЗ ' + (TOTAL - 1));
+    pctLabel.textContent = pct + '%';
+    var full = Math.floor(score / 3);
+    var s = '';
+    for(var i = 0; i < full && i < 6; i++){ s += '🏅'; }
+    starsBox.textContent = s;
+  }
+
+  function shakeStage(){
+    var st = stageHost.querySelector('.stage');
+    if(!st) return;
+    st.classList.remove('shake');
+    void st.offsetWidth;
+    st.classList.add('shake');
+  }
+
+  function speakerBtn(text, cls, title){
+    var b = document.createElement('button');
+    b.className = cls || 'speak-mini';
+    b.innerHTML = '🔊';
+    b.title = title || 'Прослушать';
+    b.setAttribute('aria-label','Прослушать: ' + text);
+    b.addEventListener('click', function(ev){ ev.stopPropagation(); speak(text); });
+    return b;
+  }
+
+  function nextBtn(label, fn, cls){
+    var b = document.createElement('button');
+    b.className = cls || 'btn-next';
+    b.textContent = label;
+    b.addEventListener('click', fn);
+    return b;
+  }
+
+  function goNext(){
+    if(idx < TOTAL - 1){
+      history.push(idx);
+      idx++;
+      render();
+    }
+  }
+  function goBack(){
+    if(history.length){
+      idx = history.pop();
+      render();
+    }
+  }
+
+  function render(){
+    window.scrollTo({top:0, behavior:'smooth'});
+    updateBar();
+    stageHost.innerHTML = '';
+    var s = STEPS[idx];
+
+    var stage = document.createElement('div');
+    stage.className = 'stage';
+    stageHost.appendChild(stage);
+
+    if(s.kind === 'intro')   return renderIntro(stage, s);
+    if(s.kind === 'final')   return renderFinal(stage, s);
+    if(s.kind === 'listen' || s.kind === 'choice') return renderChoice(stage, s);
+    if(s.kind === 'yesno')   return renderYesNo(stage, s);
+    if(s.kind === 'cancant') return renderCanCant(stage, s);
+    if(s.kind === 'count')   return renderCount(stage, s);
+    if(s.kind === 'spell')   return renderSpell(stage, s);
+    if(s.kind === 'match')   return renderMatch(stage, s);
+    if(s.kind === 'order')   return renderOrder(stage, s);
+    if(s.kind === 'pick')    return renderPick(stage, s);
+  }
+
+  function header(stage, s){
+    var tag = document.createElement('span');
+    tag.className = 'step-tag';
+    tag.textContent = 'РЕПОРТАЖ ' + (idx + 1) + ' ИЗ ' + TOTAL;
+    stage.appendChild(tag);
+
+    if(s.mech){
+      var m = document.createElement('span');
+      m.className = 'mech-tag';
+      m.textContent = s.mech;
+      stage.appendChild(m);
+    }
+    var hero = document.createElement('span');
+    hero.className = 'hero';
+    hero.textContent = s.emoji || '🏟️';
+    stage.appendChild(hero);
+
+    var h2 = document.createElement('h2');
+    h2.textContent = s.title;
+    stage.appendChild(h2);
+
+    var p = document.createElement('div');
+    p.className = 'task-text';
+    p.innerHTML = bold(s.text);
+    stage.appendChild(p);
+  }
+
+  function speakBlock(stage, s){
+    if(!s.say) return;
+    var line = document.createElement('div');
+    line.className = 'speak-line';
+    var big = document.createElement('button');
+    big.className = 'speak-big';
+    big.innerHTML = '🔊 ' + s.say;
+    big.addEventListener('click', function(){ speak(s.say); });
+    line.appendChild(big);
+    stage.appendChild(line);
+    if(s.sayRu){
+      var r = document.createElement('div');
+      r.className = 'task-text';
+      r.style.marginTop = '-8px';
+      r.style.fontSize = '.92rem';
+      r.textContent = s.sayRu;
+      stage.appendChild(r);
+    }
+  }
+
+  function feedback(stage, s, onWin){
+    var fb = document.createElement('div');
+    fb.className = 'fb';
+    stage.appendChild(fb);
+
+    var nav = document.createElement('div');
+    nav.className = 'nav';
+
+    var back = nextBtn('⬅️ Назад', goBack, 'btn-back');
+    if(!history.length) back.disabled = true;
+    nav.appendChild(back);
+
+    var replay = nextBtn('🔁 Ещё раз', function(){ render(); }, 'btn-replay');
+    nav.appendChild(replay);
+
+    var next = nextBtn('Следующий репортаж ➡️', goNext);
+    next.style.display = 'none';
+    nav.appendChild(next);
+
+    stage.appendChild(nav);
+
+    function showGood(){
+      fb.className = 'fb good show';
+      fb.innerHTML = bold(s.ok || 'Репортаж в эфире!');
+      next.style.display = '';
+      speak('Well done!', 250);
+      if(onWin) onWin();
+    }
+    function showBad(){
+      fb.className = 'fb bad show';
+      fb.innerHTML = bold(s.no || 'Повторим репортаж!') +
+        '<br><button class="again" type="button">🔁 Попробовать снова</button>';
+      var ag = fb.querySelector('.again');
+      ag.addEventListener('click', function(){ render(); });
+      shakeStage();
+      speak('Try again!', 200);
+    }
+    return {good:showGood, bad:showBad, next:next, back:back};
+  }
+
+  function renderIntro(stage, s){
+    header(stage, s);
+    speakBlock(stage, s);
+
+    var cast = document.createElement('div');
+    cast.className = 'start-screen';
+    cast.innerHTML = '<div class="cast">🏟️ 🐱 🐶 🏅</div>';
+    stage.appendChild(cast);
+
+    var list = document.createElement('ul');
+    ['Называть действия: run, jump, climb',
+     'Различать can (может) и can\'t (не может)',
+     'Отвечать на вопросы: Yes, he can / No, he can\'t',
+     'Рассказывать про себя: I can jump!',
+     'Собрать золотую медаль комментатора'
+    ].forEach(function(t){
+      var li = document.createElement('li');
+      li.textContent = t;
+      list.appendChild(li);
+    });
+    stage.appendChild(list);
+
+    var note = document.createElement('div');
+    note.className = 'sound-note';
+    note.innerHTML = '🔈 Включите звук. Все фразы озвучены британским голосом. В задании «Can или can\'t» — две кнопки с зелёной галочкой и красным крестиком.';
+    stage.appendChild(note);
+
+    var nav = document.createElement('div');
+    nav.className = 'nav';
+    nav.appendChild(nextBtn(s.cta || 'Начать ➡️', goNext));
+    stage.appendChild(nav);
+
+    speak(s.say, 500);
+  }
+
+  function renderCanCant(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+
+    var scene = document.createElement('div');
+    scene.className = 'cancant-scene';
+    var big = document.createElement('span');
+    big.className = 'big';
+    big.textContent = s.scene || '❓';
+    scene.appendChild(big);
+    stage.insertBefore(scene, stage.querySelector('.nav'));
+
+    var line = document.createElement('div');
+    line.className = 'speak-line';
+    var sb = document.createElement('button');
+    sb.className = 'speak-big';
+    sb.innerHTML = '🔊 ' + s.say;
+    sb.addEventListener('click', function(){ speak(s.say); });
+    line.appendChild(sb);
+    stage.insertBefore(line, stage.querySelector('.nav'));
+    speak(s.say, 600);
+
+    var row = document.createElement('div');
+    row.className = 'cancant-row';
+    stage.insertBefore(row, stage.querySelector('.nav'));
+
+    var hint = document.createElement('div');
+    hint.className = 'cancant-hint';
+    hint.innerHTML = '💡 Если герой умеет — нажми <b>CAN ✓</b>. Если не умеет — нажми <b>CAN\'T ✗</b>.';
+    stage.insertBefore(hint, stage.querySelector('.nav'));
+
+    var locked = false;
+    [['can','✅ CAN — умеет'], ['cant','❌ CAN\'T — не умеет']].forEach(function(pair){
+      var val = pair[0];
+      var b = document.createElement('button');
+      b.className = 'cancant-btn ' + val;
+      b.type = 'button';
+      b.textContent = pair[1];
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(val === s.answer){
+          locked = true;
+          b.classList.add('correct');
+          speak(s.say, 100);
+          setTimeout(fb.good, 600);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      row.appendChild(b);
+    });
+  }
+
+  function renderChoice(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+
+    if(s.kind === 'listen'){
+      var line = document.createElement('div');
+      line.className = 'speak-line';
+      var big = document.createElement('button');
+      big.className = 'speak-big';
+      big.innerHTML = '🔊 Прослушать';
+      big.addEventListener('click', function(){ speak(s.say); });
+      line.appendChild(big);
+      stage.insertBefore(line, stage.querySelector('.nav'));
+      speak(s.say, 600);
+    } else {
+      speakBlock(stage, s);
+    }
+
+    var box = document.createElement('div');
+    box.className = 'opts' + (s.opts.length > 3 ? ' grid2' : '');
+    var navEl = stage.querySelector('.nav');
+    stage.insertBefore(box, navEl);
+
+    var locked = false;
+    s.opts.forEach(function(o, i){
+      var b = document.createElement('button');
+      b.className = 'opt';
+      b.type = 'button';
+      var mk = document.createElement('span');
+      mk.className = 'mark';
+      mk.textContent = String.fromCharCode(65 + i);
+      b.appendChild(mk);
+      var tx = document.createElement('span');
+      tx.innerHTML = bold(o.t);
+      b.appendChild(tx);
+      b.appendChild(speakerBtn(o.say || o.t.replace(/\/.*?\//g,'').replace(/—.*$/,'').trim(), 'speak-mini'));
+
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(i === s.correct){
+          locked = true;
+          b.classList.add('correct');
+          Array.prototype.forEach.call(box.children, function(x){ x.disabled = true; });
+          speak(o.say || o.t, 120);
+          setTimeout(fb.good, 650);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function renderYesNo(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+
+    var box = document.createElement('div');
+    box.className = 'yesno-scene';
+    var big = document.createElement('span');
+    big.className = 'big';
+    big.textContent = s.scene || '❓';
+    box.appendChild(big);
+    stage.insertBefore(box, stage.querySelector('.nav'));
+
+    var line = document.createElement('div');
+    line.className = 'speak-line';
+    var sb = document.createElement('button');
+    sb.className = 'speak-big';
+    sb.innerHTML = '🔊 ' + s.say;
+    sb.addEventListener('click', function(){ speak(s.say); });
+    line.appendChild(sb);
+    stage.insertBefore(line, stage.querySelector('.nav'));
+    speak(s.say, 600);
+
+    var row = document.createElement('div');
+    row.className = 'yesno-row';
+    stage.insertBefore(row, stage.querySelector('.nav'));
+
+    var locked = false;
+    [true, false].forEach(function(val){
+      var b = document.createElement('button');
+      b.className = 'yesno-btn ' + (val ? 'yes' : 'no');
+      b.type = 'button';
+      b.innerHTML = val ? '✔️ ВЕРНО' : '❌ НЕВЕРНО';
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(val === s.answer){
+          locked = true;
+          b.classList.add('correct');
+          speak(s.say, 100);
+          setTimeout(fb.good, 600);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      row.appendChild(b);
+    });
+  }
+
+  function renderCount(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    var cb = document.createElement('div');
+    cb.className = 'countbox';
+    var q = document.createElement('div');
+    q.className = 'task-text';
+    q.style.marginBottom = '12px';
+    q.innerHTML = '<span class="en-inline">' + s.ask + '</span>';
+    cb.appendChild(q);
+    var ql = document.createElement('div');
+    ql.className = 'speak-line';
+    ql.style.margin = '0 0 14px';
+    ql.appendChild(speakerBtn(s.ask, 'speak-mini', 'Прослушать вопрос'));
+    cb.appendChild(ql);
+    var it = document.createElement('div');
+    it.className = 'items';
+    it.textContent = s.items;
+    cb.appendChild(it);
+    stage.insertBefore(cb, navEl);
+
+    speak(s.say, 600);
+
+    var box = document.createElement('div');
+    box.className = 'opts grid2';
+    stage.insertBefore(box, navEl);
+
+    var locked = false;
+    s.opts.forEach(function(o, i){
+      var b = document.createElement('button');
+      b.className = 'opt'; b.type = 'button';
+      b.style.justifyContent = 'center';
+      b.innerHTML = bold(o.t);
+      b.appendChild(speakerBtn(o.say, 'speak-mini'));
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(i === s.correct){
+          locked = true;
+          b.classList.add('correct');
+          Array.prototype.forEach.call(box.children, function(x){ x.disabled = true; });
+          speak(o.say, 120);
+          setTimeout(fb.good, 650);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function renderSpell(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    var hintLine = document.createElement('div');
+    hintLine.className = 'speak-line';
+    var hb = document.createElement('button');
+    hb.className = 'speak-big';
+    hb.innerHTML = s.hint + ' 🔊 Прослушать слово';
+    hb.addEventListener('click', function(){ speak(s.word); });
+    hintLine.appendChild(hb);
+    stage.insertBefore(hintLine, navEl);
+    speak(s.word, 600);
+
+    var slots = document.createElement('div');
+    slots.className = 'spell-slots';
+    var slotEls = [];
+    for(var i = 0; i < s.word.length; i++){
+      var sl = document.createElement('div');
+      sl.className = 'slot';
+      slots.appendChild(sl);
+      slotEls.push(sl);
+    }
+    stage.insertBefore(slots, navEl);
+
+    var letters = s.word.split('');
+    var extra = 'abcdefghijklmnopqrstuvwxyz'.split('');
+    var pool = letters.slice();
+    var need = Math.max(0, 6 - pool.length);
+    for(var k = 0; k < need; k++){
+      pool.push(extra[Math.floor(Math.random() * extra.length)]);
+    }
+    pool.sort(function(){ return Math.random() - 0.5; });
+
+    var poolBox = document.createElement('div');
+    poolBox.className = 'letter-pool';
+    stage.insertBefore(poolBox, navEl

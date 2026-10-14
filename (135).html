@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик: Небесный театр</title>
+<meta name="description" content="Интерактивный словарик к уроку Небесный театр.">
+<style>
+body { font-family: 'Comic Sans MS', 'Marker Felt', sans-serif; background: linear-gradient(to bottom, #87ceeb 0%, #e0f6ff 100%); margin: 0; padding: 20px; color: #2c3e50; min-height: 100vh; }
+.header { text-align: center; margin-bottom: 25px; }
+.header h1 { font-size: 2.2em; margin: 0; color: #1e3a5f; text-shadow: 2px 2px 0 rgba(255,255,255,0.5); }
+.header p { font-size: 1.1em; color: #34495e; margin: 8px 0; }
+.filters { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; }
+.filter-btn { background: #5dade2; color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1em; cursor: pointer; font-family: inherit; transition: all 0.3s; box-shadow: 0 4px 0 #2874a6; }
+.filter-btn.active, .filter-btn:hover { background: #f39c12; box-shadow: 0 4px 0 #d68910; transform: translateY(-2px); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; max-width: 1100px; margin: 0 auto; }
+.card { background: white; border: 5px solid #85c1e9; border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%; padding: 25px 20px 20px; text-align: center; position: relative; box-shadow: 0 8px 20px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; min-height: 200px; transition: transform 0.3s; }
+.card:hover { transform: translateY(-5px); }
+.card::before { content: ''; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; background: white; border-radius: 50%; border: 4px solid #85c1e9; }
+.emoji { font-size: 3.5em; margin-bottom: 10px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2)); }
+.en { font-size: 1.5em; font-weight: bold; color: #1e3a5f; margin: 8px 0; }
+.ipa { font-size: 0.95em; color: #5d6d7e; font-family: 'Courier New', monospace; margin-bottom: 8px; }
+.ru { font-size: 1.15em; color: #2c3e50; margin-bottom: 18px; }
+.sound-btn { background: #27ae60; color: white; border: none; width: 50px; height: 50px; border-radius: 50%; font-size: 1.6em; cursor: pointer; box-shadow: 0 5px 0 #1e8449; transition: 0.1s; }
+.sound-btn:active { transform: translateY(5px); box-shadow: none; }
+.card.playing { border-color: #f39c12; background: #fef9e7; transform: scale(1.05); }
+.footer { text-align: center; margin-top: 50px; font-size: 0.95em; color: #5d6d7e; }
+@media (max-width: 600px) {
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .header h1 { font-size: 1.7em; }
+  .card { min-height: 180px; padding: 20px 15px 15px; }
+  .emoji { font-size: 3em; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>☁️ Небесный театр</h1>
+  <p>Нажми на кнопку, чтобы услышать слово</p>
+</div>
+<div class="filters">
+  <button class="filter-btn active" data-cat="all">Все</button>
+  <button class="filter-btn" data-cat="animals">Животные</button>
+  <button class="filter-btn" data-cat="nature">Природа</button>
+  <button class="filter-btn" data-cat="actions">Действия</button>
+</div>
+<div class="grid" id="grid"></div>
+<div class="footer">Spotlight Starter • Модуль 3, Урок 5</div>
+<script>
+var words = [
+  { en: "swans", ipa: "/swɒnz/", ru: "лебеди", emoji: "🦢", cat: "animals" },
+  { en: "duckling", ipa: "/ˈdʌklɪŋ/", ru: "утёнок", emoji: "🐥", cat: "animals" },
+  { en: "sky", ipa: "/skaɪ/", ru: "небо", emoji: "☁️", cat: "nature" },
+  { en: "sun", ipa: "/sʌn/", ru: "солнце", emoji: "☀️", cat: "nature" },
+  { en: "fly", ipa: "/flaɪ/", ru: "летать", emoji: "🪽", cat: "actions" },
+  { en: "look", ipa: "/lʊk/", ru: "смотреть", emoji: "👀", cat: "actions" },
+  { en: "beautiful", ipa: "/ˈbjuːtɪf(ə)l/", ru: "красивый", emoji: "✨", cat: "actions" },
+  { en: "up", ipa: "/ʌp/", ru: "вверх", emoji: "⬆️", cat: "actions" },
+  { en: "can", ipa: "/kæn/", ru: "мочь", emoji: "💪", cat: "actions" },
+  { en: "they", ipa: "/ðeɪ/", ru: "они", emoji: "👥", cat: "actions" },
+  { en: "wings", ipa: "/wɪŋz/", ru: "крылья", emoji: "🪽", cat: "nature" },
+  { en: "clouds", ipa: "/klaʊdz/", ru: "облака", emoji: "☁️", cat: "nature" }
+];
+
+var grid = document.getElementById('grid');
+var currentAudio = null;
+var playingCard = null;
+
+function renderWords(filter) {
+  grid.innerHTML = '';
+  words.forEach(function(w) {
+    if (filter !== 'all' && w.cat !== filter) return;
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = 
+      '<div class="emoji">' + w.emoji + '</div>' +
+      '<div class="en">' + w.en + '</div>' +
+      '<div class="ipa">' + w.ipa + '</div>' +
+      '<div class="ru">' + w.ru + '</div>' +
+      '<button class="sound-btn">🔊</button>';
+    
+    var btn = card.querySelector('.sound-btn');
+    btn.onclick = function() {
+      if (currentAudio) {
+        speechSynthesis.cancel();
+        if (playingCard) playingCard.classList.remove('playing');
+      }
+      var utter = new SpeechSynthesisUtterance(w.en);
+      utter.lang = 'en-GB';
+      utter.rate = 0.85;
+      card.classList.add('playing');
+      playingCard = card;
+      utter.onend = function() {
+        card.classList.remove('playing');
+        playingCard = null;
+      };
+      speechSynthesis.speak(utter);
+      currentAudio = utter;
+    };
+    grid.appendChild(card);
+  });
+}
+
+document.querySelectorAll('.filter-btn').forEach(function(btn) {
+  btn.onclick = function() {
+    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    renderWords(btn.getAttribute('data-cat'));
+  };
+});
+
+renderWords('all');
+</script>
+</body>
+</html>

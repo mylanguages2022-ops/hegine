@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Квест — Ночной пруд</title>
+
+<meta property="og:title" content="Квест — Ночной пруд">
+<meta property="og:description" content="Квест по седьмой части The Ugly Duckling: 16 следов через замёрзший пруд, девять механик, зимние слова и тёплые фразы. Британская озвучка.">
+<meta property="og:image" content="https://spotlight-lessons.example.com/og/ud7-quest-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Замёрзший пруд ночью, следы утёнка">
+<meta property="og:url" content="https://spotlight-lessons.example.com/ud7/quest">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Spotlight — уроки для родителя и ребёнка">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Квест по седьмой части The Ugly Duckling: 16 шагов, девять механик, озвучка en-GB, прогресс-бар и возврат при ошибке.">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
+    background-color:#16233d;
+    background-image:
+      radial-gradient(rgba(255,255,255,.35) 1.2px, transparent 1.8px),
+      radial-gradient(rgba(255,255,255,.22) 1px, transparent 1.6px),
+      radial-gradient(rgba(255,255,255,.15) 1.6px, transparent 2.2px),
+      linear-gradient(180deg,#16233d 0%,#0d1626 100%);
+    background-size:140px 140px, 90px 90px, 220px 220px, 100% 100%;
+    background-position:10px 20px, 60px 80px, 30px 40px, 0 0;
+    color:#dfe9f4;min-height:100vh;padding:20px 12px 90px;
+  }
+  .wrap{max-width:780px;margin:0 auto}
+
+  /* ---------- НЕБО И СУГРОБ ---------- */
+  .topbar{
+    background:rgba(255,255,255,.07);border-radius:16px;padding:18px 18px 22px;
+    border:2px solid rgba(191,224,245,.4);
+    box-shadow:0 8px 24px rgba(0,0,0,.45), inset 0 0 30px rgba(191,224,245,.08);
+    margin-bottom:26px;backdrop-filter:blur(2px);
+  }
+  .topbar h1{
+    font-size:clamp(1.05rem,4vw,1.45rem);color:#eaf4fd;text-align:center;line-height:1.35;
+    letter-spacing:.5px;
+  }
+  .topbar h1::before{content:'🌙 ';}
+  .bar-wrap{margin-top:16px}
+  .bar-label{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:.8rem;color:#a8c4dc;margin-bottom:8px;font-weight:700;letter-spacing:1px;
+  }
+  .bar-track{
+    height:26px;background:#f2f8fd;border-radius:13px;overflow:hidden;
+    border:2px solid #bfe0f5;position:relative;
+    box-shadow:inset 0 -6px 10px rgba(140,180,210,.35);
+  }
+  .bar-fill{
+    height:100%;width:0%;
+    background:linear-gradient(90deg,#8ec8ee,#5aa8dc);
+    transition:width .5s cubic-bezier(.34,1.4,.64,1);
+  }
+  .bar-runner{
+    position:absolute;top:-10px;left:0;font-size:1.5rem;
+    transform:translateX(-50%);transition:left .5s cubic-bezier(.34,1.4,.64,1);
+    filter:drop-shadow(0 3px 2px rgba(0,0,0,.45));
+  }
+  .stars{margin-top:12px;text-align:center;font-size:1.05rem;letter-spacing:4px;color:#ffd23e}
+
+  /* ---------- МОРОЗНОЕ ОКНО ---------- */
+  .stage{
+    background:#f4f9ff;border-radius:18px;padding:40px 22px 48px;position:relative;
+    border:3px solid #bfe0f5;
+    box-shadow:0 10px 26px rgba(0,0,0,.5), inset 0 0 0 6px rgba(255,255,255,.7), inset 0 0 40px rgba(160,200,230,.25);
+    animation:pop .35s ease;
+    color:#22384a;
+  }
+  .stage::before,.stage::after{
+    content:'❄';position:absolute;color:rgba(120,170,210,.5);font-size:1.5rem;
+  }
+  .stage::before{top:10px;left:14px}
+  .stage::after{bottom:10px;right:14px}
+  @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+  .stage.shake{animation:shake .45s}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-9px)}40%{transform:translateX(9px)}
+    60%{transform:translateX(-6px)}80%{transform:translateX(6px)}
+  }
+  .step-tag{
+    display:inline-block;background:#2a5a8a;color:#eaf4fd;
+    font-size:.76rem;font-weight:700;padding:5px 14px;border-radius:999px;
+    letter-spacing:1.5px;margin-bottom:14px;
+  }
+  .mech-tag{
+    display:inline-block;background:#fff4d8;color:#8a6a10;
+    font-size:.72rem;font-weight:700;padding:3px 11px;border-radius:999px;
+    border:2px solid #f2b53c;margin-left:6px;margin-bottom:14px;letter-spacing:.3px;
+  }
+  .hero{font-size:3.1rem;text-align:center;display:block;margin:4px 0 12px;line-height:1.15}
+  .stage h2{font-size:clamp(1.05rem,3.8vw,1.4rem);color:#2a5a8a;text-align:center;margin-bottom:14px;line-height:1.35}
+
+  .task-text{
+    font-size:1rem;line-height:1.65;color:#33475a;text-align:center;
+    margin:0 auto 22px;max-width:540px;
+  }
+  .en-inline{font-weight:700;color:#1f4e79}
+
+  .speak-line{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:16px 0 22px}
+  .speak-big{
+    background:#2a5a8a;color:#fff;border:none;border-radius:999px;
+    padding:12px 22px;font-size:1rem;font-weight:700;cursor:pointer;
+    font-family:inherit;box-shadow:0 4px 0 #16385a;transition:.15s;
+    display:inline-flex;align-items:center;gap:9px;letter-spacing:.4px;
+  }
+  .speak-big:hover{background:#1f4e79;transform:translateY(-2px)}
+  .speak-big:active{transform:translateY(1px);box-shadow:0 2px 0 #16385a}
+  .speak-mini{
+    width:36px;height:36px;border-radius:50%;border:2px solid #2a5a8a;
+    background:#eaf4fd;color:#2a5a8a;font-size:.95rem;cursor:pointer;
+    box-shadow:0 3px 0 #16385a;transition:.15s;
+    display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+  }
+  .speak-mini:hover{transform:scale(1.1) rotate(-8deg);background:#d8ecfa}
+  .speak-mini:active{transform:scale(.94)}
+
+  .opts{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+  .opts.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .opt{
+    background:#fff;border:2px solid #bfe0f5;border-left:8px solid #2a5a8a;border-radius:10px;
+    padding:14px 15px;cursor:pointer;font-family:inherit;font-size:1.02rem;
+    color:#22384a;text-align:left;display:flex;align-items:center;gap:10px;
+    transition:.16s;font-weight:600;line-height:1.4;box-shadow:0 2px 0 rgba(42,90,138,.25);
+  }
+  .opt:hover{border-color:#2a5a8a;background:#eef6fd;transform:translateX(3px)}
+  .opt .mark{
+    flex:0 0 30px;height:30px;border-radius:50%;background:#2a5a8a;color:#fff;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;
+  }
+  .opt.correct{background:#eafff0;border-color:#2e8b57;border-left-color:#2e8b57;animation:bounce .45s}
+  .opt.wrong{background:#fff0f0;border-color:#c0392b;border-left-color:#c0392b;animation:shake .4s}
+  @keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+  .opt:disabled{cursor:default}
+
+  .yesno-scene{
+    background:#eef6fd;border:3px dashed #8ab8dc;border-radius:14px;
+    padding:20px 14px;text-align:center;margin-bottom:20px;
+  }
+  .yesno-scene .big{font-size:2.6rem;letter-spacing:6px;display:block;margin-bottom:8px}
+  .yesno-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .yesno-btn{
+    flex:1 1 140px;max-width:220px;border-radius:12px;padding:14px 10px;
+    font-family:inherit;font-size:1.05rem;font-weight:700;cursor:pointer;transition:.15s;
+    border:2.5px solid;letter-spacing:.5px;
+  }
+  .yesno-btn.yes{background:#eafff0;border-color:#2e8b57;color:#1f6b41;box-shadow:0 4px 0 #1f6b41}
+  .yesno-btn.no{background:#fff4f4;border-color:#c0392b;color:#8e2a1f;box-shadow:0 4px 0 #8e2a1f}
+  .yesno-btn:hover{transform:translateY(-2px)}
+  .yesno-btn.correct{animation:bounce .45s}
+  .yesno-btn.wrong{animation:shake .4s}
+
+  .countbox{
+    background:#eef6fd;border:3px dashed #8ab8dc;border-radius:14px;
+    padding:22px 14px;text-align:center;margin-bottom:20px;
+  }
+  .countbox .items{font-size:2.4rem;letter-spacing:9px;line-height:1.6;word-break:break-word}
+
+  .match-area{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+  .mcol{display:flex;flex-direction:column;gap:12px}
+  .mcol h4{text-align:center;font-size:.82rem;color:#5a7488;font-weight:700;margin-bottom:2px;letter-spacing:1px}
+  .mitem{
+    background:#fff;border:2px solid #bfe0f5;border-radius:10px;padding:12px 8px;
+    cursor:pointer;font-family:inherit;font-size:1rem;font-weight:700;color:#22384a;
+    text-align:center;transition:.16s;display:flex;align-items:center;justify-content:center;gap:7px;
+    min-height:58px;box-shadow:0 2px 0 rgba(42,90,138,.2);
+  }
+  .mitem:hover{border-color:#2a5a8a;background:#eef6fd}
+  .mitem.sel{background:#eef6fd;box-shadow:0 0 0 3px rgba(42,90,138,.2)}
+  .mitem.done{background:#eafff0;border-color:#2e8b57;color:#1f6b41;cursor:default;opacity:.85}
+  .mitem.bad{animation:shake .4s;border-color:#c0392b;background:#fff0f0}
+  .mitem .pic{font-size:1.6rem}
+
+  .order-pool,.order-slots{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .order-slots{
+    min-height:70px;background:#eef6fd;border:3px dashed #8ab8dc;border-radius:14px;
+    padding:14px 10px;margin-bottom:20px;align-items:center;
+  }
+  .order-slots.empty-pool::after{content:'нажимайте снежинки ниже ⬇️';color:#7a94a8;font-size:.88rem}
+  .otile{
+    background:#fff;border:2px solid #2a5a8a;border-radius:10px;padding:10px 14px;
+    cursor:pointer;font-family:inherit;font-size:.98rem;font-weight:700;color:#2a5a8a;
+    transition:.15s;display:flex;align-items:center;gap:7px;box-shadow:0 3px 0 #16385a;
+  }
+  .otile:hover{transform:translateY(-2px);background:#eef6fd}
+  .otile.placed{border-color:#2e8b57;background:#eafff0;color:#1f6b41;box-shadow:0 3px 0 #1f6b41}
+  .otile.bad{animation:shake .4s;border-color:#c0392b;background:#fff0f0}
+  .otile.used{opacity:.3;pointer-events:none}
+  .otile .num{font-size:1.4rem}
+
+  .spell-slots{display:flex;gap:10px;justify-content:center;margin:8px 0 22px;flex-wrap:wrap}
+  .slot{
+    width:52px;height:60px;border-radius:10px;background:#eef6fd;
+    border:3px dashed #2a5a8a;display:flex;align-items:center;justify-content:center;
+    font-size:1.75rem;font-weight:700;color:#2a5a8a;text-transform:uppercase;
+  }
+  .slot.filled{border-style:solid;border-color:#2e8b57;background:#eafff0}
+  .slot.bad{border-color:#c0392b;background:#fff0f0;animation:shake .4s}
+  .letter-pool{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .letter{
+    width:54px;height:60px;border-radius:10px;border:3px solid #8ab8dc;background:#eaf4fd;
+    font-family:inherit;font-size:1.7rem;font-weight:700;color:#2a5a8a;cursor:pointer;
+    text-transform:uppercase;box-shadow:0 4px 0 #5a8ab0;transition:.14s;
+  }
+  .letter:hover{transform:translateY(-3px);background:#d8ecfa}
+  .letter.used{opacity:.25;pointer-events:none;box-shadow:none;transform:none}
+
+  .drag-zone{
+    background:#eef6fd;border:3px dashed #8ab8dc;border-radius:14px;
+    padding:22px 14px;text-align:center;margin-bottom:20px;min-height:130px;
+  }
+  .drag-item{
+    display:inline-block;background:#fff;border:2px solid #2a5a8a;border-radius:10px;
+    padding:10px 16px;margin:6px;cursor:pointer;font-family:inherit;font-size:1.02rem;
+    font-weight:700;color:#2a5a8a;box-shadow:0 3px 0 #16385a;transition:.15s;
+  }
+  .drag-item:hover{transform:translateY(-3px);background:#eef6fd}
+  .drag-item.chosen{background:#eafff0;border-color:#2e8b57;color:#1f6b41;box-shadow:0 3px 0 #1f6b41}
+  .drag-item.bad{animation:shake .4s;border-color:#c0392b;background:#fff0f0}
+
+  .fb{
+    margin-top:22px;padding:16px 18px;border-radius:12px;font-size:1rem;
+    line-height:1.6;text-align:center;display:none;font-weight:600;
+  }
+  .fb.show{display:block;animation:pop .3s}
+  .fb.good{background:#eafff0;border:3px double #2e8b57;color:#1f6b41}
+  .fb.bad{background:#fff4f4;border:3px double #c0392b;color:#8e2a1f}
+  .fb .again{
+    margin-top:12px;background:#fff;border:2px solid #c0392b;color:#8e2a1f;
+    border-radius:999px;padding:7px 16px;font-family:inherit;font-weight:700;
+    font-size:.9rem;cursor:pointer;
+  }
+  .fb .again:hover{background:#ffeaea}
+
+  .nav{display:flex;gap:12px;justify-content:center;margin-top:28px;flex-wrap:wrap}
+  .nav button{
+    border:none;border-radius:999px;padding:13px 26px;font-family:inherit;
+    font-size:1rem;font-weight:700;cursor:pointer;transition:.16s;
+    display:inline-flex;align-items:center;gap:8px;letter-spacing:.3px;
+  }
+  .btn-next{background:#2a5a8a;color:#fff;box-shadow:0 5px 0 #16385a}
+  .btn-next:hover{background:#1f4e79;transform:translateY(-2px)}
+  .btn-back{background:#fff;color:#2a5a8a;border:3px dashed #8ab8dc !important;box-shadow:0 5px 0 #b8d4e8}
+  .btn-back:hover{background:#eef6fd}
+  .btn-back:disabled,.btn-next:disabled{opacity:.4;cursor:default;transform:none}
+  .btn-replay{background:#f2b53c;color:#5a4210;box-shadow:0 5px 0 #b08020}
+  .btn-replay:hover{background:#ffc855}
+
+  .final{text-align:center}
+  .final .big{
+    font-size:3.4rem;display:inline-block;margin-bottom:16px;
+    background:#eaf4fd;border-radius:50%;width:110px;height:110px;line-height:110px;
+    border:5px double #8ab8dc;animation:float 2.4s ease-in-out infinite;
+    box-shadow:0 8px 0 rgba(90,138,176,.4);
+  }
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  .final h2{font-size:clamp(1.25rem,4.5vw,1.8rem);color:#2a5a8a;margin-bottom:14px}
+  .final p{font-size:1.02rem;line-height:1.7;color:#33475a;margin-bottom:16px}
+  .reward{
+    background:#eef6fd;border:3px dashed #8ab8dc;border-radius:14px;
+    padding:24px 20px 28px;margin:24px 0 28px;
+  }
+  .reward .words{font-size:1.02rem;line-height:2;color:#33475a;text-align:left;padding-bottom:4px}
+  .reward .words b{color:#1f4e79}
+  .reward .words div{padding:5px 0;border-bottom:1px dotted #a8c8e0;margin-bottom:5px}
+  .reward .words div:last-child{border-bottom:none;margin-bottom:0}
+  .restart{background:#2a5a8a;color:#fff;box-shadow:0 5px 0 #16385a}
+  .restart:hover{background:#1f4e79}
+
+  .start-screen{text-align:center}
+  .start-screen .cast{font-size:2.6rem;letter-spacing:6px;margin:16px 0 8px}
+  .start-screen ul{
+    list-style:none;text-align:left;margin:18px auto;max-width:440px;
+    background:#eef6fd;border:3px dashed #8ab8dc;border-radius:14px;padding:18px 20px;
+  }
+  .start-screen li{
+    padding:8px 0 8px 32px;position:relative;font-size:.97rem;color:#33475a;line-height:1.5;
+    border-bottom:1px dotted #a8c8e0;
+  }
+  .start-screen li:last-child{border-bottom:none}
+  .start-screen li::before{content:'❄️';position:absolute;left:0;top:8px;font-size:.95rem}
+  .sound-note{
+    background:#fff4d8;border:2px solid #f2b53c;border-radius:12px;padding:12px 16px;
+    font-size:.88rem;color:#8a6a10;margin-top:18px;line-height:1.55;
+  }
+
+  @media (max-width:560px){
+    .match-area{grid-template-columns:1fr 1fr;gap:8px}
+    .mitem{font-size:.88rem;min-height:52px;padding:9px 5px}
+    .mitem .pic{font-size:1.3rem}
+    .slot,.letter{width:44px;height:52px;font-size:1.4rem}
+    .countbox .items{font-size:1.9rem;letter-spacing:5px}
+    .hero{font-size:2.6rem}
+    .nav button{padding:12px 18px;font-size:.95rem}
+    .stage{padding:32px 14px 40px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <h1>Ночной пруд · зимняя сказка</h1>
+    <div class="bar-wrap">
+      <div class="bar-label">
+        <span id="stepLabel">СЛЕД 0 ИЗ 16</span>
+        <span id="pctLabel">0%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" id="barFill"></div>
+        <div class="bar-runner" id="barRunner">🦆</div>
+      </div>
+      <div class="stars" id="stars"></div>
+    </div>
+  </div>
+
+  <div id="stageHost"></div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var RATE = 0.85;
+  var voices = [];
+
+  function loadVoices(){
+    if(!('speechSynthesis' in window)) return;
+    voices = window.speechSynthesis.getVoices() || [];
+  }
+  loadVoices();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    setTimeout(loadVoices, 350);
+    setTimeout(loadVoices, 1400);
+  }
+
+  function pickVoice(){
+    if(!voices.length) loadVoices();
+    var v;
+    v = voices.find(function(x){ return x.lang === 'en-GB'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en-gb') === 0; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang === 'en-US'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en') === 0; });
+    return v || null;
+  }
+
+  function speak(text, delay){
+    if(!('speechSynthesis' in window)) return;
+    var go = function(){
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      var v = pickVoice();
+      if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+      u.rate = RATE; u.pitch = 1.06; u.volume = 1;
+      window.speechSynthesis.speak(u);
+    };
+    if(delay){ setTimeout(go, delay); } else { go(); }
+  }
+
+  function speakSeq(arr){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    arr.forEach(function(t, i){
+      setTimeout(function(){
+        var u = new SpeechSynthesisUtterance(t);
+        var v = pickVoice();
+        if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+        u.rate = RATE; u.pitch = 1.06;
+        window.speechSynthesis.speak(u);
+      }, i * 1500);
+    });
+  }
+
+  var STEPS = [
+
+  /* 1 */ {
+    kind:'intro', emoji:'🌙', mech:'Первый след',
+    title:'Ночной пруд',
+    text:'Зима. Тишина. Один маленький утёнок на краю замёрзшего пруда. Сегодня ты идёшь рядом с ним по снегу: слушаешь его слова, считаешь снежинки, собираешь фразы и в конце приносишь ему самое тёплое слово из всех возможных.',
+    say:"I'm all alone. Where can I go?",
+    sayRu:'Я совсем один. Куда мне идти?',
+    cta:'❄️ Оставить первый след!'
+  },
+
+  /* 2 */ {
+    kind:'listen', emoji:'👂', mech:'Аудирование',
+    title:'След 1: голос в тишине',
+    text:'Нажми на кнопку и выбери фразу, которую произнёс утёнок.',
+    say:"I'm all alone.",
+    opts:[
+      {t:"I'm all alone. /aɪm ɔːl ələʊn/ — я совсем один", say:"I'm all alone."},
+      {t:"I'm at home. /aɪm æt həʊm/ — я дома", say:"I'm at home."},
+      {t:"I'm a big swan. /aɪm ə bɪɡ swɒn/ — я большой лебедь", say:"I'm a big swan."}
+    ],
+    correct:0,
+    ok:'Это его слова: **I\'m all alone.** /aɪm ɔːl əˈləʊn/ — я совсем один.',
+    no:'Послушай ещё раз: утёнок говорит про одиночество.'
+  },
+
+  /* 3 */ {
+    kind:'choice', emoji:'🧭', mech:'Выбор ответа',
+    title:'След 2: вопрос утёнка',
+    text:'Утёнок оглядывается и спрашивает сам себя: куда идти? Как звучит этот вопрос?',
+    say:'Where can I go?',
+    opts:[
+      {t:'Where can I go? /weə kæn aɪ ɡəʊ/ — куда мне идти?', say:'Where can I go?'},
+      {t:"Where's the snow? /weəz ðə snəʊ/ — где снег?", say:"Where's the snow?"},
+      {t:'Who can see? /huː kæn siː/ — кто видит?', say:'Who can see?'}
+    ],
+    correct:0,
+    ok:'Верно: **Where can I go?** /weə kæn aɪ ɡəʊ/ — куда мне идти?',
+    no:'Послушай все три вопроса: утёнок ищет дорогу, а не снег.'
+  },
+
+  /* 4 */ {
+    kind:'spell', emoji:'❄️', mech:'Сборка слова',
+    title:'След 3: слово из снежинок',
+    text:'Снег кружится вокруг. Собери слово **snow** /snəʊ/ из букв-снежинок.',
+    word:'snow', hint:'❄️', say:'snow',
+    ok:'Собрано: **snow** /snəʊ/ — снег.',
+    no:'Буква не та. Слушай: s-n-o-w.'
+  },
+
+  /* 5 */ {
+    kind:'yesno', emoji:'✅', mech:'Верно / неверно',
+    title:'След 4: какое время года?',
+    text:'Посмотри на сцену и послушай утверждение. Правда ли это?',
+    scene:'❄️ 🧊 ⛄',
+    say:'It is summer.',
+    answer:false,
+    ok:'Конечно нет: вокруг зима. **It is winter.** /ɪt ɪz ˈwɪntə/ — сейчас зима.',
+    no:'Посмотри на снег и лёд: разве это лето?'
+  },
+
+  /* 6 */ {
+    kind:'count', emoji:'❄️', mech:'Счёт',
+    title:'След 5: снежинки над прудом',
+    text:'Посчитай снежинки, которые кружатся над головой утёнка.',
+    ask:'How many snowflakes?',
+    items:'❄️❄️❄️❄️❄️❄️',
+    say:'How many snowflakes? One, two, three, four, five, six. Six snowflakes!',
+    opts:[
+      {t:'five /faɪv/ — пять', say:'five'},
+      {t:'six /sɪks/ — шесть', say:'six'},
+      {t:'seven /ˈsevən/ — семь', say:'seven'}
+    ],
+    correct:1,
+    ok:'Шесть: **Six snowflakes!** /sɪks ˈsnəfleɪks/',
+    no:'Считаем по одной снежинке, касаясь экрана.'
+  },
+
+  /* 7 */ {
+    kind:'match', emoji:'🔗', mech:'Пары',
+    title:'След 6: слова и сцена',
+    text:'Соедини слово с тем, что видно на сцене.',
+    say:'snow, ice, cold, sad, warm',
+    pairs:[
+      {left:'snow', say:'snow', right:'❄️'},
+      {left:'ice', say:'ice', right:'🧊'},
+      {left:'cold', say:'cold', right:'🥶'},
+      {left:'sad', say:'sad', right:'😢'},
+      {left:'warm', say:'warm', right:'🧣'}
+    ],
+    ok:'Все слова встали на свои места: **snow, ice, cold, sad, warm**.',
+    no:'Не та пара. Послушай слово и посмотри на картинку.'
+  },
+
+  /* 8 */ {
+    kind:'choice', emoji:'🧊', mech:'Выбор ответа',
+    title:'След 7: на что смотрит утёнок?',
+    text:'Утёнок смотрит под ноги на замёрзший пруд. Что он говорит?',
+    say:'Look at the ice.',
+    opts:[
+      {t:'Look at the ice. /lʊk æt ði aɪs/ — посмотри на лёд', say:'Look at the ice.'},
+      {t:'Look at the snow. /lʊk æt ðə snəʊ/ — посмотри на снег', say:'Look at the snow.'},
+      {t:'Look at the spring. /lʊk æt ðə sprɪŋ/ — посмотри на весну', say:'Look at the spring.'}
+    ],
+    correct:0,
+    ok:'Верно: под лапками лёд. **Look at the ice.** /lʊk æt ði as/',
+    no:'Под ногами утёнка твёрдая блестящая поверхность пруда. Что это?'
+  },
+
+  /* 9 */ {
+    kind:'spell', emoji:'🥶', mech:'Сборка слова',
+    title:'След 8: слово-дрожь',
+    text:'Утёнок дрожит. Собери слово **cold** /kəʊld/.',
+    word:'cold', hint:'🥶', say:'cold',
+    ok:'Собрано: **cold** /kəʊld/ — холодно. Хочется сразу сказать: I am with you!',
+    no:'Буква не та. Слушай: c-o-l-d.'
+  },
+
+  /* 10 */ {
+    kind:'pick', emoji:'🧣', mech:'Отбор',
+    title:'След 9: корзина тёплых слов',
+    text:'Собери для утёнка только тёплые фразы. Холодные и злые оставь за бортом.',
+    say:'Warm words only!',
+    pool:[
+      {t:'I am with you.', say:'I am with you.', good:true},
+      {t:'Go away!', say:'Go away!', good:false},
+      {t:'You are not alone.', say:'You are not alone.', good:true},
+      {t:"You're so ugly!", say:"You're so ugly!", good:false},
+      {t:'I can help you.', say:'I can help you.', good:true}
+    ],
+    ok:'Корзина собрана: **I am with you. You are not alone. I can help you.** Три фразы, от которых тает снег.',
+    no:'Одна из отмеченных фраз — злая. Проверь корзину.'
+  },
+
+  /* 11 */ {
+    kind:'order', emoji:'🎞️', mech:'Склейка монолога',
+    title:'След 10: монолог на льду',
+    text:'Расставь строки монолога утёнка по порядку.',
+    say:"I'm all alone. Where can I go? Look at the ice. Look at the snow.",
+    items:[
+      {t:"I'm all alone.", n:'1️⃣', say:"I'm all alone."},
+      {t:'Where can I go?', n:'2️⃣', say:'Where can I go?'},
+      {t:'Look at the ice.', n:'3️⃣', say:'Look at the ice.'},
+      {t:'Look at the snow.', n:'4️⃣', say:'Look at the snow.'}
+    ],
+    ok:'Монолог звучит целиком: **I\'m all alone. — Where can I go? — Look at the ice. — Look at the snow.**',
+    no:'Порядок сбился: сначала про одиночество, потом вопрос, потом лёд и снег.'
+  },
+
+  /* 12 */ {
+    kind:'count', emoji:'🧊', mech:'Счёт',
+    title:'След 11: льдины на пруду',
+    text:'Посчитай льдины, между которыми ищет дорогу утёнок.',
+    ask:'How many ice floes?',
+    items:'🧊🧊🧊🧊',
+    say:'How many ice floes? One, two, three, four. Four!',
+    opts:[
+      {t:'three /θriː/ — три', say:'three'},
+      {t:'four /fɔː/ — четыре', say:'four'},
+      {t:'five /faɪv/ — пять', say:'five'}
+    ],
+    correct:1,
+    ok:'Четыре льдины: **Four!** /fɔː/ Дорога узкая, но есть.',
+    no:'Считаем по одной льдине.'
+  },
+
+  /* 13 */ {
+    kind:'match', emoji:'💧', mech:'Пары чувств',
+    title:'След 12: лицо и чувство',
+    text:'Соедини чувство с лицом утёнка.',
+    say:'cold, sad, happy, alone',
+    pairs:[
+      {left:'cold', say:'cold', right:'🥶'},
+      {left:'sad', say:'sad', right:'😢'},
+      {left:'happy', say:'happy', right:'😊'},
+      {left:'alone', say:'alone', right:'🦆'}
+    ],
+    ok:'Чувства названы: **cold, sad, happy, alone**.',
+    no:'Не та пара. Послушай слово и посмотри на лицо.'
+  },
+
+  /* 14 */ {
+    kind:'choice', emoji:'💛', mech:'Выбор ответа',
+    title:'След 13: твоё слово утёнку',
+    text:'Ты подошёл к утёнку вплотную. Какую фразу ты скажешь ему первым делом?',
+    say:'You are not alone.',
+    opts:[
+      {t:'You are not alone. /juː ɑː nɒt əˈləʊn/ — ты не один', say:'You are not alone.'},
+      {t:'Go away! /ɡəʊ əˈweɪ/ — уходи!', say:'Go away!'},
+      {t:"I'm cold. /aɪm kəʊld/ — мне холодно", say:"I'm cold."}
+    ],
+    correct:0,
+    ok:'Самое важное слово сказано: **You are not alone.** /juː ɑː nɒt əˈləʊn/',
+    no:'Утёнку сейчас нужно тепло. Какая из фраз греет?'
+  },
+
+  /* 15 */ {
+    kind:'order', emoji:'💬', mech:'Склейка диалога',
+    title:'След 14: разговор у полыньи',
+    text:'Склей короткий разговор: утёнок жалуется, ты отвечаешь.',
+    say:"I'm cold. I am with you. Look at the snow! Let's play!",
+    items:[
+      {t:"I'm cold.", n:'🥶', say:"I'm cold."},
+      {t:'I am with you.', n:'🤝', say:'I am with you.'},
+      {t:'Look at the snow!', n:'❄️', say:'Look at the snow!'},
+      {t:"Let's play!", n:'🎉', say:"Let's play!"}
+    ],
+    ok:'Разговор согрел: **I\'m cold. — I am with you. — Look at the snow! — Let\'s play!**',
+    no:'Порядок сбился: сначала жалоба, потом поддержка, потом игра.'
+  },
+
+  /* 16 */ {
+    kind:'final', emoji:'🌅', mech:'Рассвет',
+    title:'Лёд звенит по-весеннему',
+    text:'Ты прошёл с утёнком всю зимнюю ночь: слушал его монолог, считал снежинки, собирал слова и принёс ему тёплые фразы. А на рассвете лёд тонко звенит — значит, весна уже где-то рядом. Утёнок больше не один.',
+    say:'You are not alone. Spring is coming!',
+    allWords:[
+      {en:'snow', ipa:'/snəʊ/', ru:'снег'},
+      {en:'ice', ipa:'/aɪs/', ru:'лёд'},
+      {en:'winter', ipa:'/ˈwɪntə/', ru:'зима'},
+      {en:'spring', ipa:'/sprɪŋ/', ru:'весна'},
+      {en:'cold', ipa:'/kəʊld/', ru:'холодно'},
+      {en:'alone', ipa:'/əˈləʊn/', ru:'один, одиноко'},
+      {en:'sad', ipa:'/sæd/', ru:'грустно'},
+      {en:'happy', ipa:'/ˈhæpi/', ru:'радостно'},
+      {en:'warm', ipa:'/wɔːm/', ru:'тепло'},
+      {en:"I'm all alone.", ipa:'/aɪm ɔːl ələʊn/', ru:'я совсем один'},
+      {en:'Where can I go?', ipa:'/weə kæn aɪ ɡəʊ/', ru:'куда мне идти?'},
+      {en:'Look at the ice.', ipa:'/lʊk æt ði as/', ru:'посмотри на лёд'},
+      {en:'Look at the snow.', ipa:'/lʊk æt ðə snəʊ/', ru:'посмотри на снег'},
+      {en:"I'm cold.", ipa:'/aɪm kəʊld/', ru:'мне холодно'},
+      {en:'You are not alone.', ipa:'/juː ɑː nɒt əˈləʊn/', ru:'ты не один'},
+      {en:'I am with you.', ipa:'/aɪ æm wɪð juː/', ru:'я с тобой'}
+    ]
+  }
+  ];
+
+  var TOTAL = STEPS.length;
+  var idx = 0;
+  var history = [];
+  var score = 0;
+  var stageHost = document.getElementById('stageHost');
+  var barFill = document.getElementById('barFill');
+  var barRunner = document.getElementById('barRunner');
+  var stepLabel = document.getElementById('stepLabel');
+  var pctLabel = document.getElementById('pctLabel');
+  var starsBox = document.getElementById('stars');
+
+  function bold(str){
+    return String(str).replace(/\*\*(.+?)\*\*/g, '<span class="en-inline">$1</span>');
+  }
+
+  function updateBar(){
+    var pct = Math.round((idx / (TOTAL - 1)) * 100);
+    if(pct < 0) pct = 0; if(pct > 100) pct = 100;
+    barFill.style.width = pct + '%';
+    barRunner.style.left = pct + '%';
+    stepLabel.textContent = idx === 0 ? 'СЛЕД 0 ИЗ ' + (TOTAL - 1) : ('СЛЕД ' + idx + ' ИЗ ' + (TOTAL - 1));
+    pctLabel.textContent = pct + '%';
+    var full = Math.floor(score / 3);
+    var s = '';
+    for(var i = 0; i < full && i < 6; i++){ s += '❄️'; }
+    starsBox.textContent = s;
+  }
+
+  function shakeStage(){
+    var st = stageHost.querySelector('.stage');
+    if(!st) return;
+    st.classList.remove('shake');
+    void st.offsetWidth;
+    st.classList.add('shake');
+  }
+
+  function speakerBtn(text, cls, title){
+    var b = document.createElement('button');
+    b.className = cls || 'speak-mini';
+    b.innerHTML = '🔊';
+    b.title = title || 'Прослушать';
+    b.setAttribute('aria-label','Прослушать: ' + text);
+    b.addEventListener('click', function(ev){ ev.stopPropagation(); speak(text); });
+    return b;
+  }
+
+  function nextBtn(label, fn, cls){
+    var b = document.createElement('button');
+    b.className = cls || 'btn-next';
+    b.textContent = label;
+    b.addEventListener('click', fn);
+    return b;
+  }
+
+  function goNext(){
+    if(idx < TOTAL - 1){
+      history.push(idx);
+      idx++;
+      render();
+    }
+  }
+  function goBack(){
+    if(history.length){
+      idx = history.pop();
+      render();
+    }
+  }
+
+  function render(){
+    window.scrollTo({top:0, behavior:'smooth'});
+    updateBar();
+    stageHost.innerHTML = '';
+    var s = STEPS[idx];
+
+    var stage = document.createElement('div');
+    stage.className = 'stage';
+    stageHost.appendChild(stage);
+
+    if(s.kind === 'intro')   return renderIntro(stage, s);
+    if(s.kind === 'final')   return renderFinal(stage, s);
+    if(s.kind === 'listen' || s.kind === 'choice') return renderChoice(stage, s);
+    if(s.kind === 'yesno')   return renderYesNo(stage, s);
+    if(s.kind === 'count')   return renderCount(stage, s);
+    if(s.kind === 'spell')   return renderSpell(stage, s);
+    if(s.kind === 'match')   return renderMatch(stage, s);
+    if(s.kind === 'order')   return renderOrder(stage, s);
+    if(s.kind === 'pick')    return renderPick(stage, s);
+  }
+
+  function header(stage, s){
+    var tag = document.createElement('span');
+    tag.className = 'step-tag';
+    tag.textContent = 'СЛЕД ' + (idx + 1) + ' ИЗ ' + TOTAL;
+    stage.appendChild(tag);
+
+    if(s.mech){
+      var m = document.createElement('span');
+      m.className = 'mech-tag';
+      m.textContent = s.mech;
+      stage.appendChild(m);
+    }
+    var hero = document.createElement('span');
+    hero.className = 'hero';
+    hero.textContent = s.emoji || '❄️';
+    stage.appendChild(hero);
+
+    var h2 = document.createElement('h2');
+    h2.textContent = s.title;
+    stage.appendChild(h2);
+
+    var p = document.createElement('div');
+    p.className = 'task-text';
+    p.innerHTML = bold(s.text);
+    stage.appendChild(p);
+  }
+
+  function speakBlock(stage, s){
+    if(!s.say) return;
+    var line = document.createElement('div');
+    line.className = 'speak-line';
+    var big = document.createElement('button');
+    big.className = 'speak-big';
+    big.innerHTML = '🔊 ' + s.say;
+    big.addEventListener('click', function(){ speak(s.say); });
+    line.appendChild(big);
+    stage.appendChild(line);
+    if(s.sayRu){
+      var r = document.createElement('div');
+      r.className = 'task-text';
+      r.style.marginTop = '-8px';
+      r.style.fontSize = '.92rem';
+      r.textContent = s.sayRu;
+      stage.appendChild(r);
+    }
+  }
+
+  function feedback(stage, s, onWin){
+    var fb = document.createElement('div');
+    fb.className = 'fb';
+    stage.appendChild(fb);
+
+    var nav = document.createElement('div');
+    nav.className = 'nav';
+
+    var back = nextBtn('⬅️ Назад', goBack, 'btn-back');
+    if(!history.length) back.disabled = true;
+    nav.appendChild(back);
+
+    var replay = nextBtn('🔁 Ещё раз', function(){ render(); }, 'btn-replay');
+    nav.appendChild(replay);
+
+    var next = nextBtn('Следующий след ➡️', goNext);
+    next.style.display = 'none';
+    nav.appendChild(next);
+
+    stage.appendChild(nav);
+
+    function showGood(){
+      fb.className = 'fb good show';
+      fb.innerHTML = bold(s.ok || 'След в точку!');
+      next.style.display = '';
+      speak('Well done!', 250);
+      if(onWin) onWin();
+    }
+    function showBad(){
+      fb.className = 'fb bad show';
+      fb.innerHTML = bold(s.no || 'Попробуй ещё раз!') +
+        '<br><button class="again" type="button">🔁 Попробовать снова</button>';
+      var ag = fb.querySelector('.again');
+      ag.addEventListener('click', function(){ render(); });
+      shakeStage();
+      speak('Try again!', 200);
+    }
+    return {good:showGood, bad:showBad, next:next, back:back};
+  }
+
+  function renderIntro(stage, s){
+    header(stage, s);
+    speakBlock(stage, s);
+
+    var cast = document.createElement('div');
+    cast.className = 'start-screen';
+    cast.innerHTML = '<div class="cast">🌙 ❄️ 🦆 🧣</div>';
+    stage.appendChild(cast);
+
+    var list = document.createElement('ul');
+    ['Понимать зимние слова: snow, ice, cold, winter',
+     'Называть чувства: sad, happy, alone',
+     'Слышать монолог утёнка и отвечать ему',
+     'Собирать тёплые фразы поддержки',
+     'Довести утёнка до рассвета'
+    ].forEach(function(t){
+      var li = document.createElement('li');
+      li.textContent = t;
+      list.appendChild(li);
+    });
+    stage.appendChild(list);
+
+    var note = document.createElement('div');
+    note.className = 'sound-note';
+    note.innerHTML = '🔈 Включите звук. Все фразы озвучены британским голосом. Сцена грустная: держите под рукой плед и объятие — после квеста они пригодятся.';
+    stage.appendChild(note);
+
+    var nav = document.createElement('div');
+    nav.className = 'nav';
+    nav.appendChild(nextBtn(s.cta || 'Начать ➡️', goNext));
+    stage.appendChild(nav);
+
+    speak(s.say, 500);
+  }
+
+  function renderChoice(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+
+    if(s.kind === 'listen'){
+      var line = document.createElement('div');
+      line.className = 'speak-line';
+      var big = document.createElement('button');
+      big.className = 'speak-big';
+      big.innerHTML = '🔊 Прослушать';
+      big.addEventListener('click', function(){ speak(s.say); });
+      line.appendChild(big);
+      stage.insertBefore(line, stage.querySelector('.nav'));
+      speak(s.say, 600);
+    } else {
+      speakBlock(stage, s);
+    }
+
+    var box = document.createElement('div');
+    box.className = 'opts' + (s.opts.length > 3 ? ' grid2' : '');
+    var navEl = stage.querySelector('.nav');
+    stage.insertBefore(box, navEl);
+
+    var locked = false;
+    s.opts.forEach(function(o, i){
+      var b = document.createElement('button');
+      b.className = 'opt';
+      b.type = 'button';
+      var mk = document.createElement('span');
+      mk.className = 'mark';
+      mk.textContent = String.fromCharCode(65 + i);
+      b.appendChild(mk);
+      var tx = document.createElement('span');
+      tx.innerHTML = bold(o.t);
+      b.appendChild(tx);
+      b.appendChild(speakerBtn(o.say || o.t.replace(/\/.*?\//g,'').replace(/—.*$/,'').trim(), 'speak-mini'));
+
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(i === s.correct){
+          locked = true;
+          b.classList.add('correct');
+          Array.prototype.forEach.call(box.children, function(x){ x.disabled = true; });
+          speak(o.say || o.t, 120);
+          setTimeout(fb.good, 650);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function renderYesNo(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+
+    var box = document.createElement('div');
+    box.className = 'yesno-scene';
+    var big = document.createElement('span');
+    big.className = 'big';
+    big.textContent = s.scene || '❓';
+    box.appendChild(big);
+    stage.insertBefore(box, stage.querySelector('.nav'));
+
+    var line = document.createElement('div');
+    line.className = 'speak-line';
+    var sb = document.createElement('button');
+    sb.className = 'speak-big';
+    sb.innerHTML = '🔊 ' + s.say;
+    sb.addEventListener('click', function(){ speak(s.say); });
+    line.appendChild(sb);
+    stage.insertBefore(line, stage.querySelector('.nav'));
+    speak(s.say, 600);
+
+    var row = document.createElement('div');
+    row.className = 'yesno-row';
+    stage.insertBefore(row, stage.querySelector('.nav'));
+
+    var locked = false;
+    [true, false].forEach(function(val){
+      var b = document.createElement('button');
+      b.className = 'yesno-btn ' + (val ? 'yes' : 'no');
+      b.type = 'button';
+      b.innerHTML = val ? '✔️ ВЕРНО' : '❌ НЕВЕРНО';
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(val === s.answer){
+          locked = true;
+          b.classList.add('correct');
+          speak(s.say, 100);
+          setTimeout(fb.good, 600);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      row.appendChild(b);
+    });
+  }
+
+  function renderCount(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    var cb = document.createElement('div');
+    cb.className = 'countbox';
+    var q = document.createElement('div');
+    q.className = 'task-text';
+    q.style.marginBottom = '12px';
+    q.innerHTML = '<span class="en-inline">' + s.ask + '</span>';
+    cb.appendChild(q);
+    var ql = document.createElement('div');
+    ql.className = 'speak-line';
+    ql.style.margin = '0 0 14px';
+    ql.appendChild(speakerBtn(s.ask, 'speak-mini', 'Прослушать вопрос'));
+    cb.appendChild(ql);
+    var it = document.createElement('div');
+    it.className = 'items';
+    it.textContent = s.items;
+    cb.appendChild(it);
+    stage.insertBefore(cb, navEl);
+
+    speak(s.say, 600);
+
+    var box = document.createElement('div');
+    box.className = 'opts grid2';
+    stage.insertBefore(box, navEl);
+
+    var locked = false;
+    s.opts.forEach(function(o, i){
+      var b = document.createElement('button');
+      b.className = 'opt'; b.type = 'button';
+      b.style.justifyContent = 'center';
+      b.innerHTML = bold(o.t);
+      b.appendChild(speakerBtn(o.say, 'speak-mini'));
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(i === s.correct){
+          locked = true;
+          b.classList.add('correct');
+          Array.prototype.forEach.call(box.children, function(x){ x.disabled = true; });
+          speak(o.say, 120);
+          setTimeout(fb.good, 650);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function renderSpell(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    var hintLine = document.createElement('div');
+    hintLine.className = 'speak-line';
+    var hb = document.createElement('button');
+    hb.className = 'speak-big';
+    hb.innerHTML = s.hint + ' 🔊 Прослушать слово';
+    hb.addEventListener('click', function(){ speak(s.word); });
+    hintLine.appendChild(hb);
+    stage.insertBefore(hintLine, navEl);
+    speak(s.word, 600);
+
+    var slots = document.createElement('div');
+    slots.className = 'spell-slots';
+    var slotEls = [];
+    for(var i = 0; i < s.word.length; i++){
+      var sl = document.createElement('div');
+      sl.className = 'slot';
+      slots.appendChild(sl);
+      slotEls.push(sl);
+    }
+    stage.insertBefore(slots, navEl);
+
+    var letters = s.word.split('');
+    var extra = 'abcdefghijklmnopqrstuvwxyz'.split('');
+    var pool = letters.slice();
+    var need = Math.max(0, 6 - pool.length);
+    for(var k = 0; k < need; k++){
+      pool.push(extra[Math.floor(Math.random() * extra.length)]);
+    }
+    pool.sort(function(){ return Math.random() - 0.5; });
+
+    var poolBox = document.createElement('div');
+    poolBox.className = 'letter-pool';
+    stage.insertBefore(poolBox, navEl);
+
+    var pos = 0;
+    var done = false;
+
+    pool.forEach(function(ch){
+      var b = document.createElement('button');
+      b.className = 'letter'; b.type = 'button';
+      b.textContent = ch;
+      b.addEventListener('click', function(){
+        if(done) return;
+        if(ch === s.word[pos]){
+          slotEls[pos].textContent = ch;
+          slotEls[pos].classList.add('filled');
+          b.classList.add('used');
+          pos++;
+          speak(ch, 0);
+          if(pos === s.word.length){
+            done = true;
+            speak(s.word, 500);
+            setTimeout(fb.good, 1200);
+          }
+        } else {
+          slotEls[pos].classList.add('bad');
+          b.classList.add('bad');
+          (function(el, bt){
+            setTimeout(function(){ el.classList.remove('bad'); bt.classList.remove('bad'); }, 500);
+          })(slotEls[pos], b);
+          fb.bad();
+        }
+      });
+      poolBox.appendChild(b);
+    });
+  }
+
+  function renderMatch(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score += 2; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    speakBlock(stage, s);
+
+    var area = document.createElement('div');
+    area.className = 'match-area';
+    stage.insertBefore(area, navEl);
+
+    var leftCol = document.createElement('div');
+    leftCol.className = 'mcol';
+    leftCol.innerHTML = '<h4>СЛОВО</h4>';
+    var rightCol = document.createElement('div');
+    rightCol.className = 'mcol';
+    rightCol.innerHTML = '<h4>КАРТИНКА</h4>';
+    area.appendChild(leftCol);
+    area.appendChild(rightCol);
+
+    var pairs = s.pairs.slice();
+    var lefts  = pairs.map(function(p,i){ return {p:p, i:i}; });
+    var rights = pairs.map(function(p,i){ return {p:p, i:i}; });
+    rights.sort(function(){ return Math.random() - 0.5; });
+
+    var selected = null;
+    var matched = 0;
+    var busy = false;
+
+    lefts.forEach(function(o){
+      var b = document.createElement('button');
+      b.className = 'mitem'; b.type = 'button';
+      b.textContent = o.p.left;
+      b.appendChild(speakerBtn(o.p.say, 'speak-mini'));
+      b.addEventListener('click', function(){
+        if(busy || b.classList.contains('done') || b.classList.contains('sel')) return;
+        if(selected && selected.side === 'left'){ selected.el.classList.remove('sel'); }
+        selected = {side:'left', el:b, i:o.i};
+        b.classList.add('sel');
+        speak(o.p.say);
+      });
+      leftCol.appendChild(b);
+      o.el = b;
+    });
+
+    rights.forEach(function(o){
+      var b = document.createElement('button');
+      b.className = 'mitem'; b.type = 'button';
+      var pic = document.createElement('span');
+      pic.className = 'pic';
+      pic.textContent = o.p.right;
+      b.appendChild(pic);
+      b.appendChild(speakerBtn(o.p.say, 'speak-mini'));
+      b.addEventListener('click', function(){
+        if(busy || b.classList.contains('done')) return;
+        speak(o.p.say);
+        if(selected && selected.side === 'left'){
+          busy = true;
+          if(selected.i === o.i){
+            selected.el.classList.remove('sel');
+            selected.el.classList.add('done');
+            b.classList.add('done');
+            selected = null;
+            matched++;
+            speak('Yes!', 250);
+            busy = false;
+            if(matched === pairs.length){ setTimeout(fb.good, 900); }
+          } else {
+            selected.el.classList.add('bad');
+            b.classList.add('bad');
+            var a1 = selected.el, a2 = b;
+            setTimeout(function(){
+              a1.classList.remove('bad','sel');
+              a2.classList.remove('bad');
+              selected = null; busy = false;
+            }, 650);
+            fb.bad();
+            shakeStage();
+          }
+        } else {
+          if(selected && selected.side === 'right'){ selected.el.classList.remove('sel'); }
+          selected = {side:'right', el:b, i:o.i};
+          b.classList.add('sel');
+        }
+      });
+      rightCol.appendChild(b);
+      o.el = b;
+    });
+  }
+
+  function renderOrder(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score += 2; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    speakBlock(stage, s);
+
+    var slots = document.createElement('div');
+    slots.className = 'order-slots empty-pool';
+    stage.insertBefore(slots, navEl);
+
+    var pool = s.items.map(function(it, i){ return {it:it, i:i}; });
+    var shuffled = pool.slice();
+    shuffled.sort(function(){ return Math.random() - 0.5; });
+
+    var poolBox = document.createElement('div');
+    poolBox.className = 'order-pool';
+    stage.insertBefore(poolBox, navEl);
+
+    var placed = [];
+    var busy = false;
+    var correctOrder = pool.map(function(o){ return o.i; });
+
+    shuffled.forEach(function(o){
+      var b = document.createElement('button');
+      b.className = 'otile'; b.type = 'button';
+      var n = document.createElement('span');
+      n.className = 'num';
+      n.textContent = o.it.n || '';
+      b.appendChild(n);
+      var t = document.createElement('span');
+      t.innerHTML = bold(o.it.t);
+      b.appendChild(t);
+      b.appendChild(speakerBtn(o.it.say, 'speak-mini'));
+
+      b.addEventListener('click', function(){
+        if(busy || b.classList.contains('used')) return;
+        speak(o.it.say);
+        var expect = correctOrder[placed.length];
+        if(o.i === expect){
+          b.classList.add('used');
+          var clone = document.createElement('button');
+          clone.className = 'otile placed';
+          clone.type = 'button';
+          clone.innerHTML = '<span class="num">' + (o.it.n || '') + '</span><span>' + o.it.t + '</span>';
+          slots.appendChild(clone);
+          slots.classList.remove('empty-pool');
+          placed.push(o.i);
+          if(placed.length === pool.length){
+            busy = true;
+            speakSeq(s.items.map(function(x){ return x.say; }));
+            setTimeout(fb.good, 1200);
+          }
+        } else {
+          b.classList.add('bad');
+          setTimeout(function(){ b.classList.remove('bad'); }, 550);
+          fb.bad();
+          shakeStage();
+        }
+      });
+      poolBox.appendChild(b);
+    });
+  }
+
+  function renderPick(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score += 2; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    speakBlock(stage, s);
+
+    var zone = document.createElement('div');
+    zone.className = 'drag-zone';
+    stage.insertBefore(zone, navEl);
+
+    var chosenCount = 0;
+    var correctCount = s.pool.filter(function(p){ return p.good; }).length;
+    var busy = false;
+
+    s.pool.forEach(function(item){
+      var el = document.createElement('button');
+      el.className = 'drag-item';
+      el.type = 'button';
+      el.innerHTML = bold(item.t);
+      el.appendChild(speakerBtn(item.say, 'speak-mini'));
+
+      el.addEventListener('click', function(){
+        if(busy || el.classList.contains('chosen')) return;
+        speak(item.say);
+        if(item.good){
+          el.classList.add('chosen');
+          chosenCount++;
+          if(chosenCount === correctCount){
+            busy = true;
+            setTimeout(fb.good, 800);
+          }
+        } else {
+          el.classList.add('bad');
+          setTimeout(function(){ el.classList.remove('bad'); }, 600);
+          fb.bad();
+          shakeStage();
+        }
+      });
+      zone.appendChild(el);
+    });
+  }
+
+  function renderFinal(stage, s){
+    stage.innerHTML = '';
+    var box = document.createElement('div');
+    box.className = 'final';
+    stage.appendChild(box);
+
+    var big = document.createElement('span');
+    big.className = 'big';
+    big.textContent = '🌅';
+    box.appendChild(big);
+
+    var h = document.createElement('h2');
+    h.textContent = s.title;
+    box.appendChild(h);
+
+    var p = document.createElement('p');
+    p.textContent = s.text;
+    box.appendChild(p);
+
+    var line = document.createElement('div');
+    line.className = 'speak-line';
+    var big2 = document.createElement('button');
+    big2.className = 'speak-big';
+    big2.innerHTML = '🔊 ' + s.say;
+    big2.addEventListener('click', function(){ speakSeq(['You are not alone!', 'Spring is coming!']); });
+    line.appendChild(big2);
+    box.appendChild(line);
+
+    var rw = document.createElement('div');
+    rw.className = 'reward';
+    var rt = document.createElement('div');
+    rt.style.fontWeight = '700';
+    rt.style.marginBottom = '12px';
+    rt.style.color = '#1f4e79';
+    rt.textContent = '❄️ Зимний словарь — всё, что прошло через эту ночь:';
+    rw.appendChild(rt);
+
+    var wl = document.createElement('div');
+    wl.className = 'words';
+    s.allWords.forEach(function(w){
+      var row = document.createElement('div');
+      row.style.display = 'flex';
+      row.style.alignItems = 'center';
+      row.style.gap = '8px';
+      var tx = document.createElement('span');
+      tx.innerHTML = '<b>' + w.en + '</b> ' + w.ipa + ' — ' + w.ru;
+      tx.style.flex = '1';
+      row.appendChild(tx);
+      row.appendChild(speakerBtn(w.en, 'speak-mini'));
+      wl.appendChild(row);
+    });
+    rw.appendChild(wl);
+    box.appendChild(rw);
+
+    var st = document.createElement('p');
+    st.innerHTML = '❄️ Следов оставлено: <b>' + score + '</b><br>Эту ночную тропу можно пройти ещё раз: к рассвету снег успеет выпасть заново.';
+    box.appendChild(st);
+
+    var nav = document.createElement('div');
+    nav.className = 'nav';
+    var back = nextBtn('⬅️ Назад', goBack, 'btn-back');
+    if(!history.length) back.disabled = true;
+    nav.appendChild(back);
+    nav.appendChild(nextBtn('🔁 Пройти ещё раз', function(){
+      idx = 0; history = []; score = 0; render();
+    }, 'restart'));
+    box.appendChild(nav);
+
+    speakSeq(['You are not alone!', 'Spring is coming!']);
+  }
+
+  render();
+
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = function(){ loadVoices(); };
+  }
+  document.addEventListener('click', function once(){
+    loadVoices();
+    document.removeEventListener('click', once);
+  });
+
+})();
+</script>
+</body>
+</html>

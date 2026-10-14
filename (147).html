@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик: Playtime!</title>
+<meta name="description" content="Интерактивный словарик к уроку Playtime.">
+<style>
+body { font-family: 'Comic Sans MS', 'Marker Felt', sans-serif; background: linear-gradient(to bottom, #1a237e 0%, #283593 55%, #ff6f00 100%); margin: 0; padding: 20px; color: #fff8e1; min-height: 100vh; }
+.header { text-align: center; margin-bottom: 25px; }
+.header h1 { font-size: 2.2em; margin: 0; color: #ffe082; text-shadow: 2px 2px 0 #1a237e; }
+.header p { font-size: 1.1em; color: #fff3e0; margin: 8px 0; }
+.filters { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; }
+.filter-btn { background: #5c6bc0; color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1em; cursor: pointer; font-family: inherit; transition: all 0.3s; box-shadow: 0 4px 0 #283593; }
+.filter-btn.active, .filter-btn:hover { background: #ffca28; color: #3e2723; box-shadow: 0 4px 0 #ff8f00; transform: translateY(-2px); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; }
+.card { background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 55%, #ffe082 100%); color: #3e2723; border: 4px solid #ffca28; border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%; padding: 30px 16px 22px; text-align: center; position: relative; box-shadow: 5px 7px 16px rgba(0,0,0,0.25); display: flex; flex-direction: column; align-items: center; min-height: 220px; transition: transform 0.3s; overflow: hidden; }
+.card::before { content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 24px; height: 40px; background: #1a237e; border-radius: 4px 4px 0 0; }
+.card:hover { transform: translateY(-5px) rotate(-3deg); }
+.emoji { font-size: 3.4em; margin: 18px 0 8px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.18)); }
+.en { font-size: 1.35em; font-weight: bold; color: #1a237e; margin: 6px 0; }
+.ipa { font-size: 0.9em; color: #5d4037; font-family: 'Courier New', monospace; margin-bottom: 6px; }
+.ru { font-size: 1.05em; color: #3e2723; margin-bottom: 16px; }
+.sound-btn { background: #43a047; color: white; border: none; width: 48px; height: 48px; border-radius: 50%; font-size: 1.5em; cursor: pointer; box-shadow: 0 4px 0 #2e7d32; transition: 0.1s; }
+.sound-btn:active { transform: translateY(4px); box-shadow: none; }
+.card.playing { border-color: #ff6f00; background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 55%, #ffcc80 100%); transform: scale(1.04) rotate(3deg); }
+.footer { text-align: center; margin-top: 50px; font-size: 0.95em; color: #ffe082; font-weight: bold; }
+@media (max-width: 600px) {
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .header h1 { font-size: 1.7em; }
+  .card { min-height: 200px; padding: 25px 12px 18px; }
+  .emoji { font-size: 2.9em; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🎵 Playtime!</h1>
+  <p>Нажми на кнопку, чтобы услышать слово</p>
+</div>
+<div class="filters">
+  <button class="filter-btn active" data-cat="all">Все</button>
+  <button class="filter-btn" data-cat="instruments">Инструменты</button>
+  <button class="filter-btn" data-cat="actions">Действия</button>
+  <button class="filter-btn" data-cat="phrases">Фразы</button>
+</div>
+<div class="grid" id="grid"></div>
+<div class="footer">Spotlight Starter • Модуль 3, Урок 12</div>
+<script>
+var words = [
+  { en: "party", ipa: "/ˈpɑːti/", ru: "вечеринка", emoji: "🎉", cat: "actions" },
+  { en: "piano", ipa: "/piˈænəʊ/", ru: "пианино", emoji: "🎹", cat: "instruments" },
+  { en: "guitar", ipa: "/ɡɪˈtɑː/", ru: "гитара", emoji: "🎸", cat: "instruments" },
+  { en: "trumpet", ipa: "/ˈtrʌmpɪt/", ru: "труба", emoji: "🎺", cat: "instruments" },
+  { en: "drums", ipa: "/drʌmz/", ru: "барабаны", emoji: "🥁", cat: "instruments" },
+  { en: "play", ipa: "/pleɪ/", ru: "играть", emoji: "🎵", cat: "actions" },
+  { en: "hear", ipa: "/hɪə/", ru: "слышать", emoji: "👂", cat: "actions" },
+  { en: "music", ipa: "/ˈmjuːzɪk/", ru: "музыка", emoji: "🎶", cat: "actions" },
+  { en: "What's Larry playing?", ipa: "/wɒts ˈlæri ˈpleɪɪŋ/", ru: "Что играет Ларри?", emoji: "❓", cat: "phrases" },
+  { en: "I hear drums", ipa: "/aɪ hɪə drʌmz/", ru: "Я слышу барабаны", emoji: "🥁", cat: "phrases" },
+  { en: "Let's play music", ipa: "/lets pleɪ ˈmjuːzɪk/", ru: "Давайте играть музыку", emoji: "🎵", cat: "phrases" },
+  { en: "Great!", ipa: "/ɡreɪt/", ru: "Отлично!", emoji: "👍", cat: "phrases" }
+];
+var grid = document.getElementById('grid');
+var currentAudio = null;
+var playingCard = null;
+function renderWords(filter) {
+  grid.innerHTML = '';
+  words.forEach(function(w) {
+    if (filter !== 'all' && w.cat !== filter) return;
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = '<div class="emoji">' + w.emoji + '</div><div class="en">' + w.en + '</div><div class="ipa">' + w.ipa + '</div><div class="ru">' + w.ru + '</div><button class="sound-btn">🔊</button>';
+    var btn = card.querySelector('.sound-btn');
+    btn.onclick = function() {
+      if (currentAudio) { speechSynthesis.cancel(); if (playingCard) playingCard.classList.remove('playing'); }
+      var utter = new SpeechSynthesisUtterance(w.en);
+      utter.lang = 'en-GB'; utter.rate = 0.85;
+      card.classList.add('playing'); playingCard = card;
+      utter.onend = function() { card.classList.remove('playing'); playingCard = null; };
+      speechSynthesis.speak(utter); currentAudio = utter;
+    };
+    grid.appendChild(card);
+  });
+}
+document.querySelectorAll('.filter-btn').forEach(function(btn) {
+  btn.onclick = function() {
+    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active'); renderWords(btn.getAttribute('data-cat'));
+  };
+});
+renderWords('all');
+</script>
+</body>
+</html>

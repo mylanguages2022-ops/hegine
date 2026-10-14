@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик: The Seaside!</title>
+<meta name="description" content="Интерактивный словарик к уроку The Seaside.">
+<style>
+body { font-family: 'Comic Sans MS', 'Marker Felt', sans-serif; background: linear-gradient(to bottom, #ffe082 0%, #ffcc80 40%, #4fc3f7 100%); margin: 0; padding: 20px; color: #3e2723; min-height: 100vh; }
+.header { text-align: center; margin-bottom: 25px; }
+.header h1 { font-size: 2.2em; margin: 0; color: #01579b; text-shadow: 2px 2px 0 rgba(255,255,255,0.6); }
+.header p { font-size: 1.1em; color: #4e342e; margin: 8px 0; }
+.filters { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; }
+.filter-btn { background: #ff7043; color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1em; cursor: pointer; font-family: inherit; transition: all 0.3s; box-shadow: 0 4px 0 #d84315; }
+.filter-btn.active, .filter-btn:hover { background: #29b6f6; box-shadow: 0 4px 0 #0277bd; transform: translateY(-2px); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 25px; max-width: 1100px; margin: 0 auto; }
+.card { background: #fff8e1; border: 4px solid #d7ccc8; border-radius: 40% 60% 50% 40% / 50% 40% 60% 50%; padding: 25px 20px; text-align: center; position: relative; box-shadow: 4px 6px 12px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; min-height: 210px; transition: transform 0.3s; overflow: hidden; }
+.card::before { content: ''; position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px; border: 2px dashed #bcaaa4; border-radius: 30% 70% 60% 40% / 40% 50% 70% 60%; pointer-events: none; }
+.card:hover { transform: translateY(-5px) rotate(-3deg); }
+.emoji { font-size: 3.5em; margin-bottom: 10px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2)); }
+.en { font-size: 1.4em; font-weight: bold; color: #4e342e; margin: 8px 0; }
+.ipa { font-size: 0.9em; color: #795548; font-family: 'Courier New', monospace; margin-bottom: 8px; }
+.ru { font-size: 1.1em; color: #3e2723; margin-bottom: 18px; }
+.sound-btn { background: #4caf50; color: white; border: none; width: 48px; height: 48px; border-radius: 50%; font-size: 1.5em; cursor: pointer; box-shadow: 0 4px 0 #2e7d32; transition: 0.1s; }
+.sound-btn:active { transform: translateY(4px); box-shadow: none; }
+.card.playing { border-color: #29b6f6; background: #e1f5fe; transform: scale(1.05) rotate(3deg); }
+.footer { text-align: center; margin-top: 50px; font-size: 0.95em; color: #01579b; font-weight: bold; }
+@media (max-width: 600px) {
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .header h1 { font-size: 1.7em; }
+  .card { min-height: 190px; padding: 20px 15px; }
+  .emoji { font-size: 3em; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🐚 The Seaside!</h1>
+  <p>Нажми на кнопку, чтобы услышать слово</p>
+</div>
+<div class="filters">
+  <button class="filter-btn active" data-cat="all">Все</button>
+  <button class="filter-btn" data-cat="food">Еда</button>
+  <button class="filter-btn" data-cat="actions">Действия</button>
+  <button class="filter-btn" data-cat="place">На пляже</button>
+</div>
+<div class="grid" id="grid"></div>
+<div class="footer">Spotlight Starter • Модуль 3, Урок 7</div>
+<script>
+var words = [
+  { en: "eat", ipa: "/iːt/", ru: "есть", emoji: "🍦", cat: "actions" },
+  { en: "drink", ipa: "/drɪŋk/", ru: "пить", emoji: "🥤", cat: "actions" },
+  { en: "play", ipa: "/pleɪ/", ru: "играть", emoji: "🤸", cat: "actions" },
+  { en: "ice cream", ipa: "/ˌaɪs ˈkriːm/", ru: "мороженое", emoji: "🍧", cat: "food" },
+  { en: "water", ipa: "/ˈwɔːtə/", ru: "вода", emoji: "💧", cat: "food" },
+  { en: "sand", ipa: "/sænd/", ru: "песок", emoji: "🏖️", cat: "place" },
+  { en: "seaside", ipa: "/ˈsiːsaɪd/", ru: "морской берег", emoji: "🌊", cat: "place" },
+  { en: "I like", ipa: "/aɪ laɪk/", ru: "я люблю", emoji: "❤️", cat: "actions" },
+  { en: "I don't like", ipa: "/aɪ dəʊnt laɪk/", ru: "я не люблю", emoji: "🙅", cat: "actions" },
+  { en: "Let's get some", ipa: "/lets ɡet sʌm/", ru: "давай возьмём", emoji: "🤲", cat: "actions" },
+  { en: "cold", ipa: "/kəʊld/", ru: "холодный", emoji: "🥶", cat: "place" },
+  { en: "sun", ipa: "/sʌn/", ru: "солнце", emoji: "☀️", cat: "place" }
+];
+var grid = document.getElementById('grid');
+var currentAudio = null;
+var playingCard = null;
+function renderWords(filter) {
+  grid.innerHTML = '';
+  words.forEach(function(w) {
+    if (filter !== 'all' && w.cat !== filter) return;
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = '<div class="emoji">' + w.emoji + '</div><div class="en">' + w.en + '</div><div class="ipa">' + w.ipa + '</div><div class="ru">' + w.ru + '</div><button class="sound-btn">🔊</button>';
+    var btn = card.querySelector('.sound-btn');
+    btn.onclick = function() {
+      if (currentAudio) { speechSynthesis.cancel(); if (playingCard) playingCard.classList.remove('playing'); }
+      var utter = new SpeechSynthesisUtterance(w.en);
+      utter.lang = 'en-GB'; utter.rate = 0.85;
+      card.classList.add('playing'); playingCard = card;
+      utter.onend = function() { card.classList.remove('playing'); playingCard = null; };
+      speechSynthesis.speak(utter); currentAudio = utter;
+    };
+    grid.appendChild(card);
+  });
+}
+document.querySelectorAll('.filter-btn').forEach(function(btn) {
+  btn.onclick = function() {
+    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active'); renderWords(btn.getAttribute('data-cat'));
+  };
+});
+renderWords('all');
+</script>
+</body>
+</html>

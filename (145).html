@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик: Now I Know!</title>
+<meta name="description" content="Интерактивный словарик: повторение всего модуля 3.">
+<style>
+body { font-family: 'Comic Sans MS', 'Marker Felt', sans-serif; background: linear-gradient(to bottom, #fff9c4 0%, #ffe082 50%, #d7ccc8 100%); margin: 0; padding: 20px; color: #3e2723; min-height: 100vh; }
+.header { text-align: center; margin-bottom: 25px; }
+.header h1 { font-size: 2.2em; margin: 0; color: #5d4037; text-shadow: 2px 2px 0 rgba(255,255,255,0.7); }
+.header p { font-size: 1.1em; color: #4e342e; margin: 8px 0; }
+.filters { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; }
+.filter-btn { background: #8d6e63; color: white; border: none; padding: 12px 24px; border-radius: 25px; font-size: 1em; cursor: pointer; font-family: inherit; transition: all 0.3s; box-shadow: 0 4px 0 #5d4037; }
+.filter-btn.active, .filter-btn:hover { background: #ff9800; box-shadow: 0 4px 0 #e65100; transform: translateY(-2px); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 24px; max-width: 1100px; margin: 0 auto; }
+.card { background: #fffde7; border: 4px solid #ffca28; border-radius: 20px; padding: 24px 16px 20px; text-align: center; position: relative; box-shadow: 4px 6px 15px rgba(0,0,0,0.14); display: flex; flex-direction: column; align-items: center; min-height: 220px; transition: transform 0.3s; overflow: hidden; }
+.card::before { content: ''; position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 28px; height: 28px; background: #ffca28; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+.card:hover { transform: translateY(-5px) rotate(-2deg); }
+.emoji { font-size: 3.4em; margin: 16px 0 8px; filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.18)); }
+.en { font-size: 1.35em; font-weight: bold; color: #bf360c; margin: 6px 0; }
+.ipa { font-size: 0.9em; color: #6d4c41; font-family: 'Courier New', monospace; margin-bottom: 6px; }
+.ru { font-size: 1.05em; color: #3e2723; margin-bottom: 16px; }
+.sound-btn { background: #43a047; color: white; border: none; width: 48px; height: 48px; border-radius: 50%; font-size: 1.5em; cursor: pointer; box-shadow: 0 4px 0 #2e7d32; transition: 0.1s; }
+.sound-btn:active { transform: translateY(4px); box-shadow: none; }
+.card.playing { border-color: #ff9800; background: #fff3e0; transform: scale(1.04) rotate(2deg); }
+.footer { text-align: center; margin-top: 50px; font-size: 0.95em; color: #5d4037; font-weight: bold; }
+@media (max-width: 600px) {
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .header h1 { font-size: 1.7em; }
+  .card { min-height: 200px; padding: 20px 12px 16px; }
+  .emoji { font-size: 2.9em; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🗺️ Now I Know!</h1>
+  <p>Нажми на кнопку, чтобы услышать слово</p>
+</div>
+<div class="filters">
+  <button class="filter-btn active" data-cat="all">Все</button>
+  <button class="filter-btn" data-cat="food">Еда</button>
+  <button class="filter-btn" data-cat="animals">Животные</button>
+  <button class="filter-btn" data-cat="actions">Действия</button>
+  <button class="filter-btn" data-cat="phrases">Фразы</button>
+</div>
+<div class="grid" id="grid"></div>
+<div class="footer">Spotlight Starter • Модуль 3 • Финал</div>
+<script>
+var words = [
+  { en: "pizza", ipa: "/ˈpiːtsə/", ru: "пицца", emoji: "🍕", cat: "food" },
+  { en: "ice cream", ipa: "/ˌaɪs ˈkriːm/", ru: "мороженое", emoji: "🍦", cat: "food" },
+  { en: "cheese", ipa: "/tʃiːz/", ru: "сыр", emoji: "🧀", cat: "food" },
+  { en: "apples", ipa: "/ˈæpəlz/", ru: "яблоки", emoji: "🍎", cat: "food" },
+  { en: "bananas", ipa: "/bəˈnɑːnəz/", ru: "бананы", emoji: "🍌", cat: "food" },
+  { en: "chocolate", ipa: "/ˈtʃɒklət/", ru: "шоколад", emoji: "🍫", cat: "food" },
+  { en: "biscuits", ipa: "/ˈbɪskɪts/", ru: "печенье", emoji: "🍪", cat: "food" },
+  { en: "milk", ipa: "/mɪlk/", ru: "молоко", emoji: "🥛", cat: "food" },
+  { en: "juice", ipa: "/dʒuːs/", ru: "сок", emoji: "🧃", cat: "food" },
+  { en: "swan", ipa: "/swɒn/", ru: "лебедь", emoji: "🦢", cat: "animals" },
+  { en: "duckling", ipa: "/ˈdʌklɪŋ/", ru: "утёнок", emoji: "🐥", cat: "animals" },
+  { en: "fish", ipa: "/fɪʃ/", ru: "рыба", emoji: "🐟", cat: "animals" },
+  { en: "eat", ipa: "/iːt/", ru: "есть", emoji: "🍴", cat: "actions" },
+  { en: "drink", ipa: "/drɪŋk/", ru: "пить", emoji: "🥤", cat: "actions" },
+  { en: "play", ipa: "/pleɪ/", ru: "играть", emoji: "🤸", cat: "actions" },
+  { en: "fly", ipa: "/flaɪ/", ru: "летать", emoji: "🕊️", cat: "actions" },
+  { en: "swim", ipa: "/swɪm/", ru: "плавать", emoji: "🏊", cat: "actions" },
+  { en: "run", ipa: "/rʌn/", ru: "бегать", emoji: "🏃", cat: "actions" },
+  { en: "I like", ipa: "/aɪ laɪk/", ru: "я люблю", emoji: "😊", cat: "phrases" },
+  { en: "I love", ipa: "/aɪ lʌv/", ru: "я обожаю", emoji: "❤️", cat: "phrases" },
+  { en: "I don't like", ipa: "/aɪ dəʊnt laɪk/", ru: "я не люблю", emoji: "🙅", cat: "phrases" },
+  { en: "I've got", ipa: "/aɪv ɡɒt/", ru: "у меня есть", emoji: "🤲", cat: "phrases" },
+  { en: "Can you...?", ipa: "/kæn juː/", ru: "ты умеешь...?", emoji: "💪", cat: "phrases" },
+  { en: "Where's...?", ipa: "/weəz/", ru: "где...?", emoji: "🔍", cat: "phrases" }
+];
+var grid = document.getElementById('grid');
+var currentAudio = null;
+var playingCard = null;
+function renderWords(filter) {
+  grid.innerHTML = '';
+  words.forEach(function(w) {
+    if (filter !== 'all' && w.cat !== filter) return;
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = '<div class="emoji">' + w.emoji + '</div><div class="en">' + w.en + '</div><div class="ipa">' + w.ipa + '</div><div class="ru">' + w.ru + '</div><button class="sound-btn">🔊</button>';
+    var btn = card.querySelector('.sound-btn');
+    btn.onclick = function() {
+      if (currentAudio) { speechSynthesis.cancel(); if (playingCard) playingCard.classList.remove('playing'); }
+      var utter = new SpeechSynthesisUtterance(w.en);
+      utter.lang = 'en-GB'; utter.rate = 0.85;
+      card.classList.add('playing'); playingCard = card;
+      utter.onend = function() { card.classList.remove('playing'); playingCard = null; };
+      speechSynthesis.speak(utter); currentAudio = utter;
+    };
+    grid.appendChild(card);
+  });
+}
+document.querySelectorAll('.filter-btn').forEach(function(btn) {
+  btn.onclick = function() {
+    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active'); renderWords(btn.getAttribute('data-cat'));
+  };
+});
+renderWords('all');
+</script>
+</body>
+</html>

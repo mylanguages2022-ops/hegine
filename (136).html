@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик: Кулинарный пазл</title>
+<meta name="description" content="Интерактивный словарик к уроку Кулинарный пазл.">
+<style>
+body { font-family: 'Comic Sans MS', 'Marker Felt', sans-serif; background: #f4f1ea; margin: 0; padding: 20px; color: #3e2723; }
+.header { text-align: center; margin-bottom: 20px; }
+.header h1 { font-size: 2em; margin: 0; color: #5d4037; }
+.header p { font-size: 1.1em; color: #795548; margin: 5px 0; }
+.filters { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin-bottom: 25px; }
+.filter-btn { background: #8d6e63; color: white; border: none; padding: 10px 20px; border-radius: 20px; font-size: 1em; cursor: pointer; font-family: inherit; transition: 0.2s; box-shadow: 0 4px 0 #5d4037; }
+.filter-btn.active, .filter-btn:hover { background: #ff7043; box-shadow: 0 4px 0 #d84315; transform: translateY(-2px); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto; }
+.card { background: #d7ccc8; border: 4px solid #8d6e63; border-radius: 15px; padding: 15px; text-align: center; position: relative; box-shadow: 5px 5px 0 #5d4037; display: flex; flex-direction: column; align-items: center; min-height: 180px; }
+.card::before { content: ''; position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px; border: 2px dashed #a1887f; border-radius: 10px; pointer-events: none; }
+.emoji { font-size: 3em; margin-bottom: 5px; }
+.en { font-size: 1.4em; font-weight: bold; color: #3e2723; margin: 5px 0; }
+.ipa { font-size: 0.9em; color: #5d4037; font-family: monospace; margin-bottom: 5px; }
+.ru { font-size: 1.1em; color: #4e342e; margin-bottom: 15px; }
+.sound-btn { background: #ff7043; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; font-size: 1.5em; cursor: pointer; box-shadow: 0 4px 0 #d84315; transition: 0.1s; }
+.sound-btn:active { transform: translateY(4px); box-shadow: none; }
+.card.playing { border-color: #ff7043; background: #ffe0b2; }
+.footer { text-align: center; margin-top: 40px; font-size: 0.9em; color: #8d6e63; }
+@media (max-width: 600px) {
+  .grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
+  .header h1 { font-size: 1.5em; }
+  .card { min-height: 160px; padding: 10px; }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🍽️ Кулинарный пазл</h1>
+  <p>Нажми на кнопку, чтобы услышать слово</p>
+</div>
+<div class="filters">
+  <button class="filter-btn active" data-cat="all">Все</button>
+  <button class="filter-btn" data-cat="food">Еда</button>
+  <button class="filter-btn" data-cat="action">Действия</button>
+  <button class="filter-btn" data-cat="things">Предметы</button>
+</div>
+<div class="grid" id="grid"></div>
+<div class="footer">Spotlight Starter • Модуль 3, Урок 4</div>
+<script>
+var words = [
+  { en: "apple", ipa: "/ˈæp(ə)l/", ru: "яблоко", emoji: "🍎", cat: "food" },
+  { en: "banana", ipa: "/bəˈnɑːnə/", ru: "банан", emoji: "🍌", cat: "food" },
+  { en: "cheese", ipa: "/tʃiːz/", ru: "сыр", emoji: "🧀", cat: "food" },
+  { en: "chocolate", ipa: "/ˈtʃɒk(ə)lət/", ru: "шоколад", emoji: "🍫", cat: "food" },
+  { en: "biscuits", ipa: "/ˈbɪskɪts/", ru: "печенье", emoji: "🍪", cat: "food" },
+  { en: "eggs", ipa: "/eɡz/", ru: "яйца", emoji: "🥚", cat: "food" },
+  { en: "milk", ipa: "/mɪlk/", ru: "молоко", emoji: "🥛", cat: "food" },
+  { en: "put", ipa: "/pʊt/", ru: "класть", emoji: "🖐️", cat: "action" },
+  { en: "like", ipa: "/laɪk/", ru: "любить", emoji: "❤️", cat: "action" },
+  { en: "plate", ipa: "/pleɪt/", ru: "тарелка", emoji: "🍽️", cat: "things" },
+  { en: "basket", ipa: "/ˈbɑːskɪt/", ru: "корзина", emoji: "🧺", cat: "things" },
+  { en: "on", ipa: "/ɒn/", ru: "на", emoji: "⬆️", cat: "action" },
+  { en: "in", ipa: "/ɪn/", ru: "в", emoji: "⬇️", cat: "action" }
+];
+
+var grid = document.getElementById('grid');
+var currentAudio = null;
+var playingCard = null;
+
+function renderWords(filter) {
+  grid.innerHTML = '';
+  words.forEach(function(w) {
+    if (filter !== 'all' && w.cat !== filter) return;
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = 
+      '<div class="emoji">' + w.emoji + '</div>' +
+      '<div class="en">' + w.en + '</div>' +
+      '<div class="ipa">' + w.ipa + '</div>' +
+      '<div class="ru">' + w.ru + '</div>' +
+      '<button class="sound-btn">🔊</button>';
+    
+    var btn = card.querySelector('.sound-btn');
+    btn.onclick = function() {
+      if (currentAudio) {
+        speechSynthesis.cancel();
+        if (playingCard) playingCard.classList.remove('playing');
+      }
+      var utter = new SpeechSynthesisUtterance(w.en);
+      utter.lang = 'en-GB';
+      utter.rate = 0.85;
+      card.classList.add('playing');
+      playingCard = card;
+      utter.onend = function() {
+        card.classList.remove('playing');
+        playingCard = null;
+      };
+      speechSynthesis.speak(utter);
+      currentAudio = utter;
+    };
+    grid.appendChild(card);
+  });
+}
+
+document.querySelectorAll('.filter-btn').forEach(function(btn) {
+  btn.onclick = function() {
+    document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    renderWords(btn.getAttribute('data-cat'));
+  };
+});
+
+renderWords('all');
+</script>
+</body>
+</html>

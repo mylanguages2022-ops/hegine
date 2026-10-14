@@ -1,0 +1,1398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Квест — Поляна прыгунов</title>
+
+<meta property="og:title" content="Квест — Поляна прыгунов">
+<meta property="og:description" content="Квест урока 12b Spotlight: 16 выступлений, десять механик включая «can или can't» для множественного числа, зверята и фразы. Британская озвучка.">
+<meta property="og:image" content="https://spotlight-lessons.example.com/og/12b-quest-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Солнечная поляна с цветами и зверятами">
+<meta property="og:url" content="https://spotlight-lessons.example.com/12b/quest">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Spotlight — уроки для родителя и ребёнка">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Квест по уроку 12b Spotlight: 16 шагов, десять механик, озвучка en-GB, прогресс-бар и возврат при ошибке.">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
+    background:linear-gradient(180deg,#90ee90 0%,#7cdd7c 55%,#68c868 100%);
+    background-image:
+      radial-gradient(rgba(255,255,255,.3) 1.4px, transparent 2px);
+    background-size:120px 120px;
+    color:#2a4a2a;min-height:100vh;padding:20px 12px 80px;
+  }
+  .wrap{max-width:780px;margin:0 auto}
+
+  /* ---------- ПОЛЯНА ---------- */
+  .topbar{
+    background:linear-gradient(180deg,#fff8dc 0%,#ffe8a0 100%);
+    border-radius:16px;padding:18px 18px 22px;
+    border:4px solid #8b6914;
+    box-shadow:0 10px 30px rgba(90,60,10,.3), inset 0 0 30px rgba(255,215,0,.15);
+    margin-bottom:28px;position:relative;
+  }
+  .topbar::before,.topbar::after{
+    content:'🌸';position:absolute;font-size:1.8rem;
+  }
+  .topbar::before{top:10px;left:14px}
+  .topbar::after{top:10px;right:14px}
+  .topbar h1{
+    font-size:clamp(1.05rem,4vw,1.45rem);color:#8b4513;text-align:center;line-height:1.35;
+    letter-spacing:.5px;
+  }
+  .topbar h1::before{content:'🌳 ';}
+  .bar-wrap{margin-top:16px}
+  .bar-label{
+    display:flex;justify-content:space-between;align-items:center;
+    font-size:.8rem;color:#8b6914;margin-bottom:8px;font-weight:700;letter-spacing:1px;
+  }
+  .bar-track{
+    height:26px;background:#8fbc8f;border-radius:13px;overflow:hidden;
+    border:3px solid #2e8b57;position:relative;
+    background-image:repeating-linear-gradient(90deg, transparent 0 48px, rgba(255,255,255,.25) 48px 50px);
+  }
+  .bar-fill{
+    height:100%;width:0%;
+    background:linear-gradient(90deg,#ffd700,#ffed4e);
+    transition:width .5s cubic-bezier(.34,1.4,.64,1);
+  }
+  .bar-runner{
+    position:absolute;top:-10px;left:0;font-size:1.5rem;
+    transform:translateX(-50%);transition:left .5s cubic-bezier(.34,1.4,.64,1);
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.3));
+  }
+  .stars{margin-top:12px;text-align:center;font-size:1.05rem;letter-spacing:4px;color:#ffd700;text-shadow:1px 1px 0 #8b6914}
+
+  /* ---------- ВЫСТУПЛЕНИЕ ---------- */
+  .stage{
+    background:#fff;border-radius:14px;padding:38px 22px 44px;position:relative;
+    border:3px solid #2e8b57;color:#2a4a2a;
+    box-shadow:0 10px 30px rgba(46,139,87,.3);
+    animation:pop .35s ease;
+  }
+  .stage::before{
+    content:'🎪';position:absolute;top:-18px;left:20px;font-size:1.6rem;
+    background:#ffd700;padding:4px 8px;border-radius:10px;border:2px solid #8b6914;
+  }
+  @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+  .stage.shake{animation:shake .45s}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-9px)}40%{transform:translateX(9px)}
+    60%{transform:translateX(-6px)}80%{transform:translateX(6px)}
+  }
+  .step-tag{
+    display:inline-block;background:#2e8b57;color:#fff;
+    font-size:.76rem;font-weight:700;padding:5px 14px;border-radius:999px;
+    letter-spacing:1.5px;margin-bottom:14px;
+  }
+  .mech-tag{
+    display:inline-block;background:#fff4d8;color:#8a5a10;
+    font-size:.72rem;font-weight:700;padding:3px 11px;border-radius:999px;
+    border:2px solid #ffd700;margin-left:6px;margin-bottom:14px;letter-spacing:.3px;
+  }
+  .hero{font-size:3.1rem;text-align:center;display:block;margin:4px 0 12px;line-height:1.15}
+  .stage h2{font-size:clamp(1.05rem,3.8vw,1.4rem);color:#2e8b57;text-align:center;margin-bottom:14px;line-height:1.35}
+
+  .task-text{
+    font-size:1rem;line-height:1.65;color:#3a5a3a;text-align:center;
+    margin:0 auto 22px;max-width:540px;
+  }
+  .en-inline{font-weight:700;color:#1a5a1a}
+
+  .speak-line{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:16px 0 22px}
+  .speak-big{
+    background:#2e8b57;color:#fff;border:none;border-radius:999px;
+    padding:12px 22px;font-size:1rem;font-weight:700;cursor:pointer;
+    font-family:inherit;box-shadow:0 4px 0 #1a5a1a;transition:.15s;
+    display:inline-flex;align-items:center;gap:9px;letter-spacing:.4px;
+  }
+  .speak-big:hover{background:#1a5a1a;transform:translateY(-2px)}
+  .speak-big:active{transform:translateY(1px);box-shadow:0 2px 0 #1a5a1a}
+  .speak-mini{
+    width:36px;height:36px;border-radius:50%;border:2px solid #2e8b57;
+    background:#ffd700;color:#2a4a2a;font-size:.95rem;cursor:pointer;
+    box-shadow:0 3px 0 #8b6914;transition:.15s;
+    display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+  }
+  .speak-mini:hover{transform:scale(1.1) rotate(-8deg);background:#ffed4e}
+  .speak-mini:active{transform:scale(.94)}
+
+  .opts{display:flex;flex-direction:column;gap:12px;margin-top:8px}
+  .opts.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .opt{
+    background:#fff;border:2px solid #8fbc8f;border-left:8px solid #2e8b57;border-radius:10px;
+    padding:14px 15px;cursor:pointer;font-family:inherit;font-size:1.02rem;
+    color:#2a4a2a;text-align:left;display:flex;align-items:center;gap:10px;
+    transition:.16s;font-weight:600;line-height:1.4;box-shadow:0 2px 0 rgba(46,139,87,.25);
+  }
+  .opt:hover{border-color:#2e8b57;background:#f0fff0;transform:translateX(3px)}
+  .opt .mark{
+    flex:0 0 30px;height:30px;border-radius:50%;background:#2e8b57;color:#ffd700;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;
+  }
+  .opt.correct{background:#eafff0;border-color:#228b22;border-left-color:#228b22;animation:bounce .45s}
+  .opt.wrong{background:#fff0f0;border-color:#c0392b;border-left-color:#c0392b;animation:shake .4s}
+  @keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+  .opt:disabled{cursor:default}
+
+  .yesno-scene,.cancant-scene{
+    background:#f0fff0;border:3px dashed #2e8b57;border-radius:14px;
+    padding:22px 14px;text-align:center;margin-bottom:20px;
+  }
+  .yesno-scene .big,.cancant-scene .big{font-size:2.6rem;letter-spacing:6px;display:block;margin-bottom:10px}
+  .yesno-row,.cancant-row{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+  .yesno-btn,.cancant-btn{
+    flex:1 1 160px;max-width:240px;border-radius:12px;padding:16px 12px;
+    font-family:inherit;font-size:1.05rem;font-weight:700;cursor:pointer;transition:.15s;
+    border:3px solid;letter-spacing:.5px;
+  }
+  .yesno-btn.yes{background:#eafff0;border-color:#228b22;color:#1a5a1a;box-shadow:0 4px 0 #1a5a1a}
+  .yesno-btn.no{background:#fff4f4;border-color:#c0392b;color:#8e2a1f;box-shadow:0 4px 0 #8e2a1f}
+  .cancant-btn.can{background:#eafff0;border-color:#228b22;color:#1a5a1a;box-shadow:0 4px 0 #1a5a1a}
+  .cancant-btn.cant{background:#fff4f4;border-color:#c0392b;color:#8e2a1f;box-shadow:0 4px 0 #8e2a1f}
+  .yesno-btn:hover,.cancant-btn:hover{transform:translateY(-2px)}
+  .yesno-btn.correct,.cancant-btn.correct{animation:bounce .45s}
+  .yesno-btn.wrong,.cancant-btn.wrong{animation:shake .4s}
+  .cancant-hint{font-size:.86rem;color:#5a7a5a;margin-top:10px;line-height:1.45}
+
+  .countbox{
+    background:#f0fff0;border:3px dashed #2e8b57;border-radius:14px;
+    padding:22px 14px;text-align:center;margin-bottom:20px;
+  }
+  .countbox .items{font-size:2.4rem;letter-spacing:9px;line-height:1.6;word-break:break-word}
+
+  .match-area{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px}
+  .mcol{display:flex;flex-direction:column;gap:12px}
+  .mcol h4{text-align:center;font-size:.82rem;color:#5a7a5a;font-weight:700;margin-bottom:2px;letter-spacing:1px}
+  .mitem{
+    background:#fff;border:2px solid #8fbc8f;border-radius:10px;padding:12px 8px;
+    cursor:pointer;font-family:inherit;font-size:1rem;font-weight:700;color:#2a4a2a;
+    text-align:center;transition:.16s;display:flex;align-items:center;justify-content:center;gap:7px;
+    min-height:58px;box-shadow:0 2px 0 rgba(46,139,87,.2);
+  }
+  .mitem:hover{border-color:#2e8b57;background:#f0fff0}
+  .mitem.sel{background:#f0fff0;box-shadow:0 0 0 3px rgba(46,139,87,.2)}
+  .mitem.done{background:#eafff0;border-color:#228b22;color:#1a5a1a;cursor:default;opacity:.85}
+  .mitem.bad{animation:shake .4s;border-color:#c0392b;background:#fff0f0}
+  .mitem .pic{font-size:1.6rem}
+
+  .order-pool,.order-slots{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+  .order-slots{
+    min-height:70px;background:#f0fff0;border:3px dashed #2e8b57;border-radius:14px;
+    padding:14px 10px;margin-bottom:20px;align-items:center;
+  }
+  .order-slots.empty-pool::after{content:'выкладывайте реплики ниже ⬇️';color:#8aa898;font-size:.88rem}
+  .otile{
+    background:#fff;border:2px solid #2e8b57;border-radius:10px;padding:10px 14px;
+    cursor:pointer;font-family:inherit;font-size:.98rem;font-weight:700;color:#2e8b57;
+    transition:.15s;display:flex;align-items:center;gap:7px;box-shadow:0 3px 0 #1a5a1a;
+  }
+  .otile:hover{transform:translateY(-2px);background:#f0fff0}
+  .otile.placed{border-color:#228b22;background:#eafff0;color:#1a5a1a;box-shadow:0 3px 0 #1a5a1a}
+  .otile.bad{animation:shake .4s;border-color:#c0392b;background:#fff0f0}
+  .otile.used{opacity:.3;pointer-events:none}
+  .otile .num{font-size:1.4rem}
+
+  .spell-slots{display:flex;gap:10px;justify-content:center;margin:8px 0 22px;flex-wrap:wrap}
+  .slot{
+    width:52px;height:60px;border-radius:10px;background:#f0fff0;
+    border:3px dashed #2e8b57;display:flex;align-items:center;justify-content:center;
+    font-size:1.75rem;font-weight:700;color:#2e8b57;text-transform:uppercase;
+  }
+  .slot.filled{border-style:solid;border-color:#228b22;background:#eafff0}
+  .slot.bad{border-color:#c0392b;background:#fff0f0;animation:shake .4s}
+  .letter-pool{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+  .letter{
+    width:54px;height:60px;border-radius:10px;border:3px solid #ffd700;background:#fff4d8;
+    font-family:inherit;font-size:1.7rem;font-weight:700;color:#8b6914;cursor:pointer;
+    text-transform:uppercase;box-shadow:0 4px 0 #8b6914;transition:.14s;
+  }
+  .letter:hover{transform:translateY(-3px);background:#ffed4e}
+  .letter.used{opacity:.25;pointer-events:none;box-shadow:none;transform:none}
+
+  .drag-zone{
+    background:#f0fff0;border:3px dashed #2e8b57;border-radius:14px;
+    padding:22px 14px;text-align:center;margin-bottom:20px;min-height:130px;
+  }
+  .drag-item{
+    display:inline-block;background:#fff;border:2px solid #2e8b57;border-radius:10px;
+    padding:10px 16px;margin:6px;cursor:pointer;font-family:inherit;font-size:1.02rem;
+    font-weight:700;color:#2e8b57;box-shadow:0 3px 0 #1a5a1a;transition:.15s;
+  }
+  .drag-item:hover{transform:translateY(-3px);background:#f0fff0}
+  .drag-item.chosen{background:#eafff0;border-color:#228b22;color:#1a5a1a;box-shadow:0 3px 0 #1a5a1a}
+  .drag-item.bad{animation:shake .4s;border-color:#c0392b;background:#fff0f0}
+
+  .fb{
+    margin-top:24px;padding:18px 20px;border-radius:12px;font-size:1rem;
+    line-height:1.6;text-align:center;display:none;font-weight:600;
+  }
+  .fb.show{display:block;animation:pop .3s}
+  .fb.good{background:#eafff0;border:3px double #228b22;color:#1a5a1a}
+  .fb.bad{background:#fff4f4;border:3px double #c0392b;color:#8e2a1f}
+  .fb .again{
+    margin-top:12px;background:#fff;border:2px solid #c0392b;color:#8e2a1f;
+    border-radius:999px;padding:7px 16px;font-family:inherit;font-weight:700;
+    font-size:.9rem;cursor:pointer;
+  }
+  .fb .again:hover{background:#ffeaea}
+
+  .nav{display:flex;gap:12px;justify-content:center;margin-top:30px;flex-wrap:wrap}
+  .nav button{
+    border:none;border-radius:999px;padding:13px 26px;font-family:inherit;
+    font-size:1rem;font-weight:700;cursor:pointer;transition:.16s;
+    display:inline-flex;align-items:center;gap:8px;letter-spacing:.3px;
+  }
+  .btn-next{background:#2e8b57;color:#fff;box-shadow:0 5px 0 #1a5a1a}
+  .btn-next:hover{background:#1a5a1a;transform:translateY(-2px)}
+  .btn-back{background:#fff;color:#2e8b57;border:3px dashed #8fbc8f !important;box-shadow:0 5px 0 #8fbc8f}
+  .btn-back:hover{background:#f0fff0}
+  .btn-back:disabled,.btn-next:disabled{opacity:.4;cursor:default;transform:none}
+  .btn-replay{background:#ffd700;color:#2a4a2a;box-shadow:0 5px 0 #8b6914}
+  .btn-replay:hover{background:#ffed4e}
+
+  .final{text-align:center}
+  .final .big{
+    font-size:3.4rem;display:inline-block;margin-bottom:16px;
+    background:radial-gradient(circle at 30% 25%, rgba(255,255,255,.4) 0 14px, transparent 20px),
+      linear-gradient(145deg,#ffd700 0%,#daa520 50%,#b8860b 100%);
+    border-radius:50%;width:110px;height:110px;line-height:110px;
+    border:5px double #2e8b57;animation:float 2.4s ease-in-out infinite;
+    box-shadow:0 8px 0 rgba(46,139,87,.4);
+  }
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  .final h2{font-size:clamp(1.25rem,4.5vw,1.8rem);color:#2e8b57;margin-bottom:14px}
+  .final p{font-size:1.02rem;line-height:1.7;color:#3a5a3a;margin-bottom:16px}
+  .reward{
+    background:#f0fff0;border:3px dashed #2e8b57;border-radius:14px;
+    padding:28px 22px 34px;margin:28px 0 32px;
+  }
+  .reward .head{font-weight:700;margin-bottom:14px;color:#2e8b57;font-size:1.05rem}
+  .reward .words{font-size:1.02rem;line-height:2;color:#3a5a3a;text-align:left;padding-bottom:6px}
+  .reward .words b{color:#1a5a1a}
+  .reward .words div{padding:6px 0;border-bottom:1px dotted #8fbc8f;margin-bottom:5px}
+  .reward .words div:last-child{border-bottom:none;margin-bottom:0}
+  .restart{background:#2e8b57;color:#fff;box-shadow:0 5px 0 #1a5a1a}
+  .restart:hover{background:#1a5a1a}
+
+  .start-screen{text-align:center}
+  .start-screen .cast{font-size:2.6rem;letter-spacing:6px;margin:16px 0 8px}
+  .start-screen ul{
+    list-style:none;text-align:left;margin:18px auto;max-width:440px;
+    background:#f0fff0;border:3px dashed #2e8b57;border-radius:14px;padding:18px 20px;
+  }
+  .start-screen li{
+    padding:8px 0 8px 32px;position:relative;font-size:.97rem;color:#3a5a3a;line-height:1.5;
+    border-bottom:1px dotted #8fbc8f;
+  }
+  .start-screen li:last-child{border-bottom:none}
+  .start-screen li::before{content:'🐰';position:absolute;left:0;top:8px;font-size:.95rem}
+  .sound-note{
+    background:#fff4d8;border:2px solid #ffd700;border-radius:12px;padding:12px 16px;
+    font-size:.88rem;color:#8b6914;margin-top:18px;line-height:1.55;
+  }
+
+  @media (max-width:560px){
+    .match-area{grid-template-columns:1fr 1fr;gap:8px}
+    .mitem{font-size:.88rem;min-height:52px;padding:9px 5px}
+    .mitem .pic{font-size:1.3rem}
+    .slot,.letter{width:44px;height:52px;font-size:1.4rem}
+    .countbox .items{font-size:1.9rem;letter-spacing:5px}
+    .hero{font-size:2.6rem}
+    .nav button{padding:12px 18px;font-size:.95rem}
+    .stage{padding:32px 14px 38px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <h1>Поляна прыгунов</h1>
+    <div class="bar-wrap">
+      <div class="bar-label">
+        <span id="stepLabel">ВЫСТУПЛЕНИЕ 0 ИЗ 16</span>
+        <span id="pctLabel">0%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" id="barFill"></div>
+        <div class="bar-runner" id="barRunner">🐰</div>
+      </div>
+      <div class="stars" id="stars"></div>
+    </div>
+  </div>
+
+  <div id="stageHost"></div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var RATE = 0.85;
+  var voices = [];
+
+  function loadVoices(){
+    if(!('speechSynthesis' in window)) return;
+    voices = window.speechSynthesis.getVoices() || [];
+  }
+  loadVoices();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    setTimeout(loadVoices, 350);
+    setTimeout(loadVoices, 1400);
+  }
+
+  function pickVoice(){
+    if(!voices.length) loadVoices();
+    var v;
+    v = voices.find(function(x){ return x.lang === 'en-GB'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en-gb') === 0; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang === 'en-US'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en') === 0; });
+    return v || null;
+  }
+
+  function speak(text, delay){
+    if(!('speechSynthesis' in window)) return;
+    var go = function(){
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      var v = pickVoice();
+      if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+      u.rate = RATE; u.pitch = 1.06; u.volume = 1;
+      window.speechSynthesis.speak(u);
+    };
+    if(delay){ setTimeout(go, delay); } else { go(); }
+  }
+
+  function speakSeq(arr){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    arr.forEach(function(t, i){
+      setTimeout(function(){
+        var u = new SpeechSynthesisUtterance(t);
+        var v = pickVoice();
+        if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+        u.rate = RATE; u.pitch = 1.06;
+        window.speechSynthesis.speak(u);
+      }, i * 1500);
+    });
+  }
+
+  var STEPS = [
+
+  /* 1 */ {
+    kind:'intro', emoji:'🌳', mech:'Выход на поляну',
+    title:'Парад прыгунов',
+    text:'Сегодня на поляне парад! Кролики прыгают, мышки бегают, кошки лазают, собаки носятся. Ты — тренер на этом параде: считаешь зверят, показываешь движения и рассказываешь: **Rabbits can jump! Cats can climb!** Шестнадцать выступлений — и ты главный тренер поляны.',
+    say:'I can jump! Rabbits can jump too!',
+    sayRu:'Я умею прыгать! Кролики тоже умеют прыгать!',
+    cta:'🌳 Выйти на поляну!'
+  },
+
+  /* 2 */ {
+    kind:'listen', emoji:'👂', mech:'Аудирование',
+    title:'Выступление 1: первый вопрос',
+    text:'Нажми на рупор и выбери вопрос, который прозвучал.',
+    say:'Can rabbits run?',
+    opts:[
+      {t:'Can rabbits run? /kæn ˈræbɪts rʌn/ — кролики умеют бегать?', say:'Can rabbits run?'},
+      {t:'Can rabbits jump? /kæn ˈræbɪts dʒʌmp/ — кролики умеют прыгать?', say:'Can rabbits jump?'},
+      {t:'Can cats climb? /kæn kæts klaɪm/ — кошки умеют лазать?', say:'Can cats climb?'}
+    ],
+    correct:0,
+    ok:'Да, вопрос про бег: **Can rabbits run?** /kæn ˈræbɪts rʌn/',
+    no:'Послушай ещё раз: вопрос про бег кроликов.'
+  },
+
+  /* 3 */ {
+    kind:'spell', emoji:'🐰', mech:'Сборка слова',
+    title:'Выступление 2: слово «кролик»',
+    text:'Собери слово **rabbit** /ˈræbɪt/ — кролик.',
+    word:'rabbit', hint:'🐰', say:'rabbit',
+    ok:'Собрано: **rabbit** /ˈræbɪt/ — кролик.',
+    no:'Буква не та. Слушай: r-a-b-b-i-t.'
+  },
+
+  /* 4 */ {
+    kind:'cancant', emoji:'🐰', mech:'Can или can\'t',
+    title:'Выступление 3: умеют или нет?',
+    text:'Посмотри на кроликов. Они прыгают высоко. Кролики умеют прыгать?',
+    scene:'🐰 🐰 🦘',
+    say:'Rabbits can jump.',
+    answer:'can',
+    ok:'Верно: **Rabbits can jump** /ˈræbɪts kæn dʒʌmp/ — кролики умеют прыгать!',
+    no:'Посмотри, что делают кролики. Они прыгают — значит умеют или нет?'
+  },
+
+  /* 5 */ {
+    kind:'cancant', emoji:'🐭', mech:'Can или can\'t',
+    title:'Выступление 4: а мышки?',
+    text:'Теперь посмотри на мышек. Они тихо бегают по траве.',
+    scene:'🐭 🐭 🏃',
+    say:'Mice can run.',
+    answer:'can',
+    ok:'Верно: **Mice can run** /maɪs kæn rʌn/ — мышки умеют бегать.',
+    no:'Мышки бегают — значит они умеют это или нет?'
+  },
+
+  /* 6 */ {
+    kind:'count', emoji:'🐱', mech:'Счёт',
+    title:'Выступление 5: белые кошки',
+    text:'Сосчитай белых кошек на поляне. **How many white cats?**',
+    ask:'How many white cats?',
+    items:'🐱🐱🐱',
+    say:'How many white cats? One, two, three. Three white cats!',
+    opts:[
+      {t:'two /tuː/ — две', say:'two'},
+      {t:'three /θriː/ — три', say:'three'},
+      {t:'four /fɔː/ — четыре', say:'four'}
+    ],
+    correct:1,
+    ok:'Три белые кошки: **Three white cats!** /θriː waɪt kæts/',
+    no:'Считаем по одной кошке.'
+  },
+
+  /* 7 */ {
+    kind:'match', emoji:'🔗', mech:'Пары',
+    title:'Выступление 6: зверёк и действие',
+    text:'Соедини зверька с действием, которое он умеет.',
+    say:'Rabbits can jump, Mice can run, Cats can climb, Dogs can run',
+    pairs:[
+      {left:'Rabbits', say:'Rabbits can jump', right:'🐰 🦘'},
+      {left:'Mice', say:'Mice can run', right:'🐭 🏃'},
+      {left:'Cats', say:'Cats can climb', right:'🐱 🧗'},
+      {left:'Dogs', say:'Dogs can run', right:'🐶 🏃'}
+    ],
+    ok:'Все пары сошлись: у каждого зверька своё умение.',
+    no:'Не та пара. Послушай фразу и посмотри на картинку.'
+  },
+
+  /* 8 */ {
+    kind:'spell', emoji:'🐭', mech:'Сборка слова',
+    title:'Выступление 7: слово «мышка»',
+    text:'Собери слово **mouse** /maʊs/ — мышка.',
+    word:'mouse', hint:'🐭', say:'mouse',
+    ok:'Собрано: **mouse** /maʊs/ — мышка.',
+    no:'Буква не та. Слушай: m-o-u-s-e.'
+  },
+
+  /* 9 */ {
+    kind:'choice', emoji:'👂', mech:'Выбор ответа',
+    title:'Выступление 8: вопрос про уши',
+    text:'У кроликов большие уши. Как звучит вопрос про это?',
+    say:'Have rabbits got big ears?',
+    opts:[
+      {t:'Have rabbits got big ears? /hæv ˈræbɪts ɡɒt bɪɡ ɪəz/ — у кроликов большие уши?', say:'Have rabbits got big ears?'},
+      {t:'Can rabbits hear? /kæn ˈræbɪts hɪə/ — кролики умеют слышать?', say:'Can rabbits hear?'},
+      {t:'Where are rabbits? /weər ɑː ˈræbɪts/ — где кролики?', say:'Where are rabbits?'}
+    ],
+    correct:0,
+    ok:'Верно: **Have rabbits got big ears?** /hæv ˈræbɪts ɡɒt bɪɡ ɪəz/',
+    no:'Вопрос про уши. Какая фраза про ears?'
+  },
+
+  /* 10 */ {
+    kind:'choice', emoji:'✅', mech:'Выбор ответа',
+    title:'Выступление 9: ответ про уши',
+    text:'Да, у кроликов большие уши! Как отвечает тренер?',
+    say:'Yes, they have.',
+    opts:[
+      {t:'Yes, they have. /jes ðeɪ hæv/ — да, у них есть', say:'Yes, they have.'},
+      {t:"No, they haven't. /nəʊ ðeɪ ˈhævnt/ — нет, у них нет", say:"No, they haven't."},
+      {t:'Yes, he has. /jes hiː hæz/ — да, у него есть', say:'Yes, he has.'}
+    ],
+    correct:0,
+    ok:'Правильный ответ: **Yes, they have.** /jes ðeɪ hæv/',
+    no:'У кроликов есть большие уши — значит ответ «да». Какая фраза?'
+  },
+
+  /* 11 */ {
+    kind:'pick', emoji:'🐱', mech:'Отбор',
+    title:'Выступление 10: что умеют кошки?',
+    text:'Отметь все действия, которые кошки умеют. То, что не умеют — оставь.',
+    say:'Cats can!',
+    pool:[
+      {t:'🧗 climb', say:'climb', good:true},
+      {t:'🦘 jump', say:'jump', good:true},
+      {t:'🏃 run', say:'run', good:true},
+      {t:'✈️ fly', say:'fly', good:false},
+      {t:'🏊 swim', say:'swim', good:false}
+    ],
+    ok:'Три способности кошек: **climb, jump, run**!',
+    no:'Одна из отметок — не про кошек. Проверь список.'
+  },
+
+  /* 12 */ {
+    kind:'order', emoji:'💬', mech:'Склейка репортажа',
+    title:'Выступление 11: репортаж с поляны',
+    text:'Склей репортаж тренера по порядку.',
+    say:'Rabbits can jump. Cats can climb. Dogs can run. Mice can run too!',
+    items:[
+      {t:'Rabbits can jump.', n:'🐰', say:'Rabbits can jump.'},
+      {t:'Cats can climb.', n:'🐱', say:'Cats can climb.'},
+      {t:'Dogs can run.', n:'🐶', say:'Dogs can run.'},
+      {t:'Mice can run too!', n:'🐭', say:'Mice can run too!'}
+    ],
+    ok:'Репортаж в эфире: **Rabbits can jump. — Cats can climb. — Dogs can run. — Mice can run too!**',
+    no:'Порядок такой: сначала кролики, потом кошки, потом собаки, потом мышки.'
+  },
+
+  /* 13 */ {
+    kind:'spell', emoji:'🐱', mech:'Сборка слова',
+    title:'Выступление 12: слово «кошка»',
+    text:'Собери слово **cat** /kæt/ — кошка.',
+    word:'cat', hint:'🐱', say:'cat',
+    ok:'Собрано: **cat** /kæt/ — кошка.',
+    no:'Буква не та. Слушай: c-a-t.'
+  },
+
+  /* 14 */ {
+    kind:'yesno', emoji:'✅', mech:'Верно / неверно',
+    title:'Выступление 13: проверка трибун',
+    text:'Трибуны кричат про собак. Правда ли это?',
+    scene:'🐶 🌳 ❌',
+    say:'Dogs can climb trees.',
+    answer:false,
+    ok:'Неправда: **Dogs can\'t climb.** /dɒɡz kɑːnt klaɪm/ — они не умеют лазать.',
+    no:'Посмотри: собаки бегают по земле, а не лазают на деревья. Они умеют лазать?'
+  },
+
+  /* 15 */ {
+    kind:'choice', emoji:'🙋', mech:'Выбор ответа',
+    title:'Выступление 14: твой выход',
+    text:'Трибуны спрашивают тебя: что умеешь ты? Какая фраза твоя?',
+    say:'I can jump!',
+    opts:[
+      {t:'I can jump! /aɪ kæn dʒʌmp/ — я умею прыгать!', say:'I can jump!'},
+      {t:'Rabbits can jump! /ˈræbɪts kæn dʒʌmp/ — кролики умеют прыгать!', say:'Rabbits can jump!'},
+      {t:"I can't jump. /aɪ kɑːnt dʒʌmp/ — я не умею прыгать", say:"I can't jump."}
+    ],
+    correct:0,
+    ok:'Правильно: **I can jump!** /aɪ kæn dʒʌmp/ — это про тебя!',
+    no:'Фраза должна быть про тебя. Какая начинается с I can?'
+  },
+
+  /* 16 */ {
+    kind:'final', emoji:'🏅', mech:'Главный тренер',
+    title:'Золотая медаль тренера!',
+    text:'Шестнадцать выступлений позади: ты рассказал про всех зверят, различил can и can\'t, посчитал белых кошек и сам вышел на поляну. Золотая медаль тренера — твоя.',
+    say:'You are the champion coach! Well done!',
+    allWords:[
+      {en:'rabbit', ipa:'/ˈræbɪt/', ru:'кролик'},
+      {en:'mouse', ipa:'/maʊs/', ru:'мышка'},
+      {en:'cat', ipa:'/kæt/', ru:'кошка'},
+      {en:'dog', ipa:'/dɒɡ/', ru:'собака'},
+      {en:'run', ipa:'/rʌn/', ru:'бегать'},
+      {en:'jump', ipa:'/dʒʌmp/', ru:'прыгать'},
+      {en:'climb', ipa:'/klaɪm/', ru:'лазать'},
+      {en:'can', ipa:'/kæn/', ru:'может'},
+      {en:"can't", ipa:'/kɑːnt/', ru:'не может'},
+      {en:'Can rabbits run?', ipa:'/kæn ˈræbɪts rʌn/', ru:'кролики умеют бегать?'},
+      {en:'Yes, they can.', ipa:'/jes ðeɪ kæn/', ru:'да, умеют'},
+      {en:"No, they can't.", ipa:'/nəʊ ðeɪ kɑːnt/', ru:'нет, не умеют'},
+      {en:'Have rabbits got big ears?', ipa:'/hæv ˈræbɪts ɡɒt bɪɡ ɪəz/', ru:'у кроликов большие уши?'},
+      {en:'How many white cats?', ipa:'/haʊ ˈmeni waɪt kæts/', ru:'сколько белых кошек?'},
+      {en:'I can jump!', ipa:'/aɪ kæn dʒʌmp/', ru:'я умею прыгать!'}
+    ]
+  }
+  ];
+
+  var TOTAL = STEPS.length;
+  var idx = 0;
+  var history = [];
+  var score = 0;
+  var stageHost = document.getElementById('stageHost');
+  var barFill = document.getElementById('barFill');
+  var barRunner = document.getElementById('barRunner');
+  var stepLabel = document.getElementById('stepLabel');
+  var pctLabel = document.getElementById('pctLabel');
+  var starsBox = document.getElementById('stars');
+
+  function bold(str){
+    return String(str).replace(/\*\*(.+?)\*\*/g, '<span class="en-inline">$1</span>');
+  }
+
+  function updateBar(){
+    var pct = Math.round((idx / (TOTAL - 1)) * 100);
+    if(pct < 0) pct = 0; if(pct > 100) pct = 100;
+    barFill.style.width = pct + '%';
+    barRunner.style.left = pct + '%';
+    stepLabel.textContent = idx === 0 ? 'ВЫСТУПЛЕНИЕ 0 ИЗ ' + (TOTAL - 1) : ('ВЫСТУПЛЕНИЕ ' + idx + ' ИЗ ' + (TOTAL - 1));
+    pctLabel.textContent = pct + '%';
+    var full = Math.floor(score / 3);
+    var s = '';
+    for(var i = 0; i < full && i < 6; i++){ s += '🏅'; }
+    starsBox.textContent = s;
+  }
+
+  function shakeStage(){
+    var st = stageHost.querySelector('.stage');
+    if(!st) return;
+    st.classList.remove('shake');
+    void st.offsetWidth;
+    st.classList.add('shake');
+  }
+
+  function speakerBtn(text, cls, title){
+    var b = document.createElement('button');
+    b.className = cls || 'speak-mini';
+    b.innerHTML = '🔊';
+    b.title = title || 'Прослушать';
+    b.setAttribute('aria-label','Прослушать: ' + text);
+    b.addEventListener('click', function(ev){ ev.stopPropagation(); speak(text); });
+    return b;
+  }
+
+  function nextBtn(label, fn, cls){
+    var b = document.createElement('button');
+    b.className = cls || 'btn-next';
+    b.textContent = label;
+    b.addEventListener('click', fn);
+    return b;
+  }
+
+  function goNext(){
+    if(idx < TOTAL - 1){
+      history.push(idx);
+      idx++;
+      render();
+    }
+  }
+  function goBack(){
+    if(history.length){
+      idx = history.pop();
+      render();
+    }
+  }
+
+  function render(){
+    window.scrollTo({top:0, behavior:'smooth'});
+    updateBar();
+    stageHost.innerHTML = '';
+    var s = STEPS[idx];
+
+    var stage = document.createElement('div');
+    stage.className = 'stage';
+    stageHost.appendChild(stage);
+
+    if(s.kind === 'intro')   return renderIntro(stage, s);
+    if(s.kind === 'final')   return renderFinal(stage, s);
+    if(s.kind === 'listen' || s.kind === 'choice') return renderChoice(stage, s);
+    if(s.kind === 'yesno')   return renderYesNo(stage, s);
+    if(s.kind === 'cancant') return renderCanCant(stage, s);
+    if(s.kind === 'count')   return renderCount(stage, s);
+    if(s.kind === 'spell')   return renderSpell(stage, s);
+    if(s.kind === 'match')   return renderMatch(stage, s);
+    if(s.kind === 'order')   return renderOrder(stage, s);
+    if(s.kind === 'pick')    return renderPick(stage, s);
+  }
+
+  function header(stage, s){
+    var tag = document.createElement('span');
+    tag.className = 'step-tag';
+    tag.textContent = 'ВЫСТУПЛЕНИЕ ' + (idx + 1) + ' ИЗ ' + TOTAL;
+    stage.appendChild(tag);
+
+    if(s.mech){
+      var m = document.createElement('span');
+      m.className = 'mech-tag';
+      m.textContent = s.mech;
+      stage.appendChild(m);
+    }
+    var hero = document.createElement('span');
+    hero.className = 'hero';
+    hero.textContent = s.emoji || '🌳';
+    stage.appendChild(hero);
+
+    var h2 = document.createElement('h2');
+    h2.textContent = s.title;
+    stage.appendChild(h2);
+
+    var p = document.createElement('div');
+    p.className = 'task-text';
+    p.innerHTML = bold(s.text);
+    stage.appendChild(p);
+  }
+
+  function speakBlock(stage, s){
+    if(!s.say) return;
+    var line = document.createElement('div');
+    line.className = 'speak-line';
+    var big = document.createElement('button');
+    big.className = 'speak-big';
+    big.innerHTML = '🔊 ' + s.say;
+    big.addEventListener('click', function(){ speak(s.say); });
+    line.appendChild(big);
+    stage.appendChild(line);
+    if(s.sayRu){
+      var r = document.createElement('div');
+      r.className = 'task-text';
+      r.style.marginTop = '-8px';
+      r.style.fontSize = '.92rem';
+      r.textContent = s.sayRu;
+      stage.appendChild(r);
+    }
+  }
+
+  function feedback(stage, s, onWin){
+    var fb = document.createElement('div');
+    fb.className = 'fb';
+    stage.appendChild(fb);
+
+    var nav = document.createElement('div');
+    nav.className = 'nav';
+
+    var back = nextBtn('⬅️ Назад', goBack, 'btn-back');
+    if(!history.length) back.disabled = true;
+    nav.appendChild(back);
+
+    var replay = nextBtn('🔁 Ещё раз', function(){ render(); }, 'btn-replay');
+    nav.appendChild(replay);
+
+    var next = nextBtn('Следующее выступление ➡️', goNext);
+    next.style.display = 'none';
+    nav.appendChild(next);
+
+    stage.appendChild(nav);
+
+    function showGood(){
+      fb.className = 'fb good show';
+      fb.innerHTML = bold(s.ok || 'Выступление принято!');
+      next.style.display = '';
+      speak('Well done!', 250);
+      if(onWin) onWin();
+    }
+    function showBad(){
+      fb.className = 'fb bad show';
+      fb.innerHTML = bold(s.no || 'Повторим выступление!') +
+        '<br><button class="again" type="button">🔁 Попробовать снова</button>';
+      var ag = fb.querySelector('.again');
+      ag.addEventListener('click', function(){ render(); });
+      shakeStage();
+      speak('Try again!', 200);
+    }
+    return {good:showGood, bad:showBad, next:next, back:back};
+  }
+
+  function renderIntro(stage, s){
+    header(stage, s);
+    speakBlock(stage, s);
+
+    var cast = document.createElement('div');
+    cast.className = 'start-screen';
+    cast.innerHTML = '<div class="cast">🌳 🐰 🐭 🐱 🐶 🏅</div>';
+    stage.appendChild(cast);
+
+    var list = document.createElement('ul');
+    ['Называть зверят: rabbit, mouse, cat, dog',
+     'Различать can (может) и can\'t (не может)',
+     'Отвечать на вопросы: Yes, they can / No, they can\'t',
+     'Считать зверят: How many white cats?',
+     'Собрать золотую медаль тренера'
+    ].forEach(function(t){
+      var li = document.createElement('li');
+      li.textContent = t;
+      list.appendChild(li);
+    });
+    stage.appendChild(list);
+
+    var note = document.createElement('div');
+    note.className = 'sound-note';
+    note.innerHTML = '🔈 Включите звук. Все фразы озвучены британским голосом. В задании «Can или can\'t» — две кнопки с зелёной галочкой и красным крестиком.';
+    stage.appendChild(note);
+
+    var nav = document.createElement('div');
+    nav.className = 'nav';
+    nav.appendChild(nextBtn(s.cta || 'Начать ➡️', goNext));
+    stage.appendChild(nav);
+
+    speak(s.say, 500);
+  }
+
+  function renderCanCant(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+
+    var scene = document.createElement('div');
+    scene.className = 'cancant-scene';
+    var big = document.createElement('span');
+    big.className = 'big';
+    big.textContent = s.scene || '❓';
+    scene.appendChild(big);
+    stage.insertBefore(scene, stage.querySelector('.nav'));
+
+    var line = document.createElement('div');
+    line.className = 'speak-line';
+    var sb = document.createElement('button');
+    sb.className = 'speak-big';
+    sb.innerHTML = '🔊 ' + s.say;
+    sb.addEventListener('click', function(){ speak(s.say); });
+    line.appendChild(sb);
+    stage.insertBefore(line, stage.querySelector('.nav'));
+    speak(s.say, 600);
+
+    var row = document.createElement('div');
+    row.className = 'cancant-row';
+    stage.insertBefore(row, stage.querySelector('.nav'));
+
+    var hint = document.createElement('div');
+    hint.className = 'cancant-hint';
+    hint.innerHTML = '💡 Если зверята умеют — нажми <b>CAN ✓</b>. Если не умеют — нажми <b>CAN\'T ✗</b>.';
+    stage.insertBefore(hint, stage.querySelector('.nav'));
+
+    var locked = false;
+    [['can','✅ CAN — умеют'], ['cant','❌ CAN\'T — не умеют']].forEach(function(pair){
+      var val = pair[0];
+      var b = document.createElement('button');
+      b.className = 'cancant-btn ' + val;
+      b.type = 'button';
+      b.textContent = pair[1];
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(val === s.answer){
+          locked = true;
+          b.classList.add('correct');
+          speak(s.say, 100);
+          setTimeout(fb.good, 600);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      row.appendChild(b);
+    });
+  }
+
+  function renderChoice(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+
+    if(s.kind === 'listen'){
+      var line = document.createElement('div');
+      line.className = 'speak-line';
+      var big = document.createElement('button');
+      big.className = 'speak-big';
+      big.innerHTML = '🔊 Прослушать';
+      big.addEventListener('click', function(){ speak(s.say); });
+      line.appendChild(big);
+      stage.insertBefore(line, stage.querySelector('.nav'));
+      speak(s.say, 600);
+    } else {
+      speakBlock(stage, s);
+    }
+
+    var box = document.createElement('div');
+    box.className = 'opts' + (s.opts.length > 3 ? ' grid2' : '');
+    var navEl = stage.querySelector('.nav');
+    stage.insertBefore(box, navEl);
+
+    var locked = false;
+    s.opts.forEach(function(o, i){
+      var b = document.createElement('button');
+      b.className = 'opt';
+      b.type = 'button';
+      var mk = document.createElement('span');
+      mk.className = 'mark';
+      mk.textContent = String.fromCharCode(65 + i);
+      b.appendChild(mk);
+      var tx = document.createElement('span');
+      tx.innerHTML = bold(o.t);
+      b.appendChild(tx);
+      b.appendChild(speakerBtn(o.say || o.t.replace(/\/.*?\//g,'').replace(/—.*$/,'').trim(), 'speak-mini'));
+
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(i === s.correct){
+          locked = true;
+          b.classList.add('correct');
+          Array.prototype.forEach.call(box.children, function(x){ x.disabled = true; });
+          speak(o.say || o.t, 120);
+          setTimeout(fb.good, 650);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function renderYesNo(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+
+    var box = document.createElement('div');
+    box.className = 'yesno-scene';
+    var big = document.createElement('span');
+    big.className = 'big';
+    big.textContent = s.scene || '❓';
+    box.appendChild(big);
+    stage.insertBefore(box, stage.querySelector('.nav'));
+
+    var line = document.createElement('div');
+    line.className = 'speak-line';
+    var sb = document.createElement('button');
+    sb.className = 'speak-big';
+    sb.innerHTML = '🔊 ' + s.say;
+    sb.addEventListener('click', function(){ speak(s.say); });
+    line.appendChild(sb);
+    stage.insertBefore(line, stage.querySelector('.nav'));
+    speak(s.say, 600);
+
+    var row = document.createElement('div');
+    row.className = 'yesno-row';
+    stage.insertBefore(row, stage.querySelector('.nav'));
+
+    var locked = false;
+    [true, false].forEach(function(val){
+      var b = document.createElement('button');
+      b.className = 'yesno-btn ' + (val ? 'yes' : 'no');
+      b.type = 'button';
+      b.innerHTML = val ? '✔️ ВЕРНО' : '❌ НЕВЕРНО';
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(val === s.answer){
+          locked = true;
+          b.classList.add('correct');
+          speak(s.say, 100);
+          setTimeout(fb.good, 600);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      row.appendChild(b);
+    });
+  }
+
+  function renderCount(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    var cb = document.createElement('div');
+    cb.className = 'countbox';
+    var q = document.createElement('div');
+    q.className = 'task-text';
+    q.style.marginBottom = '12px';
+    q.innerHTML = '<span class="en-inline">' + s.ask + '</span>';
+    cb.appendChild(q);
+    var ql = document.createElement('div');
+    ql.className = 'speak-line';
+    ql.style.margin = '0 0 14px';
+    ql.appendChild(speakerBtn(s.ask, 'speak-mini', 'Прослушать вопрос'));
+    cb.appendChild(ql);
+    var it = document.createElement('div');
+    it.className = 'items';
+    it.textContent = s.items;
+    cb.appendChild(it);
+    stage.insertBefore(cb, navEl);
+
+    speak(s.say, 600);
+
+    var box = document.createElement('div');
+    box.className = 'opts grid2';
+    stage.insertBefore(box, navEl);
+
+    var locked = false;
+    s.opts.forEach(function(o, i){
+      var b = document.createElement('button');
+      b.className = 'opt'; b.type = 'button';
+      b.style.justifyContent = 'center';
+      b.innerHTML = bold(o.t);
+      b.appendChild(speakerBtn(o.say, 'speak-mini'));
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(i === s.correct){
+          locked = true;
+          b.classList.add('correct');
+          Array.prototype.forEach.call(box.children, function(x){ x.disabled = true; });
+          speak(o.say, 120);
+          setTimeout(fb.good, 650);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function renderSpell(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    var hintLine = document.createElement('div');
+    hintLine.className = 'speak-line';
+    var hb = document.createElement('button');
+    hb.className = 'speak-big';
+    hb.innerHTML = s.hint + ' 🔊 Прослушать слово';
+    hb.addEventListener('click', function(){ speak(s.word); });
+    hintLine.appendChild(hb);
+    stage.insertBefore(hintLine, navEl);
+    speak(s.word, 600);
+
+    var slots = document.createElement('div');
+    slots.className = 'spell-slots';
+    var slotEls = [];
+    for(var i = 0; i < s.word.length; i++){
+      var sl = document.createElement('div');
+      sl.className = 'slot';
+      slots.appendChild(sl);
+      slotEls.push(sl);
+    }
+    stage.insertBefore(slots, navEl);
+
+    var letters = s.word.split('');
+    var extra = 'abcdefghijklmnopqrstuvwxyz'.split('');
+    var pool = letters.slice();
+    var need = Math.max(0, 6 - pool.length);
+    for(var k = 0; k < need; k++){
+      pool.push(extra[Math.floor(Math.random() * extra.length)]);
+    }
+    pool.sort(function(){ return Math.random() - 0.5; });
+
+    var poolBox = document.createElement('div');
+    poolBox.className = 'letter-pool';
+    stage.insertBefore(poolBox, navEl);
+
+    var pos = 0;
+    var done = false;
+
+    pool.forEach(function(ch){
+      var b = document.createElement('button');
+      b.className = 'letter'; b.type = 'button';
+      b.textContent = ch;
+      b.addEventListener('click', function(){
+        if(done) return;
+        if(ch === s.word[pos]){
+          slotEls[pos].textContent = ch;
+          slotEls[pos].classList.add('filled');
+          b.classList.add('used');
+          pos++;
+          speak(ch, 0);
+          if(pos === s.word.length){
+            done = true;
+            speak(s.word, 500);
+            setTimeout(fb.good, 1200);
+          }
+        } else {
+          slotEls[pos].classList.add('bad');
+          b.classList.add('bad');
+          (function(el, bt){
+            setTimeout(function(){ el.classList.remove('bad'); bt.classList.remove('bad'); }, 500);
+          })(slotEls[pos], b);
+          fb.bad();
+        }
+      });
+      poolBox.appendChild(b);
+    });
+  }
+
+  function renderMatch(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score += 2; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    speakBlock(stage, s);
+
+    var area = document.createElement('div');
+    area.className = 'match-area';
+    stage.insertBefore(area, navEl);
+
+    var leftCol = document.createElement('div');
+    leftCol.className = 'mcol';
+    leftCol.innerHTML = '<h4>ЗВЕРЁК</h4>';
+    var rightCol = document.createElement('div');
+    rightCol.className = 'mcol';
+    rightCol.innerHTML = '<h4>ДЕЙСТВИЕ</h4>';
+    area.appendChild(leftCol);
+    area.appendChild(rightCol);
+
+    var pairs = s.pairs.slice();
+    var lefts  = pairs.map(function(p,i){ return {p:p, i:i}; });
+    var rights = pairs.map(function(p,i){ return {p:p, i:i}; });
+    rights.sort(function(){ return Math.random() - 0.5; });
+
+    var selected = null;
+    var matched = 0;
+    var busy = false;
+
+    lefts.forEach(function(o){
+      var b = document.createElement('button');
+      b.className = 'mitem'; b.type = 'button';
+      b.textContent = o.p.left;
+      b.appendChild(speakerBtn(o.p.say, 'speak-mini'));
+      b.addEventListener('click', function(){
+        if(busy || b.classList.contains('done') || b.classList.contains('sel')) return;
+        if(selected && selected.side === 'left'){ selected.el.classList.remove('sel'); }
+        selected = {side:'left', el:b, i:o.i};
+        b.classList.add('sel');
+        speak(o.p.say);
+      });
+      leftCol.appendChild(b);
+      o.el = b;
+    });
+
+    rights.forEach(function(o){
+      var b = document.createElement('button');
+      b.className = 'mitem'; b.type = 'button';
+      var pic = document.createElement('span');
+      pic.className = 'pic';
+      pic.textContent = o.p.right;
+      b.appendChild(pic);
+      b.appendChild(speakerBtn(o.p.say, 'speak-mini'));
+      b.addEventListener('click', function(){
+        if(busy || b.classList.contains('done')) return;
+        speak(o.p.say);
+        if(selected && selected.side === 'left'){
+          busy = true;
+          if(selected.i === o.i){
+            selected.el.classList.remove('sel');
+            selected.el.classList.add('done');
+            b.classList.add('done');
+            selected = null;
+            matched++;
+            speak('Yes!', 250);
+            busy = false;
+            if(matched === pairs.length){ setTimeout(fb.good, 900); }
+          } else {
+            selected.el.classList.add('bad');
+            b.classList.add('bad');
+            var a1 = selected.el, a2 = b;
+            setTimeout(function(){
+              a1.classList.remove('bad','sel');
+              a2.classList.remove('bad');
+              selected = null; busy = false;
+            }, 650);
+            fb.bad();
+            shakeStage();
+          }
+        } else {
+          if(selected && selected.side === 'right'){ selected.el.classList.remove('sel'); }
+          selected = {side:'right', el:b, i:o.i};
+          b.classList.add('sel');
+        }
+      });
+      rightCol.appendChild(b);
+      o.el = b;
+    });
+  }
+
+  function renderOrder(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score += 2; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    speakBlock(stage, s);
+
+    var slots = document.createElement('div');
+    slots.className = 'order-slots empty-pool';
+    stage.insertBefore(slots, navEl);
+
+    var pool = s.items.map(function(it, i){ return {it:it, i:i}; });
+    var shuffled = pool.slice();
+    shuffled.sort(function(){ return Math.random() - 0.5; });
+
+    var poolBox = document.createElement('div');
+    poolBox.className = 'order-pool';
+    stage.insertBefore(poolBox, navEl);
+
+    var placed = [];
+    var busy = false;
+    var correctOrder = pool.map(function(o){ return o.i; });
+
+    shuffled.forEach(function(o){
+      var b = document.createElement('button');
+      b.className = 'otile'; b.type = 'button';
+      var n = document.createElement('span');
+      n.className = 'num';
+      n.textContent = o.it.n || '';
+      b.appendChild(n);
+      var t = document.createElement('span');
+      t.innerHTML = bold(o.it.t);
+      b.appendChild(t);
+      b.appendChild(speakerBtn(o.it.say, 'speak-mini'));
+
+      b.addEventListener('click', function(){
+        if(busy || b.classList.contains('used')) return;
+        speak(o.it.say);
+        var expect = correctOrder[placed.length];
+        if(o.i === expect){
+          b.classList.add('used');
+          var clone = document.createElement('button');
+          clone.className = 'otile placed';
+          clone.type = 'button';
+          clone.innerHTML = '<span class="num">' + (o.it.n || '') + '</span><span>' + o.it.t + '</span>';
+          slots.appendChild(clone);
+          slots.classList.remove('empty-pool');
+          placed.push(o.i);
+          if(placed.length === pool.length){
+            busy = true;
+            speakSeq(s.items.map(function(x){ return x.say; }));
+            setTimeout(fb.good, 1200);
+          }
+        } else {
+          b.classList.add('bad');
+          setTimeout(function(){ b.classList.remove('bad'); }, 550);
+          fb.bad();
+          shakeStage();
+        }
+      });
+      poolBox.appendChild(b);
+    });
+  }
+
+  function renderPick(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score += 2; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    speakBlock(stage, s);
+
+    var zone = document.createElement('div');
+    zone.className = 'drag-zone';
+    stage.insertBefore(zone, navEl);
+
+    var chosenCount = 0;
+    var correctCount = s.pool.filter(function(p){ return p.good; }).length;
+    var busy = false;
+
+    s.pool.forEach(function(item){
+      var el = document.createElement('button');
+      el.className = 'drag-item';
+      el.type = 'button';
+      el.innerHTML = bold(item.t);
+      el.appendChild(speakerBtn(item.say, 'speak-mini'));
+
+      el.addEventListener('click', function(){
+        if(busy || el.classList.contains('chosen')) return;
+        speak(item.say);
+        if(item.good){
+          el.classList.add('chosen');
+          chosenCount++;
+          if(chosenCount === correctCount){
+            busy = true;
+            setTimeout(fb.good, 800);
+          }
+        } else {
+          el.classList.add('bad');
+          setTimeout(function(){ el.classList.remove('bad'); }, 600);
+          fb.bad();
+          shakeStage();
+        }
+      });
+      zone.appendChild(el);
+    });
+  }
+
+  function renderFinal(stage, s){
+    stage.innerHTML = '';
+    var box = document.createElement('div');
+    box.className = 'final';
+    stage.appendChild(box);
+
+    var big = document.createElement('span');
+    big.className = 'big';
+    big.textContent = '🏅';
+    box.appendChild(big);
+
+    var h = document.createElement('h2');
+    h.textContent = s.title;
+    box.appendChild(h);
+
+    var p = document.createElement('p');
+    p.textContent = s.text;
+    box.appendChild(p);
+
+    var line = document.createElement('div');
+    line.className = 'speak-line';
+    var big2 = document.createElement('button');
+    big2.className = 'speak-big';
+    big2.innerHTML = '🔊 ' + s.say;
+    big2.addEventListener('click', function(){ speakSeq(['You are the champion coach!', 'Well done!']); });
+    line.appendChild(big2);
+    box.appendChild(line);
+
+    var rw = document.createElement('div');
+    rw.className = 'reward';
+    var rt = document.createElement('div');
+    rt.className = 'head';
+    rt.textContent = '🏅 Журнал парада — весь словарь урока:';
+    rw.appendChild(rt);
+
+    var wl = document.createElement('div');
+    wl.className = 'words';
+    s.allWords.forEach(function(w){
+      var row = document.createElement('div');
+      row.style.display = 'flex';
+      row.style.alignItems = 'center';
+      row.style.gap = '8px';
+      var tx = document.createElement('span');
+      tx.innerHTML = '<b>' + w.en + '</b> ' + w.ipa + ' — ' + w.ru;
+      tx.style.flex = '1';
+      row.appendChild(tx);
+      row.appendChild(speakerBtn(w.en, 'speak-mini'));
+      wl.appendChild(row);
+    });
+    rw.appendChild(wl);
+    box.appendChild(rw);
+
+    var st = document.createElement('p');
+    st.innerHTML = '🌳 Выступлений на поляне: <b>' + score + '</b><br>Поляну можно открыть ещё раз: зверята всегда рады тренеру.';
+    box.appendChild(st);
+
+    var nav = document.createElement('div');
+    nav.className = 'nav';
+    var back = nextBtn('⬅️ Назад', goBack, 'btn-back');
+    if(!history.length) back.disabled = true;
+    nav.appendChild(back);
+    nav.appendChild(nextBtn('🔁 Новый парад', function(){
+      idx = 0; history = []; score = 0; render();
+    }, 'restart'));
+    box.appendChild(nav);
+
+    speakSeq(['You are the champion coach!', 'Well done!']);
+  }
+
+  render();
+
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = function(){ loadVoices(); };
+  }
+  document.addEventListener('click', function once(){
+    loadVoices();
+    document.removeEventListener('click', once);
+  });
+
+})();
+</script>
+</body>
+</html>

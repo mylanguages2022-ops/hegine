@@ -1,0 +1,2286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Квест «Ресторан шеф-повара Чаклза»</title>
+<meta name="description" content="Интерактивный квест для Spotlight Starter, модуль 5, урок 2: приключения на кухне сэндвичей">
+<style>
+:root {
+  --kitchen-cream: #fff8e7;
+  --kitchen-warm: #ffecb3;
+  --kitchen-gold: #ffc107;
+  --kitchen-deep: #ff8f00;
+  --brick-red: #bf360c;
+  --brick-light: #d84315;
+  --brick-dark: #8b2500;
+  --wood-light: #a1887f;
+  --wood-mid: #795548;
+  --wood-dark: #4e342e;
+  --green-herb: #558b2f;
+  --green-light: #8bc34a;
+  --plate-white: #ffffff;
+  --plate-soft: #fafafa;
+  --text-dark: #3e2723;
+  --text-mid: #6d4c41;
+  --good-green: #43a047;
+  --good-light: #a5d6a7;
+  --bad-red: #d32f2f;
+  --bad-light: #ef9a9a;
+  --shadow-soft: 0 4px 12px rgba(62, 39, 35, 0.18);
+  --shadow-mid: 0 6px 20px rgba(62, 39, 35, 0.25);
+  --shadow-hard: 0 10px 32px rgba(62, 39, 35, 0.3);
+  --gradient-cream: linear-gradient(180deg, #fff8e7 0%, #ffecb3 100%);
+  --gradient-gold: linear-gradient(135deg, #ffc107 0%, #ff8f00 100%);
+  --gradient-brick: linear-gradient(135deg, #d84315 0%, #bf360c 100%);
+  --gradient-wood: linear-gradient(135deg, #a1887f 0%, #5d4037 100%);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 34px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Comic Sans MS', 'Chalkboard SE', 'Marker Felt', sans-serif;
+  background: var(--gradient-cream);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: var(--text-dark);
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    radial-gradient(circle at 12% 18%, rgba(255, 193, 7, 0.12) 0%, transparent 30%),
+    radial-gradient(circle at 88% 22%, rgba(216, 67, 21, 0.08) 0%, transparent 28%),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 30px,
+      rgba(191, 54, 12, 0.03) 30px,
+      rgba(191, 54, 12, 0.03) 31px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+.app-container {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+  min-height: 100vh;
+}
+.top-bar {
+  background: var(--plate-white);
+  border-radius: var(--radius-lg);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-mid);
+  border: 3px solid var(--brick-light);
+}
+.quest-title {
+  font-size: 1.5em;
+  color: var(--brick-dark);
+  text-align: center;
+  margin-bottom: 14px;
+  text-shadow: 1px 1px 0 #ffecb3;
+}
+.progress-container {
+  position: relative;
+  height: 34px;
+  background: #fff3e0;
+  border-radius: 17px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 3px solid var(--brick-light);
+  cursor: pointer;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--gradient-gold);
+  border-radius: 14px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+.progress-hero {
+  position: absolute;
+  right: -20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.7em;
+  animation: chefBounce 1.4s ease-in-out infinite;
+}
+.progress-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95em;
+  color: var(--text-mid);
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.rewards-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 34px;
+}
+.reward-badge {
+  width: 34px;
+  height: 34px;
+  background: var(--gradient-brick);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  animation: badgePop 0.5s ease-out;
+  box-shadow: 0 3px 8px rgba(191, 54, 12, 0.45);
+}
+.game-screen {
+  background: var(--plate-white);
+  border-radius: var(--radius-xl);
+  padding: 24px 20px;
+  box-shadow: var(--shadow-hard);
+  border: 4px solid var(--wood-mid);
+  min-height: 520px;
+  position: relative;
+  animation: screenFadeIn 0.5s ease-out;
+}
+.screen-intro {
+  text-align: center;
+  padding: 34px 10px;
+}
+.intro-heroes {
+  font-size: 4em;
+  margin-bottom: 20px;
+  animation: heroesWave 2.2s ease-in-out infinite;
+}
+.intro-title {
+  font-size: 2em;
+  color: var(--brick-dark);
+  margin-bottom: 15px;
+}
+.intro-text {
+  font-size: 1.15em;
+  color: var(--text-mid);
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 28px;
+  border: none;
+  border-radius: var(--radius-lg);
+  font-family: inherit;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: var(--shadow-soft);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:focus {
+  outline: 3px dashed var(--brick-light);
+  outline-offset: 3px;
+}
+.btn-primary {
+  background: var(--gradient-gold);
+  color: #3e2723;
+  border: 3px solid var(--kitchen-deep);
+}
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: var(--shadow-mid);
+}
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn-secondary {
+  background: #ffffff;
+  color: var(--brick-dark);
+  border: 3px solid var(--wood-light);
+}
+.btn-secondary:hover {
+  background: #fff3e0;
+  transform: translateY(-2px);
+}
+.btn-secondary:active {
+  transform: translateY(0);
+}
+.btn-secondary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.step-header {
+  text-align: center;
+  margin-bottom: 22px;
+}
+.step-hero {
+  font-size: 3.2em;
+  margin-bottom: 12px;
+  display: block;
+  animation: heroFloat 2.5s ease-in-out infinite;
+}
+.step-picture {
+  font-size: 4em;
+  margin: 10px 0;
+  display: block;
+  animation: floatSlow 3s ease-in-out infinite;
+}
+.step-instruction {
+  font-size: 1.3em;
+  color: var(--text-dark);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  min-height: 58px;
+}
+.speak-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: none;
+  background: var(--gradient-gold);
+  color: #3e2723;
+  font-size: 1.6em;
+  cursor: pointer;
+  margin: 0 auto 20px;
+  display: block;
+  box-shadow: 0 4px 12px rgba(255, 143, 0, 0.45);
+  transition: all 0.2s ease;
+}
+.speak-btn:hover {
+  transform: scale(1.1) rotate(8deg);
+}
+.speak-btn:active {
+  transform: scale(0.95);
+}
+.speak-btn:focus {
+  outline: 3px dashed var(--brick-light);
+  outline-offset: 3px;
+}
+.speak-btn.speaking {
+  animation: pulseSpeak 1s ease-in-out infinite;
+}
+.game-zone {
+  margin: 20px 0;
+  min-height: 200px;
+}
+.choice-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 20px 0;
+}
+.choice-btn {
+  background: #fff3e0;
+  border: 4px solid var(--wood-light);
+  border-radius: var(--radius-md);
+  padding: 18px 14px;
+  font-family: inherit;
+  font-size: 1.08em;
+  font-weight: bold;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  text-align: center;
+  min-height: 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.choice-btn .choice-emoji {
+  font-size: 2.4em;
+}
+.choice-btn:hover:not(:disabled) {
+  border-color: var(--brick-light);
+  background: #ffe0b2;
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-soft);
+}
+.choice-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+.choice-btn:focus {
+  outline: 3px dashed var(--brick-light);
+  outline-offset: 2px;
+}
+.choice-btn:disabled {
+  cursor: not-allowed;
+}
+.choice-btn.correct {
+  background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+  border-color: var(--good-green);
+  animation: correctPop 0.6s ease-out;
+}
+.choice-btn.wrong {
+  background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
+  border-color: var(--bad-red);
+  animation: wrongShake 0.5s ease-in-out;
+}
+.cook-zone {
+  margin: 20px 0;
+  text-align: center;
+}
+.cook-plate {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, #ffffff 60%, #f5f5f5 100%);
+  border: 6px solid var(--wood-mid);
+  border-radius: 50%;
+  margin: 14px auto;
+  position: relative;
+  box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.08), var(--shadow-mid);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 10px;
+}
+.cook-plate .plate-item {
+  font-size: 2em;
+  margin: 2px;
+  animation: itemFound 0.5s ease-out;
+}
+.cook-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 18px 0;
+}
+.cook-opt-btn {
+  padding: 14px 8px;
+  border: 4px solid var(--wood-light);
+  background: #fff3e0;
+  border-radius: var(--radius-md);
+  font-size: 2.4em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.cook-opt-btn:hover:not(:disabled) {
+  transform: translateY(-3px) scale(1.05);
+  border-color: var(--brick-light);
+  background: #ffe0b2;
+}
+.cook-opt-btn:disabled {
+  cursor: not-allowed;
+}
+.cook-opt-btn.correct {
+  background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+  border-color: var(--good-green);
+  animation: correctPop 0.6s ease-out;
+}
+.cook-opt-btn.wrong {
+  background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
+  border-color: var(--bad-red);
+  animation: wrongShake 0.5s ease-in-out;
+}
+.polite-zone {
+  margin: 20px 0;
+  text-align: center;
+}
+.polite-sentence {
+  font-size: 1.4em;
+  font-weight: bold;
+  color: var(--brick-dark);
+  padding: 16px 22px;
+  background: #fff3e0;
+  border: 4px solid var(--wood-light);
+  border-radius: var(--radius-md);
+  display: inline-block;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-soft);
+}
+.polite-sentence .blank {
+  display: inline-block;
+  min-width: 90px;
+  border-bottom: 3px solid var(--brick-light);
+  color: var(--good-green);
+  font-weight: bold;
+}
+.polite-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin: 18px 0;
+}
+.polite-btn {
+  padding: 16px 12px;
+  background: #fff3e0;
+  border: 4px solid var(--wood-light);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.polite-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  border-color: var(--brick-light);
+  background: #ffe0b2;
+}
+.polite-btn:focus {
+  outline: 3px dashed var(--brick-light);
+  outline-offset: 2px;
+}
+.polite-btn:disabled {
+  cursor: not-allowed;
+}
+.polite-btn.correct {
+  background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+  border-color: var(--good-green);
+  animation: correctPop 0.6s ease-out;
+}
+.polite-btn.wrong {
+  background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
+  border-color: var(--bad-red);
+  animation: wrongShake 0.5s ease-in-out;
+}
+.spell-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin: 20px 0;
+}
+.spell-target {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  min-height: 62px;
+  padding: 12px;
+  background: #fff3e0;
+  border: 3px dashed var(--wood-light);
+  border-radius: var(--radius-md);
+  width: 100%;
+}
+.spell-slot {
+  width: 46px;
+  height: 54px;
+  background: #ffffff;
+  border: 3px solid var(--brick-light);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6em;
+  font-weight: bold;
+  color: var(--brick-dark);
+  transition: all 0.2s ease;
+}
+.spell-slot.filled {
+  background: var(--gradient-gold);
+  color: #ffffff;
+  border-color: var(--kitchen-deep);
+  animation: slotFill 0.3s ease-out;
+}
+.spell-slot.wrong {
+  background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
+  border-color: var(--bad-red);
+  animation: wrongShake 0.4s ease-in-out;
+}
+.letters-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 12px;
+  background: #ffe0b2;
+  border-radius: var(--radius-md);
+  min-height: 62px;
+}
+.letter-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  border: 3px solid var(--brick-light);
+  background: #ffffff;
+  font-family: inherit;
+  font-size: 1.4em;
+  font-weight: bold;
+  color: var(--brick-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+.letter-btn:hover:not(:disabled) {
+  background: var(--gradient-gold);
+  color: #3e2723;
+  border-color: var(--kitchen-deep);
+  transform: translateY(-3px) rotate(-2deg);
+}
+.letter-btn:active:not(:disabled) {
+  transform: translateY(0) rotate(0);
+}
+.letter-btn:focus {
+  outline: 3px dashed var(--brick-light);
+  outline-offset: 2px;
+}
+.letter-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.letter-btn.used {
+  background: #d7ccc8;
+  color: #8d6e63;
+  border-color: #bcaaa4;
+}
+.yesno-zone {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin: 30px 0;
+}
+.yesno-btn {
+  flex: 1;
+  max-width: 180px;
+  padding: 24px;
+  border-radius: var(--radius-lg);
+  border: 4px solid;
+  font-family: inherit;
+  font-size: 1.4em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  min-height: 122px;
+}
+.yesno-btn .yn-emoji {
+  font-size: 2.8em;
+}
+.yesno-btn.yes {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  border-color: var(--good-green);
+  color: var(--good-green);
+}
+.yesno-btn.no {
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+  border-color: var(--bad-red);
+  color: var(--bad-red);
+}
+.yesno-btn:hover:not(:disabled) {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: var(--shadow-mid);
+}
+.yesno-btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+}
+.yesno-btn:focus {
+  outline: 3px dashed var(--brick-light);
+  outline-offset: 2px;
+}
+.yesno-btn.correct {
+  animation: correctPop 0.6s ease-out;
+  box-shadow: 0 0 30px rgba(67, 160, 71, 0.5);
+}
+.yesno-btn.wrong {
+  animation: wrongShake 0.5s ease-in-out;
+  box-shadow: 0 0 30px rgba(211, 47, 47, 0.5);
+}
+.count-zone {
+  text-align: center;
+  margin: 20px 0;
+}
+.count-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin: 20px 0;
+  padding: 20px;
+  background: #fff3e0;
+  border-radius: var(--radius-md);
+  min-height: 104px;
+}
+.count-item {
+  font-size: 3em;
+  animation: itemAppear 0.4s ease-out;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.count-item:hover {
+  transform: scale(1.2) rotate(8deg);
+}
+.count-item.counted {
+  filter: grayscale(35%);
+  transform: scale(0.9);
+}
+.count-options {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+.count-opt-btn {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  border: 4px solid var(--brick-light);
+  background: #ffffff;
+  font-family: inherit;
+  font-size: 1.8em;
+  font-weight: bold;
+  color: var(--brick-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.count-opt-btn:hover:not(:disabled) {
+  background: var(--gradient-gold);
+  color: #3e2723;
+  border-color: var(--kitchen-deep);
+  transform: scale(1.1);
+}
+.count-opt-btn:focus {
+  outline: 3px dashed var(--brick-light);
+  outline-offset: 2px;
+}
+.count-opt-btn.correct {
+  background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+  border-color: var(--good-green);
+  animation: correctPop 0.6s ease-out;
+}
+.count-opt-btn.wrong {
+  background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
+  border-color: var(--bad-red);
+  animation: wrongShake 0.5s ease-in-out;
+}
+.match-zone {
+  margin: 20px 0;
+}
+.match-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.match-column {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.match-item {
+  padding: 14px;
+  background: #fff3e0;
+  border: 3px solid var(--wood-light);
+  border-radius: var(--radius-md);
+  text-align: center;
+  font-size: 1.05em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.match-item .match-emoji {
+  font-size: 1.8em;
+}
+.match-item:hover:not(.matched):not(:disabled) {
+  border-color: var(--brick-light);
+  background: #ffe0b2;
+  transform: scale(1.03);
+}
+.match-item.selected {
+  border-color: var(--kitchen-deep);
+  background: #ffecb3;
+  transform: scale(1.03);
+}
+.match-item.matched {
+  background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+  border-color: var(--good-green);
+  cursor: default;
+  opacity: 0.85;
+}
+.match-item.wrong-match {
+  animation: wrongShake 0.5s ease-in-out;
+  border-color: var(--bad-red);
+  background: #ffcdd2;
+}
+.order-zone {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.order-target {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 16px;
+  background: #fff3e0;
+  border: 3px dashed var(--wood-light);
+  border-radius: var(--radius-md);
+  min-height: 72px;
+  min-width: 280px;
+}
+.order-word {
+  padding: 10px 16px;
+  background: var(--gradient-gold);
+  color: #3e2723;
+  border-radius: var(--radius-sm);
+  font-weight: bold;
+  font-size: 1.1em;
+  animation: slotFill 0.3s ease-out;
+}
+.order-bank {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 16px;
+  background: #ffe0b2;
+  border-radius: var(--radius-md);
+  min-height: 72px;
+}
+.order-btn {
+  padding: 10px 16px;
+  border: 3px solid var(--brick-light);
+  background: #ffffff;
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 1.1em;
+  font-weight: bold;
+  color: var(--brick-dark);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.order-btn:hover:not(:disabled) {
+  background: var(--gradient-gold);
+  color: #3e2723;
+  border-color: var(--kitchen-deep);
+  transform: translateY(-3px);
+}
+.order-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+.order-btn:focus {
+  outline: 3px dashed var(--brick-light);
+  outline-offset: 2px;
+}
+.order-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.pick-zone {
+  margin: 20px 0;
+}
+.pick-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin: 20px 0;
+}
+.pick-item {
+  background: #fff3e0;
+  border: 4px solid var(--wood-light);
+  border-radius: var(--radius-md);
+  padding: 16px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.pick-item .pick-emoji {
+  font-size: 2.6em;
+}
+.pick-item .pick-label {
+  font-size: 0.95em;
+  font-weight: bold;
+  color: var(--text-dark);
+}
+.pick-item:hover:not(.picked) {
+  border-color: var(--brick-light);
+  background: #ffe0b2;
+  transform: translateY(-3px);
+}
+.pick-item.picked {
+  background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+  border-color: var(--good-green);
+}
+.pick-item.wrong-pick {
+  animation: wrongShake 0.5s ease-in-out;
+  border-color: var(--bad-red);
+  background: #ffcdd2;
+}
+.serve-zone {
+  margin: 20px 0;
+  text-align: center;
+}
+.serve-tray {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 20px;
+  background: linear-gradient(180deg, #8d6e63 0%, #6d4c41 100%);
+  border: 4px solid var(--wood-dark);
+  border-radius: var(--radius-md);
+  min-height: 120px;
+  margin: 14px 0;
+  box-shadow: var(--shadow-mid);
+}
+.serve-tray .tray-item {
+  font-size: 2.6em;
+  animation: itemFound 0.5s ease-out;
+}
+.serve-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 18px 0;
+}
+.serve-btn {
+  padding: 18px 10px;
+  background: #fff3e0;
+  border: 4px solid var(--wood-light);
+  border-radius: var(--radius-md);
+  font-size: 2.6em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.serve-btn .serve-label {
+  font-size: 0.35em;
+  font-weight: bold;
+  color: var(--text-dark);
+}
+.serve-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  border-color: var(--brick-light);
+  background: #ffe0b2;
+}
+.serve-btn:disabled {
+  cursor: not-allowed;
+}
+.serve-btn.correct {
+  background: linear-gradient(135deg, #c8e6c9 0%, #a5d6a7 100%);
+  border-color: var(--good-green);
+  animation: correctPop 0.6s ease-out;
+}
+.serve-btn.wrong {
+  background: linear-gradient(135deg, #ffcdd2 0%, #ef9a9a 100%);
+  border-color: var(--bad-red);
+  animation: wrongShake 0.5s ease-in-out;
+}
+.feedback {
+  text-align: center;
+  padding: 18px;
+  border-radius: var(--radius-md);
+  margin: 20px 0;
+  font-size: 1.2em;
+  font-weight: bold;
+  animation: feedbackAppear 0.4s ease-out;
+  display: none;
+}
+.feedback.visible { display: block; }
+.feedback.correct {
+  background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+  color: var(--good-green);
+  border: 3px solid var(--good-green);
+}
+.feedback.wrong {
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+  color: var(--bad-red);
+  border: 3px solid var(--bad-red);
+  animation: wrongShake 0.5s ease-in-out;
+}
+.feedback-emoji {
+  font-size: 2.2em;
+  display: block;
+  margin-bottom: 8px;
+}
+.nav-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+.screen-final {
+  text-align: center;
+  padding: 30px 10px;
+}
+.final-reward {
+  font-size: 5em;
+  margin-bottom: 16px;
+  animation: finalBounce 1s ease-in-out infinite;
+}
+.final-title {
+  font-size: 2em;
+  color: var(--brick-dark);
+  margin-bottom: 16px;
+}
+.final-text {
+  font-size: 1.15em;
+  color: var(--text-mid);
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+.final-vocab {
+  text-align: left;
+  background: #fff3e0;
+  border: 3px solid var(--wood-light);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  margin: 20px 0;
+  max-height: 380px;
+  overflow-y: auto;
+}
+.vocab-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 2px solid #ffe0b2;
+  gap: 10px;
+}
+.vocab-item:last-child { border-bottom: none; }
+.vocab-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.vocab-en {
+  font-weight: bold;
+  color: var(--brick-dark);
+  font-size: 1.05em;
+}
+.vocab-ipa {
+  font-size: 0.85em;
+  color: var(--text-mid);
+}
+.vocab-ru {
+  font-size: 0.9em;
+  color: var(--text-mid);
+}
+.vocab-speak {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: var(--gradient-gold);
+  color: #3e2723;
+  font-size: 1.1em;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.vocab-speak:hover { transform: scale(1.1); }
+.vocab-speak:active { transform: scale(0.94); }
+.final-score {
+  font-size: 1.4em;
+  color: var(--brick-light);
+  font-weight: bold;
+  margin: 20px 0;
+  padding: 16px;
+  background: #ffffff;
+  border-radius: var(--radius-md);
+  border: 3px solid var(--brick-light);
+}
+@keyframes chefBounce {
+  0%, 100% { transform: translateY(-50%) translateX(0) rotate(0deg); }
+  50% { transform: translateY(-65%) translateX(-5px) rotate(-5deg); }
+}
+@keyframes badgePop {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  60% { transform: scale(1.2) rotate(10deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes screenFadeIn {
+  0% { opacity: 0; transform: translateY(22px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroesWave {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-9px); }
+  75% { transform: translateY(5px); }
+}
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes pulseSpeak {
+  0%, 100% { box-shadow: 0 4px 12px rgba(255, 143, 0, 0.45); }
+  50% { box-shadow: 0 0 0 12px rgba(255, 143, 0, 0.3); }
+}
+@keyframes correctPop {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.12); }
+  60% { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+@keyframes wrongShake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-8px) rotate(-2deg); }
+  30% { transform: translateX(8px) rotate(2deg); }
+  45% { transform: translateX(-6px) rotate(-1deg); }
+  60% { transform: translateX(6px) rotate(1deg); }
+  75% { transform: translateX(-3px); }
+}
+@keyframes slotFill {
+  0% { transform: scale(0) rotate(-20deg); opacity: 0; }
+  60% { transform: scale(1.1) rotate(3deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes itemAppear {
+  0% { transform: scale(0) rotate(-30deg); opacity: 0; }
+  70% { transform: scale(1.15) rotate(5deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes feedbackAppear {
+  0% { opacity: 0; transform: translateY(15px) scale(0.95); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes finalBounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-15px) rotate(-5deg); }
+  75% { transform: translateY(-10px) rotate(5deg); }
+}
+@keyframes steamRise {
+  0% { transform: translateY(0) scale(1); opacity: 0.8; }
+  100% { transform: translateY(-20px) scale(1.5); opacity: 0; }
+}
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.08); opacity: 1; }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(255, 193, 7, 0.3); }
+  50% { box-shadow: 0 0 26px rgba(255, 193, 7, 0.7); }
+}
+@keyframes plateRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes itemFound {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  60% { transform: scale(1.3) rotate(10deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+@keyframes trayShine {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.15); }
+}
+@keyframes bellRing {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-15deg); }
+  75% { transform: rotate(15deg); }
+}
+@keyframes whiskSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes knifeChop {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes plateGlow {
+  0%, 100% { box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.08), var(--shadow-mid); }
+  50% { box-shadow: inset 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 20px rgba(255, 193, 7, 0.6); }
+}
+@media (max-width: 640px) {
+  .app-container { padding: 10px; }
+  .top-bar { padding: 12px 14px; }
+  .quest-title { font-size: 1.2em; }
+  .game-screen { padding: 16px 12px; border-width: 3px; }
+  .step-hero { font-size: 2.6em; }
+  .step-picture { font-size: 3.2em; }
+  .step-instruction { font-size: 1.1em; }
+  .choice-grid { grid-template-columns: 1fr; gap: 10px; }
+  .choice-btn { padding: 14px 10px; font-size: 1em; }
+  .choice-btn .choice-emoji { font-size: 2em; }
+  .yesno-zone { flex-direction: column; align-items: center; }
+  .yesno-btn { max-width: 100%; }
+  .spell-slot { width: 38px; height: 46px; font-size: 1.3em; }
+  .letter-btn { width: 40px; height: 40px; font-size: 1.2em; }
+  .pick-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .pick-item .pick-emoji { font-size: 2.2em; }
+  .count-item { font-size: 2.4em; }
+  .count-opt-btn { width: 62px; height: 62px; font-size: 1.5em; }
+  .match-columns { grid-template-columns: 1fr; gap: 16px; }
+  .cook-options { grid-template-columns: repeat(2, 1fr); }
+  .serve-options { grid-template-columns: repeat(2, 1fr); }
+  .polite-options { grid-template-columns: 1fr; }
+  .cook-plate { width: 160px; height: 160px; }
+  .nav-buttons { flex-direction: column; width: 100%; }
+  .nav-buttons .btn { width: 100%; }
+  .final-reward { font-size: 3.5em; }
+  .final-title { font-size: 1.5em; }
+  .intro-heroes { font-size: 3em; }
+  .intro-title { font-size: 1.5em; }
+  .progress-stats { font-size: 0.85em; flex-wrap: wrap; }
+  .vocab-item { flex-direction: column; align-items: flex-start; }
+  .vocab-speak { align-self: flex-end; }
+  .order-target { min-width: 100%; padding: 12px; }
+  .order-btn { padding: 8px 12px; font-size: 1em; }
+}
+@media (min-width: 641px) and (max-width: 900px) {
+  .app-container { padding: 14px; }
+  .game-screen { padding: 22px 18px; }
+  .choice-grid { gap: 12px; }
+  .pick-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width: 901px) {
+  .choice-grid { grid-template-columns: repeat(4, 1fr); }
+  .pick-grid { grid-template-columns: repeat(5, 1fr); }
+}
+</style>
+</head>
+<body>
+<div class="app-container">
+  <div class="top-bar" id="topBar">
+    <div class="quest-title">👨‍🍳 Ресторан шеф-повара Чаклза</div>
+    <div class="progress-container" id="progressContainer">
+      <div class="progress-fill" id="progressFill">
+        <span class="progress-hero">🐵</span>
+      </div>
+    </div>
+    <div class="progress-stats">
+      <span id="progressText">Готово: 0 из 21</span>
+      <span id="progressPercent">0%</span>
+    </div>
+    <div class="rewards-row" id="rewardsRow"></div>
+  </div>
+  <div class="game-screen" id="gameScreen">
+    <div class="screen-intro" id="introScreen">
+      <div class="intro-heroes">👨🍳👦👧</div>
+      <div class="intro-title">Ресторан открывается!</div>
+      <div class="intro-text">
+        Шеф-повар Чаклз ждёт умного помощника.<br>
+        Приноси нужные продукты, не забывай вежливое слово<br>
+        и собирай самые вкусные сэндвичи! 🥪
+      </div>
+      <button class="btn btn-primary" id="startBtn">Начать! 🔥</button>
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  var synth = window.speechSynthesis;
+  var currentStepIndex = 0;
+  var score = 0;
+  var totalSteps = 0;
+  var rewardsCount = 0;
+  var vocabulary = {
+    bread: { en: 'bread', ipa: '/bred/', ru: 'хлеб', emoji: '🍞' },
+    egg: { en: 'egg', ipa: '/eɡ/', ru: 'яйцо', emoji: '🥚' },
+    cheese: { en: 'cheese', ipa: '/tʃiːz/', ru: 'сыр', emoji: '🧀' },
+    chocolate: { en: 'chocolate', ipa: '/ˈtʃɒklət/', ru: 'шоколад', emoji: '🍫' },
+    sandwich: { en: 'sandwich', ipa: '/ˈsænwɪdʒ/', ru: 'сэндвич', emoji: '🥪' },
+    plate: { en: 'plate', ipa: '/pleɪt/', ru: 'тарелка', emoji: '🍽️' },
+    please: { en: 'please', ipa: '/pliːz/', ru: 'пожалуйста', emoji: '🤲' },
+    cook: { en: 'cook', ipa: '/kʊk/', ru: 'готовить', emoji: '👨🍳' }
+  };
+  var phrases = {
+    letsMakeSandwich: { en: "Let's make a sandwich!", ipa: '/lets meɪk ə ˈsænwɪdʒ/', ru: 'давай сделаем сэндвич!' },
+    bringTheBread: { en: 'Bring the bread.', ipa: '/brɪŋ ðə bred/', ru: 'принеси хлеб.' },
+    bringMeCheesePlease: { en: 'Bring me the cheese, please.', ipa: '/brɪŋ miː ðə tʃiːz pliːz/', ru: 'принеси мне сыр, пожалуйста.' },
+    letsEat: { en: "Let's eat!", ipa: '/lets iːt/', ru: 'давай есть!' },
+    letsCook: { en: "Let's cook!", ipa: '/lets kʊk/', ru: 'давай готовить!' },
+    bringTheEgg: { en: 'Bring the egg.', ipa: '/brɪŋ i eɡ/', ru: 'принеси яйцо.' },
+    bringMeChocolate: { en: 'Bring me the chocolate.', ipa: '/brɪŋ miː ðə ˈtʃɒklət/', ru: 'принеси мне шоколад.' }
+  };
+  var steps = [
+    {
+      type: 'intro',
+      hero: '👨‍🍳',
+      instruction: 'Нажми на повара и услышь главную фразу урока!',
+      speakText: "Let's make a sandwich!"
+    },
+    {
+      type: 'listen',
+      hero: '👨‍🍳',
+      instruction: 'Послушай и выбери то, что попросил шеф!',
+      speakText: 'Bring the bread, please!',
+      correctKey: 'bread',
+      options: [
+        { key: 'bread', label: 'bread', emoji: '🍞' },
+        { key: 'cheese', label: 'cheese', emoji: '🧀' },
+        { key: 'egg', label: 'egg', emoji: '🥚' },
+        { key: 'chocolate', label: 'chocolate', emoji: '🍫' }
+      ]
+    },
+    {
+      type: 'choice',
+      hero: '🐵',
+      instruction: 'Выбери правильное слово для картинки!',
+      speakText: 'cheese',
+      picture: '🧀',
+      correctKey: 'cheese',
+      options: [
+        { key: 'bread', label: 'bread' },
+        { key: 'cheese', label: 'cheese' },
+        { key: 'egg', label: 'egg' },
+        { key: 'plate', label: 'plate' }
+      ]
+    },
+    {
+      type: 'polite',
+      hero: '👦',
+      instruction: 'Гость забыл вежливое слово! Добавь его в просьбу.',
+      speakText: 'Bring me the cheese, please!',
+      sentence: 'Bring me the cheese, ______!',
+      correctKey: 'please',
+      options: [
+        { key: 'please', label: 'please' },
+        { key: 'now', label: 'now' },
+        { key: 'hello', label: 'hello' },
+        { key: 'thanks', label: 'thanks' }
+      ]
+    },
+    {
+      type: 'cook',
+      hero: '👧',
+      instruction: 'Собери сэндвич! Добавляй нужные ингредиенты по одному.',
+      speakText: "Let's make a sandwich!",
+      layers: [
+        { key: 'bread', emoji: '🍞', label: 'bread' },
+        { key: 'cheese', emoji: '🧀', label: 'cheese' },
+        { key: 'bread', emoji: '🍞', label: 'bread' }
+      ],
+      wrongOptions: [
+        { key: 'chocolate', emoji: '🍫', label: 'chocolate' },
+        { key: 'plate', emoji: '🍽️', label: 'plate' }
+      ]
+    },
+    {
+      type: 'spell',
+      hero: '🐵',
+      instruction: 'Собери слово! Нажимай буквы по порядку.',
+      speakText: 'egg',
+      targetWord: 'egg',
+      scramble: 'gge'
+    },
+    {
+      type: 'yesno',
+      hero: '👨‍🍳',
+      instruction: 'Это сэндвич?',
+      speakText: 'Is this a sandwich?',
+      picture: '🥪',
+      correctAnswer: true
+    },
+    {
+      type: 'count',
+      hero: '🍞',
+      instruction: 'Сколько ломтиков хлеба? Считай нажатиями!',
+      speakText: 'How many slices of bread?',
+      itemEmoji: '🍞',
+      count: 3,
+      options: [2, 3, 4, 5]
+    },
+    {
+      type: 'match',
+      hero: '👦',
+      instruction: 'Соедини фразу с картинкой!',
+      speakText: 'Match the phrases!',
+      pairs: [
+        { word: 'bringBread', emoji: '🍞', wordLabel: 'Bring the bread' },
+        { word: 'bringCheese', emoji: '🧀', wordLabel: 'Bring me the cheese' },
+        { word: 'bringEgg', emoji: '🥚', wordLabel: 'Bring the egg' },
+        { word: 'letsEat', emoji: '🍽️', wordLabel: "Let's eat!" }
+      ]
+    },
+    {
+      type: 'serve',
+      hero: '👧',
+      instruction: 'Подай заказы! Положи на поднос нужную еду.',
+      speakText: 'Serve the orders!',
+      orders: [
+        { key: 'sandwich', emoji: '🥪', label: 'sandwich' },
+        { key: 'egg', emoji: '🥚', label: 'egg' }
+      ],
+      allOptions: [
+        { key: 'sandwich', emoji: '🥪', label: 'sandwich' },
+        { key: 'egg', emoji: '🥚', label: 'egg' },
+        { key: 'plate', emoji: '🍽️', label: 'plate' },
+        { key: 'chocolate', emoji: '🍫', label: 'chocolate' }
+      ]
+    },
+    {
+      type: 'polite',
+      hero: '🐵',
+      instruction: 'Сделай просьбу вежливой! Добавь вежливое слово.',
+      speakText: 'Bring me the chocolate, please!',
+      sentence: 'Bring me the chocolate, ______!',
+      correctKey: 'please',
+      options: [
+        { key: 'please', label: 'please' },
+        { key: 'yes', label: 'yes' },
+        { key: 'good', label: 'good' },
+        { key: 'wow', label: 'wow' }
+      ]
+    },
+    {
+      type: 'order',
+      hero: '👨🍳',
+      instruction: 'Расставь слова в правильном порядке!',
+      speakText: 'Bring me the cheese, please.',
+      correctOrder: ['Bring', 'me', 'the', 'cheese,', 'please.'],
+      scramble: ['cheese,', 'Bring', 'please.', 'me', 'the']
+    },
+    {
+      type: 'choice',
+      hero: '👦',
+      instruction: 'Выбери правильную фразу!',
+      speakText: "Let's make a sandwich!",
+      picture: '🥪',
+      correctKey: 'make',
+      options: [
+        { key: 'eat', label: "Let's eat!" },
+        { key: 'make', label: "Let's make a sandwich!" },
+        { key: 'cook', label: "Let's cook!" },
+        { key: 'bring', label: 'Bring the bread.' }
+      ]
+    },
+    {
+      type: 'spell',
+      hero: '👧',
+      instruction: 'Собери слово! Нажимай буквы по порядку.',
+      speakText: 'bread',
+      targetWord: 'bread',
+      scramble: 'daerb'
+    },
+    {
+      type: 'yesno',
+      hero: '🐵',
+      instruction: 'Это тарелка?',
+      speakText: 'Is this a plate?',
+      picture: '🍫',
+      correctAnswer: false
+    },
+    {
+      type: 'count',
+      hero: '🧀',
+      instruction: 'Сколько ломтиков сыра? Считай нажатиями!',
+      speakText: 'How many cheese slices?',
+      itemEmoji: '🧀',
+      count: 4,
+      options: [2, 3, 4, 5]
+    },
+    {
+      type: 'cook',
+      hero: '👨🍳',
+      instruction: 'Собери ещё один сэндвич! Добавляй нужные ингредиенты.',
+      speakText: "Let's make a sandwich!",
+      layers: [
+        { key: 'bread', emoji: '🍞', label: 'bread' },
+        { key: 'egg', emoji: '🥚', label: 'egg' },
+        { key: 'cheese', emoji: '🧀', label: 'cheese' },
+        { key: 'bread', emoji: '🍞', label: 'bread' }
+      ],
+      wrongOptions: [
+        { key: 'chocolate', emoji: '🍫', label: 'chocolate' },
+        { key: 'plate', emoji: '🍽️', label: 'plate' }
+      ]
+    },
+    {
+      type: 'pick',
+      hero: '👦',
+      instruction: 'Выбери всё, что кладут в сэндвич!',
+      speakText: 'Pick the sandwich ingredients!',
+      items: [
+        { key: 'bread', label: 'bread', emoji: '🍞', isCorrect: true },
+        { key: 'cheese', label: 'cheese', emoji: '🧀', isCorrect: true },
+        { key: 'egg', label: 'egg', emoji: '🥚', isCorrect: true },
+        { key: 'plate', label: 'plate', emoji: '🍽️', isCorrect: false },
+        { key: 'ball', label: 'ball', emoji: '⚽', isCorrect: false }
+      ],
+      requiredCorrect: 3
+    },
+    {
+      type: 'listen',
+      hero: '👧',
+      instruction: 'Послушай и выбери то, что услышал!',
+      speakText: "Let's eat!",
+      correctKey: 'eat',
+      options: [
+        { key: 'eat', label: "Let's eat!", emoji: '🍽️' },
+        { key: 'cook', label: "Let's cook!", emoji: '👨🍳' },
+        { key: 'make', label: "Let's make a sandwich!", emoji: '🥪' },
+        { key: 'bring', label: 'Bring the bread.', emoji: '🍞' }
+      ]
+    },
+    {
+      type: 'polite',
+      hero: '🐵',
+      instruction: 'Сделай просьбу вежливой! Добавь вежливое слово.',
+      speakText: 'Bring the egg, please!',
+      sentence: 'Bring the egg, ______!',
+      correctKey: 'please',
+      options: [
+        { key: 'please', label: 'please' },
+        { key: 'now', label: 'now' },
+        { key: 'stop', label: 'stop' },
+        { key: 'run', label: 'run' }
+      ]
+    },
+    {
+      type: 'order',
+      hero: '👨‍🍳',
+      instruction: 'Расставь слова в правильном порядке!',
+      speakText: "Let's make a sandwich!",
+      correctOrder: ["Let's", 'make', 'a', 'sandwich!'],
+      scramble: ['sandwich!', "Let's", 'a', 'make']
+    }
+  ];
+  totalSteps = steps.length;
+  function pickEnglishVoice() {
+    var voices = synth.getVoices();
+    for (var i = 0; i < voices.length; i++) {
+      if (voices[i].lang === 'en-GB') { return voices[i]; }
+    }
+    return null;
+  }
+  function speakText(text) {
+    if (synth.speaking) synth.cancel();
+    var utter = new SpeechSynthesisUtterance(text);
+    var englishVoice = pickEnglishVoice();
+    if (englishVoice) utter.voice = englishVoice;
+    utter.rate = 0.85;
+    synth.speak(utter);
+  }
+  function updateProgress() {
+    var percent = Math.round((currentStepIndex / totalSteps) * 100);
+    document.getElementById('progressFill').style.width = percent + '%';
+    document.getElementById('progressPercent').textContent = percent + '%';
+    document.getElementById('progressText').textContent = 'Готово: ' + currentStepIndex + ' из ' + totalSteps;
+  }
+  function addReward() {
+    rewardsCount++;
+    if (rewardsCount % 3 === 0) {
+      var row = document.getElementById('rewardsRow');
+      var badge = document.createElement('div');
+      badge.className = 'reward-badge';
+      badge.textContent = '🥪';
+      row.appendChild(badge);
+    }
+  }
+  function increaseScore() {
+    score++;
+    addReward();
+  }
+  function showFeedback(container, isCorrect, ruMessage, enAudio) {
+    var fb = container.querySelector('.feedback');
+    if (!fb) {
+      fb = document.createElement('div');
+      fb.className = 'feedback';
+      container.appendChild(fb);
+    }
+    fb.className = 'feedback visible ' + (isCorrect ? 'correct' : 'wrong');
+    fb.innerHTML =
+      '<span class="feedback-emoji">' + (isCorrect ? '🎉' : '🤔') + '</span>' +
+      (isCorrect ? 'Молодец! ' + ruMessage : 'Попробуй ещё раз!');
+    if (isCorrect) {
+      speakText(enAudio + ' Well done!');
+    } else {
+      speakText('Try again!');
+    }
+  }
+  function createNavButtons(container) {
+    var nav = document.createElement('div');
+    nav.className = 'nav-buttons';
+    var backBtn = document.createElement('button');
+    backBtn.className = 'btn btn-secondary';
+    backBtn.textContent = '⬅ Назад';
+    backBtn.disabled = currentStepIndex === 0;
+    backBtn.addEventListener('click', function() {
+      if (currentStepIndex > 0) {
+        currentStepIndex--;
+        renderStep(currentStepIndex);
+      }
+    });
+    var retryBtn = document.createElement('button');
+    retryBtn.className = 'btn btn-secondary';
+    retryBtn.textContent = '🔄 Ещё раз';
+    retryBtn.addEventListener('click', function() {
+      renderStep(currentStepIndex);
+    });
+    var nextBtn = document.createElement('button');
+    nextBtn.className = 'btn btn-primary';
+    nextBtn.textContent = 'Дальше ➡';
+    nextBtn.style.display = 'none';
+    nextBtn.addEventListener('click', function() {
+      if (currentStepIndex < totalSteps - 1) {
+        currentStepIndex++;
+        renderStep(currentStepIndex);
+      } else {
+        showFinalScreen();
+      }
+    });
+    nav.appendChild(backBtn);
+    nav.appendChild(retryBtn);
+    nav.appendChild(nextBtn);
+    container.appendChild(nav);
+    return nextBtn;
+  }
+  function addHeader(container, step, picture) {
+    var header = document.createElement('div');
+    header.className = 'step-header';
+    header.innerHTML =
+      '<span class="step-hero">' + step.hero + '</span>' +
+      (picture ? '<span class="step-picture">' + picture + '</span>' : '') +
+      '<div class="step-instruction">' + step.instruction + '</div>';
+    container.appendChild(header);
+    var speakBtn = document.createElement('button');
+    speakBtn.className = 'speak-btn';
+    speakBtn.textContent = '🔊';
+    speakBtn.addEventListener('click', function() {
+      speakText(step.speakText);
+    });
+    container.appendChild(speakBtn);
+  }
+  function addFeedbackBox(container) {
+    var fb = document.createElement('div');
+    fb.className = 'feedback';
+    container.appendChild(fb);
+  }
+  function renderIntroStep(step, container) {
+    addHeader(container, step, '');
+    var zone = document.createElement('div');
+    zone.className = 'game-zone';
+    zone.style.textAlign = 'center';
+    var chefBtn = document.createElement('button');
+    chefBtn.className = 'cook-opt-btn';
+    chefBtn.style.fontSize = '5em';
+    chefBtn.style.padding = '30px 40px';
+    chefBtn.style.animation = 'heroFloat 2.5s ease-in-out infinite';
+    chefBtn.textContent = '👨‍';
+    var answered = false;
+    var nextBtn = null;
+    chefBtn.addEventListener('click', function() {
+      if (answered) return;
+      answered = true;
+      chefBtn.classList.add('correct');
+      increaseScore();
+      showFeedback(container, true, 'Ресторан открыт!', "Let's make a sandwich!");
+      if (nextBtn) nextBtn.style.display = 'inline-flex';
+    });
+    zone.appendChild(chefBtn);
+    container.appendChild(zone);
+    addFeedbackBox(container);
+    nextBtn = createNavButtons(container);
+  }
+  function renderListenStep(step, container) {
+    addHeader(container, step, '');
+    var zone = document.createElement('div');
+    zone.className = 'game-zone';
+    var grid = document.createElement('div');
+    grid.className = 'choice-grid';
+    var answered = false;
+    var nextBtn = null;
+    step.options.forEach(function(opt) {
+      var btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.innerHTML = '<span class="choice-emoji">' + opt.emoji + '</span>' + opt.label;
+      btn.addEventListener('click', function() {
+        if (answered) return;
+        if (opt.key === step.correctKey) {
+          btn.classList.add('correct');
+          answered = true;
+          increaseScore();
+          showFeedback(container, true, opt.label, opt.label);
+          if (nextBtn) nextBtn.style.display = 'inline-flex';
+          var allBtns = grid.querySelectorAll('.choice-btn');
+          for (var i = 0; i < allBtns.length; i++) { allBtns[i].disabled = true; }
+        } else {
+          btn.classList.add('wrong');
+          showFeedback(container, false, '', '');
+          setTimeout(function() { btn.classList.remove('wrong'); }, 600);
+        }
+      });
+      grid.appendChild(btn);
+    });
+    zone.appendChild(grid);
+    container.appendChild(zone);
+    addFeedbackBox(container);
+    nextBtn = createNavButtons(container);
+  }
+  function renderChoiceStep(step, container) {
+    addHeader(container, step, step.picture);
+    var zone = document.createElement('div');
+    zone.className = 'game-zone';
+    var grid = document.createElement('div');
+    grid.className = 'choice-grid';
+    var answered = false;
+    var nextBtn = null;
+    step.options.forEach(function(opt) {
+      var btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.textContent = opt.label;
+      btn.addEventListener('click', function() {
+        if (answered) return;
+        if (opt.key === step.correctKey) {
+          btn.classList.add('correct');
+          answered = true;
+          increaseScore();
+          showFeedback(container, true, opt.label, opt.label);
+          if (nextBtn) nextBtn.style.display = 'inline-flex';
+          var allBtns = grid.querySelectorAll('.choice-btn');
+          for (var i = 0; i < allBtns.length; i++) { allBtns[i].disabled = true; }
+        } else {
+          btn.classList.add('wrong');
+          showFeedback(container, false, '', '');
+          setTimeout(function() { btn.classList.remove('wrong'); }, 600);
+        }
+      });
+      grid.appendChild(btn);
+    });
+    zone.appendChild(grid);
+    container.appendChild(zone);
+    addFeedbackBox(container);
+    nextBtn = createNavButtons(container);
+  }
+  function renderPoliteStep(step, container) {
+    addHeader(container, step, '');
+    var zone = document.createElement('div');
+    zone.className = 'game-zone';
+    var politeZone = document.createElement('div');
+    politeZone.className = 'polite-zone';
+    var sentenceBox = document.createElement('div');
+    sentenceBox.className = 'polite-sentence';
+    sentenceBox.innerHTML = step.sentence.replace('______', '<span class="blank">______</span>');
+    var optionsDiv = document.createElement('div');
+    optionsDiv.className = 'polite-options';
+    var answered = false;
+    var nextBtn = null;
+    var blankSpan = sentenceBox.querySelector('.blank');
+    step.options.forEach(function(opt) {
+      var btn = document.createElement('button');
+      btn.className = 'polite-btn';
+      btn.textContent = opt.label;
+      btn.addEventListener('click', function() {
+        if (answered) return;
+        if (opt.key === step.correctKey) {
+          btn.classList.add('correct');
+          blankSpan.textContent = opt.label;
+          answered = true;
+          increaseScore();
+          showFeedback(container, true, step.sentence.replace('______', opt.label), step.sentence.replace('______', opt.label));
+          if (nextBtn) nextBtn.style.display = 'inline-flex';
+          var allBtns = optionsDiv.querySelectorAll('.polite-btn');
+          for (var i = 0; i < allBtns.length; i++) { allBtns[i].disabled = true; }
+        } else {
+          btn.classList.add('wrong');
+          showFeedback(container, false, '', '');
+          setTimeout(function() { btn.classList.remove('wrong'); }, 600);
+        }
+      });
+      optionsDiv.appendChild(btn);
+    });
+    politeZone.appendChild(sentenceBox);
+    politeZone.appendChild(optionsDiv);
+    zone.appendChild(politeZone);
+    container.appendChild(zone);
+    addFeedbackBox(container);
+    nextBtn = createNavButtons(container);
+  }
+  function renderCookStep(step, container) {
+    addHeader(container, step, '');
+    var zone = document.createElement('div');
+    zone.className = 'game-zone';
+    var cookZone = document.createElement('div');
+    cookZone.className = 'cook-zone';
+    var plate = document.createElement('div');
+    plate.className = 'cook-plate';
+    var optionsDiv = document.createElement('div');
+    optionsDiv.className = 'cook-options';
+    var currentLayerIndex = 0;
+    var answered = false;
+    var nextBtn = null;
+    function refreshOptions() {
+      optionsDiv.innerHTML = '';
+      if (currentLayerIndex >= step.layers.length) return;
+      var correctLayer = step.layers[currentLayerIndex];
+      var shownOptions = [correctLayer].concat(step.wrongOptions);
+      shownOptions.sort(function() { return Math.random() - 0.5; });
+      shownOptions.forEach(function(opt) {
+        var btn = document.createElement('button');
+        btn.className = 'cook-opt-btn';
+        btn.textContent = opt.emoji;
+        btn.addEventListener('click', function() {
+          if (answered) return;
+          if (opt.key === correctLayer.key) {
+            btn.classList.add('correct');
+            var plateItem = document.createElement('span');
+            plateItem.className = 'plate-item';
+            plateItem.textContent = opt.emoji;
+            plate.appendChild(plateItem);
+            speakText(opt.label);
+            currentLayerIndex++;
+            if (currentLayerIndex >= step.layers.length) {
+              answered = true;
+              increaseScore();
+              showFeedback(container, true, 'Сэндвич готов!', 'Sandwich ready!');
+              if (nextBtn) nextBtn.style.display = 'inline-flex';
+              var allBtns = optionsDiv.querySelectorAll('.cook-opt-btn');
+              for (var i = 0; i < allBtns.length; i++) { allBtns[i].disabled = true; }
+            } else {
+              setTimeout(function() { refreshOptions(); }, 500);
+            }
+          } else {
+            btn.classList.add('wrong');
+            showFeedback(container, false, '', '');
+            setTimeout(function() { btn.classList.remove('wrong'); }, 600);
+          }
+        });
+        optionsDiv.appendChild(btn);
+      });
+    }
+    refreshOptions();
+    cookZone.appendChild(plate);
+    cookZone.appendChild(optionsDiv);
+    zone.appendChild(cookZone);
+    container.appendChild(zone);
+    addFeedbackBox(container);
+    nextBtn = createNavButtons(container);
+  }
+  function renderSpellStep(step, container) {
+    addHeader(container, step, '');
+    var zone = document.createElement('div');
+    zone.className = 'game-zone';
+    var spellZone = document.createElement('div');
+    spellZone.className = 'spell-zone';
+    var target = document.createElement('div');
+    target.className = 'spell-target';
+    var slots = [];
+    for (var i = 0; i < step.targetWord.length; i++) {
+      var slot = document.createElement('div');
+      slot.className = 'spell-slot';
+      target.appendChild(slot);
+      slots.push(slot);
+    }
+    var bank = document.createElement('div');
+    bank.className = 'letters-bank';
+    var currentIndex = 0;
+    var answered = false;
+    var nextBtn = null;
+    var letters = step.scramble.split('');
+    letters.forEach(function(letter) {
+      var btn = document.createElement('button');
+      btn.className = 'letter-btn';
+      btn.textContent = letter;
+      btn.addEventListener('click', function() {
+        if (answered || btn.classList.contains('used')) return;
+        var expected = step.targetWord[currentIndex];
+        if (letter === expected) {
+          slots[currentIndex].textContent = letter;
+          slots[currentIndex].classList.add('filled');
+          btn.classList.add('used');
+          btn.disabled = true;
+          currentIndex++;
+          if (currentIndex === step.targetWord.length) {
+            answered = true;
+            increaseScore();
+            showFeedback(container, true, step.targetWord, step.targetWord);
+            if (nextBtn) nextBtn.style.display = 'inline-flex';
+            var allBtns = bank.querySelectorAll('.letter-btn');
+            for (var j = 0; j < allBtns.length; j++) { allBtns[j].disabled = true; }
+          }
+        } else {
+          slots[currentIndex].classList.add('wrong');
+          showFeedback(container, false, '', '');
+          setTimeout(function() { slots[currentIndex].classList.remove('wrong'); }, 500);
+        }
+      });
+      bank.appendChild(btn);
+    });
+    spellZone.appendChild(target);
+    spellZone.appendChild(bank);
+    zone.appendChild(spellZone);
+    container.appendChild(zone);
+    addFeedbackBox(container);
+    nextBtn = createNavButtons(container);
+  }
+  function renderYesNoStep(step, container) {
+    addHeader(container, step, step.picture);
+    var zone = document.createElement('div');
+    zone.className = 'game-zone';
+    var ynZone = document.createElement('div');
+    ynZone.className = 'yesno-zone';
+    var answered = false;
+    var nextBtn = null;
+    var yesBtn = document.createElement('button');
+    yesBtn.className = 'yesno-btn yes';
+    yesBtn.innerHTML = '<span class="yn-emoji">😊</span>Да';
+    var noBtn = document.createElement('button');
+    noBtn.className = 'yesno-btn no';
+    noBtn.innerHTML = '<span class="yn-emoji">🙅</span>Нет';
+    yesBtn.addEventListener('click', function() {
+      if (answered) return;
+      if (step.correctAnswer === true) {
+        yesBtn.classList.add('correct');
+        answered = true;
+        increaseScore();
+        showFeedback(container, true, 'Верно!', 'Yes!');
+        if (nextBtn) nextBtn.style.display = 'inline-flex';
+        yesBtn.disabled = true;
+        noBtn.disabled = true;
+      } else {
+        yesBtn.classList.add('wrong');
+        showFeedback(container, false, '', '');
+        setTimeout(function() { yesBtn.classList.remove('wrong'); }, 600);
+      }
+    });
+    noBtn.addEventListener('click', function() {
+      if (answered) return;
+      if (step.correctAnswer === false) {
+        noBtn.classList.add('correct');
+        answered = true;
+        increaseScore();
+        showFeedback(container, true, 'Верно!', 'No!');
+        if (nextBtn) nextBtn.style.display = 'inline-flex';
+        yesBtn.disabled = true;
+        noBtn.disabled = true;
+      } else {
+        noBtn.classList.add('wrong');
+        showFeedback(container, false, '', '');
+        setTimeout(function() { noBtn.classList.remove('wrong'); }, 600);
+      }
+    });
+    ynZone.appendChild(yesBtn);
+    ynZone.appendChild(noBtn);
+    zone.appendChild(ynZone);
+    container.appendChild(zone);
+    addFeedbackBox(container);
+    nextBtn = createNavButtons(container);
+  }
+  function renderCountStep(step, container) {
+    addHeader(container, step, '');
+    var zone = document.createElement('div');
+    zone.className = 'game-zone';
+    var countZone = document.createElement('div');
+    countZone.className = 'count-zone';
+    var items = document.createElement('div');
+    items.className = 'count-items';
+    for (var i = 0; i < step.count; i++) {
+      var item = document.createElement('span');
+      item.className = 'count-item';
+      item.textContent = step.itemEmoji;
+      item.style.animationDelay = (i * 0.1) + 's';
+      item.addEventListener('click', function(it) {
+        return function() {
+          if (!it.classList.contains('counted')) {
+            it.classList.add('counted');
+          }
+        };
+      }(item));
+      items.appendChild(item);
+    }
+    var opts = document.createElement('div');
+    opts.className = 'count-options';
+    var answered = false;
+    var nextBtn = null;
+    step.options.forEach(function(num) {
+      var btn = document.createElement('button');
+      btn.className = 'count-opt-btn';
+      btn.textContent = num;
+      btn.addEventListener('click', function() {
+        if (answered) return;
+        if (num === step.count) {
+          btn.classList.add('correct');
+          answered = true;
+          increaseScore();
+          showFeedback(container, true, num + '!', num + '!');
+          if (nextBtn) nextBtn.style.display = 'inline-flex';
+          var allBtns = opts.querySelectorAll('.count-opt-btn');
+          for (var j = 0; j < allBtns.length; j++) { allBtns[j].disabled = true; }
+        } else {
+          btn.classList.add('wrong');
+          showFeedback(container, false, '', '');
+          setTimeout(function() { btn.classList.remove('wrong'); }, 600);
+        }
+      });
+      opts.appendChild(btn);
+    });
+    countZone.appendChild(items);
+    countZone.appendChild(opts);
+    zone.appendChild(countZone);
+    container.appendChild(zone);
+    addFeedbackBox(container);
+    nextBtn = createNavButtons(container);
+  }
+  function renderMatchStep(step, container) {
+    addHeader(container, step, '');
+    var zone = document.createElement('div');
+    zone.className = 'game-zone';
+    var matchZone = document.createElement('div');
+    matchZone.className = 'match-zone';
+    var columns = document.createElement('div');
+    columns.className = 'match-columns';
+    var leftCol = document.createElement('div');
+    leftCol.className = 'match-column';
+    var rightCol = document.createElement('div');
+    rightCol.className = 'match-column';
+    var selectedWord = null;
+    var matchedCount = 0;
+    var answered = false;
+    var nextBtn = null;
+    var shuffledPairs = step.pairs.slice().sort(function() { return Math.random() - 0.5; });
+    step.pairs.forEach(function(pair) {
+      var wordItem = document.createElement('div');
+      wordItem.className = 'match-item';
+      wordItem.textContent = pair.wordLabel;
+      wordItem.setAttribute('data-word', pair.word);
+      wordItem.addEventListener('click', function() {
+        if (wordItem.classList.contains('matched') || answered) return;
+        var allWords = leftCol.querySelectorAll('.match-item');
+        for (var i = 0; i < allWords.length; i++) { allWords[i].classList.remove('selected'); }
+        wordItem.classList.add('selected');
+        selectedWord = pair.word;
+      });
+      leftCol.appendChild(wordItem);
+    });
+    shuffledPairs.forEach(function(pair) {
+      var emojiItem = document.createElement('div');
+      emojiItem.className = 'match-item';
+      emojiItem.innerHTML = '<span class="match-emoji">' + pair.emoji + '</span>';
+      emojiItem.setAttribute('data-word', pair.word);
+      emojiItem.addEventListener('click', function() {
+        if (emojiItem.classList.contains('matched') || answered) return;
+        if (selectedWord === null) {
+          emojiItem.classList.add('wrong-match');
+          showFeedback(container, false, '', '');
+          setTimeout(function() { emojiItem.classList.remove('wrong-match'); }, 600);
+          return;
+        }
+        if (emojiItem.getAttribute('data-word') === selectedWord) {
+          emojiItem.classList.add('matched');
+          var wordEl = leftCol.querySelector('[data-word="' + selectedWord + '"]');
+          if (wordEl) {
+            wordEl.classList.add('matched');
+            wordEl.classList.remove('selected');
+          }
+          matchedCount++;
+          speakText(pair.wordLabel);
+          selectedWord = null;
+          if (matchedCount === step.pairs.length) {
+            answered = true;
+            increaseScore();
+            showFeedback(container, true, 'Всё соединено!', 'All matched!');
+            if (nextBtn) nextBtn.style.display = 'inline-flex';
+          }
+        } else {
+          emojiItem.classList.add('wrong-match');
+          showFeedback(container, false, '', '');
+          setTimeout(function() { emojiItem.classList.remove('wrong-match'); }, 600);
+        }
+      });
+      rightCol.appendChild(emojiItem);
+    });
+    columns.appendChild(leftCol);
+    columns.appendChild(rightCol);
+    matchZone.appendChild(columns);
+    zone.appendChild(matchZone);
+    container.appendChild(zone);
+    addFeedbackBox(container);
+    nextBtn = createNavButtons(container);
+  }
+  function renderServeStep(step, container) {
+    addHeader(container, step, '');
+    var zone = document.createElement('div');
+    zone.className = 'game-zone';
+    var serveZone = document.createElement('div');
+    serveZone.className = 'serve-zone';
+    var tray = document.createElement('div');
+    tray.className = 'serve-tray';
+    var optionsDiv = document.createElement('div');
+    optionsDiv.className = 'serve-options';
+    var servedCount = 0;
+    var answered = false;
+    var nextBtn = null;
+    step.allOptions.forEach(function(opt) {
+      var btn = document.createElement('button');
+      btn.className = 'serve-btn';
+      btn.innerHTML = '<span>' + opt.emoji + '</span><span class="serve-label">' + opt.label + '</span>';
+      btn.addEventListener('click', function() {
+        if (answered || btn.classList.contains('correct')) return;
+        var isCorrect = false;
+        for (var i = 0; i < step.orders.length; i++) {
+          if (step.orders[i].key === opt.key) { isCorrect = true; break; }
+        }
+        if (isCorrect) {
+          btn.classList.add('correct');
+          var trayItem = document.createElement('span');
+          trayItem.className = 'tray-item';
+          trayItem.textContent = opt.emoji;
+          tray.appendChild(trayItem);
+          speakText(opt.label);
+          servedCount++;
+          if (servedCount === step.orders.length) {
+            answered = true;
+            increaseScore();
+            showFeedback(container, true, 'Все заказы поданы!', 'All served!');
+            if (nextBtn) nextBtn.style.display = 'inline-flex';
+          }
+        } else {
+          btn.classList.add('wrong');
+          showFeedback(container, false, '', '');
+          setTimeout(function() { btn.classList.remove('wrong'); }, 600);
+        }
+      });
+      optionsDiv.appendChild(btn);
+    });
+    serveZone.appendChild(tray);
+    serveZone.appendChild(optionsDiv);
+    zone.appendChild(serveZone);
+    container.appendChild(zone);
+    addFeedbackBox(container);
+    nextBtn = createNavButtons(container);
+  }
+  function renderOrderStep(step, container) {
+    addHeader(container, step, '');
+    var zone = document.createElement('div');
+    zone.className = 'game-zone';
+    var orderZone = document.createElement('div');
+    orderZone.className = 'order-zone';
+    var target = document.createElement('div');
+    target.className = 'order-target';
+    var bank = document.createElement('div');
+    bank.className = 'order-bank';
+    var currentOrder = [];
+    var answered = false;
+    var nextBtn = null;
+    step.scramble.forEach(function(word) {
+      var btn = document.createElement('button');
+      btn.className = 'order-btn';
+      btn.textContent = word;
+      btn.addEventListener('click', function() {
+        if (answered || btn.disabled) return;
+        var expectedIdx = currentOrder.length;
+        if (word === step.correctOrder[expectedIdx]) {
+          currentOrder.push(word);
+          var wordEl = document.createElement('span');
+          wordEl.className = 'order-word';
+          wordEl.textContent = word;
+          target.appendChild(wordEl);
+          btn.disabled = true;
+          if (currentOrder.length === step.correctOrder.length) {
+            answered = true;
+            increaseScore();
+            showFeedback(container, true, step.correctOrder.join(' '), step.correctOrder.join(' '));
+            if (nextBtn) nextBtn.style.display = 'inline-flex';
+            var allBtns = bank.querySelectorAll('.order-btn');
+            for (var j = 0; j < allBtns.length; j++) { allBtns[j].disabled = true; }
+          }
+        } else {
+          showFeedback(container, false, '', '');
+        }
+      });
+      bank.appendChild(btn);
+    });
+    orderZone.appendChild(target);
+    orderZone.appendChild(bank);
+    zone.appendChild(orderZone);
+    container.appendChild(zone);
+    addFeedbackBox(container);
+    nextBtn = createNavButtons(container);
+  }
+  function renderPickStep(step, container) {
+    addHeader(container, step, '');
+    var zone = document.createElement('div');
+    zone.className = 'game-zone';
+    var pickZone = document.createElement('div');
+    pickZone.className = 'pick-zone';
+    var grid = document.createElement('div');
+    grid.className = 'pick-grid';
+    var pickedCorrect = 0;
+    var answered = false;
+    var nextBtn = null;
+    step.items.forEach(function(item) {
+      var el = document.createElement('div');
+      el.className = 'pick-item';
+      el.innerHTML =
+        '<span class="pick-emoji">' + item.emoji + '</span>' +
+        '<span class="pick-label">' + item.label + '</span>';
+      el.addEventListener('click', function() {
+        if (answered || el.classList.contains('picked')) return;
+        if (item.isCorrect) {
+          el.classList.add('picked');
+          pickedCorrect++;
+          speakText(item.label);
+          if (pickedCorrect === step.requiredCorrect) {
+            answered = true;
+            increaseScore();
+            showFeedback(container, true, 'Всё найдено!', 'All found!');
+            if (nextBtn) nextBtn.style.display = 'inline-flex';
+          }
+        } else {
+          el.classList.add('wrong-pick');
+          showFeedback(container, false, '', '');
+          setTimeout(function() { el.classList.remove('wrong-pick'); }, 600);
+        }
+      });
+      grid.appendChild(el);
+    });
+    pickZone.appendChild(grid);
+    zone.appendChild(pickZone);
+    container.appendChild(zone);
+    addFeedbackBox(container);
+    nextBtn = createNavButtons(container);
+  }
+  function renderStep(idx) {
+    if (idx >= totalSteps) {
+      showFinalScreen();
+      return;
+    }
+    var screen = document.getElementById('gameScreen');
+    screen.innerHTML = '';
+    var step = steps[idx];
+    updateProgress();
+    if (step.type === 'intro') renderIntroStep(step, screen);
+    if (step.type === 'listen') renderListenStep(step, screen);
+    if (step.type === 'choice') renderChoiceStep(step, screen);
+    if (step.type === 'polite') renderPoliteStep(step, screen);
+    if (step.type === 'cook') renderCookStep(step, screen);
+    if (step.type === 'spell') renderSpellStep(step, screen);
+    if (step.type === 'yesno') renderYesNoStep(step, screen);
+    if (step.type === 'count') renderCountStep(step, screen);
+    if (step.type === 'match') renderMatchStep(step, screen);
+    if (step.type === 'serve') renderServeStep(step, screen);
+    if (step.type === 'order') renderOrderStep(step, screen);
+    if (step.type === 'pick') renderPickStep(step, screen);
+  }
+  function showFinalScreen() {
+    var screen = document.getElementById('gameScreen');
+    screen.innerHTML = '';
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('progressPercent').textContent = '100%';
+    document.getElementById('progressText').textContent = 'Кухня закрыта!';
+    var final = document.createElement('div');
+    final.className = 'screen-final';
+    final.innerHTML =
+      '<div class="final-reward">🏆</div>' +
+      '<div class="final-title">Ты настоящий шеф-повар!</div>' +
+      '<div class="final-text">' +
+        'Ты помог Чаклзу собрать самые вкусные сэндвичи.<br>' +
+        'Все гости сыты и довольны!<br>' +
+        'Нажимай на слова и фразы ниже, чтобы услышать их ещё раз.' +
+      '</div>' +
+      '<div class="final-score">🥪 Твой счёт: ' + score + ' из ' + totalSteps + '</div>' +
+      '<button class="btn btn-primary" id="finalSpeak">🔊 Послушать финальную фразу</button>';
+    screen.appendChild(final);
+    var vocabList = document.createElement('div');
+    vocabList.className = 'final-vocab';
+    var vocabTitle = document.createElement('div');
+    vocabTitle.style.cssText = 'font-size: 1.3em; font-weight: bold; color: #8b2500; margin-bottom: 12px; text-align: center;';
+    vocabTitle.textContent = '📖 Все слова и фразы урока';
+    vocabList.appendChild(vocabTitle);
+    var allItems = [];
+    var vocabKeys = ['bread', 'egg', 'cheese', 'chocolate', 'sandwich', 'plate', 'please', 'cook'];
+    vocabKeys.forEach(function(key) {
+      var item = vocabulary[key];
+      allItems.push({ en: item.emoji + ' ' + item.en, ipa: item.ipa, ru: item.ru });
+    });
+    var phraseKeys = ['letsMakeSandwich', 'bringTheBread', 'bringMeCheesePlease', 'letsEat', 'letsCook', 'bringTheEgg', 'bringMeChocolate'];
+    phraseKeys.forEach(function(key) {
+      var item = phrases[key];
+      allItems.push({ en: item.en, ipa: item.ipa, ru: item.ru });
+    });
+    allItems.forEach(function(item) {
+      var row = document.createElement('div');
+      row.className = 'vocab-item';
+      row.innerHTML =
+        '<div class="vocab-text">' +
+          '<div class="vocab-en">' + item.en + '</div>' +
+          '<div class="vocab-ipa">' + item.ipa + '</div>' +
+          '<div class="vocab-ru">' + item.ru + '</div>' +
+        '</div>' +
+        '<button class="vocab-speak">🔊</button>';
+      var btn = row.querySelector('.vocab-speak');
+      btn.addEventListener('click', function() {
+        speakText(item.en);
+      });
+      vocabList.appendChild(row);
+    });
+    screen.appendChild(vocabList);
+    var nav = document.createElement('div');
+    nav.className = 'nav-buttons';
+    var backBtn = document.createElement('button');
+    backBtn.className = 'btn btn-secondary';
+    backBtn.textContent = '⬅ Назад';
+    backBtn.addEventListener('click', function() {
+      if (currentStepIndex > 0) {
+        currentStepIndex--;
+        renderStep(currentStepIndex);
+      }
+    });
+    var restartBtn = document.createElement('button');
+    restartBtn.className = 'btn btn-primary';
+    restartBtn.textContent = '🔄 Пройти ещё раз';
+    restartBtn.addEventListener('click', function() {
+      currentStepIndex = 0;
+      score = 0;
+      rewardsCount = 0;
+      document.getElementById('rewardsRow').innerHTML = '';
+      renderStep(0);
+    });
+    nav.appendChild(backBtn);
+    nav.appendChild(restartBtn);
+    screen.appendChild(nav);
+    document.getElementById('finalSpeak').addEventListener('click', function() {
+      speakText('Well done, chef! Bring me the sandwich, please!');
+    });
+  }
+  document.getElementById('startBtn').addEventListener('click', function() {
+    renderStep(0);
+  });
+  document.getElementById('progressContainer').addEventListener('click', function(e) {
+    var rect = this.getBoundingClientRect();
+    var x = e.clientX - rect.left;
+    var percent = x / rect.width;
+    var targetStep = Math.floor(percent * totalSteps);
+    if (targetStep >= 0 && targetStep < totalSteps) {
+      currentStepIndex = targetStep;
+      renderStep(currentStepIndex);
+    }
+  });
+  if (synth.onvoiceschanged !== undefined) {
+    synth.onvoiceschanged = function() {};
+  }
+})();
+</script>
+</body>
+</html>

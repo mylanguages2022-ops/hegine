@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 5 Lesson 1 Dictionary</title>
+<meta name="description" content="Interactive dictionary for Spotlight Module 5 Lesson 1 - The Ugly Duckling final, swan and summer vocabulary">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Comic Sans MS', 'Marker Felt', sans-serif;
+  background: linear-gradient(180deg, #b3e5fc 0%, #81d4fa 45%, #4fc3f7 100%);
+  min-height: 100vh;
+  padding: 20px;
+  color: #1b3a2a;
+}
+.container { max-width: 1200px; margin: 0 auto; }
+.header {
+  text-align: center;
+  margin-bottom: 26px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 24px;
+  box-shadow: 0 6px 18px rgba(21, 101, 192, 0.25);
+}
+.header h1 {
+  font-size: 2.1em;
+  color: #1b5e20;
+  margin-bottom: 8px;
+}
+.header .subtitle {
+  font-size: 1.05em;
+  color: #33691e;
+  font-style: italic;
+}
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 26px;
+}
+.filter-btn {
+  padding: 10px 18px;
+  border: 3px solid #2e7d32;
+  background: #ffffff;
+  color: #2e7d32;
+  font-family: inherit;
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.filter-btn:hover, .filter-btn.active {
+  background: #2e7d32;
+  color: #ffffff;
+  transform: translateY(-2px);
+}
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 22px;
+  margin-bottom: 30px;
+}
+.card {
+  background: radial-gradient(circle at 35% 30%, #aed581 0%, #7cb342 70%, #689f38 100%);
+  border-radius: 48% 52% 50% 50% / 55% 45% 55% 45%;
+  padding: 26px 16px 22px;
+  text-align: center;
+  box-shadow: 0 6px 14px rgba(27, 94, 32, 0.3);
+  border: 3px solid #558b2f;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -6%;
+  width: 30%;
+  height: 5px;
+  background: #558b2f;
+  transform: rotate(18deg);
+  border-radius: 3px;
+  opacity: 0.55;
+}
+.card.speaking {
+  border-color: #ffeb3b;
+  box-shadow: 0 0 22px rgba(255, 235, 59, 0.75);
+  transform: scale(1.04);
+}
+.card-emoji {
+  font-size: 2.8em;
+  margin-bottom: 8px;
+  display: block;
+}
+.card-en {
+  font-size: 1.25em;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 5px;
+  text-shadow: 1px 1px 0 #33691e;
+}
+.card-ipa {
+  font-size: 0.9em;
+  color: #f1f8e9;
+  font-family: 'Segoe UI', sans-serif;
+  margin-bottom: 5px;
+}
+.card-ru {
+  font-size: 0.98em;
+  color: #ffffff;
+  margin-bottom: 12px;
+}
+.sound-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, #ffee58, #fbc02d);
+  color: #5d4037;
+  font-size: 1.4em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 3px 8px rgba(251, 192, 45, 0.5);
+}
+.sound-btn:hover { transform: scale(1.1) rotate(6deg); }
+.sound-btn:active { transform: scale(0.94); }
+.footer {
+  text-align: center;
+  padding: 14px;
+  color: #0d3c22;
+  font-style: italic;
+  font-size: 0.95em;
+}
+@media (max-width: 600px) {
+  .header h1 { font-size: 1.55em; }
+  .cards-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .card { padding: 20px 10px 16px; }
+  .card-emoji { font-size: 2.2em; }
+  .card-en { font-size: 1.05em; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>🪷 Lily Pads of the Summer Pond</h1>
+    <div class="subtitle">Module 5 · Lesson 1 · The Ugly Duckling, final</div>
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="noun">Pond words</button>
+    <button class="filter-btn" data-filter="adj">Feelings</button>
+    <button class="filter-btn" data-filter="phrase">Phrases</button>
+  </div>
+  <div class="cards-grid" id="cardsGrid"></div>
+  <div class="footer">Spotlight Starter · Module 5 · Lesson 1</div>
+</div>
+<script>
+var vocabulary = [
+  { emoji: '🦢', en: 'swan', ipa: '/swɒn/', ru: 'лебедь', cat: 'noun' },
+  { emoji: '🐤', en: 'duckling', ipa: '/ˈdʌklɪŋ/', ru: 'утёнок', cat: 'noun' },
+  { emoji: '🏞️', en: 'pond', ipa: '/pɒnd/', ru: 'пруд', cat: 'noun' },
+  { emoji: '🪽', en: 'feathers', ipa: '/ˈfeðəz/', ru: 'перья', cat: 'noun' },
+  { emoji: '🤝', en: 'friend', ipa: '/frend/', ru: 'друг', cat: 'noun' },
+  { emoji: '☀️', en: 'summertime', ipa: '/ˈsʌmətaɪm/', ru: 'летняя пора', cat: 'noun' },
+  { emoji: '✨', en: 'beautiful', ipa: '/ˈbjuːtɪf(ə)l/', ru: 'красивый', cat: 'adj' },
+  { emoji: '😄', en: 'happy', ipa: '/ˈhæpi/', ru: 'счастливый', cat: 'adj' },
+  { emoji: '😌', en: 'proud', ipa: '/praʊd/', ru: 'гордый', cat: 'adj' },
+  { emoji: '🕊️', en: 'free', ipa: '/friː/', ru: 'свободный', cat: 'adj' },
+  { emoji: '🪞', en: 'Look at you now!', ipa: '/lʊk æt juː naʊ/', ru: 'посмотри на себя теперь', cat: 'phrase' },
+  { emoji: '📏', en: "You're big, not small.", ipa: '/jɔː bɪɡ, nɒt smɔːl/', ru: 'ты большой, а не маленький', cat: 'phrase' },
+  { emoji: '✋', en: "You're not ugly. Not at all!", ipa: '/jɔ nɒt ˈʌɡli. nɒt æt ɔːl/', ru: 'ты не некрасивый. Совсем нет!', cat: 'phrase' },
+  { emoji: '🧭', en: "It's time to go!", ipa: '/ɪts taɪm tə ɡəʊ/', ru: 'пора отправляться!', cat: 'phrase' },
+  { emoji: '👋', en: 'Goodbye, dear friend.', ipa: '/ˌɡʊdˈbaɪ dɪə frend/', ru: 'до свидания, дорогой друг', cat: 'phrase' },
+  { emoji: '🎉', en: 'Have a good time!', ipa: '/hæv ə ɡʊd taɪm/', ru: 'хорошо проведи время!', cat: 'phrase' }
+];
+var synth = window.speechSynthesis;
+var currentCard = null;
+function speak(text, card) {
+  if (synth.speaking) synth.cancel();
+  if (currentCard) currentCard.classList.remove('speaking');
+  var utter = new SpeechSynthesisUtterance(text);
+  var voices = synth.getVoices();
+  var gbVoice = null;
+  for (var i = 0; i < voices.length; i++) {
+    if (voices[i].lang === 'en-GB') { gbVoice = voices[i]; break; }
+  }
+  if (gbVoice) utter.voice = gbVoice;
+  utter.rate = 0.85;
+  utter.onstart = function() { card.classList.add('speaking'); currentCard = card; };
+  utter.onend = function() { card.classList.remove('speaking'); currentCard = null; };
+  utter.onerror = function() { card.classList.remove('speaking'); };
+  synth.speak(utter);
+}
+function renderCards(filter) {
+  var grid = document.getElementById('cardsGrid');
+  grid.innerHTML = '';
+  var items = filter === 'all' ? vocabulary : vocabulary.filter(function(v) { return v.cat === filter; });
+  items.forEach(function(item) {
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML =
+      '<span class="card-emoji">' + item.emoji + '</span>' +
+      '<div class="card-en">' + item.en + '</div>' +
+      '<div class="card-ipa">' + item.ipa + '</div>' +
+      '<div class="card-ru">' + item.ru + '</div>' +
+      '<button class="sound-btn">🔊</button>';
+    var btn = card.querySelector('.sound-btn');
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      speak(item.en, card);
+    });
+    card.addEventListener('click', function() { speak(item.en, card); });
+    grid.appendChild(card);
+  });
+}
+var filterBtns = document.querySelectorAll('.filter-btn');
+filterBtns.forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    filterBtns.forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    renderCards(btn.getAttribute('data-filter'));
+  });
+});
+if (synth.onvoiceschanged !== undefined) {
+  synth.onvoiceschanged = function() {};
+}
+renderCards('all');
+</script>
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sky Quest</title>
+<meta name="description" content="Квест по английскому языку: Небесный театр.">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; min-height: 100vh; font-family: "Comic Sans MS", "Chalkboard SE", "Marker Felt", sans-serif; background: linear-gradient(to bottom, #87ceeb, #b0e0e6 65%, #98d8c8); color: #1e3a5f; }
+body { display: flex; flex-direction: column; }
+.scene-bg { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+.cloud-bg { position: absolute; font-size: 5em; opacity: .65; animation: driftCloud 55s linear infinite; }
+.cloud-bg:nth-child(1) { top: 12%; left: -15%; }
+.cloud-bg:nth-child(2) { top: 30%; left: -15%; font-size: 4em; animation-duration: 70s; animation-delay: -20s; }
+.cloud-bg:nth-child(3) { top: 7%; left: -15%; font-size: 6em; animation-duration: 62s; animation-delay: -35s; }
+.mountain { position: absolute; bottom: -8%; font-size: 7em; opacity: .8; }
+.mountain:nth-child(4) { left: -2%; }
+.mountain:nth-child(5) { right: 5%; font-size: 6em; }
+.mountain:nth-child(6) { left: 40%; font-size: 5em; }
+.top-bar { width: 100%; background: #3498db; color: white; padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; position: sticky; top: 0; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,.25); border-bottom: 5px solid #2874a6; min-height: 64px; }
+.title-quest { font-size: 1.25em; font-weight: bold; text-shadow: 2px 2px 0 #2874a6; white-space: nowrap; }
+.progress-wrap { flex: 1; height: 24px; background: #2874a6; border-radius: 12px; overflow: hidden; position: relative; border: 2px solid #1a5276; box-shadow: inset 0 2px 6px rgba(0,0,0,.3); }
+.progress-bar { height: 100%; width: 0%; background: linear-gradient(90deg, #f39c12, #e74c3c); position: relative; transition: width .6s ease; }
+.progress-bar::after { content: ""; position: absolute; inset: 0; background: linear-gradient(45deg, rgba(255,255,255,.25) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.25) 50%, rgba(255,255,255,.25) 75%, transparent 75%); background-size: 24px 24px; animation: moveStripes 1s linear infinite; }
+.hero-fly { position: absolute; top: 50%; left: 0; font-size: 1.9em; transition: left .6s ease; animation: flyBounceRight .5s infinite alternate; filter: drop-shadow(2px 2px 0 rgba(0,0,0,.3)); z-index: 5; }
+.stats-panel { text-align: right; min-width: 72px; font-weight: bold; font-size: .95em; text-shadow: 1px 1px 0 #2874a6; }
+.badges-row { display: flex; gap: 3px; justify-content: flex-end; margin-top: 2px; }
+.badge-icon { opacity: .3; filter: grayscale(1); transition: all .5s ease; font-size: 1.15em; }
+.badge-icon.earned { opacity: 1; filter: grayscale(0); transform: scale(1.2); animation: starBurst .6s ease; }
+.container { width: 100%; max-width: 640px; margin: 0 auto; padding: 22px; flex: 1; display: flex; align-items: center; justify-content: center; }
+.card { width: 100%; background: white; border: 6px solid #f39c12; border-radius: 26px; box-shadow: 0 16px 35px rgba(0,0,0,.22); padding: 28px 18px; text-align: center; animation: cardEnter .5s ease; }
+.card.exit { animation: cardExit .3s ease forwards; }
+.instruction-text { font-size: 1.5em; font-weight: bold; line-height: 1.35; margin-bottom: 22px; }
+.sound-btn-main { background: #27ae60; color: white; border: none; padding: 15px 32px; border-radius: 40px; font-size: 1.25em; font-weight: bold; cursor: pointer; box-shadow: 0 6px 0 #1e8449; margin-bottom: 22px; font-family: inherit; transition: transform .1s, box-shadow .1s; }
+.sound-btn-main:hover { transform: translateY(-2px); }
+.sound-btn-main:active { transform: translateY(6px); box-shadow: none; }
+.sound-btn-main::after { content: " 🔊"; }
+.game-zone { min-height: 230px; background: #ecf0f1; border: 3px dashed #95a5a6; border-radius: 18px; padding: 14px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px; margin-bottom: 18px; }
+.option-btn { background: #fff3e0; color: #1e3a5f; border: 4px solid #f39c12; border-radius: 16px; padding: 14px 22px; font-size: 1.35em; font-weight: bold; cursor: pointer; box-shadow: 0 5px 0 #d68910; transition: transform .15s, box-shadow .15s, background .2s; font-family: inherit; min-width: 86px; }
+.option-btn:hover { transform: translateY(-3px) scale(1.04); background: #ffe8c2; }
+.option-btn:active { transform: translateY(5px); box-shadow: none; }
+.option-btn:focus { outline: 3px solid #3498db; outline-offset: 2px; }
+.option-btn:disabled { cursor: default; opacity: .65; transform: none; box-shadow: none; }
+.option-btn.correct { background: #c8e6c9; border-color: #27ae60; color: #1b5e20; animation: correctPop .5s ease; }
+.option-btn.wrong { background: #ffcdd2; border-color: #e74c3c; color: #b71c1c; animation: wrongShake .5s ease; }
+.option-btn.selected { background: #ffe0b2; outline: 3px solid #e67e22; }
+.letter-btn { width: 56px; height: 56px; font-size: 1.8em; display: inline-flex; align-items: center; justify-content: center; border-radius: 14px; background: #e3f2fd; border-color: #3498db; box-shadow: 0 5px 0 #2874a6; color: #2874a6; text-transform: uppercase; }
+.letter-btn.selected { background: #3498db; color: white; transform: translateY(5px); box-shadow: none; }
+.word-display { min-width: 220px; min-height: 64px; background: white; border-radius: 14px; border-bottom: 5px solid #95a5a6; display: inline-flex; align-items: center; justify-content: center; font-size: 2.2em; font-weight: bold; letter-spacing: .18em; padding: 8px 18px; margin-bottom: 16px; text-transform: uppercase; }
+.match-col { display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 180px; }
+.feedback { min-height: 46px; font-size: 1.5em; font-weight: bold; margin: 12px 0 18px; }
+.feedback.success { color: #1e8449; animation: feedbackSlide .4s ease; }
+.feedback.error { color: #c62828; animation: feedbackShake .4s ease; }
+.nav-btns { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+.nav-btn { border: none; border-radius: 35px; padding: 12px 26px; font-size: 1.15em; font-weight: bold; cursor: pointer; color: white; font-family: inherit; box-shadow: 0 5px 0 rgba(0,0,0,.25); transition: transform .1s, box-shadow .1s; }
+.nav-btn:hover { transform: translateY(-2px); }
+.nav-btn:active { transform: translateY(5px); box-shadow: none; }
+.nav-btn:focus { outline: 3px solid #1e3a5f; outline-offset: 2px; }
+.nav-btn:disabled { opacity: .5; cursor: default; transform: none; box-shadow: none; }
+.btn-back { background: #95a5a6; }
+.btn-retry { background: #f39c12; display: none; }
+.btn-next { background: #27ae60; display: none; }
+.btn-start { background: #e74c3c; color: white; border: none; padding: 20px 42px; border-radius: 45px; font-size: 1.8em; font-weight: bold; cursor: pointer; box-shadow: 0 9px 0 #a93226; animation: pulseStart 2s infinite; font-family: inherit; letter-spacing: .06em; }
+.btn-start:hover { transform: translateY(-3px); }
+.btn-start:active { transform: translateY(9px); box-shadow: none; }
+.intro-screen { text-align: center; color: white; padding: 24px; }
+.intro-screen h1 { font-size: 3.1em; text-shadow: 4px 4px 0 #2874a6; animation: titleFloat 3s ease-in-out infinite; margin-bottom: 10px; }
+.intro-subtitle { font-size: 1.5em; text-shadow: 2px 2px 0 #2874a6; margin-bottom: 18px; }
+.heroes-row { font-size: 4.8em; display: flex; justify-content: center; gap: 18px; margin: 28px 0; filter: drop-shadow(4px 4px 0 rgba(0,0,0,.25)); }
+.heroes-row span { animation: heroWave 2s ease-in-out infinite; display: inline-block; }
+.heroes-row span:nth-child(2) { animation-delay: .25s; }
+.heroes-row span:nth-child(3) { animation-delay: .5s; }
+.final-screen { background: white; border: 8px solid #f39c12; border-radius: 28px; padding: 28px 16px; text-align: center; box-shadow: 0 0 55px rgba(243,156,18,.45), 0 18px 40px rgba(0,0,0,.25); }
+.final-screen h1 { color: #f39c12; font-size: 2.5em; margin-bottom: 12px; text-shadow: 2px 2px 0 #fff6d8; }
+.reward-icon { font-size: 5.8em; display: inline-block; margin: 18px 0; animation: rotateReward 5s linear infinite; filter: drop-shadow(0 8px 16px rgba(0,0,0,.2)); }
+.word-list-final { text-align: left; background: #fef9e7; border: 2px solid #f39c12; border-radius: 16px; padding: 16px; margin: 22px 0; max-height: 320px; overflow-y: auto; }
+.word-row-final { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px dashed #d7ccc8; font-size: 1.05em; }
+.word-row-final:last-child { border-bottom: none; }
+.mini-sound-btn { width: 38px; height: 38px; border: none; border-radius: 50%; background: #27ae60; color: white; font-size: 1em; cursor: pointer; box-shadow: 0 4px 0 #1e8449; flex: 0 0 auto; }
+.mini-sound-btn:hover { transform: translateY(-2px); }
+.mini-sound-btn:active { transform: translateY(4px); box-shadow: none; }
+.mini-sound-btn:focus { outline: 3px solid #1e8449; outline-offset: 2px; }
+.drag-zone { width: 100%; height: 300px; position: relative; background: linear-gradient(to bottom, #aee9ff, #e0f7fa); border-radius: 18px; border: 4px dashed #00bcd4; overflow: hidden; touch-action: none; }
+.target-zone { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); font-size: 5.8em; animation: targetPulse 2s infinite; pointer-events: none; }
+.drag-item { position: absolute; font-size: 3.4em; cursor: grab; user-select: none; touch-action: none; z-index: 20; filter: drop-shadow(3px 3px 4px rgba(0,0,0,.25)); transform: scaleX(-1); }
+.drag-item:active { cursor: grabbing; transform: scaleX(-1) scale(1.2); }
+.sky-path-zone { width: 100%; height: 260px; position: relative; background: linear-gradient(to bottom, #8fd7ff, #cfefff); border-radius: 18px; border: 4px solid #3498db; overflow: hidden; }
+.swan-fly { position: absolute; left: 170px; top: 150px; font-size: 3.4em; transition: left .35s ease, top .35s ease; transform: scaleX(-1); filter: drop-shadow(3px 3px 4px rgba(0,0,0,.25)); }
+.arrow-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 16px; }
+@media (max-width: 600px) {
+  .container { padding: 14px; }
+  .card { padding: 20px 12px; border-radius: 20px; }
+  .instruction-text { font-size: 1.25em; }
+  .option-btn { padding: 12px 16px; font-size: 1.15em; min-width: 72px; }
+  .word-display { min-width: 170px; font-size: 1.8em; letter-spacing: .1em; }
+  .letter-btn { width: 48px; height: 48px; font-size: 1.5em; }
+  .intro-screen h1 { font-size: 2.2em; }
+  .heroes-row { font-size: 3.4em; gap: 12px; }
+  .btn-start { font-size: 1.45em; padding: 16px 28px; }
+  .title-quest { font-size: 1em; }
+  .stats-panel { min-width: 58px; font-size: .82em; }
+  .drag-item { font-size: 2.8em; }
+  .target-zone { font-size: 4.8em; }
+  .swan-fly { font-size: 2.8em; left: 120px; top: 140px; }
+}
+@media (min-width: 601px) and (max-width: 900px) {
+  .container { max-width: 720px; }
+  .instruction-text { font-size: 1.4em; }
+}
+@media (prefers-color-scheme: dark) {
+  body { background: #263238; color: #eceff1; }
+  .scene-bg { display: none; }
+  .card, .final-screen { background: #37474f; border-color: #f39c12; color: #eceff1; }
+  .instruction-text { color: #eceff1; }
+  .game-zone { background: #455a64; border-color: #78909c; }
+  .option-btn { background: #546e7a; color: #eceff1; border-color: #90a4ae; box-shadow: 0 5px 0 #263238; }
+  .option-btn:hover { background: #607d8b; }
+  .option-btn.correct { background: #2e7d32; border-color: #4caf50; color: white; }
+  .option-btn.wrong { background: #c62828; border-color: #ef5350; color: white; }
+  .letter-btn { background: #455a64; color: #eceff1; border-color: #90a4ae; box-shadow: 0 5px 0 #263238; }
+  .letter-btn.selected { background: #1976d2; color: white; }
+  .word-display { background: #263238; color: #eceff1; border-color: #78909c; }
+  .word-list-final { background: #455a64; border-color: #546e7a; }
+  .word-row-final { border-color: #78909c; }
+  .drag-zone { background: #37474f; border-color: #26c6da; }
+  .sky-path-zone { background: #37474f; border-color: #29b6f6; }
+}
+@keyframes driftCloud { from { transform: translateX(0); } to { transform: translateX(120vw); } }
+@keyframes moveStripes { from { background-position: 0 0; } to { background-position: 24px 0; } }
+@keyframes flyBounceRight { 0% { transform: translateY(-50%) scaleX(-1) translateY(0) rotate(-4deg); } 100% { transform: translateY(-50%) scaleX(-1) translateY(-7px) rotate(4deg); } }
+@keyframes starBurst { 0% { transform: scale(.4) rotate(-30deg); opacity: 0; } 60% { transform: scale(1.4) rotate(8deg); opacity: 1; } 100% { transform: scale(1.2) rotate(0); opacity: 1; } }
+@keyframes cardEnter { from { opacity: 0; transform: translateY(35px) scale(.94); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes cardExit { from { opacity: 1; transform: translateY(0) scale(1); } to { opacity: 0; transform: translateY(-30px) scale(.94); } }
+@keyframes correctPop { 0% { transform: scale(1); } 45% { transform: scale(1.12); } 100% { transform: scale(1); } }
+@keyframes wrongShake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
+@keyframes feedbackSlide { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes feedbackShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+@keyframes pulseStart { 0%, 100% { box-shadow: 0 9px 0 #a93226, 0 0 25px rgba(231,76,60,.35); } 50% { box-shadow: 0 9px 0 #a93226, 0 0 45px rgba(231,76,60,.65); } }
+@keyframes titleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes heroWave { 0%, 100% { transform: translateY(0) rotate(0); } 30% { transform: translateY(-12px) rotate(-6deg); } 70% { transform: translateY(-6px) rotate(6deg); } }
+@keyframes rotateReward { from { transform: rotate(0) scale(1); } 50% { transform: rotate(180deg) scale(1.12); } to { transform: rotate(360deg) scale(1); } }
+@keyframes targetPulse { 0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; } 50% { transform: translateX(-50%) scale(1.12); opacity: .82; } }
+@keyframes confettiFall { 0% { transform: translateY(-100vh) rotate(0); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+</style>
+</head>
+<body>
+<div class="scene-bg">
+  <div class="cloud-bg">☁️</div>
+  <div class="cloud-bg">☁️</div>
+  <div class="cloud-bg">☁️</div>
+  <div class="mountain">⛰️</div>
+  <div class="mountain">🏔️</div>
+  <div class="mountain">⛰️</div>
+</div>
+<div class="top-bar" id="topBar" style="display:none;">
+  <div class="title-quest">🦢 Sky Quest</div>
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="hero-fly" id="heroFly">🦢</div>
+  </div>
+  <div class="stats-panel">
+    <div id="statsText">0/20</div>
+    <div class="badges-row" id="badgesRow">
+      <span class="badge-icon">⭐</span><span class="badge-icon">⭐</span><span class="badge-icon">⭐</span><span class="badge-icon">⭐</span><span class="badge-icon">⭐</span>
+    </div>
+  </div>
+</div>
+<div class="container" id="container"></div>
+<script>
+var SkyQuestApp = {
+  steps: [
+    { type: 'intro' },
+    { type: 'listen', text: 'Послушай и выбери картинку', audio: 'Look at the swans', answer: '🦢' },
+    { type: 'choice', text: 'Что мы видим в небе?', options: ['🐟', '🦢', '🐕'], answer: '🦢' },
+    { type: 'spell', text: 'Собери слово', word: 'SWANS' },
+    { type: 'yesno', text: 'Can swans fly?', answer: 'yes' },
+    { type: 'count', text: 'Сколько лебедей? 🦢🦢🦢', options: ['2', '3', '4'], answer: '3' },
+    { type: 'match', text: 'Соедини слово и картинку', pairs: [['swans', '🦢'], ['sky', '☁️'], ['fly', '🪽']] },
+    { type: 'order', text: 'Расставь слова по порядку', words: ['Look', 'at', 'the', 'swans'], answer: 'Look at the swans' },
+    { type: 'pick', text: 'Что лишнее?', options: ['🦢', '🦆', '🚗'], answer: '🚗' },
+    { type: 'drag', text: 'Перетащи лебедя в небо', target: '🦢' },
+    { type: 'path', text: 'Проведи лебедя по небу', path: ['up', 'right', 'up', 'left'] },
+    { type: 'listen', text: 'Послушай и выбери действие', audio: 'They can fly', answer: '🪽' },
+    { type: 'choice', text: 'Что умеют делать лебеди?', options: ['🏊', '🪽', '🏃'], answer: '🪽' },
+    { type: 'spell', text: 'Собери слово', word: 'FLY' },
+    { type: 'yesno', text: 'Is it beautiful?', answer: 'yes' },
+    { type: 'count', text: 'Сколько облаков? ☁️☁️☁️☁️', options: ['3', '4', '5'], answer: '4' },
+    { type: 'match', text: 'Соедини фразу и картинку', pairs: [['Look at them', '👀'], ['Up in the sky', '☁️']] },
+    { type: 'order', text: 'Расставь слова по порядку', words: ['They', 'can', 'fly'], answer: 'They can fly' },
+    { type: 'pick', text: 'Что лишнее?', options: ['☁️', '🦢', '🐟'], answer: '🐟' },
+    { type: 'final' }
+  ],
+  currentStep: 0,
+  score: 0,
+  container: document.getElementById('container'),
+  topBar: document.getElementById('topBar'),
+  progressBar: document.getElementById('progressBar'),
+  heroFly: document.getElementById('heroFly'),
+  statsText: document.getElementById('statsText'),
+  badgesRow: document.getElementById('badgesRow').children,
+  currentAudio: null,
+  init: function() {
+    this.renderStep();
+  },
+  speak: function(textToSpeak) {
+    if (this.currentAudio) {
+      speechSynthesis.cancel();
+    }
+    var speechUtterance = new SpeechSynthesisUtterance(textToSpeak);
+    speechUtterance.lang = 'en-GB';
+    speechUtterance.rate = 0.85;
+    speechSynthesis.speak(speechUtterance);
+    this.currentAudio = speechUtterance;
+  },
+  updateProgress: function() {
+    var totalSteps = this.steps.length - 1;
+    var progressPercent = (this.currentStep / totalSteps) * 100;
+    this.progressBar.style.width = progressPercent + '%';
+    this.heroFly.style.left = 'calc(' + progressPercent + '% - 18px)';
+    this.statsText.innerText = this.currentStep + '/' + totalSteps;
+    var badgeCount = Math.floor(this.score / 3);
+    for (var badgeIndex = 0; badgeIndex < this.badgesRow.length; badgeIndex++) {
+      if (badgeIndex < badgeCount && !this.badgesRow[badgeIndex].classList.contains('earned')) {
+        this.badgesRow[badgeIndex].classList.add('earned');
+      }
+    }
+  },
+  confetti: function() {
+    var confettiEmojis = ['🎉', '✨', '🌟', '🦢', '☁️', '🪽'];
+    for (var confettiIndex = 0; confettiIndex < 40; confettiIndex++) {
+      var confettiPiece = document.createElement('div');
+      confettiPiece.innerText = confettiEmojis[Math.floor(Math.random() * confettiEmojis.length)];
+      confettiPiece.style.position = 'fixed';
+      confettiPiece.style.top = '-60px';
+      confettiPiece.style.left = Math.random() * 100 + 'vw';
+      confettiPiece.style.fontSize = (1.3 + Math.random() * 2) + 'em';
+      confettiPiece.style.zIndex = '1200';
+      confettiPiece.style.pointerEvents = 'none';
+      confettiPiece.style.animation = 'confettiFall ' + (2.3 + Math.random() * 2.8) + 's linear forwards';
+      document.body.appendChild(confettiPiece);
+      setTimeout(function(pieceToRemove) {
+        return function() {
+          if (pieceToRemove.parentNode) {
+            pieceToRemove.parentNode.removeChild(pieceToRemove);
+          }
+        };
+      }(confettiPiece), 5300);
+    }
+  },
+  renderStep: function() {
+    var app = this;
+    if (app.currentStep >= app.steps.length) {
+      return;
+    }
+    var step = app.steps[app.currentStep];
+    app.updateProgress();
+    if (step.type === 'intro') {
+      app.topBar.style.display = 'none';
+      app.container.innerHTML =
+        '<div class="intro-screen">' +
+        '<h1>🦢 Sky Quest</h1>' +
+        '<div class="intro-subtitle">Небесный театр</div>' +
+        '<div class="heroes-row"><span>🦢</span><span>👦</span><span>👧</span></div>' +
+        '<button class="btn-start" id="startBtn">Start!</button>' +
+        '</div>';
+      document.getElementById('startBtn').onclick = function() {
+        app.currentStep++;
+        app.topBar.style.display = 'flex';
+        app.renderStep();
+      };
+      return;
+    }
+    if (step.type === 'final') {
+      app.topBar.style.display = 'none';
+      app.confetti();
+      var finalWords = [
+        { en: 'swans', ipa: '/swɒnz/', ru: 'лебеди' },
+        { en: 'sky', ipa: '/skaɪ/', ru: 'небо' },
+        { en: 'fly', ipa: '/flaɪ/', ru: 'летать' },
+        { en: 'beautiful', ipa: '/ˈbjuːtɪf(ə)l/', ru: 'красивый' },
+        { en: 'Look at the swans', ipa: '/lʊk æt ðə swɒnz/', ru: 'Посмотри на лебедей' },
+        { en: 'They can fly', ipa: '/ðeɪ kæn flaɪ/', ru: 'Они умеют летать' },
+        { en: 'I can fly', ipa: '/aɪ kæn flaɪ/', ru: 'Я умею летать' }
+      ];
+      var wordListHtml = '';
+      for (var wordIndex = 0; wordIndex < finalWords.length; wordIndex++) {
+        wordListHtml +=
+          '<div class="word-row-final">' +
+          '<span><b>' + finalWords[wordIndex].en + '</b> ' + finalWords[wordIndex].ipa + ' — ' + finalWords[wordIndex].ru + '</span>' +
+          '<button class="mini-sound-btn" data-word="' + finalWords[wordIndex].en + '">🔊</button>' +
+          '</div>';
+      }
+      app.container.innerHTML =
+        '<div class="final-screen">' +
+        '<h1>Great Job!</h1>' +
+        '<div class="reward-icon">🦢</div>' +
+        '<p style="font-size:1.25em; margin-bottom:18px;">You can fly with English words!</p>' +
+        '<button class="sound-btn-main" id="finalAudio">Well done!</button>' +
+        '<div class="word-list-final">' + wordListHtml + '</div>' +
+        '<p style="font-size:1.35em; font-weight:bold;">Score: ' + app.score + '</p>' +
+        '<div class="nav-btns">' +
+        '<button class="nav-btn btn-back" id="backBtn">⬅️ Back</button>' +
+        '<button class="nav-btn btn-start" id="restartBtn" style="font-size:1.2em; padding:16px 28px;">🔄 Play Again</button>' +
+        '</div>' +
+        '</div>';
+      document.getElementById('finalAudio').onclick = function() {
+        app.speak('Well done!');
+      };
+      document.getElementById('backBtn').onclick = function() {
+        app.currentStep--;
+        app.renderStep();
+      };
+      document.getElementById('restartBtn').onclick = function() {
+        app.currentStep = 0;
+        app.score = 0;
+        app.renderStep();
+      };
+      var miniSoundButtons = document.querySelectorAll('.mini-sound-btn');
+      for (var miniSoundIndex = 0; miniSoundIndex < miniSoundButtons.length; miniSoundIndex++) {
+        (function(buttonElement) {
+          buttonElement.onclick = function() {
+            app.speak(buttonElement.getAttribute('data-word'));
+          };
+        })(miniSoundButtons[miniSoundIndex]);
+      }
+      return;
+    }
+    var cardHtml = '<div class="instruction-text">' + step.text + '</div>';
+    if (step.audio) {
+      cardHtml += '<button class="sound-btn-main" id="mainAudio">' + step.audio + '</button>';
+    }
+    cardHtml += '<div class="game-zone" id="gameZone"></div>';
+    cardHtml += '<div class="feedback" id="feedback"></div>';
+    cardHtml +=
+      '<div class="nav-btns">' +
+      '<button class="nav-btn btn-back" id="backBtn">⬅️</button>' +
+      '<button class="nav-btn btn-retry" id="retryBtn">🔄</button>' +
+      '<button class="nav-btn btn-next" id="nextBtn">➡️</button>' +
+      '</div>';
+    app.container.innerHTML = '<div class="card">' + cardHtml + '</div>';
+    var zone = document.getElementById('gameZone');
+    var feedbackArea = document.getElementById('feedback');
+    var retryButton = document.getElementById('retryBtn');
+    var nextButton = document.getElementById('nextBtn');
+    if (step.audio) {
+      document.getElementById('mainAudio').onclick = function() {
+        app.speak(step.audio);
+      };
+    }
+    document.getElementById('backBtn').onclick = function() {
+      if (app.currentStep > 1) {
+        app.currentStep--;
+        app.renderStep();
+      }
+    };
+    retryButton.onclick = function() {
+      app.renderStep();
+    };
+    nextButton.onclick = function() {
+      app.currentStep++;
+      app.renderStep();
+    };
+    var correct = function() {
+      feedbackArea.innerText = '✅ Correct!';
+      feedbackArea.className = 'feedback success';
+      app.speak('Well done!');
+      app.score++;
+      nextButton.style.display = 'inline-block';
+      retryButton.style.display = 'none';
+      app.updateProgress();
+    };
+    var wrong = function(elementToShake) {
+      feedbackArea.innerText = '❌ Try again!';
+      feedbackArea.className = 'feedback error';
+      app.speak('Try again!');
+      if (elementToShake) {
+        elementToShake.classList.add('wrong');
+      }
+      retryButton.style.display = 'inline-block';
+      setTimeout(function() {
+        feedbackArea.className = 'feedback';
+        if (elementToShake) {
+          elementToShake.classList.remove('wrong');
+        }
+      }, 650);
+    };
+    if (step.type === 'listen' || step.type === 'choice' || step.type === 'yesno' || step.type === 'count' || step.type === 'pick') {
+      var optionsList = [];
+      var correctAnswer = '';
+      if (step.type === 'listen') {
+        optionsList = step.options || ['🦢', '🐟', '🐕', '☁️', '🪽'];
+        correctAnswer = step.answer;
+      } else if (step.type === 'yesno') {
+        optionsList = ['Yes', 'No'];
+        correctAnswer = step.answer === 'yes' ? 'Yes' : 'No';
+      } else {
+        optionsList = step.options || [];
+        correctAnswer = step.answer;
+      }
+      optionsList.forEach(function(optionValue) {
+        var optionButton = document.createElement('button');
+        optionButton.className = 'option-btn';
+        optionButton.innerText = optionValue;
+        optionButton.onclick = function() {
+          if (optionValue === correctAnswer) {
+            optionButton.classList.add('correct');
+            correct();
+            var allOptionButtons = zone.querySelectorAll('.option-btn');
+            for (var optionIndex = 0; optionIndex < allOptionButtons.length; optionIndex++) {
+              allOptionButtons[optionIndex].disabled = true;
+            }
+          } else {
+            wrong(optionButton);
+          }
+        };
+        zone.appendChild(optionButton);
+      });
+    }
+    if (step.type === 'spell') {
+      var targetLetters = step.word.split('');
+      var shuffledLetters = targetLetters.slice().sort(function() {
+        return 0.5 - Math.random();
+      });
+      var selectedLetters = [];
+      var wordDisplay = document.createElement('div');
+      wordDisplay.className = 'word-display';
+      zone.appendChild(wordDisplay);
+      shuffledLetters.forEach(function(letterValue) {
+        var letterButton = document.createElement('button');
+        letterButton.className = 'letter-btn option-btn';
+        letterButton.innerText = letterValue;
+        letterButton.onclick = function() {
+          if (letterButton.disabled) {
+            return;
+          }
+          selectedLetters.push(letterValue);
+          letterButton.disabled = true;
+          letterButton.classList.add('selected');
+          wordDisplay.innerText = selectedLetters.join('');
+          if (selectedLetters.length === targetLetters.length) {
+            if (selectedLetters.join('') === step.word) {
+              correct();
+            } else {
+              wrong(wordDisplay);
+              setTimeout(function() {
+                selectedLetters = [];
+                wordDisplay.innerText = '';
+                var letterButtons = zone.querySelectorAll('.letter-btn');
+                for (var letterIndex = 0; letterIndex < letterButtons.length; letterIndex++) {
+                  letterButtons[letterIndex].disabled = false;
+                  letterButtons[letterIndex].classList.remove('selected');
+                }
+              }, 700);
+            }
+          }
+        };
+        zone.appendChild(letterButton);
+      });
+    }
+    if (step.type === 'order') {
+      var targetWords = step.words.slice();
+      var shuffledWords = targetWords.slice().sort(function() {
+        return 0.5 - Math.random();
+      });
+      var selectedWords = [];
+      var sentenceDisplay = document.createElement('div');
+      sentenceDisplay.className = 'word-display';
+      sentenceDisplay.style.fontSize = '1.8em';
+      sentenceDisplay.style.letterSpacing = 'normal';
+      zone.appendChild(sentenceDisplay);
+      shuffledWords.forEach(function(wordValue) {
+        var wordButton = document.createElement('button');
+        wordButton.className = 'option-btn';
+        wordButton.innerText = wordValue;
+        wordButton.onclick = function() {
+          if (wordButton.disabled) {
+            return;
+          }
+          selectedWords.push(wordValue);
+          wordButton.disabled = true;
+          sentenceDisplay.innerText = selectedWords.join(' ');
+          if (selectedWords.length === targetWords.length) {
+            if (selectedWords.join(' ') === step.answer) {
+              correct();
+            } else {
+              wrong(sentenceDisplay);
+              setTimeout(function() {
+                selectedWords = [];
+                sentenceDisplay.innerText = '';
+                var wordButtons = zone.querySelectorAll('.option-btn');
+                for (var wordIndex = 0; wordIndex < wordButtons.length; wordIndex++) {
+                  wordButtons[wordIndex].disabled = false;
+                }
+              }, 700);
+            }
+          }
+        };
+        zone.appendChild(wordButton);
+      });
+    }
+    if (step.type === 'match') {
+      var matchPairs = step.pairs;
+      var leftColumn = document.createElement('div');
+      var rightColumn = document.createElement('div');
+      leftColumn.className = 'match-col';
+      rightColumn.className = 'match-col';
+      zone.appendChild(leftColumn);
+      zone.appendChild(rightColumn);
+      var selectedLeftButton = null;
+      var matchedCount = 0;
+      matchPairs.forEach(function(pairItem) {
+        var leftButton = document.createElement('button');
+        leftButton.className = 'option-btn';
+        leftButton.style.width = '100%';
+        leftButton.innerText = pairItem[0];
+        leftButton.onclick = function() {
+          if (leftButton.disabled) {
+            return;
+          }
+          if (selectedLeftButton) {
+            selectedLeftButton.classList.remove('selected');
+          }
+          selectedLeftButton = leftButton;
+          leftButton.classList.add('selected');
+        };
+        leftColumn.appendChild(leftButton);
+      });
+      var rightPairs = matchPairs.slice().sort(function() {
+        return 0.5 - Math.random();
+      });
+      rightPairs.forEach(function(pairItem) {
+        var rightButton = document.createElement('button');
+        rightButton.className = 'option-btn';
+        rightButton.style.width = '100%';
+        rightButton.innerText = pairItem[1];
+        rightButton.onclick = function() {
+          if (!selectedLeftButton || rightButton.disabled) {
+            return;
+          }
+          var matchingPair = null;
+          for (var pairIndex = 0; pairIndex < matchPairs.length; pairIndex++) {
+            if (matchPairs[pairIndex][0] === selectedLeftButton.innerText) {
+              matchingPair = matchPairs[pairIndex];
+              break;
+            }
+          }
+          if (matchingPair && matchingPair[1] === pairItem[1]) {
+            selectedLeftButton.classList.add('correct');
+            rightButton.classList.add('correct');
+            selectedLeftButton.disabled = true;
+            rightButton.disabled = true;
+            selectedLeftButton = null;
+            matchedCount++;
+            if (matchedCount === matchPairs.length) {
+              correct();
+            }
+          } else {
+            wrong(rightButton);
+          }
+        };
+        rightColumn.appendChild(rightButton);
+      });
+    }
+    if (step.type === 'drag') {
+      zone.innerHTML = '<div class="drag-zone" id="dragZone"><div class="target-zone">☁️</div></div>';
+      var dragZone = document.getElementById('dragZone');
+      var targetZone = dragZone.querySelector('.target-zone');
+      var dragItems = ['🦢', '🐟', '🐕'];
+      dragItems.forEach(function(dragItemValue, dragItemIndex) {
+        var dragItem = document.createElement('div');
+        dragItem.className = 'drag-item';
+        dragItem.innerText = dragItemValue;
+        dragItem.style.left = (12 + dragItemIndex * 30) + '%';
+        dragItem.style.top = '16%';
+        dragZone.appendChild(dragItem);
+        var isDragging = false;
+        var startX = 0;
+        var startY = 0;
+        var initialX = 0;
+        var initialY = 0;
+        var originalLeft = dragItem.style.left;
+        var originalTop = dragItem.style.top;
+        function dragStart(event) {
+          isDragging = true;
+          startX = event.touches ? event.touches[0].clientX : event.clientX;
+          startY = event.touches ? event.touches[0].clientY : event.clientY;
+          initialX = dragItem.offsetLeft;
+          initialY = dragItem.offsetTop;
+          document.addEventListener('mousemove', dragMove);
+          document.addEventListener('touchmove', dragMove);
+          document.addEventListener('mouseup', dragEnd);
+          document.addEventListener('touchend', dragEnd);
+        }
+        function dragMove(event) {
+          if (!isDragging) {
+            return;
+          }
+          event.preventDefault();
+          var clientX = event.touches ? event.touches[0].clientX : event.clientX;
+          var clientY = event.touches ? event.touches[0].clientY : event.clientY;
+          dragItem.style.left = (initialX + clientX - startX) + 'px';
+          dragItem.style.top = (initialY + clientY - startY) + 'px';
+        }
+        function dragEnd() {
+          if (!isDragging) {
+            return;
+          }
+          isDragging = false;
+          document.removeEventListener('mousemove', dragMove);
+          document.removeEventListener('touchmove', dragMove);
+          document.removeEventListener('mouseup', dragEnd);
+          document.removeEventListener('touchend', dragEnd);
+          var itemRect = dragItem.getBoundingClientRect();
+          var targetRect = targetZone.getBoundingClientRect();
+          var isOverTarget = !(itemRect.right < targetRect.left || itemRect.left > targetRect.right || itemRect.bottom < targetRect.top || itemRect.top > targetRect.bottom);
+          if (dragItemValue === step.target && isOverTarget) {
+            correct();
+            dragItem.style.pointerEvents = 'none';
+          } else {
+            wrong(dragItem);
+            dragItem.style.left = originalLeft;
+            dragItem.style.top = originalTop;
+          }
+        }
+        dragItem.addEventListener('mousedown', dragStart);
+        dragItem.addEventListener('touchstart', dragStart);
+      });
+    }
+    if (step.type === 'path') {
+      zone.innerHTML = '<div class="sky-path-zone" id="skyPathZone"><div class="swan-fly">🦢</div></div><div class="arrow-row" id="arrowRow"></div>';
+      var swanElement = zone.querySelector('.swan-fly');
+      var arrowRow = document.getElementById('arrowRow');
+      var positionX = 170;
+      var positionY = 150;
+      var pathIndex = 0;
+      function setPosition() {
+        swanElement.style.left = positionX + 'px';
+        swanElement.style.top = positionY + 'px';
+      }
+      setPosition();
+      var arrowDirections = ['up', 'left', 'right', 'down'];
+      var arrowSymbols = { up: '⬆️', left: '⬅️', right: '➡️', down: '⬇️' };
+      arrowDirections.forEach(function(directionName) {
+        var arrowButton = document.createElement('button');
+        arrowButton.className = 'option-btn';
+        arrowButton.innerText = arrowSymbols[directionName];
+        arrowButton.onclick = function() {
+          if (directionName === step.path[pathIndex]) {
+            pathIndex++;
+            if (directionName === 'up') {
+              positionY -= 50;
+            }
+            if (directionName === 'down') {
+              positionY += 50;
+            }
+            if (directionName === 'left') {
+              positionX -= 50;
+            }
+            if (directionName === 'right') {
+              positionX += 50;
+            }
+            setPosition();
+            if (pathIndex >= step.path.length) {
+              correct();
+              var arrowButtons = arrowRow.querySelectorAll('.option-btn');
+              for (var arrowIndex = 0; arrowIndex < arrowButtons.length; arrowIndex++) {
+                arrowButtons[arrowIndex].disabled = true;
+              }
+            }
+          } else {
+            wrong(arrowButton);
+          }
+        };
+        arrowRow.appendChild(arrowButton);
+      });
+    }
+  }
+};
+SkyQuestApp.init();
+</script>
+</body>
+</html>

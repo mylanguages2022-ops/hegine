@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик-медали — Now I Know</title>
+
+<meta property="og:title" content="Словарик-медали — Now I Know">
+<meta property="og:description" content="Говорящие медали повторительного урока Spotlight: игрушки, цвета, числа и фразы-чемпионы модуля 7. Британское произношение по клику.">
+<meta property="og:image" content="https://spotlight-lessons.example.com/og/7f-dictionary-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Медали со словами модуля 7">
+<meta property="og:url" content="https://spotlight-lessons.example.com/7f/dictionary">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Spotlight — уроки для родителя и ребёнка">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Интерактивный словарик повторения модуля 7 в виде медалей с озвучкой en-GB: игрушки, цвета, числа и фразы.">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
+    background-color:#eef4fb;
+    background-image:
+      radial-gradient(circle at 12% 18%, rgba(224,82,82,.10) 0 6px, transparent 7px),
+      radial-gradient(circle at 78% 32%, rgba(58,110,168,.10) 0 6px, transparent 7px),
+      radial-gradient(circle at 42% 76%, rgba(242,181,60,.14) 0 6px, transparent 7px);
+    background-size:220px 220px;
+    color:#22303e;padding:30px 14px 60px;min-height:100vh;
+  }
+  .wrap{max-width:920px;margin:0 auto}
+  header{text-align:center;margin-bottom:24px}
+  header h1{
+    font-size:clamp(1.5rem,4.5vw,2.3rem);color:#1f4e79;letter-spacing:.3px;
+  }
+  header h1::before{content:'🏅 ';}
+  header p{margin-top:8px;font-size:1rem;color:#5a6b7c;line-height:1.5}
+  .hint{
+    background:#fff;border:3px dashed #f2b53c;border-radius:14px;
+    padding:14px 18px;margin:18px 0 26px;font-size:.97rem;color:#7a5a10;line-height:1.55;
+  }
+  .filters{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:34px}
+  .filters button{
+    border:2px solid #b8cfe4;background:#fff;color:#1f4e79;
+    padding:9px 18px;border-radius:999px;font-size:.92rem;font-weight:700;
+    cursor:pointer;font-family:inherit;transition:.18s;
+  }
+  .filters button:hover{background:#eef4fb;transform:translateY(-2px)}
+  .filters button.active{background:#1f4e79;border-color:#1f4e79;color:#fff;box-shadow:0 4px 0 #123350}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:34px 22px}
+
+  /* ---------- МЕДАЛЬ ---------- */
+  .card{
+    background:#fff;border-radius:14px;
+    padding:52px 14px 14px;cursor:pointer;position:relative;
+    transition:.18s;box-shadow:0 5px 0 rgba(31,78,121,.25);
+    border:2px solid #b8cfe4;
+  }
+  .card::before{
+    content:'';position:absolute;top:-14px;left:50%;width:52px;height:44px;
+    transform:translateX(-50%);
+    background:linear-gradient(90deg,#e05252 0 50%,#3a6ea8 50% 100%);
+    clip-path:polygon(0 0,100% 0,50% 100%);
+  }
+  .card:hover{transform:translateY(-5px);box-shadow:0 9px 0 rgba(31,78,121,.25)}
+  .card:active{transform:translateY(0);box-shadow:0 3px 0 rgba(31,78,121,.25)}
+  .card.playing{animation:swing .55s}
+  @keyframes swing{0%,100%{transform:rotate(0)}25%{transform:rotate(-3deg)}75%{transform:rotate(3deg)}}
+  .card .medalring{
+    width:74px;height:74px;margin:0 auto 10px;border-radius:50%;
+    border:4px double #f2b53c;background:#fff8e4;
+    display:flex;align-items:center;justify-content:center;font-size:2.1rem;
+  }
+  .card .en{
+    font-size:1.14rem;font-weight:700;color:#1f4e79;text-align:center;
+    display:block;line-height:1.25;word-break:break-word;
+  }
+  .card .tr{
+    display:block;text-align:center;font-size:.85rem;color:#7a8b99;
+    margin-top:4px;font-family:"Segoe UI",Arial,sans-serif;letter-spacing:.2px;
+  }
+  .card .ru{
+    display:block;text-align:center;font-size:1rem;color:#3c5567;
+    margin-top:8px;font-weight:600;
+  }
+  .speak-btn{
+    position:absolute;bottom:10px;right:10px;width:38px;height:38px;border-radius:50%;
+    border:2px solid #f2b53c;background:#fff8e4;color:#b08020;font-size:1rem;cursor:pointer;
+    box-shadow:0 2px 0 #b08020;transition:.15s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .speak-btn:hover{background:#ffefc0;transform:scale(1.1) rotate(-8deg)}
+  .speak-btn:active{transform:scale(.94)}
+  .cat-toy .medalring{border-color:#e05252;background:#fff0f0}
+  .cat-toy .en{color:#a03030}
+  .cat-colour .medalring{border-color:#3a6ea8;background:#eef4fb}
+  .cat-colour .en{color:#1f4e79}
+  .cat-num .medalring{border-color:#5a8a40;background:#f0f8ea}
+  .cat-num .en{color:#3a6a20}
+  .cat-phrase .medalring{border-color:#f2b53c;background:#fff8e4}
+  .cat-phrase .en{color:#8a6a10}
+  .empty{
+    text-align:center;padding:40px 20px;color:#7a8b99;font-size:1.05rem;
+    background:#fff;border-radius:14px;border:3px dashed #b8cfe4;
+  }
+  footer{text-align:center;margin-top:40px;font-size:.9rem;color:#7a8b99;line-height:1.6}
+  @media (max-width:560px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:28px 14px}
+    .card{padding-top:46px}
+    .card .medalring{width:60px;height:60px;font-size:1.7rem}
+    .card .en{font-size:1rem}
+    .speak-btn{width:32px;height:32px;font-size:.9rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Фестиваль чемпионов</h1>
+    <p>словарик-медали · всё, что мы выиграли за модуль 7</p>
+  </header>
+
+  <div class="hint">
+    🔊 Нажмите на медаль — она озвучит слово британским голосом. Играйте в награждение: ребёнок называет слово сам, без подсказки — и только потом нажимает, чтобы проверить себя и «повесить» медаль на шею.
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">На этой полке медалей пока нет.</div>
+
+  <footer>
+    Spotlight · Module 7 · Now I Know<br>
+    Медали можно переслушивать бесконечно: золото не стирается.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var RATE = 0.85;
+  var voices = [];
+
+  function loadVoices(){
+    if(!('speechSynthesis' in window)) return;
+    voices = window.speechSynthesis.getVoices() || [];
+  }
+  loadVoices();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    setTimeout(loadVoices, 300);
+    setTimeout(loadVoices, 1200);
+  }
+
+  function pickVoice(){
+    if(!voices.length) loadVoices();
+    var v;
+    v = voices.find(function(x){ return x.lang === 'en-GB'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en-gb') === 0; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang === 'en-US'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en') === 0; });
+    return v || null;
+  }
+
+  var speakingCard = null;
+
+  function speak(text, cardEl){
+    if(!('speechSynthesis' in window)){
+      if(cardEl) flash(cardEl);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    if(speakingCard){ speakingCard.classList.remove('playing'); speakingCard = null; }
+
+    var u = new SpeechSynthesisUtterance(text);
+    var v = pickVoice();
+    if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+    u.rate = RATE;
+    u.pitch = 1.05;
+    u.volume = 1;
+
+    if(cardEl){
+      cardEl.classList.add('playing');
+      speakingCard = cardEl;
+      u.onend = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+      u.onerror = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+    }
+    window.speechSynthesis.speak(u);
+  }
+
+  function flash(el){
+    el.classList.add('playing');
+    setTimeout(function(){ el.classList.remove('playing'); }, 600);
+  }
+
+  var CATS = {
+    all:    '🏅 Все медали',
+    toy:    '🧸 Игрушки',
+    colour: '🎨 Цвета',
+    num:    '🔢 Числа',
+    phrase: '🎤 Фразы-чемпионы'
+  };
+
+  var WORDS = [
+    {c:'toy', e:'⚽', en:'ball',       ipa:'/bɔːl/',        ru:'мяч'},
+    {c:'toy', e:'🪁', en:'kite',       ipa:'/kaɪt/',        ru:'воздушный змей'},
+    {c:'toy', e:'🚗', en:'car',        ipa:'/kɑː/',         ru:'машинка'},
+    {c:'toy', e:'🚂', en:'train',      ipa:'/treɪn/',       ru:'поезд'},
+    {c:'toy', e:'🧸', en:'teddy bear', ipa:'/ˈtedi beə/',   ru:'плюшевый мишка'},
+    {c:'toy', e:'🪆', en:'doll',       ipa:'/dɒl/',         ru:'кукла'},
+    {c:'toy', e:'✈️', en:'plane',     ipa:'/pleɪn/',       ru:'самолёт'},
+    {c:'toy', e:'🛥️', en:'boat',      ipa:'/bəʊt/',        ru:'лодка'},
+
+    {c:'colour', e:'🔴', en:'red',    ipa:'/red/',        ru:'красный'},
+    {c:'colour', e:'🔵', en:'blue',   ipa:'/bluː/',       ru:'синий'},
+    {c:'colour', e:'🟡', en:'yellow', ipa:'/ˈjeləʊ/',     ru:'жёлтый'},
+    {c:'colour', e:'🟢', en:'green',  ipa:'/ɡriːn/',      ru:'зелёный'},
+    {c:'colour', e:'🌸', en:'pink',   ipa:'/pɪŋk/',       ru:'розовый'},
+
+    {c:'num', e:'6️⃣', en:'six',   ipa:'/sɪks/',    ru:'шесть'},
+    {c:'num', e:'7️⃣', en:'seven', ipa:'/ˈsevən/',  ru:'семь'},
+    {c:'num', e:'8️⃣', en:'eight', ipa:'/eɪt/',     ru:'восемь'},
+    {c:'num', e:'9️⃣', en:'nine',  ipa:'/naɪn/',    ru:'девять'},
+    {c:'num', e:'🔟', en:'ten',   ipa:'/ten/',      ru:'десять'},
+
+    {c:'phrase', e:'🔢', en:'How many?',                 ipa:'/haʊ ˈmeni/',               ru:'сколько?'},
+    {c:'phrase', e:'🎨', en:'What colour is this?',      ipa:'/wɒt ˈkʌlə ɪz ðɪs/',        ru:'какого цвета это?'},
+    {c:'phrase', e:'🔍', en:"Where's the rubber?",       ipa:'/weəz ðə ˈrʌbə/',            ru:'где ластик?'},
+    {c:'phrase', e:'🗂️', en:"It's in the pencil case.", ipa:'/ɪts n ðə ˈpensl keɪs/',   ru:'он в пенале'},
+    {c:'phrase', e:'⚽', en:"I've got seven balls.",     ipa:'/aɪv ɡɒt sevən bɔlz/',     ru:'у меня семь мячей'},
+    {c:'phrase', e:'🚂', en:"Larry's got a train.",      ipa:'/ˈlæriz ɡɒt ə treɪn/',       ru:'у Ларри есть поезд'},
+    {c:'phrase', e:'💚', en:'I like my kite.',           ipa:'/aɪ laɪk ma kaɪt/',         ru:'мне нравится мой воздушный змей'},
+    {c:'phrase', e:'🏆', en:'I can!',                    ipa:'/aɪ kæn/',                   ru:'я могу!'}
+  ];
+
+  var filtersBox = document.getElementById('filters');
+  var current = 'all';
+
+  Object.keys(CATS).forEach(function(key){
+    var b = document.createElement('button');
+    b.textContent = CATS[key];
+    b.dataset.cat = key;
+    if(key === 'all') b.classList.add('active');
+    b.addEventListener('click', function(){
+      current = key;
+      Array.prototype.forEach.call(filtersBox.children, function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      render();
+    });
+    filtersBox.appendChild(b);
+  });
+
+  var grid  = document.getElementById('grid');
+  var empty = document.getElementById('empty');
+
+  function render(){
+    grid.innerHTML = '';
+    var list = WORDS.filter(function(w){ return current === 'all' || w.c === current; });
+    empty.style.display = list.length ? 'none' : 'block';
+
+    list.forEach(function(w){
+      var card = document.createElement('div');
+      card.className = 'card cat-' + w.c;
+      card.setAttribute('role','button');
+      card.setAttribute('tabindex','0');
+
+      var ring = document.createElement('div');
+      ring.className = 'medalring';
+      ring.textContent = w.e;
+
+      var en = document.createElement('span');
+      en.className = 'en';
+      en.textContent = w.en;
+
+      var tr = document.createElement('span');
+      tr.className = 'tr';
+      tr.textContent = w.ipa;
+
+      var ru = document.createElement('span');
+      ru.className = 'ru';
+      ru.textContent = w.ru;
+
+      var sp = document.createElement('button');
+      sp.className = 'speak-btn';
+      sp.innerHTML = '🔊';
+      sp.title = 'Прослушать произношение';
+      sp.setAttribute('aria-label','Прослушать ' + w.en);
+      sp.addEventListener('click', function(ev){
+        ev.stopPropagation();
+        speak(w.en, card);
+      });
+
+      card.appendChild(ring);
+      card.appendChild(en);
+      card.appendChild(tr);
+      card.appendChild(ru);
+      card.appendChild(sp);
+
+      card.addEventListener('click', function(){ speak(w.en, card); });
+      card.addEventListener('keydown', function(ev){
+        if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); speak(w.en, card); }
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  render();
+
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = function(){ loadVoices(); };
+  }
+})();
+</script>
+</body>
+</html>

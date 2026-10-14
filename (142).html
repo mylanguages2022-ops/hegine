@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>London Zoo Quest - Spotlight Starter</title>
+    <meta property="og:title" content="London Zoo Quest - Spotlight Starter">
+    <meta property="og:description" content="Интерактивный квест для закрепления лексики урока London Zoo.">
+    <meta property="og:image" content="https://missanytka1994-ops.github.io/spotlightstarter/images/lesson-3-2-quest-og.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://missanytka1994-ops.github.io/spotlightstarter/lesson-3-2-quest.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:site_name" content="Spotlight Starter">
+    <meta name="twitter:card" content="summary_large_image">
+    <style>
+        /* ==========================================================================
+           BASE STYLES & RESET
+           ========================================================================== */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e8f5e9;
+            color: #2c3e50;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        /* ==========================================================================
+           CONTAINER & LAYOUT
+           ========================================================================== */
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 28px 34px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        /* ==========================================================================
+           PROGRESS BAR & TRACK
+           ========================================================================== */
+        .progress-container {
+            margin-bottom: 36px;
+            padding-top: 20px;
+        }
+
+        .progress-track {
+            height: 20px;
+            background: #e0e0e0;
+            border-radius: 10px;
+            position: relative;
+            border: 2px solid #8d6e63;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #81c784, #4caf50);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .progress-train {
+            position: absolute;
+            top: -14px;
+            left: 0%;
+            font-size: 28px;
+            transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(-50%);
+            z-index: 10;
+        }
+
+        /* ==========================================================================
+           STAGE & CONTENT STYLING
+           ========================================================================== */
+        .stage {
+            padding: 44px 0;
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .stage.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .step-tag {
+            display: inline-block;
+            background: #81c784;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .mech-tag {
+            display: inline-block;
+            background: #fff3e0;
+            color: #e65100;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 16px;
+            margin-left: 8px;
+        }
+
+        .hero-emoji {
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #2e7d32;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .instruction {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 28px;
+            color: #37474f;
+        }
+
+        /* ==========================================================================
+           OPTIONS & BUTTONS
+           ========================================================================== */
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: #f1f8e9;
+            border: 2px solid #81c784;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+            color: #2c3e50;
+        }
+
+        .option-btn:hover:not(:disabled) {
+            background: #c8e6c9;
+            transform: translateX(4px);
+        }
+
+        .option-btn:disabled {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        .option-btn.correct {
+            background: #a5d6a7;
+            border-color: #4caf50;
+            color: #1b5e20;
+            font-weight: bold;
+        }
+
+        .option-btn.wrong {
+            background: #ffcdd2;
+            border-color: #f44336;
+            color: #b71c1c;
+        }
+
+        .speak-quest-btn {
+            background: #2196f3;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+            cursor: pointer;
+            vertical-align: middle;
+            margin-left: 10px;
+            transition: background 0.2s;
+        }
+
+        .speak-quest-btn:hover {
+            background: #1976d2;
+        }
+
+        /* ==========================================================================
+           FEEDBACK & NAVIGATION
+           ========================================================================== */
+        .feedback {
+            margin-top: 24px;
+            padding: 16px;
+            border-radius: 8px;
+            display: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .feedback.good {
+            background: #e8f5e9;
+            color: #2e7d32;
+            display: block;
+            border-left: 4px solid #4caf50;
+        }
+
+        .feedback.bad {
+            background: #ffebee;
+            color: #c62828;
+            display: block;
+            border-left: 4px solid #f44336;
+        }
+
+        .nav-buttons {
+            margin-top: 34px;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .nav-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            background: #bdbdbd;
+            color: white;
+            transition: background 0.2s;
+        }
+
+        .nav-btn.primary {
+            background: #4caf50;
+            font-weight: bold;
+        }
+
+        .nav-btn:hover {
+            opacity: 0.9;
+        }
+
+        .stars {
+            font-size: 24px;
+            color: #ffc107;
+            margin-top: 20px;
+            text-align: right;
+            font-weight: bold;
+        }
+
+        /* ==========================================================================
+           FINAL SCREEN STYLING
+           ========================================================================== */
+        .final-screen {
+            text-align: center;
+            padding: 44px 0;
+            display: none;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        .final-screen.active {
+            display: block;
+        }
+
+        .trophy {
+            font-size: 80px;
+            margin-bottom: 20px;
+            animation: starSpin 3s infinite linear;
+        }
+
+        @keyframes starSpin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(10deg) scale(1.1); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+
+        .vocab-list {
+            text-align: left;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f9fbe7;
+            border-radius: 8px;
+            border: 1px solid #dce775;
+        }
+
+        .vocab-item {
+            padding: 6px 0;
+            border-bottom: 1px dotted #9e9e9e;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vocab-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .footer-note {
+            margin-top: 40px;
+            text-align: center;
+            color: #757575;
+            font-size: 14px;
+        }
+
+        /* ==========================================================================
+           RESPONSIVE DESIGN
+           ========================================================================== */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            .stage {
+                padding: 36px 0;
+            }
+            h2 {
+                font-size: 20px;
+            }
+            .instruction {
+                font-size: 16px;
+            }
+            .option-btn {
+                font-size: 16px;
+                padding: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress-container">
+            <div class="progress-track">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-train" id="progressTrain">🚂</div>
+            </div>
+        </div>
+
+        <div id="questArea"></div>
+
+        <div class="final-screen" id="finalScreen">
+            <div class="trophy">🏆</div>
+            <h2>Экскурсия завершена!</h2>
+            <p>Вы нашли всех животных и заработали <span id="finalStars"></span> звёзд!</p>
+            <div class="vocab-list" id="finalVocab"></div>
+            <button class="nav-btn primary" style="margin-top: 28px;" onclick="location.reload()">Пройти заново</button>
+        </div>
+
+        <div class="footer-note">Spotlight Starter • London Zoo Quest</div>
+    </div>
+
+    <script>
+        // ==========================================================================
+        // VOCABULARY DATA
+        // ==========================================================================
+        const vocabulary = [
+            { en: "cat", ipa: "/kæt/" },
+            { en: "dog", ipa: "/dɒɡ/" },
+            { en: "rabbit", ipa: "/ˈræb.ɪt/" },
+            { en: "tortoise", ipa: "/ˈtɔː.təs/" },
+            { en: "penguin", ipa: "/ˈpeŋ.ɡwɪn/" },
+            { en: "bird", ipa: "/bɜːd/" },
+            { en: "duck", ipa: "/dʌk/" },
+            { en: "mouse", ipa: "/maʊs/" },
+            { en: "train", ipa: "/treɪn/" },
+            { en: "plane", ipa: "/pleɪn/" },
+            { en: "boat", ipa: "/bəʊt/" },
+            { en: "car", ipa: "/kɑːr/" },
+            { en: "Look! A penguin!", ipa: "/lʊk! ə ˈpeŋ.ɡwɪn!/" },
+            { en: "What animals can you see?", ipa: "/wɒt ˈæn.ɪ.məlz kæn juː siː?/" }
+        ];
+
+        // ==========================================================================
+        // QUEST STEPS DATA (30 detailed steps)
+        // ==========================================================================
+        const steps = [
+            { step: 1, mech: "intro", emoji: "🎟️", title: "Билет в зоопарк", instruction: "Добро пожаловать в London Zoo! Нажми 'Дальше', чтобы начать экскурсию.", options: ["Начать"], correct: 0, feedbackGood: "Отлично! Поехали!", feedbackBad: "Нажми 'Начать'." },
+            { step: 2, mech: "scene", emoji: "🚂", title: "Дорога до зоопарка", instruction: "На чём Larry и Lulu приехали в зоопарк?", options: ["train", "plane", "boat"], correct: 0, feedbackGood: "Верно! Это поезд.", feedbackBad: "Посмотри на картинку внимательнее." },
+            { step: 3, mech: "choice", emoji: "🐧", title: "У главного входа", instruction: "Кого дети увидели первым у ворот?", options: ["penguin", "mouse", "tortoise"], correct: 0, feedbackGood: "Да, это пингвин!", feedbackBad: "Попробуй ещё раз." },
+            { step: 4, mech: "listen", emoji: "🦆", title: "Звуки пруда", instruction: "Послушай и выбери, кто это говорит.", text: "quack quack", options: ["duck", "bird", "cat"], correct: 0, feedbackGood: "Правильно, это утка!", feedbackBad: "Это звук утки." },
+            { step: 5, mech: "spell", emoji: "🐰", title: "Табличка у вольера", instruction: "Как правильно пишется 'кролик'?", options: ["rabbit", "rabit", "rabbet"], correct: 0, feedbackGood: "Отличное знание букв!", feedbackBad: "Обрати внимание на удвоенную 'b'." },
+            { step: 6, mech: "count", emoji: "🐦", title: "Считаем птиц", instruction: "Посмотри на картинку. Сколько птиц (bird) на дереве?", options: ["one", "two", "three"], correct: 2, feedbackGood: "Верно, три птицы!", feedbackBad: "Посчитай ещё раз." },
+            { step: 7, mech: "match", emoji: "🐢", title: "Кто быстрее?", instruction: "Сопоставь: кто движется медленнее?", options: ["tortoise", "train", "plane"], correct: 0, feedbackGood: "Да, черепаха очень медленная.", feedbackBad: "Поезд и самолёт быстрые." },
+            { step: 8, mech: "order", emoji: "📝", title: "Фраза для гида", instruction: "Выбери правильный порядок слов: I / see / a / dog", options: ["I see a dog", "see I a dog", "a dog see I"], correct: 0, feedbackGood: "Идеальный порядок слов!", feedbackBad: "Подлежащее идёт первым." },
+            { step: 9, mech: "pick", emoji: "🎒", title: "Собираем рюкзак", instruction: "Выбери группу, где ТОЛЬКО животные:", options: ["cat, dog, rabbit", "cat, car, boat", "plane, train, mouse"], correct: 0, feedbackGood: "Верно, это все животные.", feedbackBad: "В других группах есть транспорт." },
+            { step: 10, mech: "yesno", emoji: "🐭", title: "Проверка внимания", instruction: "Это черепаха (tortoise)?", text: "mouse", options: ["Yes", "No"], correct: 1, feedbackGood: "Правильно, это не черепаха.", feedbackBad: "Это мышь, а не черепаха." },
+            { step: 11, mech: "nearfar", emoji: "🌊", title: "Где пингвин?", instruction: "The penguin is ___ the water.", options: ["near", "far"], correct: 0, feedbackGood: "Да, он рядом с водой.", feedbackBad: "Пингвины любят быть у воды." },
+            { step: 12, mech: "twin", emoji: "👯", title: "Найди пару", instruction: "Какое слово означает то же, что и 'лодка'?", options: ["boat", "car", "bird"], correct: 0, feedbackGood: "Отлично, boat — это лодка.", feedbackBad: "Car — это машина, bird — птица." },
+            { step: 13, mech: "cage", emoji: "🦜", title: "Чей это дом?", instruction: "Кто живет в этом вольере? (Слушай)", text: "tweet tweet", options: ["bird", "dog", "rabbit"], correct: 0, feedbackGood: "Верно, это птица!", feedbackBad: "Этот звук издаёт птица." },
+            { step: 14, mech: "mirror", emoji: "🪞", title: "Зеркало слов", instruction: "Прочитай слово наоборот: 't-a-c'", options: ["cat", "car", "duck"], correct: 0, feedbackGood: "Молодец, это cat!", feedbackBad: "Прочитай буквы в обратном порядке." },
+            { step: 15, mech: "face", emoji: "😲", title: "Эмоции Lulu", instruction: "Lulu увидела пингвина и удивилась. Что она скажет?", options: ["Look! A penguin!", "I see a car.", "Goodbye!"], correct: 0, feedbackGood: "Именно так она и скажет!", feedbackBad: "Она видит пингвина, а не машину." },
+            { step: 16, mech: "simon", emoji: "🐒", title: "Игра с Chuckles", instruction: "Chuckles показывает: сначала rabbit, потом bird. Выбери правильную пару.", options: ["rabbit, bird", "bird, rabbit", "rabbit, dog"], correct: 0, feedbackGood: "Верный порядок!", feedbackBad: "Сначала кролик, потом птица." },
+            { step: 17, mech: "bubbles", emoji: "🫧", title: "Мыльные пузыри", instruction: "В каком пузыре спряталось слово 'mouse'?", options: ["mouse", "house", "blouse"], correct: 0, feedbackGood: "Поймал правильное слово!", feedbackBad: "House — это дом, blouse — блузка." },
+            { step: 18, mech: "circle", emoji: "✈️", title: "Что летает?", instruction: "Выбери то, что умеет летать.", options: ["plane", "boat", "train"], correct: 0, feedbackGood: "Да, самолёт летает!", feedbackBad: "Лодка и поезд не летают." },
+            { step: 19, mech: "size", emoji: "📏", title: "Сравниваем размеры", instruction: "Кто больше: mouse или rabbit?", options: ["rabbit", "mouse"], correct: 0, feedbackGood: "Верно, кролик больше мыши.", feedbackBad: "Мышь очень маленькая." },
+            { step: 20, mech: "cancant", emoji: "🐧", title: "Умения пингвина", instruction: "A penguin ___ fly.", options: ["can't", "can"], correct: 0, feedbackGood: "Правильно, пингвины не летают.", feedbackBad: "Пингвины плавают, но не летают." },
+            { step: 21, mech: "fill", emoji: "🎁", title: "Подарок из лавки", instruction: "I have got a toy ___. (картинка кролика)", options: ["rabbit", "train", "duck"], correct: 0, feedbackGood: "Отличный выбор!", feedbackBad: "На картинке изображён кролик." },
+            { step: 22, mech: "build", emoji: "🏗️", title: "Вопрос гиду", instruction: "Собери вопрос: What / animals / see / you / can / ?", options: ["What animals can you see?", "What you can see animals?", "Can you see what animals?"], correct: 0, feedbackGood: "Идеально составленный вопрос!", feedbackBad: "Порядок слов в вопросе особый." },
+            { step: 23, mech: "sequence", emoji: "🧠", title: "Память экскурсовода", instruction: "Запомни маршрут: train, потом car, потом boat. Выбери верный порядок.", options: ["train -> car -> boat", "car -> train -> boat", "boat -> car -> train"], correct: 0, feedbackGood: "Отличная память!", feedbackBad: "Повтори порядок: поезд, машина, лодка." },
+            { step: 24, mech: "hidden", emoji: "🔍", title: "Загадка от Nanny Shine", instruction: "Я зелёная, медленная, с панцирем. Кто я?", options: ["tortoise", "duck", "bird"], correct: 0, feedbackGood: "Верно, это черепаха!", feedbackBad: "Утка и птица не носят панцирь." },
+            { step: 25, mech: "chain", emoji: "🔗", title: "Цепочка действий", instruction: "Что делает пингвин? Сначала swim, потом...?", options: ["walk", "fly", "jump"], correct: 0, feedbackGood: "Да, он ходит вразвалочку!", feedbackBad: "Пингвины не летают и не прыгают высоко." },
+            { step: 26, mech: "compare", emoji: "⚖️", title: "Сравнение", instruction: "Кто быстрее: bird или tortoise?", options: ["bird", "tortoise"], correct: 0, feedbackGood: "Конечно, птица быстрее!", feedbackBad: "Черепаха движется очень медленно." },
+            { step: 27, mech: "describe", emoji: "📖", title: "Описание", instruction: "У этого животного длинные уши и короткий хвост. Кто это?", options: ["rabbit", "cat", "mouse"], correct: 0, feedbackGood: "Точно, это кролик!", feedbackBad: "У кошки и мыши другие уши." },
+            { step: 28, mech: "multiple", emoji: "✅", title: "Множественный выбор", instruction: "Выбери ВСЕХ животных из списка:", options: ["cat, dog, rabbit", "cat, car, boat", "plane, train, mouse"], correct: 0, feedbackGood: "Верно, здесь только животные.", feedbackBad: "В других вариантах есть транспорт." },
+            { step: 29, mech: "truefalse", emoji: "❌", title: "Правда или ложь", instruction: "A mouse is bigger than a dog.", options: ["True", "False"], correct: 1, feedbackGood: "Правильно, это ложь.", feedbackBad: "Мышь намного меньше собаки." },
+            { step: 30, mech: "intro", emoji: "🏆", title: "Экскурсия завершена!", instruction: "Вы прошли весь зоопарк и помогли героям! Нажми 'Дальше' для награды.", options: ["Дальше"], correct: 0, feedbackGood: "Поздравляем!", feedbackBad: "Нажми 'Дальше'." }
+        ];
+
+        // ==========================================================================
+        // STATE MANAGEMENT
+        // ==========================================================================
+        let currentStep = 0;
+        let stars = 0;
+
+        // ==========================================================================
+        // CORE FUNCTIONS
+        // ==========================================================================
+        function renderStep() {
+            const questArea = document.getElementById("questArea");
+            const stepData = steps[currentStep];
+            const progressPercent = ((currentStep) / (steps.length - 1)) * 100;
+            
+            document.getElementById("progressFill").style.width = progressPercent + "%";
+            document.getElementById("progressTrain").style.left = progressPercent + "%";
+
+            let optionsHtml = "";
+            stepData.options.forEach((opt, index) => {
+                optionsHtml += `<button class="option-btn" onclick="checkAnswer(${index}, ${stepData.correct})">${opt}</button>`;
+            });
+
+            let speakBtn = stepData.text ? `<button class="speak-quest-btn" onclick="speakText('${stepData.text.replace(/'/g, "\\'")}')">🔊</button>` : "";
+
+            questArea.innerHTML = `
+                <div class="stage active" id="stage-${currentStep}">
+                    <span class="step-tag">Step ${stepData.step}/30</span>
+                    <span class="mech-tag">${stepData.mech}</span>
+                    <div class="hero-emoji">${stepData.emoji}</div>
+                    <h2>${stepData.title} ${speakBtn}</h2>
+                    <div class="instruction">${stepData.instruction}</div>
+                    <div class="options">${optionsHtml}</div>
+                    <div class="feedback" id="feedback-${currentStep}"></div>
+                    <div class="nav-buttons">
+                        ${currentStep > 0 ? `<button class="nav-btn" onclick="prevStep()">Назад</button>` : ""}
+                        <button class="nav-btn" onclick="renderStep()">Ещё раз</button>
+                        <button class="nav-btn primary" id="nextBtn-${currentStep}" style="display:none;" onclick="nextStep()">Дальше</button>
+                    </div>
+                    <div class="stars">⭐ ${stars}</div>
+                </div>
+            `;
+
+            if (stepData.text) {
+                setTimeout(() => speakText(stepData.text), 500);
+            }
+        }
+
+        function checkAnswer(selected, correct) {
+            const feedback = document.getElementById(`feedback-${currentStep}`);
+            const buttons = document.querySelectorAll(".option-btn");
+            const stepData = steps[currentStep];
+            
+            buttons.forEach(btn => btn.disabled = true);
+
+            if (selected === correct) {
+                buttons[selected].classList.add("correct");
+                feedback.className = "feedback good";
+                feedback.innerHTML = stepData.feedbackGood;
+                stars++;
+                speakText("Good job!");
+            } else {
+                buttons[selected].classList.add("wrong");
+                buttons[correct].classList.add("correct");
+                feedback.className = "feedback bad";
+                feedback.innerHTML = stepData.feedbackBad;
+                if (stepData.text) speakText(stepData.text);
+            }
+            
+            document.getElementById(`nextBtn-${currentStep}`).style.display = "inline-block";
+            const starDisplay = document.querySelector(".stars");
+            if (starDisplay) starDisplay.innerHTML = `⭐ ${stars}`;
+        }
+
+        function nextStep() {
+            currentStep++;
+            if (currentStep >= steps.length) {
+                showFinalScreen();
+            } else {
+                renderStep();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                currentStep--;
+                renderStep();
+            }
+        }
+
+        function showFinalScreen() {
+            document.getElementById("questArea").style.display = "none";
+            document.getElementById("finalScreen").classList.add("active");
+            document.getElementById("finalStars").textContent = stars;
+            
+            let vocabHtml = "";
+            vocabulary.forEach(word => {
+                const safeEn = word.en.replace(/'/g, "\\'");
+                vocabHtml += `
+                    <div class="vocab-item">
+                        <span><strong>${word.en}</strong> ${word.ipa}</span>
+                        <button class="speak-quest-btn" onclick="speakText('${safeEn}')">🔊</button>
+                    </div>
+                `;
+            });
+            document.getElementById("finalVocab").innerHTML = vocabHtml;
+            document.getElementById("progressFill").style.width = "100%";
+            document.getElementById("progressTrain").style.left = "100%";
+        }
+
+        function speakText(text) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = "en-GB";
+            utterance.rate = 0.85;
+            const voices = window.speechSynthesis.getVoices();
+            const gbVoice = voices.find(v => v.lang === "en-GB") || voices.find(v => v.lang.startsWith("en"));
+            if (gbVoice) utterance.voice = gbVoice;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // ==========================================================================
+        // INITIALIZATION
+        // ==========================================================================
+        window.speechSynthesis.onvoiceschanged = () => {};
+        renderStep();
+    </script>
+</body>
+</html>

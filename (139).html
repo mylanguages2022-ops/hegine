@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сундук жемчужин — Словарь Final Review</title>
+<meta property="og:title" content="Сундук жемчужин — Словарь Final Review">
+<meta property="og:description" content="Говорящий словарик: питомцы, звери, действия, части тела, цвета, числа. Spotlight Starter, финальный урок.">
+<meta property="og:image" content="https://missanytka1994-ops.github.io/spotlightstarter/lesson-final-dictionary-og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://missanytka1994-ops.github.io/spotlightstarter/lesson-final-dictionary.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Spotlight Starter — Домашние уроки">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:"Segoe UI",Arial,sans-serif;background:linear-gradient(180deg,#0a1628 0%,#132744 100%);min-height:100vh;padding:24px 16px 60px}
+h1{text-align:center;color:#f5d67b;font-size:1.7rem;margin-bottom:6px;text-shadow:0 2px 8px rgba(0,0,0,.5)}
+.subtitle{text-align:center;color:#a8c8e8;font-size:.95rem;margin-bottom:28px}
+.filters{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-bottom:32px}
+.filters button{border:2px solid #f5d67b;background:transparent;color:#f5d67b;padding:8px 18px;border-radius:20px;font-size:.9rem;cursor:pointer;transition:all .2s}
+.filters button.active,.filters button:hover{background:#f5d67b;color:#0a1628}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;max-width:1100px;margin:0 auto}
+.card{background:radial-gradient(ellipse at 30% 20%,#1e3a5f,#0f2440);border:2px solid #3a6a9a;border-radius:18px;padding:22px 18px 18px;position:relative;transition:transform .2s,box-shadow .2s;overflow:hidden}
+.card::before{content:"";position:absolute;top:-30px;right:-30px;width:90px;height:90px;background:radial-gradient(circle,rgba(245,214,123,.15),transparent 70%);border-radius:50%}
+.card.speaking{transform:scale(1.05);box-shadow:0 0 24px rgba(245,214,123,.6);border-color:#f5d67b}
+.card-emoji{font-size:2.2rem;margin-bottom:8px}
+.card-en{font-size:1.25rem;font-weight:700;color:#fff;margin-bottom:2px}
+.card-ipa{font-size:.85rem;color:#a8c8e8;margin-bottom:4px}
+.card-ru{font-size:.95rem;color:#c8ddf0}
+.speak-btn{margin-top:14px;width:44px;height:44px;border-radius:50%;border:none;background:radial-gradient(circle at 35% 35%,#fdf6e3,#e8c56a);cursor:pointer;font-size:1.3rem;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(245,214,123,.4);transition:transform .15s}
+.speak-btn:hover{transform:scale(1.15)}
+.speak-btn:active{transform:scale(.95)}
+.hidden{display:none}
+@media(max-width:600px){
+.grid{grid-template-columns:1fr 1fr;gap:12px}
+.card{padding:16px 12px 14px}
+h1{font-size:1.3rem}
+.filters button{padding:6px 12px;font-size:.8rem}
+}
+@media(max-width:400px){
+.grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<h1>🫧 Сундук жемчужин</h1>
+<p class="subtitle">Нажми на жемчужину — услышишь слово</p>
+<div class="filters">
+<button class="active" data-cat="all">Все</button>
+<button data-cat="pets">Питомцы</button>
+<button data-cat="zoo">Зоопарк</button>
+<button data-cat="actions">Действия</button>
+<button data-cat="body">Части тела</button>
+<button data-cat="words">Слова и фразы</button>
+</div>
+<div class="grid" id="grid"></div>
+<script>
+var cards=[
+{en:"cat",ipa:"/kæt/",ru:"кошка",emoji:"🐱",cat:"pets"},
+{en:"dog",ipa:"/dɒɡ/",ru:"собака",emoji:"🐶",cat:"pets"},
+{en:"fish",ipa:"/fɪʃ/",ru:"рыба",emoji:"🐟",cat:"pets"},
+{en:"horse",ipa:"/hɔːs/",ru:"лошадь",emoji:"🐴",cat:"pets"},
+{en:"rabbit",ipa:"/ˈræbɪt/",ru:"кролик",emoji:"🐰",cat:"pets"},
+{en:"parrot",ipa:"/ˈpærət/",ru:"попугай",emoji:"🦜",cat:"pets"},
+{en:"frog",ipa:"/frɒɡ/",ru:"лягушка",emoji:"🐸",cat:"pets"},
+{en:"turtle",ipa:"/ˈtɜːtl/",ru:"черепаха",emoji:"🐢",cat:"pets"},
+{en:"hamster",ipa:"/ˈhæmstə/",ru:"хомяк",emoji:"🐹",cat:"pets"},
+{en:"monkey",ipa:"/ˈmʌŋki/",ru:"обезьяна",emoji:"🐵",cat:"zoo"},
+{en:"elephant",ipa:"/ˈelɪfənt/",ru:"слон",emoji:"🐘",cat:"zoo"},
+{en:"lion",ipa:"/ˈlaɪən/",ru:"лев",emoji:"🦁",cat:"zoo"},
+{en:"tiger",ipa:"/ˈtaɪɡə/",ru:"тигр",emoji:"🐯",cat:"zoo"},
+{en:"bear",ipa:"/beə/",ru:"медведь",emoji:"🐻",cat:"zoo"},
+{en:"snake",ipa:"/sneɪk/",ru:"змея",emoji:"🐍",cat:"zoo"},
+{en:"penguin",ipa:"/ˈpeŋɡwɪn/",ru:"пингвин",emoji:"🐧",cat:"zoo"},
+{en:"jump",ipa:"/dʒʌmp/",ru:"прыгать",emoji:"🦘",cat:"actions"},
+{en:"run",ipa:"/rʌn/",ru:"бегать",emoji:"🏃",cat:"actions"},
+{en:"swim",ipa:"/swɪm/",ru:"плавать",emoji:"🏊",cat:"actions"},
+{en:"fly",ipa:"/flaɪ/",ru:"летать",emoji:"🕊️",cat:"actions"},
+{en:"climb",ipa:"/klaɪm/",ru:"лазать",emoji:"🧗",cat:"actions"},
+{en:"dance",ipa:"/dɑːns/",ru:"танцевать",emoji:"💃",cat:"actions"},
+{en:"sing",ipa:"/sɪŋ/",ru:"петь",emoji:"🎤",cat:"actions"},
+{en:"walk",ipa:"/wɔːk/",ru:"ходить",emoji:"🚶",cat:"actions"},
+{en:"head",ipa:"/hed/",ru:"голова",emoji:"🙂",cat:"body"},
+{en:"eyes",ipa:"/aɪz/",ru:"глаза",emoji:"👀",cat:"body"},
+{en:"ears",ipa:"/ɪəz/",ru:"уши",emoji:"👂",cat:"body"},
+{en:"nose",ipa:"/nəʊz/",ru:"нос",emoji:"👃",cat:"body"},
+{en:"mouth",ipa:"/maʊθ/",ru:"рот",emoji:"👄",cat:"body"},
+{en:"arms",ipa:"/ɑːmz/",ru:"руки",emoji:"💪",cat:"body"},
+{en:"legs",ipa:"/leɡz/",ru:"ноги",emoji:"🦵",cat:"body"},
+{en:"tail",ipa:"/teɪl/",ru:"хвост",emoji:"🐕",cat:"body"},
+{en:"wings",ipa:"/wɪŋz/",ru:"крылья",emoji:"🪽",cat:"body"},
+{en:"can",ipa:"/kæn/",ru:"умею / может",emoji:"✅",cat:"words"},
+{en:"can't",ipa:"/kɑːnt/",ru:"не умею / не может",emoji:"❌",cat:"words"},
+{en:"I've got",ipa:"/aɪv ɡɒt/",ru:"у меня есть",emoji:"🙋",cat:"words"},
+{en:"It has got",ipa:"/ɪt hæz ɡɒt/",ru:"у него есть",emoji:"👉",cat:"words"},
+{en:"in",ipa:"/ɪn/",ru:"в",emoji:"📦",cat:"words"},
+{en:"on",ipa:"/ɒn/",ru:"на",emoji:"⬆️",cat:"words"},
+{en:"under",ipa:"/ˈʌndə/",ru:"под",emoji:"⬇️",cat:"words"},
+{en:"red",ipa:"/red/",ru:"красный",emoji:"🔴",cat:"words"},
+{en:"blue",ipa:"/bluː/",ru:"синий",emoji:"🔵",cat:"words"},
+{en:"green",ipa:"/ɡriːn/",ru:"зелёный",emoji:"🟢",cat:"words"},
+{en:"yellow",ipa:"/ˈjeləʊ/",ru:"жёлтый",emoji:"🟡",cat:"words"},
+{en:"black",ipa:"/blæk/",ru:"чёрный",emoji:"⚫",cat:"words"},
+{en:"white",ipa:"/waɪt/",ru:"белый",emoji:"⚪",cat:"words"},
+{en:"orange",ipa:"/ˈɒrɪndʒ/",ru:"оранжевый",emoji:"🟠",cat:"words"},
+{en:"pink",ipa:"/pɪŋk/",ru:"розовый",emoji:"🩷",cat:"words"},
+{en:"purple",ipa:"/ˈpɜːpl/",ru:"фиолетовый",emoji:"🟣",cat:"words"},
+{en:"brown",ipa:"/braʊn/",ru:"коричневый",emoji:"🟤",cat:"words"},
+{en:"one",ipa:"/wʌn/",ru:"один",emoji:"1️⃣",cat:"words"},
+{en:"two",ipa:"/tuː/",ru:"два",emoji:"2️⃣",cat:"words"},
+{en:"three",ipa:"/θriː/",ru:"три",emoji:"3️⃣",cat:"words"},
+{en:"four",ipa:"/fɔː/",ru:"четыре",emoji:"4️⃣",cat:"words"},
+{en:"five",ipa:"/faɪv/",ru:"пять",emoji:"5️⃣",cat:"words"},
+{en:"six",ipa:"/sɪks/",ru:"шесть",emoji:"6️⃣",cat:"words"},
+{en:"seven",ipa:"/ˈsevn/",ru:"семь",emoji:"7️⃣",cat:"words"},
+{en:"eight",ipa:"/eɪt/",ru:"восемь",emoji:"8️⃣",cat:"words"},
+{en:"nine",ipa:"/naɪn/",ru:"девять",emoji:"9️⃣",cat:"words"},
+{en:"ten",ipa:"/ten/",ru:"десять",emoji:"🔟",cat:"words"}
+];
+var grid=document.getElementById("grid");
+function render(cat){
+grid.innerHTML="";
+cards.forEach(function(c,i){
+if(cat!=="all"&&c.cat!==cat)return;
+var div=document.createElement("div");
+div.className="card";
+div.setAttribute("data-idx",i);
+div.innerHTML="<div class=\"card-emoji\">"+c.emoji+"</div><div class=\"card-en\">"+c.en+"</div><div class=\"card-ipa\">"+c.ipa+"</div><div class=\"card-ru\">"+c.ru+"</div><button class=\"speak-btn\" title=\"Послушать\">🫧</button>";
+div.querySelector(".speak-btn").addEventListener("click",function(){speak(c.en,div)});
+grid.appendChild(div);
+});
+}
+function speak(text,card){
+if(!window.speechSynthesis)return;
+window.speechSynthesis.cancel();
+var u=new SpeechSynthesisUtterance(text);
+u.lang="en-GB";
+u.rate=0.85;
+var voices=window.speechSynthesis.getVoices();
+var gb=voices.find(function(v){return v.lang==="en-GB"});
+if(gb)u.voice=gb;
+else{var us=voices.find(function(v){return v.lang==="en-US"});if(us)u.voice=us;}
+u.onstart=function(){card.classList.add("speaking")};
+u.onend=function(){card.classList.remove("speaking")};
+window.speechSynthesis.speak(u);
+}
+document.querySelectorAll(".filters button").forEach(function(btn){
+btn.addEventListener("click",function(){
+document.querySelectorAll(".filters button").forEach(function(b){b.classList.remove("active")});
+btn.classList.add("active");
+render(btn.getAttribute("data-cat"));
+});
+});
+render("all");
+</script>
+</body>
+</html>
