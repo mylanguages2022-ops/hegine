@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Квест-стадион — Финальный забег</title>
+
+<meta property="og:title" content="Квест-стадион — Финальный забег">
+<meta property="og:description" content="Повторительный квест модуля 7: 15 забегов, семь механик, игрушки, цвета, числа и фразы-чемпионы. Британская озвучка, стадионное табло и беговая дорожка прогресса.">
+<meta property="og:image" content="https://spotlight-lessons.example.com/og/7f-quest-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Стадионное табло и беговая дорожка">
+<meta property="og:url" content="https://spotlight-lessons.example.com/7f/quest">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Spotlight — уроки для родителя и ребёнка">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Квест-повторение модуля 7: 15 шагов, семь механик, озвучка en-GB, прогресс-бар и возврат при ошибке.">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{
+    font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
+    background:#dfe7ee;
+    background-image:repeating-linear-gradient(0deg, rgba(31,78,121,.05) 0 3px, transparent 3px 40px);
+    color:#22303e;min-height:100vh;padding:16px 12px 50px;
+  }
+  .wrap{max-width:780px;margin:0 auto}
+
+  .topbar{
+    background:#10243e;border-radius:12px;padding:14px 16px 18px;
+    border:4px solid #0a1626;box-shadow:0 6px 0 rgba(10,22,38,.5);
+    margin-bottom:20px;
+  }
+  .topbar h1{
+    font-family:"Courier New",monospace;
+    font-size:clamp(1.05rem,4vw,1.45rem);color:#ffd23e;text-align:center;
+    letter-spacing:2px;line-height:1.3;
+  }
+  .topbar h1::before{content:'🏟️ ';}
+  .bar-wrap{margin-top:14px}
+  .bar-label{
+    display:flex;justify-content:space-between;align-items:center;
+    font-family:"Courier New",monospace;
+    font-size:.8rem;color:#9fc0e0;margin-bottom:6px;font-weight:700;letter-spacing:1px;
+  }
+  .bar-track{
+    height:26px;background:#b8543f;border-radius:13px;overflow:hidden;
+    border:3px solid #7e3527;position:relative;
+    background-image:repeating-linear-gradient(90deg, transparent 0 60px, rgba(255,255,255,.55) 60px 63px);
+  }
+  .bar-fill{
+    height:100%;width:0%;
+    background:linear-gradient(180deg, rgba(255,210,62,.85), rgba(242,181,60,.85));
+    transition:width .5s cubic-bezier(.34,1.4,.64,1);
+  }
+  .bar-runner{
+    position:absolute;top:-9px;left:0;font-size:1.5rem;
+    transform:translateX(-50%);transition:left .5s cubic-bezier(.34,1.4,.64,1);
+    filter:drop-shadow(0 2px 1px rgba(0,0,0,.4));
+  }
+  .stars{
+    margin-top:9px;text-align:center;font-family:"Courier New",monospace;
+    font-size:1rem;letter-spacing:4px;color:#ffd23e;
+  }
+
+  .stage{
+    background:#fff;border-radius:12px;padding:24px 18px 26px 30px;position:relative;
+    border:3px solid #10243e;box-shadow:0 6px 0 rgba(16,36,62,.35);
+    animation:pop .35s ease;
+    border-left:14px solid #b8543f;
+  }
+  @keyframes pop{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+  .stage.shake{animation:shake .45s}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-9px)}40%{transform:translateX(9px)}
+    60%{transform:translateX(-6px)}80%{transform:translateX(6px)}
+  }
+  .step-tag{
+    display:inline-block;background:#10243e;color:#ffd23e;
+    font-family:"Courier New",monospace;
+    font-size:.76rem;font-weight:700;padding:5px 14px;border-radius:4px;
+    letter-spacing:2px;margin-bottom:12px;
+  }
+  .mech-tag{
+    display:inline-block;background:#fff8e4;color:#8a6a10;
+    font-size:.72rem;font-weight:700;padding:3px 11px;border-radius:999px;
+    border:2px solid #f2b53c;margin-left:6px;margin-bottom:12px;letter-spacing:.3px;
+  }
+  .hero{font-size:3.1rem;text-align:center;display:block;margin:2px 0 10px;line-height:1.15}
+  .stage h2{font-size:clamp(1.05rem,3.8vw,1.4rem);color:#10243e;text-align:center;margin-bottom:12px;line-height:1.35}
+
+  .task-text{
+    font-size:1rem;line-height:1.55;color:#33445a;text-align:center;margin:0 auto 18px;
+    max-width:540px;background:#eef4fb;border-radius:10px;
+    padding:12px 16px;border:2px solid #b8cfe4;
+  }
+  .en-inline{font-weight:700;color:#1f4e79}
+
+  .speak-line{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:14px 0 18px}
+  .speak-big{
+    background:#ffd23e;color:#10243e;border:none;border-radius:8px;
+    padding:12px 22px;font-size:1rem;font-weight:700;cursor:pointer;
+    font-family:inherit;box-shadow:0 4px 0 #b08020;transition:.15s;
+    display:inline-flex;align-items:center;gap:9px;letter-spacing:.4px;
+  }
+  .speak-big:hover{background:#f2c52e;transform:translateY(-2px)}
+  .speak-big:active{transform:translateY(1px);box-shadow:0 2px 0 #b08020}
+  .speak-mini{
+    width:36px;height:36px;border-radius:50%;border:2px solid #10243e;
+    background:#ffd23e;color:#10243e;font-size:.95rem;cursor:pointer;
+    box-shadow:0 3px 0 #b08020;transition:.15s;
+    display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;
+  }
+  .speak-mini:hover{transform:scale(1.1) rotate(-8deg);background:#f2c52e}
+  .speak-mini:active{transform:scale(.94)}
+
+  .opts{display:flex;flex-direction:column;gap:11px;margin-top:6px}
+  .opts.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px}
+  .opt{
+    background:#fff;border:2px solid #b8cfe4;border-left:8px solid #10243e;border-radius:8px;
+    padding:13px 14px;cursor:pointer;font-family:inherit;font-size:1.02rem;
+    color:#22303e;text-align:left;display:flex;align-items:center;gap:10px;
+    transition:.16s;font-weight:600;line-height:1.35;box-shadow:0 2px 0 rgba(16,36,62,.25);
+  }
+  .opt:hover{border-color:#10243e;background:#eef4fb;transform:translateX(3px)}
+  .opt .mark{
+    flex:0 0 30px;height:30px;border-radius:4px;background:#10243e;color:#ffd23e;
+    font-family:"Courier New",monospace;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.95rem;
+  }
+  .opt.correct{background:#eafff0;border-color:#2e8b57;border-left-color:#2e8b57;animation:bounce .45s}
+  .opt.wrong{background:#fff0f0;border-color:#c0392b;border-left-color:#c0392b;animation:shake .4s}
+  @keyframes bounce{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+  .opt:disabled{cursor:default}
+
+  .yesno-scene{
+    background:#eef4fb;border:3px dashed #3a6ea8;border-radius:12px;
+    padding:16px 12px;text-align:center;margin-bottom:16px;
+  }
+  .yesno-scene .big{font-size:2.6rem;letter-spacing:6px;display:block;margin-bottom:8px}
+  .yesno-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .yesno-btn{
+    flex:1 1 140px;max-width:220px;border-radius:10px;padding:14px 10px;
+    font-family:inherit;font-size:1.05rem;font-weight:700;cursor:pointer;transition:.15s;
+    border:2px solid;letter-spacing:.5px;
+  }
+  .yesno-btn.yes{background:#eafff0;border-color:#2e8b57;color:#1f6b41;box-shadow:0 4px 0 #1f6b41}
+  .yesno-btn.no{background:#fff4f4;border-color:#c0392b;color:#8e2a1f;box-shadow:0 4px 0 #8e2a1f}
+  .yesno-btn:hover{transform:translateY(-2px)}
+  .yesno-btn.correct{animation:bounce .45s}
+  .yesno-btn.wrong{animation:shake .4s}
+
+  .countbox{
+    background:#eef4fb;border:3px dashed #3a6ea8;border-radius:12px;
+    padding:18px 12px;text-align:center;margin-bottom:16px;
+  }
+  .countbox .items{font-size:2.4rem;letter-spacing:7px;line-height:1.5;word-break:break-word}
+
+  .match-area{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+  .mcol{display:flex;flex-direction:column;gap:10px}
+  .mcol h4{text-align:center;font-size:.8rem;color:#5a6b7c;font-weight:700;margin-bottom:2px;letter-spacing:1px;font-family:"Courier New",monospace}
+  .mitem{
+    background:#fff;border:2px solid #b8cfe4;border-radius:8px;padding:11px 8px;
+    cursor:pointer;font-family:inherit;font-size:1rem;font-weight:700;color:#22303e;
+    text-align:center;transition:.16s;display:flex;align-items:center;justify-content:center;gap:7px;
+    min-height:56px;box-shadow:0 2px 0 rgba(16,36,62,.2);
+  }
+  .mitem:hover{border-color:#10243e;background:#eef4fb}
+  .mitem.sel{background:#eef4fb;box-shadow:0 0 0 3px rgba(16,36,62,.2)}
+  .mitem.done{background:#eafff0;border-color:#2e8b57;color:#1f6b41;cursor:default;opacity:.85}
+  .mitem.bad{animation:shake .4s;border-color:#c0392b;background:#fff0f0}
+  .mitem .pic{font-size:1.6rem}
+
+  .order-pool,.order-slots{display:flex;flex-wrap:wrap;gap:9px;justify-content:center}
+  .order-slots{
+    min-height:66px;background:#eef4fb;border:3px dashed #3a6ea8;border-radius:12px;
+    padding:11px 9px;margin-bottom:16px;align-items:center;
+  }
+  .order-slots.empty-pool::after{content:'нажимайте карточки ниже ⬇️';color:#8aa0b8;font-size:.88rem}
+  .otile{
+    background:#fff;border:2px solid #3a6ea8;border-radius:8px;padding:10px 13px;
+    cursor:pointer;font-family:inherit;font-size:.98rem;font-weight:700;color:#1f4e79;
+    transition:.15s;display:flex;align-items:center;gap:7px;box-shadow:0 3px 0 #1f4e79;
+  }
+  .otile:hover{transform:translateY(-2px);background:#eef4fb}
+  .otile.placed{border-color:#2e8b57;background:#eafff0;color:#1f6b41;box-shadow:0 3px 0 #1f6b41}
+  .otile.bad{animation:shake .4s;border-color:#c0392b;background:#fff0f0}
+  .otile.used{opacity:.3;pointer-events:none}
+  .otile .num{font-size:1.4rem}
+
+  .spell-slots{display:flex;gap:9px;justify-content:center;margin:6px 0 18px;flex-wrap:wrap}
+  .slot{
+    width:52px;height:60px;border-radius:8px;background:#eef4fb;
+    border:3px dashed #10243e;display:flex;align-items:center;justify-content:center;
+    font-size:1.75rem;font-weight:700;color:#10243e;text-transform:uppercase;
+  }
+  .slot.filled{border-style:solid;border-color:#2e8b57;background:#eafff0}
+  .slot.bad{border-color:#c0392b;background:#fff0f0;animation:shake .4s}
+  .letter-pool{display:flex;gap:9px;justify-content:center;flex-wrap:wrap}
+  .letter{
+    width:54px;height:60px;border-radius:8px;border:3px solid #ffd23e;background:#fff8e4;
+    font-family:inherit;font-size:1.7rem;font-weight:700;color:#8a6a10;cursor:pointer;
+    text-transform:uppercase;box-shadow:0 4px 0 #b08020;transition:.14s;
+  }
+  .letter:hover{transform:translateY(-3px);background:#ffefc0}
+  .letter.used{opacity:.25;pointer-events:none;box-shadow:none;transform:none}
+
+  .drag-zone{
+    background:#eef4fb;border:3px dashed #3a6ea8;border-radius:12px;
+    padding:18px 12px;text-align:center;margin-bottom:16px;min-height:120px;
+  }
+  .drag-item{
+    display:inline-block;background:#fff;border:2px solid #3a6ea8;border-radius:8px;
+    padding:10px 16px;margin:5px;cursor:pointer;font-family:inherit;font-size:1.02rem;
+    font-weight:700;color:#1f4e79;box-shadow:0 3px 0 #1f4e79;transition:.15s;
+  }
+  .drag-item:hover{transform:translateY(-3px);background:#eef4fb}
+  .drag-item.chosen{background:#eafff0;border-color:#2e8b57;color:#1f6b41;box-shadow:0 3px 0 #1f6b41}
+  .drag-item.bad{animation:shake .4s;border-color:#c0392b;background:#fff0f0}
+
+  .fb{
+    margin-top:16px;padding:14px 16px;border-radius:10px;font-size:1rem;
+    line-height:1.55;text-align:center;display:none;font-weight:600;
+  }
+  .fb.show{display:block;animation:pop .3s}
+  .fb.good{background:#eafff0;border:3px double #2e8b57;color:#1f6b41}
+  .fb.bad{background:#fff4f4;border:3px double #c0392b;color:#8e2a1f}
+  .fb .again{
+    margin-top:10px;background:#fff;border:2px solid #c0392b;color:#8e2a1f;
+    border-radius:8px;padding:7px 16px;font-family:inherit;font-weight:700;
+    font-size:.9rem;cursor:pointer;
+  }
+  .fb .again:hover{background:#ffeaea}
+
+  .nav{display:flex;gap:11px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+  .nav button{
+    border:none;border-radius:8px;padding:13px 24px;font-family:inherit;
+    font-size:1rem;font-weight:700;cursor:pointer;transition:.16s;
+    display:inline-flex;align-items:center;gap:8px;letter-spacing:.3px;
+  }
+  .btn-next{background:#10243e;color:#ffd23e;box-shadow:0 5px 0 #0a1626}
+  .btn-next:hover{background:#1a3454;transform:translateY(-2px)}
+  .btn-back{background:#fff;color:#10243e;border:3px dashed #b8cfe4 !important;box-shadow:0 5px 0 #b8cfe4}
+  .btn-back:hover{background:#eef4fb}
+  .btn-back:disabled,.btn-next:disabled{opacity:.4;cursor:default;transform:none}
+  .btn-replay{background:#ffd23e;color:#10243e;box-shadow:0 5px 0 #b08020}
+  .btn-replay:hover{background:#f2c52e}
+
+  .final{text-align:center}
+  .final .big{
+    font-size:3.4rem;display:inline-block;margin-bottom:12px;
+    background:#ffd23e;border-radius:50%;width:104px;height:104px;line-height:104px;
+    border:5px double #b08020;animation:float 2.4s ease-in-out infinite;
+    box-shadow:0 6px 0 #b08020;
+  }
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+  .final h2{font-size:clamp(1.25rem,4.5vw,1.8rem);color:#10243e;margin-bottom:12px}
+  .final p{font-size:1.02rem;line-height:1.65;color:#33445a;margin-bottom:12px}
+  .reward{
+    background:#eef4fb;border:3px dashed #3a6ea8;border-radius:12px;padding:18px 16px;margin:18px 0;
+  }
+  .reward .words{font-size:1.02rem;line-height:1.85;color:#33445a;text-align:left}
+  .reward .words b{color:#1f4e79}
+  .restart{background:#10243e;color:#ffd23e;box-shadow:0 5px 0 #0a1626}
+  .restart:hover{background:#1a3454}
+
+  .start-screen{text-align:center}
+  .start-screen .cast{font-size:2.6rem;letter-spacing:6px;margin:14px 0 6px}
+  .start-screen ul{
+    list-style:none;text-align:left;margin:16px auto;max-width:440px;
+    background:#eef4fb;border:3px dashed #3a6ea8;border-radius:12px;padding:16px 18px;
+  }
+  .start-screen li{
+    padding:7px 0 7px 30px;position:relative;font-size:.97rem;color:#33445a;line-height:1.45;
+    border-bottom:1px dotted #b8cfe4;
+  }
+  .start-screen li:last-child{border-bottom:none}
+  .start-screen li::before{content:'🏃';position:absolute;left:0;top:7px;font-size:.95rem}
+  .sound-note{
+    background:#fff8e4;border:2px solid #f2b53c;border-radius:10px;padding:11px 14px;
+    font-size:.88rem;color:#8a6a10;margin-top:14px;line-height:1.5;
+  }
+
+  @media (max-width:560px){
+    .match-area{grid-template-columns:1fr 1fr;gap:8px}
+    .mitem{font-size:.88rem;min-height:50px;padding:9px 5px}
+    .mitem .pic{font-size:1.3rem}
+    .slot,.letter{width:44px;height:52px;font-size:1.4rem}
+    .countbox .items{font-size:1.9rem;letter-spacing:4px}
+    .hero{font-size:2.6rem}
+    .nav button{padding:12px 18px;font-size:.95rem}
+    .stage{padding-left:22px;border-left-width:10px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <h1>FINAL RUN · MODULE 7</h1>
+    <div class="bar-wrap">
+      <div class="bar-label">
+        <span id="stepLabel">ЗАБЕГ 0 ИЗ 15</span>
+        <span id="pctLabel">0%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" id="barFill"></div>
+        <div class="bar-runner" id="barRunner">🏃</div>
+      </div>
+      <div class="stars" id="stars"></div>
+    </div>
+  </div>
+
+  <div id="stageHost"></div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var RATE = 0.85;
+  var voices = [];
+
+  function loadVoices(){
+    if(!('speechSynthesis' in window)) return;
+    voices = window.speechSynthesis.getVoices() || [];
+  }
+  loadVoices();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    setTimeout(loadVoices, 350);
+    setTimeout(loadVoices, 1400);
+  }
+
+  function pickVoice(){
+    if(!voices.length) loadVoices();
+    var v;
+    v = voices.find(function(x){ return x.lang === 'en-GB'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en-gb') === 0; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang === 'en-US'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en') === 0; });
+    return v || null;
+  }
+
+  function speak(text, delay){
+    if(!('speechSynthesis' in window)) return;
+    var go = function(){
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      var v = pickVoice();
+      if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+      u.rate = RATE; u.pitch = 1.06; u.volume = 1;
+      window.speechSynthesis.speak(u);
+    };
+    if(delay){ setTimeout(go, delay); } else { go(); }
+  }
+
+  function speakSeq(arr){
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    arr.forEach(function(t, i){
+      setTimeout(function(){
+        var u = new SpeechSynthesisUtterance(t);
+        var v = pickVoice();
+        if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+        u.rate = RATE; u.pitch = 1.06;
+        window.speechSynthesis.speak(u);
+      }, i * 1500);
+    });
+  }
+
+  var STEPS = [
+
+  /* 1 */ {
+    kind:'intro', emoji:'🏟️', mech:'Стартовый выстрел',
+    title:'Финальный забег модуля 7',
+    text:'Стадион гудит: сегодня финальный забег по всему модулю. Игрушки, цвета, числа, размеры, предлоги — всё, что мы тренировали, выйдет на дорожку. Пятнадцать забегов, и на финише тебя ждёт пьедестал.',
+    say:'On your marks! Get set! Go!',
+    sayRu:'На старт! Внимание! Марш!',
+    cta:'🏃 Выбежать на дорожку!'
+  },
+
+  /* 2 */ {
+    kind:'count', emoji:'⚽', mech:'Счёт',
+    title:'Забег 1: мячи на поле',
+    text:'Первое испытание — пересчитать инвентарь. **How many balls?** /haʊ ˈmeni bɔːlz/',
+    ask:'How many balls?',
+    items:'⚽⚽⚽⚽⚽⚽⚽',
+    say:'How many balls? One, two, three, four, five, six, seven. Seven balls!',
+    opts:[
+      {t:'six /sɪks/ — шесть', say:'six'},
+      {t:'seven /ˈsevən/ — семь', say:'seven'},
+      {t:'eight /eɪt/ — восемь', say:'eight'}
+    ],
+    correct:1,
+    ok:'Инвентарь посчитан: **Seven balls!** /ˈsevən bɔːlz/',
+    no:'Считаем по одному, касаясь каждого мяча.'
+  },
+
+  /* 3 */ {
+    kind:'choice', emoji:'🎨', mech:'Выбор ответа',
+    title:'Забег 2: цвет флага',
+    text:'Над стадионом подняли флаг-воздушный змей. **What colour is the kite?** /wɒt ˈkʌlə ɪz ðə kaɪt/',
+    say:'It is blue.',
+    opts:[
+      {t:'It is blue. /ɪt ɪz bluː/ — он синий', say:'It is blue.'},
+      {t:'It is red. /ɪt z red/ — он красный', say:'It is red.'},
+      {t:'It is pink. /ɪt z pɪk/ — он розовый', say:'It is pink.'}
+    ],
+    correct:0,
+    ok:'Флаг описан верно: **It is blue.** /ɪt ɪz bluː/',
+    no:'Посмотри на цвет змея ещё раз.'
+  },
+
+  /* 4 */ {
+    kind:'spell', emoji:'🟡', mech:'Сборка слова',
+    title:'Забег 3: табличка цвета',
+    text:'Собери слово цвета солнечной дорожки: **yellow** /ˈjeləʊ/.',
+    word:'yellow', hint:'🟡', say:'yellow',
+    ok:'Табличка готова: **yellow** /ˈjeləʊ/ — жёлтый.',
+    no:'Буква не та. Слушай: y-e-l-l-o-w.'
+  },
+
+  /* 5 */ {
+    kind:'match', emoji:'🧸', mech:'Пары',
+    title:'Забег 4: инвентарная ведомость',
+    text:'Соедини игрушку с её именем, как в настоящей ведомости.',
+    say:'ball, kite, train, teddy bear, doll',
+    pairs:[
+      {left:'ball', say:'ball', right:'⚽'},
+      {left:'kite', say:'kite', right:'🪁'},
+      {left:'train', say:'train', right:'🚂'},
+      {left:'teddy bear', say:'teddy bear', right:'🧸'},
+      {left:'doll', say:'doll', right:'🪆'}
+    ],
+    ok:'Ведомость сверена: **ball, kite, train, teddy bear, doll**.',
+    no:'Не та пара. Послушай слово и найди свою игрушку.'
+  },
+
+  /* 6 */ {
+    kind:'yesno', emoji:'✅', mech:'Верно / неверно',
+    title:'Забег 5: проверка комментатора',
+    text:'Комментатор говорит про машинку. Посмотри на стоп-кадр: он прав?',
+    scene:'🚗 👇 ',
+    say:'The car is on the chair.',
+    answer:false,
+    ok:'Комментатор ошибся: машинка ПОД стулом. **The car is under the chair.** /ðə kɑː ɪz ˈʌndə ðə tʃeə/',
+    no:'Посмотри, где именно стоит машинка: сверху или под стулом?'
+  },
+
+  /* 7 */ {
+    kind:'pick', emoji:'🔴', mech:'Отбор',
+    title:'Забег 6: красная команда',
+    text:'В красную команду набирают только красные предметы. Отметь всех новобранцев.',
+    say:'Red team, step forward!',
+    pool:[
+      {t:'🔴 red ball', say:'red ball', good:true},
+      {t:'🔵 blue kite', say:'blue kite', good:false},
+      {t:'🔴 red car', say:'red car', good:true},
+      {t:'🟢 green train', say:'green train', good:false},
+      {t:'🔴 red doll', say:'red doll', good:true}
+    ],
+    ok:'Команда собрана: **red ball, red car, red doll**. Три бойца!',
+    no:'Один из отмеченных — не красный. Проверь команду ещё раз.'
+  },
+
+  /* 8 */ {
+    kind:'order', emoji:'💬', mech:'Порядок реплик',
+    title:'Забег 7: интервью на дорожке',
+    text:'Склей интервью спортсмена по порядку.',
+    say:'What colour is the ball? It is red. How many balls? Three!',
+    items:[
+      {t:'What colour is the ball?', n:'🎨', say:'What colour is the ball?'},
+      {t:'It is red.', n:'🔴', say:'It is red.'},
+      {t:'How many balls?', n:'🔢', say:'How many balls?'},
+      {t:'Three!', n:'3️⃣', say:'Three!'}
+    ],
+    ok:'Интервью в эфире: **What colour is the ball? — It is red. — How many balls? — Three!**',
+    no:'Порядок сбился: сначала вопрос про цвет, потом про количество.'
+  },
+
+  /* 9 */ {
+    kind:'count', emoji:'🧸', mech:'Счёт',
+    title:'Забег 8: мишки на трибуне',
+    text:'На трибуне болельщики-мишки. **How many teddy bears?** /haʊ ˈmeni ˈtedi beəz/',
+    ask:'How many teddy bears?',
+    items:'🧸🧸🧸🧸🧸🧸🧸🧸🧸🧸',
+    say:'How many teddy bears? One, two, three, four, five, six, seven, eight, nine, ten. Ten!',
+    opts:[
+      {t:'nine /naɪn/ — девять', say:'nine'},
+      {t:'ten /ten/ — десять', say:'ten'},
+      {t:'eight /eɪt/ — восемь', say:'eight'}
+    ],
+    correct:1,
+    ok:'Трибуна полна: **Ten teddy bears!** /ten ˈtedi beəz/',
+    no:'Считаем до самого конца дорожки: до десяти.'
+  },
+
+  /* 10 */ {
+    kind:'choice', emoji:'🚂', mech:'Выбор ответа',
+    title:'Забег 9: чей поезд?',
+    text:'На табло показывают поезд Ларри. Как скажет комментатор?',
+    say:"Larry's got a train.",
+    opts:[
+      {t:"Larry's got a train. /ˈlæriz ɡɒt ə treɪn/ — у Ларри есть поезд", say:"Larry's got a train."},
+      {t:"I've got a train. /aɪv ɡɒt ə treɪn/ — у меня есть поезд", say:"I've got a train."},
+      {t:"Larry's got a plane. /ˈlæriz ɡɒt ə pleɪn/ — у Ларри есть самолёт", say:"Larry's got a plane."}
+    ],
+    correct:0,
+    ok:'Верно: **Larry\'s got a train.** /ˈlæriz ɡɒt ə treɪn/',
+    no:'Поезд принадлежит Ларри, а не тебе. Чья фраза подходит?'
+  },
+
+  /* 11 */ {
+    kind:'spell', emoji:'🤏', mech:'Сборка слова',
+    title:'Забег 10: слово размера',
+    text:'Собери слово размера для крошечного мячика: **small** /smɔːl/.',
+    word:'small', hint:'🤏', say:'small',
+    ok:'Готово: **small** /smɔːl/ — маленький.',
+    no:'Буква не та. Слушай: s-m-a-l-l.'
+  },
+
+  /* 12 */ {
+    kind:'match', emoji:'📍', mech:'Пары',
+    title:'Забег 11: где что лежит',
+    text:'Соедини предлог с картинкой места.',
+    say:'in, on, under',
+    pairs:[
+      {left:'in', say:'in', right:'📦⬇️'},
+      {left:'on', say:'on', right:'📚⬆️'},
+      {left:'under', say:'under', right:'🪑👇'}
+    ],
+    ok:'Все места названы: **in, on, under**.',
+    no:'Не та пара. Послушай предлог и посмотри на стрелку.'
+  },
+
+  /* 13 */ {
+    kind:'choice', emoji:'🔍', mech:'Выбор ответа',
+    title:'Забег 12: где ластик?',
+    text:'Судья потерял ластик, а он лежит под стулом. Какой ответ правильный?',
+    say:"It's under the chair.",
+    opts:[
+      {t:"It's under the chair. /ɪts ˈʌndə ðə tʃeə/ — он под стулом", say:"It's under the chair."},
+      {t:"It's on the chair. /ɪts ɒn ðə tʃeə/ — он на стуле", say:"It's on the chair."},
+      {t:"It's in the chair. /ɪts ɪn ðə tʃeə/ — он в стуле", say:"It's in the chair."}
+    ],
+    correct:0,
+    ok:'Ластик найден: **It\'s under the chair.** /ɪts ˈʌndə ðə tʃeə/',
+    no:'Ластик снизу стула. Какой предлог про низ?'
+  },
+
+  /* 14 */ {
+    kind:'order', emoji:'🔢', mech:'Порядок чисел',
+    title:'Забег 13: разминка счёта',
+    text:'Расставь числа второго круга по порядку: от шести до десяти.',
+    say:'six, seven, eight, nine, ten',
+    items:[
+      {t:'six', n:'6️⃣', say:'six'},
+      {t:'seven', n:'7️⃣', say:'seven'},
+      {t:'eight', n:'8️⃣', say:'eight'},
+      {t:'nine', n:'9️⃣', say:'nine'},
+      {t:'ten', n:'🔟', say:'ten'}
+    ],
+    ok:'Круг отсчитан: **six, seven, eight, nine, ten**!',
+    no:'Число не на своём месте. Послушай ряд ещё раз.'
+  },
+
+  /* 15 */ {
+    kind:'final', emoji:'🥇', mech:'Пьедестал',
+    title:'Ты на пьедестале!',
+    text:'Пятнадцать забегов позади: счёт, цвета, размеры, предлоги и фразы — всё на дорожке, всё в голове. Табло гаснет, трибуны шумят, а медаль с надписью I CAN! уже висит у тебя на шее. Заслуженно.',
+    say:'You are the champion! Well done!',
+    allWords:[
+      {en:'ball', ipa:'/bɔːl/', ru:'мяч'},
+      {en:'kite', ipa:'/kaɪt/', ru:'воздушный змей'},
+      {en:'car', ipa:'/kɑː/', ru:'машинка'},
+      {en:'train', ipa:'/treɪn/', ru:'поезд'},
+      {en:'teddy bear', ipa:'/ˈtedi beə/', ru:'плюшевый мишка'},
+      {en:'doll', ipa:'/dɒl/', ru:'кукла'},
+      {en:'red', ipa:'/red/', ru:'красный'},
+      {en:'blue', ipa:'/bluː/', ru:'синий'},
+      {en:'yellow', ipa:'/ˈjeləʊ/', ru:'жёлтый'},
+      {en:'green', ipa:'/ɡriːn/', ru:'зелёный'},
+      {en:'pink', ipa:'/pɪk/', ru:'розовый'},
+      {en:'big', ipa:'/bɪɡ/', ru:'большой'},
+      {en:'small', ipa:'/smɔːl/', ru:'маленький'},
+      {en:'in', ipa:'/ɪn/', ru:'в, внутри'},
+      {en:'on', ipa:'/ɒn/', ru:'на'},
+      {en:'under', ipa:'/ˈʌndə/', ru:'под'},
+      {en:'How many?', ipa:'/haʊ ˈmeni/', ru:'сколько?'},
+      {en:'What colour is this?', ipa:'/wɒt kʌlə z ðɪs/', ru:'какого цвета это?'},
+      {en:"Where's the rubber?", ipa:'/weəz ðə ˈrʌbə/', ru:'где ластик?'},
+      {en:"I've got seven balls.", ipa:'/aɪv ɡɒt ˈsevən bɔːlz/', ru:'у меня семь мячей'},
+      {en:"Larry's got a train.", ipa:'/ˈlæriz ɡɒt ə treɪn/', ru:'у Ларри есть поезд'},
+      {en:'I like my kite.', ipa:'/aɪ laɪk ma kaɪt/', ru:'мне нравится мой воздушный змей'}
+    ]
+  }
+  ];
+
+  var TOTAL = STEPS.length;
+  var idx = 0;
+  var history = [];
+  var score = 0;
+  var stageHost = document.getElementById('stageHost');
+  var barFill = document.getElementById('barFill');
+  var barRunner = document.getElementById('barRunner');
+  var stepLabel = document.getElementById('stepLabel');
+  var pctLabel = document.getElementById('pctLabel');
+  var starsBox = document.getElementById('stars');
+
+  function bold(str){
+    return String(str).replace(/\*\*(.+?)\*\*/g, '<span class="en-inline">$1</span>');
+  }
+
+  function updateBar(){
+    var pct = Math.round((idx / (TOTAL - 1)) * 100);
+    if(pct < 0) pct = 0; if(pct > 100) pct = 100;
+    barFill.style.width = pct + '%';
+    barRunner.style.left = pct + '%';
+    stepLabel.textContent = idx === 0 ? 'ЗАБЕГ 0 ИЗ ' + (TOTAL - 1) : ('ЗАБЕГ ' + idx + ' ИЗ ' + (TOTAL - 1));
+    pctLabel.textContent = pct + '%';
+    var full = Math.floor(score / 3);
+    var s = '';
+    for(var i = 0; i < full && i < 6; i++){ s += '🥇'; }
+    starsBox.textContent = s;
+  }
+
+  function shakeStage(){
+    var st = stageHost.querySelector('.stage');
+    if(!st) return;
+    st.classList.remove('shake');
+    void st.offsetWidth;
+    st.classList.add('shake');
+  }
+
+  function speakerBtn(text, cls, title){
+    var b = document.createElement('button');
+    b.className = cls || 'speak-mini';
+    b.innerHTML = '🔊';
+    b.title = title || 'Прослушать';
+    b.setAttribute('aria-label','Прослушать: ' + text);
+    b.addEventListener('click', function(ev){ ev.stopPropagation(); speak(text); });
+    return b;
+  }
+
+  function nextBtn(label, fn, cls){
+    var b = document.createElement('button');
+    b.className = cls || 'btn-next';
+    b.textContent = label;
+    b.addEventListener('click', fn);
+    return b;
+  }
+
+  function goNext(){
+    if(idx < TOTAL - 1){
+      history.push(idx);
+      idx++;
+      render();
+    }
+  }
+  function goBack(){
+    if(history.length){
+      idx = history.pop();
+      render();
+    }
+  }
+
+  function render(){
+    window.scrollTo({top:0, behavior:'smooth'});
+    updateBar();
+    stageHost.innerHTML = '';
+    var s = STEPS[idx];
+
+    var stage = document.createElement('div');
+    stage.className = 'stage';
+    stageHost.appendChild(stage);
+
+    if(s.kind === 'intro')   return renderIntro(stage, s);
+    if(s.kind === 'final')   return renderFinal(stage, s);
+    if(s.kind === 'choice')  return renderChoice(stage, s);
+    if(s.kind === 'yesno')   return renderYesNo(stage, s);
+    if(s.kind === 'count')   return renderCount(stage, s);
+    if(s.kind === 'spell')   return renderSpell(stage, s);
+    if(s.kind === 'match')   return renderMatch(stage, s);
+    if(s.kind === 'order')   return renderOrder(stage, s);
+    if(s.kind === 'pick')    return renderPick(stage, s);
+  }
+
+  function header(stage, s){
+    var tag = document.createElement('span');
+    tag.className = 'step-tag';
+    tag.textContent = 'ДОРОЖКА ' + (idx + 1) + '/' + TOTAL;
+    stage.appendChild(tag);
+
+    if(s.mech){
+      var m = document.createElement('span');
+      m.className = 'mech-tag';
+      m.textContent = s.mech;
+      stage.appendChild(m);
+    }
+    var hero = document.createElement('span');
+    hero.className = 'hero';
+    hero.textContent = s.emoji || '🏃';
+    stage.appendChild(hero);
+
+    var h2 = document.createElement('h2');
+    h2.textContent = s.title;
+    stage.appendChild(h2);
+
+    var p = document.createElement('div');
+    p.className = 'task-text';
+    p.innerHTML = bold(s.text);
+    stage.appendChild(p);
+  }
+
+  function speakBlock(stage, s){
+    if(!s.say) return;
+    var line = document.createElement('div');
+    line.className = 'speak-line';
+    var big = document.createElement('button');
+    big.className = 'speak-big';
+    big.innerHTML = '🔊 ' + s.say;
+    big.addEventListener('click', function(){ speak(s.say); });
+    line.appendChild(big);
+    stage.appendChild(line);
+    if(s.sayRu){
+      var r = document.createElement('div');
+      r.className = 'task-text';
+      r.style.marginTop = '-6px';
+      r.style.fontSize = '.92rem';
+      r.textContent = s.sayRu;
+      stage.appendChild(r);
+    }
+  }
+
+  function feedback(stage, s, onWin){
+    var fb = document.createElement('div');
+    fb.className = 'fb';
+    stage.appendChild(fb);
+
+    var nav = document.createElement('div');
+    nav.className = 'nav';
+
+    var back = nextBtn('⬅️ Назад', goBack, 'btn-back');
+    if(!history.length) back.disabled = true;
+    nav.appendChild(back);
+
+    var replay = nextBtn('🔁 Ещё дубль', function(){ render(); }, 'btn-replay');
+    nav.appendChild(replay);
+
+    var next = nextBtn('Следующий забег ➡️', goNext);
+    next.style.display = 'none';
+    nav.appendChild(next);
+
+    stage.appendChild(nav);
+
+    function showGood(){
+      fb.className = 'fb good show';
+      fb.innerHTML = bold(s.ok || 'Чисто пройден!');
+      next.style.display = '';
+      speak('Well done!', 250);
+      if(onWin) onWin();
+    }
+    function showBad(){
+      fb.className = 'fb bad show';
+      fb.innerHTML = bold(s.no || 'Ещё попытка!') +
+        '<br><button class="again" type="button">🔁 Попробовать снова</button>';
+      var ag = fb.querySelector('.again');
+      ag.addEventListener('click', function(){ render(); });
+      shakeStage();
+      speak('Try again!', 200);
+    }
+    return {good:showGood, bad:showBad, next:next, back:back};
+  }
+
+  function renderIntro(stage, s){
+    header(stage, s);
+    speakBlock(stage, s);
+
+    var cast = document.createElement('div');
+    cast.className = 'start-screen';
+    cast.innerHTML = '<div class="cast">🏟️ 🏃  🎉</div>';
+    stage.appendChild(cast);
+
+    var list = document.createElement('ul');
+    ['Вспомнить игрушки, цвета и числа модуля',
+     'Называть размер и место предмета без запинки',
+     'Отвечать на How many? и What colour...?',
+     'Отличать I\'ve got от Larry\'s got',
+     'Добежать до пьедестала и получить медаль'
+    ].forEach(function(t){
+      var li = document.createElement('li');
+      li.textContent = t;
+      list.appendChild(li);
+    });
+    stage.appendChild(list);
+
+    var note = document.createElement('div');
+    note.className = 'sound-note';
+    note.innerHTML = '🔈 Включите звук. Все фразы озвучены британским голосом и звучат чуть медленнее обычной речи.';
+    stage.appendChild(note);
+
+    var nav = document.createElement('div');
+    nav.className = 'nav';
+    nav.appendChild(nextBtn(s.cta || 'Начать ➡️', goNext));
+    stage.appendChild(nav);
+
+    speak(s.say, 500);
+  }
+
+  function renderChoice(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+    speakBlock(stage, s);
+
+    var box = document.createElement('div');
+    box.className = 'opts' + (s.opts.length > 3 ? ' grid2' : '');
+    var navEl = stage.querySelector('.nav');
+    stage.insertBefore(box, navEl);
+
+    var locked = false;
+    s.opts.forEach(function(o, i){
+      var b = document.createElement('button');
+      b.className = 'opt';
+      b.type = 'button';
+      var mk = document.createElement('span');
+      mk.className = 'mark';
+      mk.textContent = String.fromCharCode(65 + i);
+      b.appendChild(mk);
+      var tx = document.createElement('span');
+      tx.innerHTML = bold(o.t);
+      b.appendChild(tx);
+      b.appendChild(speakerBtn(o.say || o.t.replace(/\/.*?\//g,'').replace(/—.*$/,'').trim(), 'speak-mini'));
+
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(i === s.correct){
+          locked = true;
+          b.classList.add('correct');
+          Array.prototype.forEach.call(box.children, function(x){ x.disabled = true; });
+          speak(o.say || o.t, 120);
+          setTimeout(fb.good, 650);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function renderYesNo(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+
+    var box = document.createElement('div');
+    box.className = 'yesno-scene';
+    var big = document.createElement('span');
+    big.className = 'big';
+    big.textContent = s.scene || '❓';
+    box.appendChild(big);
+    stage.insertBefore(box, stage.querySelector('.nav'));
+
+    var line = document.createElement('div');
+    line.className = 'speak-line';
+    var sb = document.createElement('button');
+    sb.className = 'speak-big';
+    sb.innerHTML = '🔊 ' + s.say;
+    sb.addEventListener('click', function(){ speak(s.say); });
+    line.appendChild(sb);
+    stage.insertBefore(line, stage.querySelector('.nav'));
+    speak(s.say, 600);
+
+    var row = document.createElement('div');
+    row.className = 'yesno-row';
+    stage.insertBefore(row, stage.querySelector('.nav'));
+
+    var locked = false;
+    [true, false].forEach(function(val){
+      var b = document.createElement('button');
+      b.className = 'yesno-btn ' + (val ? 'yes' : 'no');
+      b.type = 'button';
+      b.innerHTML = val ? '✔️ ВЕРНО' : '❌ НЕВЕРНО';
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(val === s.answer){
+          locked = true;
+          b.classList.add('correct');
+          speak(s.say, 100);
+          setTimeout(fb.good, 600);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      row.appendChild(b);
+    });
+  }
+
+  function renderCount(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    var cb = document.createElement('div');
+    cb.className = 'countbox';
+    var q = document.createElement('div');
+    q.className = 'task-text';
+    q.style.marginBottom = '10px';
+    q.innerHTML = '<span class="en-inline">' + s.ask + '</span>';
+    cb.appendChild(q);
+    var ql = document.createElement('div');
+    ql.className = 'speak-line';
+    ql.style.margin = '0 0 12px';
+    ql.appendChild(speakerBtn(s.ask, 'speak-mini', 'Прослушать вопрос'));
+    cb.appendChild(ql);
+    var it = document.createElement('div');
+    it.className = 'items';
+    it.textContent = s.items;
+    cb.appendChild(it);
+    stage.insertBefore(cb, navEl);
+
+    speak(s.say, 600);
+
+    var box = document.createElement('div');
+    box.className = 'opts grid2';
+    stage.insertBefore(box, navEl);
+
+    var locked = false;
+    s.opts.forEach(function(o, i){
+      var b = document.createElement('button');
+      b.className = 'opt'; b.type = 'button';
+      b.style.justifyContent = 'center';
+      b.innerHTML = bold(o.t);
+      b.appendChild(speakerBtn(o.say, 'speak-mini'));
+      b.addEventListener('click', function(){
+        if(locked) return;
+        if(i === s.correct){
+          locked = true;
+          b.classList.add('correct');
+          Array.prototype.forEach.call(box.children, function(x){ x.disabled = true; });
+          speak(o.say, 120);
+          setTimeout(fb.good, 650);
+        } else {
+          b.classList.add('wrong');
+          setTimeout(function(){ b.classList.remove('wrong'); }, 600);
+          fb.bad();
+        }
+      });
+      box.appendChild(b);
+    });
+  }
+
+  function renderSpell(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score++; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    var hintLine = document.createElement('div');
+    hintLine.className = 'speak-line';
+    var hb = document.createElement('button');
+    hb.className = 'speak-big';
+    hb.innerHTML = s.hint + ' 🔊 Прослушать слово';
+    hb.addEventListener('click', function(){ speak(s.word); });
+    hintLine.appendChild(hb);
+    stage.insertBefore(hintLine, navEl);
+    speak(s.word, 600);
+
+    var slots = document.createElement('div');
+    slots.className = 'spell-slots';
+    var slotEls = [];
+    for(var i = 0; i < s.word.length; i++){
+      var sl = document.createElement('div');
+      sl.className = 'slot';
+      slots.appendChild(sl);
+      slotEls.push(sl);
+    }
+    stage.insertBefore(slots, navEl);
+
+    var letters = s.word.split('');
+    var extra = 'abcdefghijklmnopqrstuvwxyz'.split('');
+    var pool = letters.slice();
+    var need = Math.max(0, 6 - pool.length);
+    for(var k = 0; k < need; k++){
+      pool.push(extra[Math.floor(Math.random() * extra.length)]);
+    }
+    pool.sort(function(){ return Math.random() - 0.5; });
+
+    var poolBox = document.createElement('div');
+    poolBox.className = 'letter-pool';
+    stage.insertBefore(poolBox, navEl);
+
+    var pos = 0;
+    var done = false;
+
+    pool.forEach(function(ch){
+      var b = document.createElement('button');
+      b.className = 'letter'; b.type = 'button';
+      b.textContent = ch;
+      b.addEventListener('click', function(){
+        if(done) return;
+        if(ch === s.word[pos]){
+          slotEls[pos].textContent = ch;
+          slotEls[pos].classList.add('filled');
+          b.classList.add('used');
+          pos++;
+          speak(ch, 0);
+          if(pos === s.word.length){
+            done = true;
+            speak(s.word, 500);
+            setTimeout(fb.good, 1200);
+          }
+        } else {
+          slotEls[pos].classList.add('bad');
+          b.classList.add('bad');
+          (function(el, bt){
+            setTimeout(function(){ el.classList.remove('bad'); bt.classList.remove('bad'); }, 500);
+          })(slotEls[pos], b);
+          fb.bad();
+        }
+      });
+      poolBox.appendChild(b);
+    });
+  }
+
+  function renderMatch(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score += 2; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    speakBlock(stage, s);
+
+    var area = document.createElement('div');
+    area.className = 'match-area';
+    stage.insertBefore(area, navEl);
+
+    var leftCol = document.createElement('div');
+    leftCol.className = 'mcol';
+    leftCol.innerHTML = '<h4>СЛОВО</h4>';
+    var rightCol = document.createElement('div');
+    rightCol.className = 'mcol';
+    rightCol.innerHTML = '<h4>КАРТИНКА</h4>';
+    area.appendChild(leftCol);
+    area.appendChild(rightCol);
+
+    var pairs = s.pairs.slice();
+    var lefts  = pairs.map(function(p,i){ return {p:p, i:i}; });
+    var rights = pairs.map(function(p,i){ return {p:p, i:i}; });
+    rights.sort(function(){ return Math.random() - 0.5; });
+
+    var selected = null;
+    var matched = 0;
+    var busy = false;
+
+    lefts.forEach(function(o){
+      var b = document.createElement('button');
+      b.className = 'mitem'; b.type = 'button';
+      b.textContent = o.p.left;
+      b.appendChild(speakerBtn(o.p.say, 'speak-mini'));
+      b.addEventListener('click', function(){
+        if(busy || b.classList.contains('done') || b.classList.contains('sel')) return;
+        if(selected && selected.side === 'left'){ selected.el.classList.remove('sel'); }
+        selected = {side:'left', el:b, i:o.i};
+        b.classList.add('sel');
+        speak(o.p.say);
+      });
+      leftCol.appendChild(b);
+      o.el = b;
+    });
+
+    rights.forEach(function(o){
+      var b = document.createElement('button');
+      b.className = 'mitem'; b.type = 'button';
+      var pic = document.createElement('span');
+      pic.className = 'pic';
+      pic.textContent = o.p.right;
+      b.appendChild(pic);
+      b.appendChild(speakerBtn(o.p.say, 'speak-mini'));
+      b.addEventListener('click', function(){
+        if(busy || b.classList.contains('done')) return;
+        speak(o.p.say);
+        if(selected && selected.side === 'left'){
+          busy = true;
+          if(selected.i === o.i){
+            selected.el.classList.remove('sel');
+            selected.el.classList.add('done');
+            b.classList.add('done');
+            selected = null;
+            matched++;
+            speak('Yes!', 250);
+            busy = false;
+            if(matched === pairs.length){ setTimeout(fb.good, 900); }
+          } else {
+            selected.el.classList.add('bad');
+            b.classList.add('bad');
+            var a1 = selected.el, a2 = b;
+            setTimeout(function(){
+              a1.classList.remove('bad','sel');
+              a2.classList.remove('bad');
+              selected = null; busy = false;
+            }, 650);
+            fb.bad();
+            shakeStage();
+          }
+        } else {
+          if(selected && selected.side === 'right'){ selected.el.classList.remove('sel'); }
+          selected = {side:'right', el:b, i:o.i};
+          b.classList.add('sel');
+        }
+      });
+      rightCol.appendChild(b);
+      o.el = b;
+    });
+  }
+
+  function renderOrder(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score += 2; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    speakBlock(stage, s);
+
+    var slots = document.createElement('div');
+    slots.className = 'order-slots empty-pool';
+    stage.insertBefore(slots, navEl);
+
+    var pool = s.items.map(function(it, i){ return {it:it, i:i}; });
+    var shuffled = pool.slice();
+    shuffled.sort(function(){ return Math.random() - 0.5; });
+
+    var poolBox = document.createElement('div');
+    poolBox.className = 'order-pool';
+    stage.insertBefore(poolBox, navEl);
+
+    var placed = [];
+    var busy = false;
+    var correctOrder = pool.map(function(o){ return o.i; });
+
+    shuffled.forEach(function(o){
+      var b = document.createElement('button');
+      b.className = 'otile'; b.type = 'button';
+      var n = document.createElement('span');
+      n.className = 'num';
+      n.textContent = o.it.n || '';
+      b.appendChild(n);
+      var t = document.createElement('span');
+      t.innerHTML = bold(o.it.t);
+      b.appendChild(t);
+      b.appendChild(speakerBtn(o.it.say, 'speak-mini'));
+
+      b.addEventListener('click', function(){
+        if(busy || b.classList.contains('used')) return;
+        speak(o.it.say);
+        var expect = correctOrder[placed.length];
+        if(o.i === expect){
+          b.classList.add('used');
+          var clone = document.createElement('button');
+          clone.className = 'otile placed';
+          clone.type = 'button';
+          clone.innerHTML = '<span class="num">' + (o.it.n || '') + '</span><span>' + o.it.t + '</span>';
+          slots.appendChild(clone);
+          slots.classList.remove('empty-pool');
+          placed.push(o.i);
+          if(placed.length === pool.length){
+            busy = true;
+            speakSeq(s.items.map(function(x){ return x.say; }));
+            setTimeout(fb.good, 1200);
+          }
+        } else {
+          b.classList.add('bad');
+          setTimeout(function(){ b.classList.remove('bad'); }, 550);
+          fb.bad();
+          shakeStage();
+        }
+      });
+      poolBox.appendChild(b);
+    });
+  }
+
+  function renderPick(stage, s){
+    header(stage, s);
+
+    var fb = feedback(stage, s, function(){ score += 2; updateBar(); });
+    var navEl = stage.querySelector('.nav');
+
+    speakBlock(stage, s);
+
+    var zone = document.createElement('div');
+    zone.className = 'drag-zone';
+    stage.insertBefore(zone, navEl);
+
+    var chosenCount = 0;
+    var correctCount = s.pool.filter(function(p){ return p.good; }).length;
+    var busy = false;
+
+    s.pool.forEach(function(item){
+      var el = document.createElement('button');
+      el.className = 'drag-item';
+      el.type = 'button';
+      el.innerHTML = bold(item.t);
+      el.appendChild(speakerBtn(item.say, 'speak-mini'));
+
+      el.addEventListener('click', function(){
+        if(busy || el.classList.contains('chosen')) return;
+        speak(item.say);
+        if(item.good){
+          el.classList.add('chosen');
+          chosenCount++;
+          if(chosenCount === correctCount){
+            busy = true;
+            setTimeout(fb.good, 800);
+          }
+        } else {
+          el.classList.add('bad');
+          setTimeout(function(){ el.classList.remove('bad'); }, 600);
+          fb.bad();
+          shakeStage();
+        }
+      });
+      zone.appendChild(el);
+    });
+  }
+
+  function renderFinal(stage, s){
+    stage.innerHTML = '';
+    var box = document.createElement('div');
+    box.className = 'final';
+    stage.appendChild(box);
+
+    var big = document.createElement('span');
+    big.className = 'big';
+    big.textContent = '🥇';
+    box.appendChild(big);
+
+    var h = document.createElement('h2');
+    h.textContent = s.title;
+    box.appendChild(h);
+
+    var p = document.createElement('p');
+    p.textContent = s.text;
+    box.appendChild(p);
+
+    var line = document.createElement('div');
+    line.className = 'speak-line';
+    var big2 = document.createElement('button');
+    big2.className = 'speak-big';
+    big2.innerHTML = '🔊 ' + s.say;
+    big2.addEventListener('click', function(){ speakSeq(['You are the champion!', 'Well done!']); });
+    line.appendChild(big2);
+    box.appendChild(line);
+
+    var rw = document.createElement('div');
+    rw.className = 'reward';
+    var rt = document.createElement('div');
+    rt.style.fontWeight = '700';
+    rt.style.marginBottom = '10px';
+    rt.style.color = '#8a6a10';
+    rt.textContent = '🥇 Протокол соревнований — весь словарь модуля:';
+    rw.appendChild(rt);
+
+    var wl = document.createElement('div');
+    wl.className = 'words';
+    s.allWords.forEach(function(w){
+      var row = document.createElement('div');
+      row.style.display = 'flex';
+      row.style.alignItems = 'center';
+      row.style.gap = '8px';
+      row.style.padding = '3px 0';
+      row.style.borderBottom = '1px dotted #b8cfe4';
+      var tx = document.createElement('span');
+      tx.innerHTML = '<b>' + w.en + '</b> ' + w.ipa + ' — ' + w.ru;
+      tx.style.flex = '1';
+      row.appendChild(tx);
+      row.appendChild(speakerBtn(w.en, 'speak-mini'));
+      wl.appendChild(row);
+    });
+    rw.appendChild(wl);
+    box.appendChild(rw);
+
+    var st = document.createElement('p');
+    st.innerHTML = '🏃 Забегов выиграно: <b>' + score + '</b><br>Дорожку можно пробежать ещё раз: рекорды только улучшаются.';
+    box.appendChild(st);
+
+    var nav = document.createElement('div');
+    nav.className = 'nav';
+    var back = nextBtn('⬅️ Назад', goBack, 'btn-back');
+    if(!history.length) back.disabled = true;
+    nav.appendChild(back);
+    nav.appendChild(nextBtn('🔁 Новый сезон', function(){
+      idx = 0; history = []; score = 0; render();
+    }, 'restart'));
+    box.appendChild(nav);
+
+    speakSeq(['You are the champion!', 'Well done!']);
+  }
+
+  render();
+
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = function(){ loadVoices(); };
+  }
+  document.addEventListener('click', function once(){
+    loadVoices();
+    document.removeEventListener('click', once);
+  });
+
+})();
+</script>
+</body>
+</html>

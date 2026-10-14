@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Quiz! — Квест по цветам</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Color Quiz! — Квест по цветам" />
+    <meta property="og:description" content="Интерактивный квест: помоги героям найти чашки, узнай цвета и получи награду!" />
+    <meta property="og:image" content="https://example.com/preview-color-quiz.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://example.com/color-quiz-2a.html" />
+    <meta property="og:locale" content="ru_RU" />
+    <style>
+        body { 
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+            color: #333; 
+            text-align: center; 
+            padding: 20px; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .quest-container { 
+            background: white; 
+            border-radius: 25px; 
+            padding: 30px; 
+            max-width: 700px; 
+            width: 90%; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+            border: 4px solid #f5576c; 
+        }
+        h2 { color: #f5576c; margin-bottom: 20px; font-size: 28px; }
+        .stage { display: none; }
+        .stage.active { display: block; animation: fadeIn 0.5s; }
+        .btn { 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+            color: white; 
+            border: none; 
+            padding: 15px 30px; 
+            font-size: 20px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            margin: 10px; 
+            transition: all 0.3s; 
+            font-family: inherit; 
+            font-weight: bold; 
+            box-shadow: 0 6px 15px rgba(245, 87, 108, 0.4); 
+        }
+        .btn:hover { 
+            transform: scale(1.08); 
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.6); 
+        }
+        .btn-option { 
+            display: block; 
+            width: 85%; 
+            margin: 12px auto; 
+            background: white; 
+            color: #f5576c; 
+            border: 3px solid #f5576c; 
+        }
+        .btn-option:hover { 
+            background: #f5576c; 
+            color: white; 
+        }
+        .character { font-size: 70px; margin-bottom: 15px; }
+        .progress { margin-top: 20px; color: #888; font-size: 16px; }
+        .reward { font-size: 90px; animation: bounce 1s infinite; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        .feedback { margin-top: 15px; font-weight: bold; min-height: 24px; font-size: 18px; }
+        .correct { color: #2ecc71; }
+        .wrong { color: #e74c3c; }
+        .color-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 10px;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="quest-container">
+        <div id="stage-0" class="stage active">
+            <div class="character">🫖</div>
+            <h2>Color Quiz!</h2>
+            <p style="font-size: 18px; line-height: 1.5;">Привет! Сегодня мы пьём чай с героями. Помоги им найти их чашки и ответь на вопросы о цветах. Готов?</p>
+            <button class="btn" onclick="nextStage(1)">Начать! </button>
+        </div>
+
+        <div id="stage-1" class="stage">
+            <div class="character">🔴</div>
+            <h2>Этап 1: Какой это цвет?</h2>
+            <div class="color-circle" style="background: #ff6b6b;"></div>
+            <p style="font-size: 18px;">Как по-английски "красный"?</p>
+            <button class="btn btn-option" onclick="checkAnswer(1, false)">blue</button>
+            <button class="btn btn-option" onclick="checkAnswer(1, true)">red</button>
+            <button class="btn btn-option" onclick="checkAnswer(1, false)">green</button>
+            <div id="feedback-1" class="feedback"></div>
+        </div>
+
+        <div id="stage-2" class="stage">
+            <div class="character">🔵</div>
+            <h2>Этап 2: Найди синий</h2>
+            <p style="font-size: 18px;">Какая чашка синяя?</p>
+            <button class="btn btn-option" onclick="checkAnswer(2, false)">🔴 red cup</button>
+            <button class="btn btn-option" onclick="checkAnswer(2, true)"> blue cup</button>
+            <button class="btn btn-option" onclick="checkAnswer(2, false)">🟡 yellow cup</button>
+            <div id="feedback-2" class="feedback"></div>
+        </div>
+
+        <div id="stage-3" class="stage">
+            <div class="character">🟡</div>
+            <h2>Этап 3: Что это?</h2>
+            <div class="color-circle" style="background: #ffd43b;"></div>
+            <p style="font-size: 18px;">Как сказать "Это жёлтое"?</p>
+            <button class="btn btn-option" onclick="checkAnswer(3, false)">It's red</button>
+            <button class="btn btn-option" onclick="checkAnswer(3, true)">It's yellow</button>
+            <button class="btn btn-option" onclick="checkAnswer(3, false)">It's green</button>
+            <div id="feedback-3" class="feedback"></div>
+        </div>
+
+        <div id="stage-4" class="stage">
+            <div class="character">🟢</div>
+            <h2>Этап 4: Чашка Nanny Shine</h2>
+            <p style="font-size: 18px;">Nanny Shine говорит: "My cup is green." Какого цвета её чашка?</p>
+            <button class="btn btn-option" onclick="checkAnswer(4, false)">Красная</button>
+            <button class="btn btn-option" onclick="checkAnswer(4, false)">Синяя</button>
+            <button class="btn btn-option" onclick="checkAnswer(4, true)">Зелёная</button>
+            <div id="feedback-4" class="feedback"></div>
+        </div>
+
+        <div id="stage-5" class="stage">
+            <div class="character">🎨</div>
+            <h2>Этап 5: Сколько цветов?</h2>
+            <p style="font-size: 18px;">Сколько цветов мы сегодня выучили?</p>
+            <button class="btn btn-option" onclick="checkAnswer(5, false)">One</button>
+            <button class="btn btn-option" onclick="checkAnswer(5, false)">Two</button>
+            <button class="btn btn-option" onclick="checkAnswer(5, true)">Four</button>
+            <div id="feedback-5" class="feedback"></div>
+        </div>
+
+        <div id="stage-6" class="stage">
+            <div class="character"></div>
+            <h2>Поздравляем!</h2>
+            <p style="font-size: 20px;">Ты нашёл все чашки!</p>
+            <div class="reward">🫖✨🎨</div>
+            <p style="font-size: 18px;">Ты настоящий эксперт по цветам!</p>
+            <button class="btn" onclick="location.reload()">Пройти ещё раз 🔄</button>
+        </div>
+
+        <div class="progress">Этап <span id="current-stage">1</span> из 5</div>
+    </div>
+
+    <script>
+        let currentStage = 1;
+
+        function nextStage(stageNum) {
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            document.getElementById('stage-' + stageNum).classList.add('active');
+            if(stageNum <= 5) {
+                document.getElementById('current-stage').textContent = stageNum;
+            } else {
+                document.querySelector('.progress').style.display = 'none';
+            }
+        }
+
+        function checkAnswer(stage, isCorrect) {
+            const feedbackEl = document.getElementById('feedback-' + stage);
+            if (isCorrect) {
+                feedbackEl.textContent = "Отлично! Правильно! 🎉";
+                feedbackEl.className = "feedback correct";
+                setTimeout(() => {
+                    nextStage(stage + 1);
+                }, 1200);
+            } else {
+                feedbackEl.textContent = "Попробуй ещё раз! 🤔";
+                feedbackEl.className = "feedback wrong";
+            }
+        }
+    </script>
+</body>
+</html>

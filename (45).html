@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Квест: Праздничный стол с героями</title>
+<meta property="og:title" content="Квест: Праздничный стол с героями — Модуль 2">
+<meta property="og:description" content="Большой интерактивный квест из 30 шагов для повторения модуля 2 Spotlight: цвета, семья, чаепитие, фразы.">
+<meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=Quest+Tea+Party+Heroes+Module+2">
+<meta property="og:url" content="https://example.com/quest-module2-review">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',sans-serif;background:#e8f8f5;color:#2c3e50;padding:12px;text-align:center}
+.box{max-width:560px;margin:0 auto;background:#fff;padding:24px 18px;border-radius:20px;box-shadow:0 8px 24px rgba(0,0,0,.1)}
+h1{color:#16a085;font-size:1.4em;margin-bottom:10px}
+.pbar{width:100%;height:14px;background:#ecf0f1;border-radius:10px;overflow:hidden;margin-bottom:16px}
+.pfill{height:100%;background:linear-gradient(90deg,#2ecc71,#27ae60);width:0%;transition:width .4s}
+.step{font-size:1.15em;margin-bottom:14px;min-height:50px;line-height:1.4}
+.opts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:16px}
+.ob{font-size:2.2em;padding:12px 18px;border:3px solid #bdc3c7;background:#fff;border-radius:14px;cursor:pointer;transition:.2s;min-width:80px}
+.ob:hover{border-color:#3498db;transform:scale(1.06)}
+.ob.ok{background:#d5f5e3;border-color:#2ecc71}
+.ob.no{background:#fadbd8;border-color:#e74c3c}
+.wb{font-size:1.3em;padding:10px 20px;border:2px solid #8e44ad;background:#f5eef8;border-radius:10px;cursor:pointer;transition:.2s}
+.wb:hover{background:#e8daef}
+.wb.ok{background:#d5f5e3;border-color:#2ecc71}
+.wb.no{background:#fadbd8;border-color:#e74c3c}
+.ctrls{margin-top:14px;display:flex;justify-content:center;gap:10px}
+.btn{padding:10px 18px;font-size:1em;border:none;border-radius:10px;cursor:pointer;transition:.2s}
+.bk{background:#95a5a6;color:#fff}
+.bk:hover{background:#7f8c8d}
+.sp{background:#3498db;color:#fff;font-size:1.15em}
+.sp:hover{background:#2980b9}
+.fin{font-size:1.4em;color:#16a085;padding:30px 0}
+.hid{display:none}
+</style>
+</head>
+<body>
+<div class="box">
+<h1>🎲 Праздничный стол с героями</h1>
+<div class="pbar"><div class="pfill" id="pf"></div></div>
+<div id="qa">
+<div class="step" id="st"></div>
+<button class="btn sp" id="sb" onclick="spk()">🔊 Послушать</button>
+<div class="opts" id="oa"></div>
+</div>
+<div class="ctrls">
+<button class="btn bk" id="bb" onclick="back()">⬅ Назад</button>
+</div>
+</div>
+<script>
+const S=[
+{t:'choice',q:'Покажи, где красный (red)! 🔴',a:'red',o:['🔴','🔵','🟢'],c:0},
+{t:'choice',q:'Покажи, где синий (blue)! 🔵',a:'blue',o:['🟡','🔵','🟠'],c:1},
+{t:'tf',q:'Это зелёный (green)? 🟢',a:'green',im:'🟢',c:true},
+{t:'choice',q:'Покажи, где жёлтый (yellow)! 🟡',a:'yellow',o:['🟡','🟣','⚪'],c:0},
+{t:'tf',q:'Это розовый (pink)? 🟤',a:'pink',im:'🟤',c:false},
+{t:'choice',q:'Покажи, где фиолетовый (purple)! 🟣',a:'purple',o:['🟣','🟠','⚫'],c:0},
+{t:'tf',q:'Это оранжевый (orange)? 🟠',a:'orange',im:'🟠',c:true},
+{t:'choice',q:'Покажи, где коричневый (brown)! 🟤',a:'brown',o:['⚪','🟤','🔴'],c:1},
+{t:'tf',q:'Это чёрный (black)? ⚫',a:'black',im:'⚫',c:true},
+{t:'choice',q:'Кто это? (Who\'s this?) 👩',a:"Who's this? Mum",o:['mum 👩','dad 👨','brother 👦'],c:0},
+{t:'tf',q:'Это папа (dad)? 👨',a:'dad',im:'👨',c:true},
+{t:'choice',q:'Кто это? (Who\'s this?) 👧',a:"Who's this? Sister",o:['sister 👧','brother 👦','grandma 👵'],c:0},
+{t:'tf',q:'Это бабушка (grandma)? 👦',a:'grandma',im:'👦',c:false},
+{t:'fill',q:'This is my ___. 👨',a:'This is my dad',o:['mum','dad'],c:1},
+{t:'choice',q:'Кто это? (Who\'s this?) 👴',a:"Who's this? Grandpa",o:['grandma 👵','grandpa 👴','sister 👧'],c:1},
+{t:'tf',q:'Это брат (brother)? 👦',a:'brother',im:'👦',c:true},
+{t:'fill',q:'This is my ___. 👵',a:'This is my grandma',o:['grandpa','grandma'],c:1},
+{t:'choice',q:'Покажи, где чай (tea)! 🍵',a:'tea',o:['🍵','🥛','🍋'],c:0},
+{t:'tf',q:'Это торт (cake)? 🍰',a:'cake',im:'🍰',c:true},
+{t:'fill',q:'I like tea with ___.',a:'I like tea with lemon',o:['lemon','cup'],c:0},
+{t:'choice',q:'Покажи, где молоко (milk)! 🥛',a:'milk',o:['🍋','🥛','🍓'],c:1},
+{t:'tf',q:'I don\'t like jam. (Мне не нравится джем) 🍓',a:"I don't like jam",im:'🍓',c:true},
+{t:'fill',q:'What ___ is it? 🔴',a:'What colour is it',o:['colour','like'],c:0},
+{t:'choice',q:'Кто это? (Who\'s this?) 🐒',a:"Who's this? Chuckles",o:['Chuckles 🐒','Larry 👦','Lulu 👧'],c:0},
+{t:'tf',q:'Это Ларри (Larry)? 👧',a:'Larry',im:'👧',c:false},
+{t:'fill',q:'I ___ cake. 🍰',a:'I like cake',o:['like','cup'],c:0},
+{t:'choice',q:'Покажи, где джем (jam)! 🍓',a:'jam',o:['🍓','🍵','🍰'],c:0},
+{t:'tf',q:'This is my sister. 👧 (Это моя сестра)',a:'This is my sister',im:'👧',c:true},
+{t:'fill',q:'Do you ___ tea? 🍵',a:'Do you like tea',o:['like','milk'],c:0},
+{t:'choice',q:'Покажи, где чашка (cup)! ☕',a:'cup',o:['☕','🍰','🍋'],c:0}
+];
+let cur=0,hist=[],curA='';
+function render(){
+if(cur>=S.length){
+document.getElementById('qa').innerHTML='<div class="fin">🎉 Ура! Стол накрыт! Все герои собрались на чаепитие! 🎉</div>';
+document.getElementById('bb').classList.add('hid');
+document.getElementById('pf').style.width='100%';
+return;
+}
+const s=S[cur];curA=s.a;
+document.getElementById('st').textContent=s.q;
+document.getElementById('pf').style.width=((cur/S.length)*100)+'%';
+const oa=document.getElementById('oa');oa.innerHTML='';
+if(s.t==='choice'){
+s.o.forEach((o,i)=>{
+const b=document.createElement('button');b.className='ob';b.textContent=o;
+b.onclick=()=>chk(i===s.c,b);oa.appendChild(b);
+});
+}else if(s.t==='tf'){
+const y=document.createElement('button');y.className='ob';y.textContent=s.im+' ✅ Да';
+y.onclick=()=>chk(true===s.c,y);oa.appendChild(y);
+const n=document.createElement('button');n.className='ob';n.textContent='❌ Нет';
+n.onclick=()=>chk(false===s.c,n);oa.appendChild(n);
+}else if(s.t==='fill'){
+s.o.forEach((o,i)=>{
+const b=document.createElement('button');b.className='wb';b.textContent=o;
+b.onclick=()=>chk(i===s.c,b);oa.appendChild(b);
+});
+}
+spkCur();
+}
+function chk(ok,b){
+if(ok){b.classList.add('ok');setTimeout(()=>{cur++;hist.push(cur-1);render()},700);}
+else{b.classList.add('no');setTimeout(()=>b.classList.remove('no'),700);}
+}
+function back(){if(hist.length>0){cur=hist.pop();render();}}
+function spkCur(){spkTxt(curA);}
+function spk(){spkTxt(curA);}
+function spkTxt(t){
+if('speechSynthesis' in window){
+window.speechSynthesis.cancel();
+const u=new SpeechSynthesisUtterance(t);
+const v=window.speechSynthesis.getVoices();
+let g=v.find(x=>x.lang==='en-GB');
+if(!g)g=v.find(x=>x.lang==='en-US');
+if(!g)g=v.find(x=>x.lang.startsWith('en'));
+if(g)u.voice=g;
+u.lang='en-GB';u.rate=0.85;
+window.speechSynthesis.speak(u);
+}}
+if('speechSynthesis' in window)window.speechSynthesis.onvoiceschanged=()=>{};
+render();
+</script>
+</body>
+</html>

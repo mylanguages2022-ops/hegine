@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotlight Starter: Словарь Утята</title>
+    <meta property="og:title" content="Spotlight Starter: Интерактивный словарь Утята">
+    <meta property="og:description" content="Карточки с английскими словами, транскрипцией и переводом для урока о солнечной прогулке утят.">
+    <meta property="og:image" content="https://example.com/og-image-ducklings-dictionary.jpg">
+    <meta property="og:url" content="https://example.com/spotlight-ducklings-dictionary">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <style>
+        body { font-family: 'Comic Sans MS', 'Arial', sans-serif; background-color: #e0f7fa; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px; }
+        .card { background: white; border-radius: 15px; padding: 20px; width: 220px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s; border: 2px solid #4dd0e1; }
+        .card:hover { transform: scale(1.05); }
+        .word { font-size: 24px; font-weight: bold; color: #006064; margin-bottom: 10px; }
+        .transcription { font-size: 16px; color: #00838f; font-style: italic; }
+        .translation { font-size: 18px; color: #e65100; margin-top: 10px; display: none; }
+        .card.active .translation { display: block; }
+    </style>
+</head>
+<body>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">Go on now, go and play!</div><div class="transcription">/ɡəʊ ɒn naʊ, ɡəʊ ənd pleɪ/</div><div class="translation">Идите же, идите играть!</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">Lovely sunny day!</div><div class="transcription">/ˈlʌvli ˈsʌni deɪ/</div><div class="translation">Чудесный солнечный день!</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">Happy / Sad</div><div class="transcription">/ˈhæpi/ /sæd/</div><div class="translation">Счастлив / Грустен</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">How many ducklings?</div><div class="transcription">/haʊ ˈmeni ˈdʌklɪŋz/</div><div class="translation">Сколько утят?</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">One, two, three</div><div class="transcription">/wʌn, tuː, θriː/</div><div class="translation">Один, два, три</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">The little duckling</div><div class="transcription">/ðə ˈlɪtl ˈdʌklɪŋ/</div><div class="translation">Маленький утёнок</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">Yellow sun</div><div class="transcription">/ˈjeləʊ sʌn/</div><div class="translation">Жёлтое солнце</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">Green grass</div><div class="transcription">/ɡriːn ɡrɑːs/</div><div class="translation">Зелёная трава</div></div>
+</body>
+</html>

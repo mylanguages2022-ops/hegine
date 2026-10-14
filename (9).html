@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Волшебный урок: My Family! — Spotlight Starter, Module 1a</title>
+<style>
+  :root{
+    --blue:#2f7de1; --blue-dark:#1f5cb0; --sky:#eaf4ff; --sky2:#d6ebff;
+    --pink:#ff7eb6; --red:#e8453c; --yellow:#ffd23f; --green:#4cc36a;
+    --purple:#9b5de5; --orange:#ff9f43; --cream:#fffdf6;
+    --ink:#233044; --soft:#7b879b; --shadow:0 10px 0 rgba(35,48,68,.12);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:"Comic Sans MS","Trebuchet MS",Verdana,system-ui,sans-serif;
+    background:linear-gradient(180deg,var(--sky) 0%, #ffffff 45%, var(--sky2) 100%);
+    color:var(--ink); min-height:100vh; padding:10px 10px 120px;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .wrap{width:100%; max-width:860px;}
+
+  /* ---------- Шапка ---------- */
+  header{
+    background:#fff; border:4px solid var(--blue); border-radius:22px;
+    padding:10px 14px; box-shadow:var(--shadow); margin-bottom:12px;
+  }
+  .top-row{display:flex; align-items:center; gap:10px; flex-wrap:wrap;}
+  .brand{font-size:15px; font-weight:bold; color:var(--blue-dark); line-height:1.15;}
+  .brand small{display:block; font-weight:normal; color:var(--soft); font-size:12px;}
+  .brand .mod{
+    background:var(--yellow); color:#5a4200; border-radius:999px;
+    padding:2px 10px; font-size:12px; display:inline-block; margin-top:3px;
+  }
+  .spacer{flex:1;}
+  .stars{font-size:20px; letter-spacing:2px; white-space:nowrap;}
+  .counter{
+    font-size:13px; font-weight:bold; color:#fff; background:var(--blue);
+    padding:5px 12px; border-radius:999px; white-space:nowrap;
+  }
+  .bar{height:14px; background:#e7eefb; border-radius:999px; margin-top:9px; overflow:hidden;}
+  .bar > i{
+    display:block; height:100%; width:0%;
+    background:linear-gradient(90deg,var(--green),#8ee06f);
+    border-radius:999px; transition:width .45s ease;
+  }
+
+  /* ---------- Карточка этапа ---------- */
+  .card{
+    background:var(--cream); border:5px solid #fff; border-radius:28px;
+    box-shadow:0 14px 0 rgba(47,125,225,.15), 0 0 0 4px #cfe3ff inset;
+    padding:18px 16px; min-height:430px; position:relative;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+    overflow:hidden;
+  }
+  .stage-tag{
+    align-self:flex-start; font-size:12px; font-weight:bold; color:#fff;
+    background:var(--purple); border-radius:999px; padding:4px 13px; margin-bottom:8px;
+  }
+  .stage-tag.listen{background:var(--blue);}
+  .stage-tag.speak{background:var(--orange);}
+  .stage-tag.play{background:var(--green);}
+  .stage-tag.color{background:var(--pink);}
+  .stage-tag.song{background:var(--purple);}
+
+  h2.title{
+    font-size:23px; margin:2px 0 4px; text-align:center; color:var(--blue-dark); line-height:1.2;
+  }
+  .subtitle{font-size:15px; color:var(--soft); text-align:center; margin:0 0 10px; line-height:1.35;}
+
+  /* ---------- Chuckles ---------- */
+  .chuckles-row{display:flex; align-items:flex-end; gap:10px; width:100%; margin-bottom:8px;}
+  .chuckles{font-size:46px; line-height:1; animation:bob 2.2s ease-in-out infinite; flex:none;}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg);}50%{transform:translateY(-7px) rotate(3deg);}}
+  .bubble{
+    background:#fff; border:3px solid var(--green); border-radius:18px 18px 18px 4px;
+    padding:9px 13px; font-size:17px; line-height:1.35; flex:1;
+  }
+  .bubble .en{font-weight:bold; color:var(--blue-dark); display:block;}
+  .bubble .ru{color:var(--soft); font-size:14px;}
+
+  /* ---------- Сцена ---------- */
+  .scene{
+    display:flex; flex-wrap:wrap; gap:14px; justify-content:center; align-items:center;
+    margin:8px 0 6px; width:100%;
+  }
+  .face{
+    width:118px; text-align:center; background:#fff; border:4px solid #dbe8fb;
+    border-radius:20px; padding:8px 6px 6px; cursor:pointer; transition:.15s;
+    box-shadow:0 6px 0 rgba(35,48,68,.10);
+  }
+  .face:active{transform:translateY(3px); box-shadow:0 2px 0 rgba(35,48,68,.10);}
+  .face .em{font-size:52px; line-height:1;}
+  .face .lab{font-size:14px; font-weight:bold; color:var(--blue-dark); margin-top:4px;}
+  .face .labru{font-size:12px; color:var(--soft);}
+  .face.big{width:170px;}
+  .face.big .em{font-size:80px;}
+  .face.good{border-color:var(--green); background:#eaffef; animation:pop .4s;}
+  .face.bad{border-color:#ffc9c9; background:#fff4f4;}
+  @keyframes pop{0%{transform:scale(1);}50%{transform:scale(1.09);}100%{transform:scale(1);}}
+
+  .swatch{
+    width:120px; height:120px; border-radius:26px; border:5px solid #fff; cursor:pointer;
+    box-shadow:0 7px 0 rgba(35,48,68,.16); transition:.15s;
+  }
+  .swatch:active{transform:translateY(3px);}
+  .swatch.good{border-color:var(--green); animation:pop .4s;}
+  .swatch > span{display:none;}
+
+  .hero{font-size:96px; line-height:1; margin:4px 0;}
+  .mixrow{display:flex; align-items:center; gap:8px; font-size:40px; font-weight:bold; justify-content:center;}
+  .mixrow .chip{width:60px; height:60px; border-radius:16px; border:4px solid #fff; box-shadow:0 5px 0 rgba(35,48,68,.15);}
+
+  /* ---------- Кнопки ---------- */
+  .btn{
+    font-family:inherit; font-size:17px; font-weight:bold; cursor:pointer;
+    border:none; border-radius:16px; padding:13px 22px; color:#fff;
+    background:var(--blue); box-shadow:0 6px 0 var(--blue-dark); transition:.12s;
+    display:inline-flex; align-items:center; gap:8px; justify-content:center;
+  }
+  .btn:active{transform:translateY(4px); box-shadow:0 2px 0 var(--blue-dark);}
+  .btn.listen{background:var(--orange); box-shadow:0 6px 0 #cc7c22;}
+  .btn.listen:active{box-shadow:0 2px 0 #cc7c22;}
+  .btn.ghost{background:#fff; color:var(--blue-dark); box-shadow:0 6px 0 #cfe3ff; border:3px solid #cfe3ff;}
+  .btn.ghost:active{box-shadow:0 2px 0 #cfe3ff;}
+  .btn.small{font-size:14px; padding:9px 15px; border-radius:13px; box-shadow:0 4px 0 var(--blue-dark);}
+  .btn.small.ghost{box-shadow:0 4px 0 #cfe3ff;}
+  .btn.green{background:var(--green); box-shadow:0 6px 0 #2f9a4c;}
+  .btn.green:active{box-shadow:0 2px 0 #2f9a4c;}
+  .btn.grey{background:#c3cddd; color:#4b5768; box-shadow:0 6px 0 #a5b1c5;}
+  .btn.grey:active{box-shadow:0 2px 0 #a5b1c5;}
+  .btn:disabled{opacity:.55;}
+
+  .controls{display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:auto; padding-top:14px;}
+
+  /* ---------- Действия ---------- */
+  .done-strip{
+    margin-top:10px; font-size:16px; font-weight:bold; color:#2f9a4c;
+    background:#eaffef; border:3px dashed #9ee0b3; border-radius:16px;
+    padding:9px 14px; text-align:center; display:none; width:100%;
+  }
+  .done-strip.show{display:block; animation:pop .35s;}
+  .hint-ru{
+    margin-top:10px; font-size:14px; color:#6b5a2a; background:#fff8dc;
+    border:2px dashed #ffd98a; border-radius:14px; padding:9px 13px; width:100%;
+    display:none; line-height:1.4;
+  }
+  .hint-ru.show{display:block;}
+
+  /* ---------- Подсказка для взрослого ---------- */
+  details.adult{
+    margin-top:16px; background:#fff; border:3px dashed #cfe3ff; border-radius:18px;
+    padding:10px 14px; font-size:14px; color:#4b5768; line-height:1.5;
+  }
+  details.adult summary{cursor:pointer; font-weight:bold; color:var(--blue-dark); font-size:15px;}
+  details.adult ul{padding-left:18px; margin:8px 0;}
+  details.adult li{margin-bottom:5px;}
+
+  /* ---------- Финал ---------- */
+  .final{text-align:center;}
+  .final .big{font-size:90px;}
+  .confetti{position:fixed; inset:0; pointer-events:none; z-index:99; overflow:hidden;}
+  .confetti i{
+    position:absolute; top:-30px; width:11px; height:16px; border-radius:3px;
+    animation:fall linear forwards;
+  }
+  @keyframes fall{to{transform:translateY(110vh) rotate(540deg);}}
+  .toast{
+    position:fixed; left:50%; transform:translateX(-50%); bottom:26px; z-index:120;
+    background:var(--green); color:#fff; font-weight:bold; font-size:17px;
+    padding:12px 22px; border-radius:999px; box-shadow:0 8px 22px rgba(0,0,0,.18);
+    opacity:0; transition:.3s; pointer-events:none; max-width:90vw; text-align:center;
+  }
+  .toast.show{opacity:1; bottom:40px;}
+  @media(max-width:520px){
+    h2.title{font-size:20px;}
+    .face{width:96px;} .face .em{font-size:42px;}
+    .swatch{width:96px; height:96px;}
+    .hero{font-size:72px;}
+    .btn{font-size:16px; padding:12px 16px;}
+    .card{min-height:400px; padding:14px 12px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="top-row">
+      <div class="brand">
+        My Family!
+        <small>Spotlight Starter · Английский в фокусе</small>
+        <span class="mod">Module 1a</span>
+      </div>
+      <div class="spacer"></div>
+      <div class="stars" id="stars">☆☆☆</div>
+      <div class="counter" id="counter">Этап 1 из 30</div>
+    </div>
+    <div class="bar"><i id="barfill"></i></div>
+  </header>
+
+  <div class="card" id="card"></div>
+
+  <details class="adult">
+    <summary>Подсказка для взрослого: как вести урок</summary>
+    <p><b>Что это за урок.</b> Полный интерактивный урок по Module 1a «My Family!» учебника Spotlight Starter: 30 этапов, которые идут от знакомства со словами к речи, цветам, диалогу, песенке и мини-проекту (portfolio). Ребёнок слышит английскую речь, повторяет вслух, выбирает картинки и отвечает на вопросы — тихо, без страха ошибки.</p>
+    <p><b>Как заниматься.</b></p>
+    <ul>
+      <li>Ребёнок сидит рядом, вы — рядом. Один этап — 1–2 минуты, весь урок — 20–30 минут. Можно остановиться в любой момент: прогресс не сбрасывается, пока открыта страница.</li>
+      <li>Кнопка <b>«Слушать»</b> озвучивает английское слово или фразу. Нажимайте столько раз, сколько нужно.</li>
+      <li>Кнопка <b>«По-русски»</b> показывает перевод — пусть ребёнок сначала попробует догадаться сам.</li>
+      <li>Сначала ребёнок <b>повторяет вслух</b>, потом нажимает «Я сказал!». Никаких оценок — только «Молодец!».</li>
+      <li>Если слово не идёт — достаточно улыбки и кивка. Мы не исправляем, мы поддерживаем.</li>
+    </ul>
+    <p><b>Лексика Module 1a:</b> family, Mummy, Daddy, me, brother, sister, grandma, grandpa. <b>Цвета:</b> red, blue, green, yellow, pink, purple, orange, white, grey. <b>Речевые образцы:</b> This is my Mummy. / Who's this? / It's my sister. / This is my family!</p>
+    <p><b>Звук.</b> Озвучка работает через браузер — лучше всего в Chrome или Safari. Если звука нет, нажмите любую кнопку ещё раз: браузеры включают звук после первого касания. Голос выбирается английский (British English), как в учебнике.</p>
+  </details>
+
+</div>
+
+<div class="confetti" id="confetti"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   ОЗВУЧКА
+   ============================================================ */
+let voice = null;
+function pickVoice(){
+  const vs = window.speechSynthesis ? speechSynthesis.getVoices() : [];
+  value: {
+    const pref = ["Google UK English Female","Google UK English Male","Daniel","Serena","Kate","Martha","English (United Kingdom)"];
+    for (const p of pref){
+      const v = vs.find(v => v.name === p); if (v){ voice = v; break value; }
+    }
+    voice = vs.find(v => (v.lang||"").toLowerCase().startsWith("en-gb"))
+         || vs.find(v => (v.lang||"").toLowerCase().startsWith("en"))
+         || null;
+  }
+}
+if (window.speechSynthesis){ pickVoice(); speechSynthesis.onvoiceschanged = pickVoice; }
+
+function speak(text, rate){
+  if (!window.speechSynthesis || !text) return;
+  try{
+    speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "en-GB"; u.rate = rate || 0.82; u.pitch = 1.12;
+    if (voice) u.voice = voice;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+
+/* ============================================================
+   30 ЭТАПОВ
+   type: welcome | learn | choose | say | dialogue | color | mix | chant | portfolio | final
+   ============================================================ */
+const F = {
+  mummy:{em:"👩", lab:"Mummy", ru:"мама"},
+  daddy:{em:"👨", lab:"Daddy", ru:"папа"},
+  me:   {em:"🧒", lab:"me", ru:"я"},
+  brother:{em:"👦", lab:"brother", ru:"брат"},
+  sister:{em:"👧", lab:"sister", ru:"сестра"},
+  grandma:{em:"👵", lab:"grandma", ru:"бабушка"},
+  grandpa:{em:"👴", lab:"grandpa", ru:"дедушка"},
+  family:{em:"👨‍👩‍👧‍👦", lab:"family", ru:"семья"}
+};
+
+const STAGES = [
+/* 1 */ {type:"welcome", tag:"Начнём!", tagcls:"", title:"Hello! I am Chuckles!",
+  bubble:"Hello! Hello! I am Chuckles the monkey!",
+  bubbleRu:"Привет! Я — обезьянка Чаклз!",
+  hero:"🐵", say:"Hello! I am Chuckles!",
+  note:"Поздоровайтесь: помашите рукой и скажите «Hello!»"},
+
+/* 2 */ {type:"learn", tag:"Слушаем", tagcls:"listen", title:"family", word:"family", pic:F.family,
+  bubble:"Listen and repeat: family!",
+  bubbleRu:"Слушай и повтори: family — семья.",
+  say:"family", sentence:"This is my family."},
+
+/* 3 */ {type:"learn", tag:"Слушаем", tagcls:"listen", title:"Mummy", word:"Mummy", pic:F.mummy,
+  bubble:"Listen and repeat: Mummy!",
+  bubbleRu:"Слушай и повтори: Mummy — мама.",
+  say:"Mummy", sentence:"This is my Mummy."},
+
+/* 4 */ {type:"learn", tag:"Слушаем", tagcls:"listen", title:"Daddy", word:"Daddy", pic:F.daddy,
+  bubble:"Listen and repeat: Daddy!",
+  bubbleRu:"Слушай и повтори: Daddy — папа.",
+  say:"Daddy", sentence:"This is my Daddy."},
+
+/* 5 */ {type:"learn", tag:"Слушаем", tagcls:"listen", title:"me", word:"me", pic:F.me,
+  bubble:"Listen and repeat: me!",
+  bubbleRu:"Слушай и повтори: me — я. Покажи на себя!",
+  say:"me", sentence:"This is me."},
+
+/* 6 */ {type:"learn", tag:"Слушаем", tagcls:"listen", title:"brother", word:"brother", pic:F.brother,
+  bubble:"Listen and repeat: brother!",
+  bubbleRu:"Слушай и повтори: brother — брат.",
+  say:"brother", sentence:"This is my brother."},
+
+/* 7 */ {type:"learn", tag:"Слушаем", tagcls:"listen", title:"sister", word:"sister", pic:F.sister,
+  bubble:"Listen and repeat: sister!",
+  bubbleRu:"Слушай и повтори: sister — сестра.",
+  say:"sister", sentence:"This is my sister."},
+
+/* 8 */ {type:"learn", tag:"Слушаем", tagcls:"listen", title:"grandma", word:"grandma", pic:F.grandma,
+  bubble:"Listen and repeat: grandma!",
+  bubbleRu:"Слушай и повтори: grandma — бабушка.",
+  say:"grandma", sentence:"This is my grandma."},
+
+/* 9 */ {type:"learn", tag:"Слушаем", tagcls:"listen", title:"grandpa", word:"grandpa", pic:F.grandpa,
+  bubble:"Listen and repeat: grandpa!",
+  bubbleRu:"Слушай и повтори: grandpa — дедушка.",
+  say:"grandpa", sentence:"This is my grandpa."},
+
+/* 10 */ {type:"choose", tag:"Играем", tagcls:"play", title:"Who's this?",
+  bubble:"Listen and choose! Who's this?",
+  bubbleRu:"Послушай и выбери. Кто это? Нажми на картинку.",
+  q:"Who's this? It's my Mummy!",
+  options:[F.mummy, F.daddy, F.grandma], answer:"Mummy",
+  say:"Who's this? It's my Mummy!"},
+
+/* 11 */ {type:"choose", tag:"Играем", tagcls:"play", title:"Who's this?",
+  bubble:"Listen and choose! Who's this?",
+  bubbleRu:"Послушай и выбери. Кто это?",
+  q:"Who's this? It's my Daddy!",
+  options:[F.sister, F.daddy, F.grandpa], answer:"Daddy",
+  say:"Who's this? It's my Daddy!"},
+
+/* 12 */ {type:"say", tag:"Говорим", tagcls:"speak", title:"This is my Mummy.",
+  bubble:"Now you! Say it with me!",
+  bubbleRu:"Теперь ты! Скажи вместе со мной, потом сам.",
+  say:"This is my Mummy.", pic:F.mummy, hero:"👩"},
+
+/* 13 */ {type:"say", tag:"Говорим", tagcls:"speak", title:"This is my Daddy.",
+  bubble:"Your turn! Say it out loud!",
+  bubbleRu:"Твоя очередь! Скажи вслух.",
+  say:"This is my Daddy.", pic:F.daddy, hero:"👨"},
+
+/* 14 */ {type:"say", tag:"Говорим", tagcls:"speak", title:"This is my family!",
+  bubble:"All together now!",
+  bubbleRu:"А теперь все вместе — моя семья!",
+  say:"This is my family!", pic:F.family, hero:"👨‍👩‍👧‍👦"},
+
+/* 15 */ {type:"dialogue", tag:"Диалог", tagcls:"speak", title:"Who's this?",
+  bubble:"Let's talk! You ask me, then answer!",
+  bubbleRu:"Давай поговорим! Сначала спроси, потом ответь.",
+  lines:[
+    {who:"Чаклз", en:"Who's this?", ru:"Кто это?"},
+    {who:"Ты", en:"It's my sister!", ru:"Это моя сестра."},
+    {who:"Чаклз", en:"Who's this?", ru:"Кто это?"},
+    {who:"Ты", en:"It's my brother!", ru:"Это мой брат."}
+  ], pic:F.sister},
+
+/* 16 */ {type:"color", tag:"Цвета", tagcls:"color", title:"red", word:"red", ru:"красный", hex:"#e8453c",
+  bubble:"Repeat after me: red!",
+  bubbleRu:"Послушай и повтори: red — красный."},
+
+/* 17 */ {type:"color", tag:"Цвета", tagcls:"color", title:"blue", word:"blue", ru:"синий", hex:"#2f7de1",
+  bubble:"Repeat after me: blue!",
+  bubbleRu:"Послушай и повтори: blue — синий."},
+
+/* 18 */ {type:"color", tag:"Цвета", tagcls:"color", title:"green", word:"green", ru:"зелёный", hex:"#4cc36a",
+  bubble:"Repeat after me: green!",
+  bubbleRu:"Послушай и повтори: green — зелёный."},
+
+/* 19 */ {type:"color", tag:"Цвета", tagcls:"color", title:"yellow", word:"yellow", ru:"жёлтый", hex:"#ffd23f",
+  bubble:"Repeat after me: yellow!",
+  bubbleRu:"Послушай и повтори: yellow — жёлтый."},
+
+/* 20 */ {type:"color", tag:"Цвета", tagcls:"color", title:"pink", word:"pink", ru:"розовый", hex:"#ff7eb6",
+  bubble:"Repeat after me: pink!",
+  bubbleRu:"Послушай и повтори: pink — розовый."},
+
+/* 21 */ {type:"color", tag:"Цвета", tagcls:"color", title:"purple", word:"purple", ru:"фиолетовый", hex:"#9b5de5",
+  bubble:"Repeat after me: purple!",
+  bubbleRu:"Послушай и повтори: purple — фиолетовый."},
+
+/* 22 */ {type:"color", tag:"Цвета", tagcls:"color", title:"orange", word:"orange", ru:"оранжевый", hex:"#ff9f43",
+  bubble:"Repeat after me: orange!",
+  bubbleRu:"Послушай и повтори: orange — оранжевый."},
+
+/* 23 */ {type:"color", tag:"Цвета", tagcls:"color", title:"white", word:"white", ru:"белый", hex:"#ffffff",
+  bubble:"Repeat after me: white!",
+  bubbleRu:"Послушай и повтори: white — белый."},
+
+/* 24 */ {type:"color", tag:"Цвета", tagcls:"color", title:"grey", word:"grey", ru:"серый", hex:"#b8c1cf",
+  bubble:"Repeat after me: grey!",
+  bubbleRu:"Послушай и повтори: grey — серый."},
+
+/* 25 */ {type:"choose_color", tag:"Играем", tagcls:"play", title:"What colour is it?",
+  bubble:"Listen and choose the right colour!",
+  bubbleRu:"Послушай и выбери нужный цвет.",
+  q:"Pink! Show me pink!",
+  options:[
+    {hex:"#ffd23f", name:"yellow"},{hex:"#ff7eb6", name:"pink"},
+    {hex:"#4cc36a", name:"green"},{hex:"#2f7de1", name:"blue"}
+  ], answer:"pink",
+  say:"Pink! Show me pink!"},
+
+/* 26 */ {type:"mix", tag:"Играем", tagcls:"play", title:"red + white = ?",
+  bubble:"Mix the colours! What do we get?",
+  bubbleRu:"Смешай цвета! Что получится?",
+  a:{hex:"#e8453c", name:"red"}, b:{hex:"#ffffff", name:"white"},
+  options:["pink","green","purple"], answer:"pink",
+  say:"Red and white. What colour is it? Red plus white is pink!"},
+
+/* 27 */ {type:"mix", tag:"Играем", tagcls:"play", title:"blue + yellow = ?",
+  bubble:"Mix the colours again!",
+  bubbleRu:"Смешай ещё раз!",
+  a:{hex:"#2f7de1", name:"blue"}, b:{hex:"#ffd23f", name:"yellow"},
+  options:["orange","green","grey"], answer:"green",
+  say:"Blue and yellow. Blue plus yellow is green!"},
+
+/* 28 */ {type:"chant", tag:"Песенка", tagcls:"song", title:"Mummy, Daddy, I love you!",
+  bubble:"Let's sing a little song! Clap with me!",
+  bubbleRu:"Давай споём песенку и похлопаем!",
+  lines:["Mummy, Mummy, I love you!","Daddy, Daddy, I love you!","Brother, sister, I love you!","This is my family — I love you!"]},
+
+/* 29 */ {type:"portfolio", tag:"Проект", tagcls:"speak", title:"This is my family!",
+  bubble:"Now it's your project! Take paper and crayons!",
+  bubbleRu:"А теперь твой маленький проект! Возьми бумагу и карандаши: нарисуй свою семью и назови её на английском.",
+  say:"This is my family! This is my Mummy. This is my Daddy. This is me."},
+
+/* 30 */ {type:"final", tag:"Молодец!", tagcls:"song", title:"Well done!",
+  bubble:"Well done! You did it! Brilliant!",
+  bubbleRu:"Молодец! Ты справился! Отлично!",
+  hero:"🐵", say:"Well done! Brilliant!"}
+];
+
+/* ============================================================
+   СОСТОЯНИЕ И РЕНДЕР
+   ============================================================ */
+let idx = 0;              // 0..29
+const stars = [];         // заработано ли "звёздочко" по этапам
+const card = document.getElementById("card");
+const barfill = document.getElementById("barfill");
+const counter = document.getElementById("counter");
+
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function safeUrl(u){ return u; }
+
+function updateHeader(){
+  counter.textContent = "Этап " + (idx+1) + " из " + STAGES.length;
+  barfill.style.width = Math.round((idx)/STAGES.length*100) + "%";
+  const got = stars.filter(Boolean).length;
+  const full = Math.min(3, Math.floor(got/10));
+  document.getElementById("stars").textContent = "★".repeat(full) + "☆".repeat(3-full);
+}
+
+function speakCurrent(s){
+  if (s.say) speak(s.say);
+  else if (s.word) speak(s.word);
+}
+
+function toast(msg){
+  const t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._h); t._h = setTimeout(()=>t.classList.remove("show"), 1700);
+}
+
+function confetti(n){
+  const box = document.getElementById("confetti");
+  const colors = ["#2f7de1","#ff7eb6","#ffd23f","#4cc36a","#9b5de5","#ff9f43","#e8453c"];
+  for (let i=0;i<(n||70);i++){
+    const el = document.createElement("i");
+    el.style.left = Math.random()*100 + "vw";
+    el.style.background = colors[i % colors.length];
+    el.style.animationDuration = (2 + Math.random()*1.8) + "s";
+    el.style.animationDelay = (Math.random()*0.7) + "s";
+    box.appendChild(el);
+    setTimeout(()=>el.remove(), 5200);
+  }
+}
+
+function markDone(msg){
+  stars[idx] = true; updateHeader();
+  toast(msg || "Молодец! ★");
+  if (stars.filter(Boolean).length % 5 === 0) confetti(40);
+}
+
+/* ---- общие блоки ---- */
+function chucklesRow(s){
+  return `<div class="chuckles-row">
+    <div class="chuckles">🐵</div>
+    <div class="bubble">
+      <span class="en">“${esc(s.bubble)}”</span>
+      <span class="ru">${esc(s.bubbleRu||"")}</span>
+    </div>
+  </div>`;
+}
+function tag(s){
+  return `<div class="stage-tag ${s.tagcls||""}">${esc(s.tag||"Этап")} · ${idx+1}/30</div>`;
+}
+function listenBtns(s, extra){
+  return `<div class="controls">
+     <button class="btn listen" data-act="speak">🔊 Слушать</button>
+     ${extra||""}
+     <button class="btn ghost small" data-act="translate">🇷🇺 По-русски</button>
+   </div>`;
+}
+function navBtns(label){
+  return `<div class="controls">
+     <button class="btn grey small" data-act="prev">← Назад</button>
+     <button class="btn green" data-act="next">${esc(label||"Дальше")} →</button>
+   </div>`;
+}
+function bindCommon(){
+  const s = STAGES[idx];
+  card.querySelectorAll('[data-act="speak"]').forEach(b=>b.onclick=()=>speakCurrent(s));
+  const tr = card.querySelector('[data-act="translate"]');
+  if (tr) tr.onclick = ()=>{ const h = card.querySelector(".hint-ru"); if(h) h.classList.toggle("show"); };
+  card.querySelectorAll('[data-act="prev"]').forEach(b=>b.onclick=()=>{ if(idx>0){ idx--; render(); } });
+  card.querySelectorAll('[data-act="next"]').forEach(b=>b.onclick=()=>{ idx = Math.min(STAGES.length-1, idx+1); render(); });
+}
+
+/* ---- типы этапов ---- */
+function renderWelcome(s){
+  card.innerHTML = tag(s) + `
+    <h2 class="title">${esc(s.title)}</h2>
+    <div class="hero">${s.hero}</div>
+    ${chucklesRow(s)}
+    <div class="hint-ru">${esc(s.bubbleRu||"")}</div>
+    <div class="done-strip" id="done">Хорошо! Идём дальше 👉</div>
+    ${listenBtns(s)}
+    ${navBtns("Начать")}`;
+  bindCommon();
+  card.querySelector('[data-act="next"]').onclick = ()=>{ markDone("Здравствуй, Чаклз!"); idx++; render(); };
+  speakCurrent(s);
+}
+
+function renderLearn(s){
+  card.innerHTML = tag(s) + `
+    <h2 class="title">${esc(s.title)}</h2>
+    <p class="subtitle">Послушай, повтори вслух и покажи картинку.</p>
+    <div class="face big"><div class="em">${s.pic.em}</div><div class="lab">${esc(s.pic.lab)}</div><div class="labru">${esc(s.pic.ru)}</div></div>
+    ${chucklesRow(s)}
+    <div class="hint-ru">${esc(s.bubbleRu||"")}${s.sentence? "<br><b>"+esc(s.sentence)+"</b>":""}</div>
+    <div class="done-strip" id="done">Молодец! Слово выучено ★</div>
+    ${listenBtns(s)}
+    ${navBtns()}`;
+  bindCommon();
+  card.querySelector('[data-act="next"]').onclick = ()=>{ markDone(); idx++; render(); };
+  speakCurrent(s);
+  setTimeout(()=>{ if(STAGES[idx].sentence) setTimeout(()=>speak(s.sentence), 1500); }, 1400);
+}
+
+function renderChoose(s){
+  const opts = s.options.map(o=>`
+    <div class="face" data-ans="${esc(o.lab)}"><div class="em">${o.em}</div><div class="lab">${esc(o.lab)}</div><div class="labru">${esc(o.ru)}</div></div>`).join("");
+  card.innerHTML = tag(s) + `
+    <h2 class="title">${esc(s.title)}</h2>
+    <p class="subtitle">Послушай вопрос и нажми на правильную картинку.</p>
+    ${chucklesRow(s)}
+    <div class="scene">${opts}</div>
+    <div class="hint-ru">${esc(s.bubbleRu||"")}<br><b>${esc(s.q)}</b></div>
+    <div class="done-strip" id="done">Верно! Это ${esc(s.answer)} ★</div>
+    ${listenBtns(s)}
+    ${navBtns()}`;
+  bindCommon();
+  card.querySelectorAll(".face").forEach(el=>{
+    el.onclick = ()=>{
+      if (el.dataset.ans === s.answer){
+        el.classList.add("good"); markDone("Верно! ★");
+        card.querySelector("#done").classList.add("show");
+        card.querySelector("#done").textContent = "Верно! Это " + s.answer + " ★";
+        speak("Yes! This is my " + s.answer + "!");
+        card.querySelectorAll(".face").forEach(f=>f.onclick=null);
+      } else {
+        el.classList.add("bad");
+        speak("Try again! Listen.");
+        toast("Попробуй ещё раз 🙂");
+        setTimeout(()=>el.classList.remove("bad"), 700);
+      }
+    };
+  });
+  speakCurrent(s);
+}
+
+function renderChooseColor(s){
+  const sw = s.options.map(o=>`<div class="swatch" data-ans="${esc(o.name)}" style="background:${o.hex}" title="${esc(o.name)}"></div>`).join("");
+  const legend = s.options.map(o=>`<span style="font-size:13px;color:#7b879b">${esc(o.name)}</span>`).join(" · ");
+  card.innerHTML = tag(s) + `
+    <h2 class="title">${esc(s.title)}</h2>
+    <p class="subtitle">Послушай и нажми на нужный цвет.</p>
+    ${chucklesRow(s)}
+    <div class="scene">${sw}</div>
+    <p class="subtitle" style="margin-top:2px">${legend}</p>
+    <div class="hint-ru">${esc(s.bubbleRu||"")}<br><b>${esc(s.q)}</b></div>
+    <div class="done-strip" id="done">Верно! Это pink — розовый ★</div>
+    ${listenBtns(s)}
+    ${navBtns()}`;
+  bindCommon();
+  card.querySelectorAll(".swatch").forEach(el=>{
+    el.onclick = ()=>{
+      if (el.dataset.ans === s.answer){
+        el.classList.add("good"); markDone("Верно! ★");
+        card.querySelector("#done").classList.add("show");
+        speak("Yes! Pink!");
+        card.querySelectorAll(".swatch").forEach(x=>x.onclick=null);
+      } else {
+        speak("Try again!");
+        toast("Послушай ещё раз 🙂");
+      }
+    };
+  });
+  speakCurrent(s);
+}
+
+function renderMix(s){
+  const optBtns = s.options.map(o=>`<div class="face" data-ans="${esc(o)}"><div class="em" style="font-size:40px">🎨</div><div class="lab">${esc(o)}</div></div>`).join("");
+  card.innerHTML = tag(s) + `
+    <h2 class="title">${esc(s.title)}</h2>
+    <p class="subtitle">Смешай два цвета и выбери, что получится.</p>
+    <div class="mixrow">
+      <span class="chip" style="background:${s.a.hex}"></span> +
+      <span class="chip" style="background:${s.b.hex}"></span> = <span style="font-size:34px">❓</span>
+    </div>
+    <p class="subtitle" style="margin-top:6px">${esc(s.a.name)} + ${esc(s.b.name)}</p>
+    <div class="scene">${optBtns}</div>
+    <div class="hint-ru"><b>${esc(s.say)}</b></div>
+    <div class="done-strip" id="done">Верно! ★</div>
+    ${listenBtns(s)}
+    ${navBtns()}`;
+  bindCommon();
+  card.querySelectorAll(".face").forEach(el=>{
+    el.onclick = ()=>{
+      if (el.dataset.ans === s.answer){
+        el.classList.add("good"); markDone("Верно! ★");
+        card.querySelector("#done").classList.add("show");
+        card.querySelector("#done").textContent = "Верно! " + s.a.name + " + " + s.b.name + " = " + s.answer + " ★";
+        speak("Yes! " + s.a.name + " plus " + s.b.name + " is " + s.answer + "!");
+        card.querySelectorAll(".face").forEach(x=>x.onclick=null);
+      } else {
+        speak("Try again!"); toast("Попробуй ещё раз 🙂");
+      }
+    };
+  });
+  speakCurrent(s);
+}
+
+function renderSay(s){
+  card.innerHTML = tag(s) + `
+    <h2 class="title">${esc(s.title)}</h2>
+    <p class="subtitle">Нажми «Слушать», повтори вслух — и нажми «Я сказал!».</p>
+    ${s.hero? `<div class="hero">${s.hero}</div>` : ""}
+    ${chucklesRow(s)}
+    <div class="hint-ru">${esc(s.bubbleRu||"")}<br><b>${esc(s.say)}</b></div>
+    <div class="done-strip" id="done">Умница! Сказано вслух ★</div>
+    ${listenBtns(s, '<button class="btn green" data-act="said">✅ Я сказал!</button>')}
+    ${navBtns()}`;
+  bindCommon();
+  card.querySelector('[data-act="said"]').onclick = ()=>{
+    markDone("Умница! ★"); card.querySelector("#done").classList.add("show");
+    card.querySelector('[data-act="said"]').disabled = true;
+  };
+  speakCurrent(s);
+}
+
+function renderDialogue(s){
+  const lines = s.lines.map((l,i)=>`
+    <div class="face" data-i="${i}" style="width:auto; max-width:100%; text-align:left; padding:9px 13px;">
+      <div class="lab" style="font-size:13px;color:#9b5de5">${esc(l.who)}</div>
+      <div style="font-size:17px;font-weight:bold;color:#1f5cb0">${esc(l.en)}</div>
+      <div class="labru">${esc(l.ru)}</div>
+    </div>`).join("");
+  card.innerHTML = tag(s) + `
+    <h2 class="title">${esc(s.title)}</h2>
+    <p class="subtitle">Нажми на каждую строчку — услышишь её. Потом повтори диалог вслух.</p>
+    ${chucklesRow(s)}
+    <div class="scene" style="flex-direction:column;">${lines}</div>
+    <div class="hint-ru">${esc(s.bubbleRu||"")}</div>
+    <div class="done-strip" id="done">Отличный диалог! ★</div>
+    ${listenBtns(s, '<button class="btn green" data-act="said">✅ Я сказал!</button>')}
+    ${navBtns()}`;
+  bindCommon();
+  card.querySelectorAll(".face").forEach(el=>{
+    const i = +el.dataset.i;
+    el.onclick = ()=>{ speak(s.lines[i].en); el.classList.add("good"); setTimeout(()=>el.classList.remove("good"), 900); };
+  });
+  card.querySelector('[data-act="said"]').onclick = ()=>{ markDone("Отличный диалог! ★"); card.querySelector("#done").classList.add("show"); };
+  speakCurrent(s);
+}
+
+function renderColor(s){
+  const border = s.word === "white" ? "box-shadow:0 0 0 4px #dbe8fb inset, 0 7px 0 rgba(35,48,68,.16);" : "";
+  card.innerHTML = tag(s) + `
+    <h2 class="title">${esc(s.word)}</h2>
+    <p class="subtitle">Послушай и повтори название цвета.</p>
+    <div class="swatch" style="background:${s.hex}; width:150px; height:150px; ${border}" data-noop="1"></div>
+    <p class="subtitle" style="margin-top:8px;font-size:19px"><b>${esc(s.word)}</b> — ${esc(s.ru)}</p>
+    ${chucklesRow(s)}
+    <div class="done-strip" id="done">Цвет выучен ★</div>
+    ${listenBtns(s)}
+    ${navBtns()}`;
+  bindCommon();
+  card.querySelector(".swatch").onclick = ()=>speak(s.word);
+  card.querySelector('[data-act="next"]').onclick = ()=>{ markDone(); idx++; render(); };
+  speakCurrent(s);
+  setTimeout(()=>speak(s.word), 1300);
+}
+
+function renderChant(s){
+  const lines = s.lines.map((l,i)=>`
+    <div class="face" data-i="${i}" style="width:auto; max-width:100%; text-align:left; padding:9px 14px;">
+      <div style="font-size:17px;font-weight:bold;color:#9b5de5">🎵 ${esc(l)}</div>
+    </div>`).join("");
+  card.innerHTML = tag(s) + `
+    <h2 class="title">${esc(s.title)}</h2>
+    <p class="subtitle">Нажми на строчку — услышишь её. Пой вместе с Чаклзом!</p>
+    ${chucklesRow(s)}
+    <div class="scene" style="flex-direction:column;">${lines}</div>
+    <div class="hint-ru">${esc(s.bubbleRu||"")}</div>
+    <div class="done-strip" id="done">Как здорово поёшь! ★</div>
+    ${listenBtns(s, '<button class="btn small green" data-act="all">▶︎ Вся песенка</button><button class="btn green" data-act="said">✅ Я спел!</button>')}
+    ${navBtns()}`;
+  bindCommon();
+  card.querySelectorAll(".face").forEach(el=>{
+    const i = +el.dataset.i;
+    el.onclick = ()=>{ speak(s.lines[i]); el.classList.add("good"); setTimeout(()=>el.classList.remove("good"), 900); };
+  });
+  card.querySelector('[data-act="all"]').onclick = ()=>{ speak(s.lines.join(". ")); };
+  card.querySelector('[data-act="said"]').onclick = ()=>{ markDone("Как здорово поёшь! ★"); card.querySelector("#done").classList.add("show"); confetti(30); };
+  speakCurrent(s);
+}
+
+function renderPortfolio(s){
+  card.innerHTML = tag(s) + `
+    <h2 class="title">${esc(s.title)}</h2>
+    <p class="subtitle">Мини-проект: нарисуй свою семью и назови каждого на английском.</p>
+    <div class="hero">🖍️</div>
+    ${chucklesRow(s)}
+    <div class="hint-ru">${esc(s.bubbleRu||"")}<br><b>${esc(s.say)}</b></div>
+    <div class="done-strip" id="done">Прекрасный проект! ★</div>
+    ${listenBtns(s, '<button class="btn green" data-act="said">✅ Я рассказал!</button>')}
+    ${navBtns()}`;
+  bindCommon();
+  card.querySelector('[data-act="said"]').onclick = ()=>{ markDone("Прекрасный проект! ★"); card.querySelector("#done").classList.add("show"); };
+  speakCurrent(s);
+}
+
+function renderFinal(s){
+  const got = stars.filter(Boolean).length;
+  card.innerHTML = `<div class="final" style="width:100%">
+    ${tag(s)}
+    <h2 class="title">${esc(s.title)}</h2>
+    <div class="big">🐵</div>
+    ${chucklesRow(s)}
+    <p class="subtitle" style="font-size:18px">Ты прошёл весь урок <b>Module 1a «My Family!»</b><br>и заработал звёздочки на <b>${got}</b> этапах.</p>
+    <div class="done-strip show">Well done! Brilliant! ★ ★ ★</div>
+    <div class="controls">
+      <button class="btn listen" data-act="speak">🔊 Слушать</button>
+      <button class="btn green" data-act="restart">🔄 Пройти урок снова</button>
+      <button class="btn ghost small" data-act="prev">← Назад</button>
+    </div>
+    <p class="subtitle" style="margin-top:12px">Теперь можно спеть песенку ещё раз или рассказать семью по-английски маме и папе.</p>
+  </div>`;
+  bindCommon();
+  card.querySelector('[data-act="restart"]').onclick = ()=>{ idx=0; stars.length=0; render(); };
+  speakCurrent(s);
+  confetti(120);
+}
+
+/* ---- маршрутизация ---- */
+function render(){
+  updateHeader();
+  window.scrollTo({top:0, behavior:"smooth"});
+  const s = STAGES[idx];
+  if (!s) return;
+  switch(s.type){
+    case "welcome": return renderWelcome(s);
+    case "learn":   return renderLearn(s);
+    case "choose":  return renderChoose(s);
+    case "choose_color": return renderChooseColor(s);
+    case "mix":     return renderMix(s);
+    case "say":     return renderSay(s);
+    case "dialogue":return renderDialogue(s);
+    case "color":   return renderColor(s);
+    case "chant":   return renderChant(s);
+    case "portfolio":return renderPortfolio(s);
+    case "final":   return renderFinal(s);
+  }
+}
+
+/* первый клик включает звук */
+["click","touchstart"].forEach(ev=>window.addEventListener(ev, function once(){
+  try{ speak(" "); }catch(e){}
+  window.removeEventListener(ev, once);
+}, {once:true}));
+
+render();
+</script>
+</body>
+</html>

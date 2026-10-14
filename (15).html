@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Словарь урока — Toy Hunt</title>
+<meta property="og:title" content="Словарь урока — Toy Hunt (Spotlight)">
+<meta property="og:description" content="Интерактивный словарь с озвучкой: игрушки и предлоги места on / under.">
+<meta property="og:image" content="https://example.com/og-toy-hunt-dictionary.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://example.com/toy-hunt-dictionary">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<style>
+  body { font-family: 'Segoe UI', 'Comic Sans MS', sans-serif; background: #eef7ff; margin: 0; padding: 24px; color: #2c3e50; }
+  h1 { text-align: center; color: #2f6fb0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 16px; max-width: 900px; margin: auto; }
+  .card { background: #fff; border-radius: 18px; padding: 18px; text-align: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: transform 0.15s ease, box-shadow 0.15s ease; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 18px rgba(0,0,0,0.12); }
+  .card .en { font-size: 1.25em; font-weight: bold; color: #c94f2e; }
+  .card .tr { color: #888; font-size: 0.9em; font-style: italic; margin: 4px 0; }
+  .card .ru { font-size: 1.05em; color: #2f6fb0; }
+  .card .emoji { font-size: 1.8em; display: block; margin-bottom: 6px; }
+  .hint { text-align: center; color: #7a8a99; font-size: 0.9em; margin-top: 24px; }
+</style>
+</head>
+<body>
+<h1>🧸 Словарь: Toy Hunt</h1>
+<p class="hint">Нажмите на карточку — услышите слово по-английски 🔊</p>
+<div class="grid" id="grid"></div>
+
+<script>
+const words = [
+  { en: 'ball', tr: '/bɔːl/', ru: 'мяч', emoji: '⚽' },
+  { en: 'kite', tr: '/kaɪt/', ru: 'змей', emoji: '🪁' },
+  { en: 'teddy bear', tr: '/ˈtedi beə(r)/', ru: 'мишка', emoji: '🧸' },
+  { en: 'doll', tr: '/dɒl/', ru: 'кукла', emoji: '🪆' },
+  { en: 'car', tr: '/kɑː(r)/', ru: 'машинка', emoji: '🚗' },
+  { en: 'boat', tr: '/bəʊt/', ru: 'лодка', emoji: '⛵' },
+  { en: 'toys', tr: '/tɔɪz/', ru: 'игрушки', emoji: '🎁' },
+  { en: 'on', tr: '/ɒn/', ru: 'на', emoji: '⬆️' },
+  { en: 'under', tr: '/ˈʌndə(r)/', ru: 'под', emoji: '⬇️' },
+  { en: 'on the bed', tr: '/ɒn ðə bed/', ru: 'на кровати', emoji: '🛏️' },
+  { en: 'under the chair', tr: '/ˈʌndə(r) ðə tʃeə(r)/', ru: 'под стулом', emoji: '🪑' },
+  { en: 'on the shelf', tr: '/ɒn ðə ʃelf/', ru: 'на полке', emoji: '📚' },
+  { en: 'under the table', tr: '/ˈʌndə(r) ðə ˈteɪbl/', ru: 'под столом', emoji: '🪑' },
+  { en: 'Where is the ball?', tr: '/weə(r) ɪz ðə bɔːl/', ru: 'где мяч?', emoji: '❓' },
+  { en: "It's on the bed.", tr: '/ɪts ɒn ðə bed/', ru: 'он на кровати', emoji: '✅' },
+  { en: "It's under the chair.", tr: '/ɪts ˈʌndə(r) ðə tʃeə(r)/', ru: 'он под стулом', emoji: '✅' }
+];
+
+const grid = document.getElementById('grid');
+words.forEach(w => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `<span class="emoji">${w.emoji}</span>
+    <div class="en">${w.en}</div>
+    <div class="tr">${w.tr}</div>
+    <div class="ru">${w.ru}</div>`;
+  card.addEventListener('click', () => speak(w.en));
+  grid.appendChild(card);
+});
+
+let voices = [];
+function loadVoices() {
+  voices = window.speechSynthesis.getVoices();
+}
+loadVoices();
+window.speechSynthesis.onvoiceschanged = loadVoices;
+
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  const utter = new SpeechSynthesisUtterance(text);
+  let voice = voices.find(v => v.lang === 'en-GB');
+  if (!voice) voice = voices.find(v => v.lang === 'en-US');
+  if (voice) utter.voice = voice;
+  utter.lang = voice ? voice.lang : 'en-GB';
+  utter.rate = 0.85;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
+}
+</script>
+</body>
+</html>

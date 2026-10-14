@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик-кубики — What Have I Got?</title>
+
+<meta property="og:title" content="Словарик-кубики — What Have I Got?">
+<meta property="og:description" content="Говорящие карточки-кубики урока 7a Spotlight: игрушки kite, ball, teddy bear, doll, car, boat и фразы I've got / I haven't got. Британское произношение по клику.">
+<meta property="og:image" content="https://spotlight-lessons.example.com/og/7a-dictionary-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Словарик-кубики What Have I Got?">
+<meta property="og:url" content="https://spotlight-lessons.example.com/7a/dictionary">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Spotlight — уроки для родителя и ребёнка">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Интерактивный словарик урока 7a Spotlight в виде игрушечных кубиков с озвучкой en-GB: игрушки и фразы I've got / I haven't got.">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
+    background-color:#fdf3e7;
+    background-image:radial-gradient(#f6ddc0 2.2px, transparent 2.6px);
+    background-size:28px 28px;
+    color:#3a2e2a;padding:26px 14px 60px;min-height:100vh;
+  }
+  .wrap{max-width:960px;margin:0 auto}
+  header{text-align:center;margin-bottom:24px}
+  header h1{
+    font-size:clamp(1.5rem,4.5vw,2.4rem);color:#e2574c;letter-spacing:.3px;
+  }
+  header h1::before{content:'🧸 ';}
+  header p{margin-top:8px;font-size:1rem;color:#7a6a5a;line-height:1.5}
+  .hint{
+    background:#fff;border:3px dashed #f2a08c;border-radius:14px;
+    padding:14px 18px;margin:18px 0 26px;font-size:.97rem;color:#8a4a3a;line-height:1.55;
+  }
+  .filters{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:28px}
+  .filters button{
+    border:2px solid #f2c8b0;background:#fff;color:#c04a3a;
+    padding:9px 18px;border-radius:999px;font-size:.92rem;font-weight:700;
+    cursor:pointer;font-family:inherit;transition:.18s;
+  }
+  .filters button:hover{background:#ffece4;transform:translateY(-2px)}
+  .filters button.active{background:#e2574c;border-color:#e2574c;color:#fff;box-shadow:0 4px 0 #b03a30}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+
+  /* ---------- КУБИК ---------- */
+  .card{
+    background:#fff;border-radius:14px;padding:22px 15px 14px;
+    border:3px solid #3ec9a7;cursor:pointer;position:relative;
+    transition:.18s;box-shadow:0 5px 0 rgba(62,201,167,.45);
+  }
+  .card::before{
+    content:'';position:absolute;top:-9px;left:16px;right:16px;height:12px;
+    background-image:radial-gradient(circle at 9px 6px, currentColor 6px, transparent 7px);
+    background-size:36px 12px;background-repeat:repeat-x;
+    color:#3ec9a7;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:0 9px 0 rgba(62,201,167,.45)}
+  .card:active{transform:translateY(0);box-shadow:0 3px 0 rgba(62,201,167,.45)}
+  .card.playing{animation:wiggle .5s}
+  @keyframes wiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-2deg)}75%{transform:rotate(2deg)}}
+  .card .emoji{font-size:2.2rem;line-height:1;text-align:center;display:block;margin-bottom:8px}
+  .card .en{
+    font-size:1.2rem;font-weight:700;color:#2a7a66;text-align:center;
+    display:block;line-height:1.25;word-break:break-word;
+  }
+  .card .tr{
+    display:block;text-align:center;font-size:.88rem;color:#9a8a7a;
+    margin-top:5px;font-family:"Segoe UI",Arial,sans-serif;letter-spacing:.2px;
+  }
+  .card .ru{
+    display:block;text-align:center;font-size:1.02rem;color:#5a4a3a;
+    margin-top:9px;font-weight:600;
+  }
+  /* мячик-динамик */
+  .speak-btn{
+    position:absolute;top:10px;right:10px;width:40px;height:40px;border-radius:50%;
+    border:none;cursor:pointer;font-size:1.05rem;
+    background:
+      radial-gradient(circle at 32% 30%, #fff 0 18%, transparent 19%),
+      linear-gradient(180deg, #ff8a75 0 46%, #fff 46% 54%, #e2574c 54% 100%);
+    box-shadow:0 3px 0 #b03a30;transition:.15s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .speak-btn:hover{transform:scale(1.1) rotate(-8deg)}
+  .speak-btn:active{transform:scale(.94);box-shadow:0 1px 0 #b03a30}
+
+  .cat-toys{border-color:#3ec9a7;box-shadow:0 5px 0 rgba(62,201,167,.45)}
+  .cat-toys::before{color:#3ec9a7}
+  .cat-toys .en{color:#2a7a66}
+  .cat-got{border-color:#ffcf4d;box-shadow:0 5px 0 rgba(255,207,77,.55)}
+  .cat-got::before{color:#ffcf4d}
+  .cat-got .en{color:#a07a10}
+  .cat-ask{border-color:#9b8cff;box-shadow:0 5px 0 rgba(155,140,255,.45)}
+  .cat-ask::before{color:#9b8cff}
+  .cat-ask .en{color:#5a4ac0}
+  .empty{
+    text-align:center;padding:40px 20px;color:#9a8a7a;font-size:1.05rem;
+    background:#fff;border-radius:14px;border:3px dashed #f2c8b0;
+  }
+  footer{text-align:center;margin-top:36px;font-size:.9rem;color:#9a8a7a;line-height:1.6}
+  @media (max-width:520px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:14px}
+    .card .en{font-size:1.02rem}
+    .card .emoji{font-size:1.9rem}
+    .speak-btn{width:34px;height:34px;font-size:.95rem;top:6px;right:6px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>What Have I Got?</h1>
+    <p>словарик-кубики · игрушки и фразы «есть / нет»</p>
+  </header>
+
+  <div class="hint">
+    🔊 Нажмите на кубик — мячик-динамик озвучит слово британским голосом. Играйте в «Покажи и расскажи»: ребёнок берёт настоящую игрушку, находит такой же кубик, нажимает и повторяет фразу <b>I've got a...</b>
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">В этой коробке пока пусто.</div>
+
+  <footer>
+    Spotlight · Module 7 · Lesson 7a<br>
+    Кубики можно переставлять и слушать сколько угодно раз.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var RATE = 0.85;
+  var voices = [];
+
+  function loadVoices(){
+    if(!('speechSynthesis' in window)) return;
+    voices = window.speechSynthesis.getVoices() || [];
+  }
+  loadVoices();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    setTimeout(loadVoices, 300);
+    setTimeout(loadVoices, 1200);
+  }
+
+  function pickVoice(){
+    if(!voices.length) loadVoices();
+    var v;
+    v = voices.find(function(x){ return x.lang === 'en-GB'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en-gb') === 0; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang === 'en-US'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en') === 0; });
+    return v || null;
+  }
+
+  var speakingCard = null;
+
+  function speak(text, cardEl){
+    if(!('speechSynthesis' in window)){
+      if(cardEl) flash(cardEl);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    if(speakingCard){ speakingCard.classList.remove('playing'); speakingCard = null; }
+
+    var u = new SpeechSynthesisUtterance(text);
+    var v = pickVoice();
+    if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+    u.rate = RATE;
+    u.pitch = 1.05;
+    u.volume = 1;
+
+    if(cardEl){
+      cardEl.classList.add('playing');
+      speakingCard = cardEl;
+      u.onend = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+      u.onerror = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+    }
+    window.speechSynthesis.speak(u);
+  }
+
+  function flash(el){
+    el.classList.add('playing');
+    setTimeout(function(){ el.classList.remove('playing'); }, 600);
+  }
+
+  var CATS = {
+    all:  '🧸 Все кубики',
+    toys: '🪁 Игрушки',
+    got:  '🎁 Есть и нет',
+    ask:  '❓ Вопросы и ответы'
+  };
+
+  var WORDS = [
+    {c:'toys', e:'🪁', en:'kite',       ipa:'/kaɪt/',        ru:'воздушный змей'},
+    {c:'toys', e:'⚽', en:'ball',       ipa:'/bɔːl/',        ru:'мяч'},
+    {c:'toys', e:'🧸', en:'teddy bear', ipa:'/ˈtedi beə/',   ru:'плюшевый мишка'},
+    {c:'toys', e:'🪆', en:'doll',       ipa:'/dɒl/',         ru:'кукла'},
+    {c:'toys', e:'🚗', en:'car',        ipa:'/kɑː/',         ru:'машинка'},
+    {c:'toys', e:'🛥️', en:'boat',      ipa:'/bəʊt/',        ru:'лодка'},
+    {c:'toys', e:'🧩', en:'toy',        ipa:'/tɔɪ/',         ru:'игрушка'},
+    {c:'toys', e:'🤖', en:'robot',      ipa:'/ˈrəʊbɒt/',     ru:'робот'},
+    {c:'toys', e:'✈️', en:'plane',     ipa:'/pleɪn/',       ru:'самолётик'},
+
+    {c:'got', e:'🪁', en:"I've got a kite.",        ipa:'/aɪv ɡɒt ə kaɪt/',       ru:'у меня есть воздушный змей'},
+    {c:'got', e:'⚽', en:"I've got a ball.",        ipa:'/aɪv ɡɒt ə bɔːl/',       ru:'у меня есть мяч'},
+    {c:'got', e:'🧸', en:"I've got a teddy bear.",  ipa:'/aɪv ɡɒt ə ˈtedi beə/',  ru:'у меня есть плюшевый мишка'},
+    {c:'got', e:'🚫', en:"I haven't got a boat.",   ipa:'/aɪ ˈhævnt ɡɒt ə bəʊt/', ru:'у меня нет лодки'},
+    {c:'got', e:'🚫', en:"I haven't got a doll.",   ipa:'/aɪ ˈhævnt ɡɒt ə dɒl/',  ru:'у меня нет куклы'},
+
+    {c:'ask', e:'🎤', en:'What have you got?',   ipa:'/wɒt hæv ju ɡɒt/',   ru:'что у тебя есть?'},
+    {c:'ask', e:'❓', en:'Have you got a doll?',  ipa:'/hæv ju ɡɒt ə dɒl/', ru:'у тебя есть кукла?'},
+    {c:'ask', e:'✅', en:'Yes, I have.',          ipa:'/jes aɪ hæv/',       ru:'да, есть'},
+    {c:'ask', e:'❌', en:"No, I haven't.",        ipa:'/nəʊ aɪ ˈhævnt/',    ru:'нет, не хватает'},
+    {c:'ask', e:'❓', en:'Have you got a ball?',  ipa:'/hæv ju ɡɒt ə bɔːl/', ru:'у тебя есть мяч?'}
+  ];
+
+  var filtersBox = document.getElementById('filters');
+  var current = 'all';
+
+  Object.keys(CATS).forEach(function(key){
+    var b = document.createElement('button');
+    b.textContent = CATS[key];
+    b.dataset.cat = key;
+    if(key === 'all') b.classList.add('active');
+    b.addEventListener('click', function(){
+      current = key;
+      Array.prototype.forEach.call(filtersBox.children, function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      render();
+    });
+    filtersBox.appendChild(b);
+  });
+
+  var grid  = document.getElementById('grid');
+  var empty = document.getElementById('empty');
+
+  function render(){
+    grid.innerHTML = '';
+    var list = WORDS.filter(function(w){ return current === 'all' || w.c === current; });
+    empty.style.display = list.length ? 'none' : 'block';
+
+    list.forEach(function(w){
+      var card = document.createElement('div');
+      card.className = 'card cat-' + w.c;
+      card.setAttribute('role','button');
+      card.setAttribute('tabindex','0');
+
+      var sp = document.createElement('button');
+      sp.className = 'speak-btn';
+      sp.innerHTML = '🔊';
+      sp.title = 'Прослушать произношение';
+      sp.setAttribute('aria-label','Прослушать ' + w.en);
+      sp.addEventListener('click', function(ev){
+        ev.stopPropagation();
+        speak(w.en, card);
+      });
+
+      var em = document.createElement('span');
+      em.className = 'emoji';
+      em.textContent = w.e;
+
+      var en = document.createElement('span');
+      en.className = 'en';
+      en.textContent = w.en;
+
+      var tr = document.createElement('span');
+      tr.className = 'tr';
+      tr.textContent = w.ipa;
+
+      var ru = document.createElement('span');
+      ru.className = 'ru';
+      ru.textContent = w.ru;
+
+      card.appendChild(sp);
+      card.appendChild(em);
+      card.appendChild(en);
+      card.appendChild(tr);
+      card.appendChild(ru);
+
+      card.addEventListener('click', function(){ speak(w.en, card); });
+      card.addEventListener('keydown', function(ev){
+        if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); speak(w.en, card); }
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  render();
+
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = function(){ loadVoices(); };
+  }
+})();
+</script>
+</body>
+</html>

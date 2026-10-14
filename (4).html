@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик: The Ugly Duckling — полёт</title>
+<meta name="description" content="Интерактивный словарик к уроку The Ugly Duckling.">
+<style>
+body {
+  font-family: "Comic Sans MS", "Marker Felt", sans-serif;
+  background: linear-gradient(to bottom, #1a237e 0%, #3949ab 35%, #81d4fa 100%);
+  margin: 0;
+  padding: 20px;
+  color: #fffde7;
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.header h1 {
+  font-size: 2.15em;
+  margin: 0;
+  color: #fff59d;
+  text-shadow: 3px 3px 0 #0d47a1;
+}
+
+.header p {
+  font-size: 1.08em;
+  color: #e3f2fd;
+  margin: 8px 0;
+  text-shadow: 1px 1px 0 #0d47a1;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.filter-btn {
+  background: #fbc02d;
+  color: #3e2723;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 25px;
+  font-size: 1em;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.3s;
+  box-shadow: 0 4px 0 #f57f17;
+  font-weight: bold;
+}
+
+.filter-btn.active,
+.filter-btn:hover {
+  background: #4fc3f7;
+  color: #01579b;
+  box-shadow: 0 4px 0 #0288d1;
+  transform: translateY(-2px);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+  gap: 28px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.card {
+  background: #fffdf7;
+  border: 5px solid #fbc02d;
+  border-radius: 58% 42% 50% 50% / 64% 64% 36% 36%;
+  padding: 30px 18px 20px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.22);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 235px;
+  transition: transform 0.3s;
+  color: #3e2723;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-8deg);
+  width: 18px;
+  height: 42px;
+  background: #fbc02d;
+  border-radius: 50% 50% 10% 10%;
+  border: 3px solid #f57f17;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  bottom: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 8px;
+  height: 34px;
+  background: #8d6e63;
+  border-radius: 6px;
+  z-index: -1;
+}
+
+.card:hover {
+  transform: translateY(-6px) rotate(-1deg);
+}
+
+.emoji {
+  font-size: 3.35em;
+  margin-bottom: 10px;
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+}
+
+.en {
+  font-size: 1.32em;
+  font-weight: bold;
+  color: #0d47a1;
+  margin: 8px 0;
+  line-height: 1.2;
+}
+
+.ipa {
+  font-size: 0.92em;
+  color: #5d6d7e;
+  font-family: "Courier New", monospace;
+  margin-bottom: 8px;
+}
+
+.ru {
+  font-size: 1.08em;
+  color: #3e2723;
+  margin-bottom: 18px;
+}
+
+.sound-btn {
+  background: #4caf50;
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.55em;
+  cursor: pointer;
+  box-shadow: 0 5px 0 #2e7d32;
+  transition: 0.1s;
+}
+
+.sound-btn:active {
+  transform: translateY(5px);
+  box-shadow: none;
+}
+
+.card.playing {
+  border-color: #4fc3f7;
+  background: #e1f5fe;
+  transform: scale(1.04) rotate(1deg);
+}
+
+.footer {
+  text-align: center;
+  margin-top: 55px;
+  font-size: 0.95em;
+  color: #fff59d;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 #0d47a1;
+}
+
+@media (max-width: 600px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .header h1 {
+    font-size: 1.65em;
+  }
+
+  .card {
+    min-height: 215px;
+    padding: 26px 14px 16px;
+  }
+
+  .emoji {
+    font-size: 2.85em;
+  }
+
+  .en {
+    font-size: 1.15em;
+  }
+}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🪶 The Ugly Duckling — полёт</h1>
+  <p>Нажми на перо, чтобы услышать слово</p>
+</div>
+<div class="filters">
+  <button class="filter-btn active" data-cat="all">Все</button>
+  <button class="filter-btn" data-cat="words">Слова</button>
+  <button class="filter-btn" data-cat="actions">Действия</button>
+  <button class="filter-btn" data-cat="sky">Небо</button>
+  <button class="filter-btn" data-cat="phrases">Фразы</button>
+</div>
+<div class="grid" id="grid"></div>
+<div class="footer">Spotlight Starter • Модуль 4, Урок 2</div>
+<script>
+var words = [
+  { en: "swan", ipa: "/swɒn/", ru: "лебедь", emoji: "🦢", cat: "words" },
+  { en: "fly", ipa: "/flaɪ/", ru: "летать", emoji: "🪽", cat: "actions" },
+  { en: "sky", ipa: "/skaɪ/", ru: "небо", emoji: "☁️", cat: "sky" },
+  { en: "beautiful", ipa: "/ˈbjuːtɪf(ə)l/", ru: "красивый", emoji: "✨", cat: "words" },
+  { en: "look", ipa: "/lʊk/", ru: "смотреть", emoji: "👀", cat: "actions" },
+  { en: "everyone", ipa: "/ˈevriwʌn/", ru: "все", emoji: "🙌", cat: "words" },
+  { en: "me", ipa: "/miː/", ru: "меня", emoji: "🫵", cat: "words" },
+  { en: "I can fly", ipa: "/aɪ kæn flaɪ/", ru: "я могу летать", emoji: "🕊️", cat: "actions" },
+  { en: "in the sky", ipa: "/ɪn ðə skaɪ/", ru: "в небе", emoji: "☁️", cat: "sky" },
+  { en: "I'm a beautiful swan", ipa: "/aɪm ə ˈbjuːtɪf(ə)l swɒn/", ru: "я красивый лебедь", emoji: "🦢", cat: "phrases" },
+  { en: "Look at me", ipa: "/lʊk æt miː/", ru: "посмотрите на меня", emoji: "👀", cat: "phrases" },
+  { en: "Look at me everyone", ipa: "/lʊk æt miː ˈevriwʌn/", ru: "посмотрите на меня все", emoji: "🙌", cat: "phrases" },
+  { en: "I can fly in the sky", ipa: "/aɪ kæn flaɪ ɪn ðə ska/", ru: "я могу летать в небе", emoji: "🕊️", cat: "phrases" },
+  { en: "beautiful swan", ipa: "/ˈbjuːtɪf(ə)l swɒn/", ru: "красивый лебедь", emoji: "✨", cat: "phrases" }
+];
+
+var grid = document.getElementById("grid");
+var currentAudio = null;
+var playingCard = null;
+
+function renderWords(filterName) {
+  grid.innerHTML = "";
+  words.forEach(function(wordItem) {
+    if (filterName !== "all" && wordItem.cat !== filterName) {
+      return;
+    }
+
+    var card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML =
+      '<div class="emoji">' + wordItem.emoji + "</div>" +
+      '<div class="en">' + wordItem.en + "</div>" +
+      '<div class="ipa">' + wordItem.ipa + "</div>" +
+      '<div class="ru">' + wordItem.ru + "</div>" +
+      '<button class="sound-btn">🔊</button>';
+
+    var soundButton = card.querySelector(".sound-btn");
+    soundButton.onclick = function() {
+      if (currentAudio) {
+        speechSynthesis.cancel();
+        if (playingCard) {
+          playingCard.classList.remove("playing");
+        }
+      }
+
+      var utterance = new SpeechSynthesisUtterance(wordItem.en);
+      utterance.lang = "en-GB";
+      utterance.rate = 0.85;
+      card.classList.add("playing");
+      playingCard = card;
+
+      utterance.onend = function() {
+        card.classList.remove("playing");
+        playingCard = null;
+      };
+
+      utterance.onerror = function() {
+        card.classList.remove("playing");
+        playingCard = null;
+      };
+
+      speechSynthesis.speak(utterance);
+      currentAudio = utterance;
+    };
+
+    grid.appendChild(card);
+  });
+}
+
+document.querySelectorAll(".filter-btn").forEach(function(filterButton) {
+  filterButton.onclick = function() {
+    document.querySelectorAll(".filter-btn").forEach(function(otherButton) {
+      otherButton.classList.remove("active");
+    });
+    filterButton.classList.add("active");
+    renderWords(filterButton.getAttribute("data-cat"));
+  };
+});
+
+renderWords("all");
+</script>
+</body>
+</html>

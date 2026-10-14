@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квест: Королевский выбор</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Квест: Королевский выбор" />
+    <meta property="og:description" content="Помоги королю и королеве найти их чашки в этой небольшой игре." />
+    <meta property="og:image" content="https://example.com/preview-quest-2b.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://example.com/quest-2b.html" />
+    <meta property="og:locale" content="ru_RU" />
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #eef2f3; color: #333; text-align: center; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .quest-container { background: white; border-radius: 20px; padding: 30px; max-width: 600px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        h2 { color: #4a4a4a; margin-bottom: 20px; }
+        .stage { display: none; }
+        .stage.active { display: block; animation: fadeIn 0.4s; }
+        .btn { background: #5c6bc0; color: white; border: none; padding: 12px 25px; font-size: 18px; border-radius: 8px; cursor: pointer; margin: 10px; transition: background 0.2s; font-family: inherit; }
+        .btn:hover { background: #3f51b5; }
+        .btn-option { display: block; width: 100%; margin: 10px 0; background: #f8f9fa; color: #333; border: 2px solid #dee2e6; text-align: left; }
+        .btn-option:hover { background: #e9ecef; border-color: #5c6bc0; }
+        .feedback { margin-top: 15px; font-weight: bold; min-height: 24px; }
+        .correct { color: #2e7d32; }
+        .wrong { color: #c62828; }
+        .color-dot { display: inline-block; width: 20px; height: 20px; border-radius: 50%; margin-right: 10px; vertical-align: middle; border: 1px solid #ccc; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+    <div class="quest-container">
+        <div id="stage-0" class="stage active">
+            <h2>👑 Привет! Давай накроем на стол.</h2>
+            <p>Король и королева ждут чая. Помоги им найти правильные чашки.</p>
+            <button class="btn" onclick="nextStage(1)">Начать</button>
+        </div>
+
+        <div id="stage-1" class="stage">
+            <h2>Вопрос 1</h2>
+            <p>Король говорит: "My cup is red." Какого цвета его чашка?</p>
+            <button class="btn btn-option" onclick="checkAnswer(1, false)"><span class="color-dot" style="background: #4dabf7;"></span> blue</button>
+            <button class="btn btn-option" onclick="checkAnswer(1, true)"><span class="color-dot" style="background: #ff6b6b;"></span> red</button>
+            <button class="btn btn-option" onclick="checkAnswer(1, false)"><span class="color-dot" style="background: #69db7c;"></span> green</button>
+            <div id="feedback-1" class="feedback"></div>
+        </div>
+
+        <div id="stage-2" class="stage">
+            <h2>Вопрос 2</h2>
+            <p>Королева спрашивает: "Is your cup blue?" А у тебя зелёная чашка. Что ты ответишь?</p>
+            <button class="btn btn-option" onclick="checkAnswer(2, true)">No</button>
+            <button class="btn btn-option" onclick="checkAnswer(2, false)">Yes</button>
+            <div id="feedback-2" class="feedback"></div>
+        </div>
+
+        <div id="stage-3" class="stage">
+            <h2>Вопрос 3</h2>
+            <p>Чаклз хочет жёлтую чашку. Найди её.</p>
+            <button class="btn btn-option" onclick="checkAnswer(3, false)"><span class="color-dot" style="background: #ff6b6b;"></span> red cup</button>
+            <button class="btn btn-option" onclick="checkAnswer(3, true)"><span class="color-dot" style="background: #ffd43b;"></span> yellow cup</button>
+            <button class="btn btn-option" onclick="checkAnswer(3, false)"><span class="color-dot" style="background: #4dabf7;"></span> blue cup</button>
+            <div id="feedback-3" class="feedback"></div>
+        </div>
+
+        <div id="stage-4" class="stage">
+            <h2>Вопрос 4</h2>
+            <p>Король спрашивает: "Is this your cup?" (показывает на твою чашку). Это правда твоя чашка. Что ответишь?</p>
+            <button class="btn btn-option" onclick="checkAnswer(4, true)">Yes</button>
+            <button class="btn btn-option" onclick="checkAnswer(4, false)">No</button>
+            <div id="feedback-4" class="feedback"></div>
+        </div>
+
+        <div id="stage-5" class="stage">
+            <h2>Отлично! 🎉</h2>
+            <p>Все чашки на своих местах. Королевское чаепитие начинается!</p>
+            <button class="btn" onclick="location.reload()">Пройти ещё раз</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStage = 1;
+        function nextStage(stageNum) {
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            document.getElementById('stage-' + stageNum).classList.add('active');
+        }
+        function checkAnswer(stage, isCorrect) {
+            const feedbackEl = document.getElementById('feedback-' + stage);
+            if (isCorrect) {
+                feedbackEl.textContent = "Верно!";
+                feedbackEl.className = "feedback correct";
+                setTimeout(() => nextStage(stage + 1), 800);
+            } else {
+                feedbackEl.textContent = "Попробуй ещё раз.";
+                feedbackEl.className = "feedback wrong";
+            }
+        }
+    </script>
+</body>
+</html>

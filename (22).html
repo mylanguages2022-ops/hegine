@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квест: The Ugly Duckling Adventure</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Квест: The Ugly Duckling Adventure" />
+    <meta property="og:description" content="Интерактивный квест по сказке Гадкий утёнок: считай утят, узнавай животных, помоги утёнку найти маму!" />
+    <meta property="og:image" content="https://example.com/preview-quest-1c.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://example.com/quest-1c.html" />
+    <meta property="og:locale" content="ru_RU" />
+    <style>
+        body { 
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; 
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
+            color: #333; 
+            text-align: center; 
+            padding: 20px; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .quest-container { 
+            background: white; 
+            border-radius: 25px; 
+            padding: 30px; 
+            max-width: 700px; 
+            width: 90%; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+            border: 4px solid #4facfe; 
+        }
+        h2 { color: #4facfe; margin-bottom: 20px; font-size: 28px; }
+        .stage { display: none; }
+        .stage.active { display: block; animation: fadeIn 0.5s; }
+        .btn { 
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
+            color: white; 
+            border: none; 
+            padding: 15px 30px; 
+            font-size: 20px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            margin: 10px; 
+            transition: all 0.3s; 
+            font-family: inherit; 
+            font-weight: bold; 
+            box-shadow: 0 6px 15px rgba(79, 172, 254, 0.4); 
+        }
+        .btn:hover { 
+            transform: scale(1.08); 
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.6); 
+        }
+        .btn-option { 
+            display: block; 
+            width: 85%; 
+            margin: 12px auto; 
+            background: white; 
+            color: #4facfe; 
+            border: 3px solid #4facfe; 
+        }
+        .btn-option:hover { 
+            background: #4facfe; 
+            color: white; 
+        }
+        .character { font-size: 70px; margin-bottom: 15px; }
+        .progress { margin-top: 20px; color: #888; font-size: 16px; }
+        .reward { font-size: 90px; animation: bounce 1s infinite; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        .feedback { margin-top: 15px; font-weight: bold; min-height: 24px; font-size: 18px; }
+        .correct { color: #2ecc71; }
+        .wrong { color: #e74c3c; }
+        .animal-choice {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        .animal-btn {
+            font-size: 50px;
+            padding: 15px;
+            background: white;
+            border: 3px solid #4facfe;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .animal-btn:hover {
+            transform: scale(1.1);
+            background: #f0f9ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="quest-container">
+        <div id="stage-0" class="stage active">
+            <div class="character"></div>
+            <h2>The Ugly Duckling Adventure!</h2>
+            <p style="font-size: 18px; line-height: 1.5;">Привет! Сегодня мы отправляемся в сказку о Гадком утёнке. Помнишь, как считать по-английски? Помнишь животных? Тогда вперёд!</p>
+            <button class="btn" onclick="nextStage(1)">Начать приключение! 🚀</button>
+        </div>
+
+        <div id="stage-1" class="stage">
+            <div class="character">🔢</div>
+            <h2>Этап 1: Считаем утят</h2>
+            <p style="font-size: 18px;">Сколько утят у мамы-утки? Посчитай!</p>
+            <div style="font-size: 60px; margin: 20px 0;">🐥🐥</div>
+            <button class="btn btn-option" onclick="checkAnswer(1, false)">One</button>
+            <button class="btn btn-option" onclick="checkAnswer(1, false)">Two</button>
+            <button class="btn btn-option" onclick="checkAnswer(1, true)">Three</button>
+            <div id="feedback-1" class="feedback"></div>
+        </div>
+
+        <div id="stage-2" class="stage">
+            <div class="character">🦆</div>
+            <h2>Этап 2: Кто это?</h2>
+            <p style="font-size: 18px;">Мама-утка говорит: "Look at my...!" Кого она показывает?</p>
+            <div class="animal-choice">
+                <button class="animal-btn" onclick="checkAnswer(2, false)">🐭</button>
+                <button class="animal-btn" onclick="checkAnswer(2, true)">🐥</button>
+                <button class="animal-btn" onclick="checkAnswer(2, false)">🐰</button>
+            </div>
+            <div id="feedback-2" class="feedback"></div>
+        </div>
+
+        <div id="stage-3" class="stage">
+            <div class="character"></div>
+            <h2>Этап 3: Медленное животное</h2>
+            <p style="font-size: 18px;">Кто двигается очень-очень медленно?</p>
+            <div class="animal-choice">
+                <button class="animal-btn" onclick="checkAnswer(3, false)">🐰</button>
+                <button class="animal-btn" onclick="checkAnswer(3, true)">🐢</button>
+                <button class="animal-btn" onclick="checkAnswer(3, false)">🦆</button>
+            </div>
+            <div id="feedback-3" class="feedback"></div>
+        </div>
+
+        <div id="stage-4" class="stage">
+            <div class="character"></div>
+            <h2>Этап 4: Сколько будет two + one?</h2>
+            <p style="font-size: 18px;">Два утёнка плюс один утёнок = ?</p>
+            <button class="btn btn-option" onclick="checkAnswer(4, false)">One</button>
+            <button class="btn btn-option" onclick="checkAnswer(4, false)">Two</button>
+            <button class="btn btn-option" onclick="checkAnswer(4, true)">Three</button>
+            <div id="feedback-4" class="feedback"></div>
+        </div>
+
+        <div id="stage-5" class="stage">
+            <div class="character">🐭</div>
+            <h2>Этап 5: Кто пищит?</h2>
+            <p style="font-size: 18px;">Какое животное маленькое и пищит "пи-пи-пи"?</p>
+            <div class="animal-choice">
+                <button class="animal-btn" onclick="checkAnswer(5, true)">🐭</button>
+                <button class="animal-btn" onclick="checkAnswer(5, false)">🐢</button>
+                <button class="animal-btn" onclick="checkAnswer(5, false)">🐰</button>
+            </div>
+            <div id="feedback-5" class="feedback"></div>
+        </div>
+
+        <div id="stage-6" class="stage">
+            <div class="character">🦢</div>
+            <h2>Этап 6: Гадкий утёнок</h2>
+            <p style="font-size: 18px;">Что говорит утёнок, когда представляется?</p>
+            <button class="btn btn-option" onclick="checkAnswer(6, false)">Hello!</button>
+            <button class="btn btn-option" onclick="checkAnswer(6, true)">I'm a duck!</button>
+            <button class="btn btn-option" onclick="checkAnswer(6, false)">Goodbye!</button>
+            <div id="feedback-6" class="feedback"></div>
+        </div>
+
+        <div id="stage-7" class="stage">
+            <div class="character">🐰</div>
+            <h2>Этап 7: Кто прыгает?</h2>
+            <p style="font-size: 18px;">Какое животное прыгает и у него длинные уши?</p>
+            <div class="animal-choice">
+                <button class="animal-btn" onclick="checkAnswer(7, false)">🦆</button>
+                <button class="animal-btn" onclick="checkAnswer(7, false)">🐢</button>
+                <button class="animal-btn" onclick="checkAnswer(7, true)">🐰</button>
+            </div>
+            <div id="feedback-7" class="feedback"></div>
+        </div>
+
+        <div id="stage-8" class="stage">
+            <div class="character">🏆</div>
+            <h2>Поздравляем!</h2>
+            <p style="font-size: 20px;">Ты помог утёнку найти маму!</p>
+            <div class="reward">🦢✨🦢</div>
+            <p style="font-size: 18px;">Гадкий утёнок оказался прекрасным лебедем!</p>
+            <button class="btn" onclick="location.reload()">Пройти ещё раз </button>
+        </div>
+
+        <div class="progress">Этап <span id="current-stage">1</span> из 7</div>
+    </div>
+
+    <script>
+        let currentStage = 1;
+
+        function nextStage(stageNum) {
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            document.getElementById('stage-' + stageNum).classList.add('active');
+            if(stageNum <= 7) {
+                document.getElementById('current-stage').textContent = stageNum;
+            } else {
+                document.querySelector('.progress').style.display = 'none';
+            }
+        }
+
+        function checkAnswer(stage, isCorrect) {
+            const feedbackEl = document.getElementById('feedback-' + stage);
+            if (isCorrect) {
+                feedbackEl.textContent = "Отлично! Правильно! 🎉";
+                feedbackEl.className = "feedback correct";
+                setTimeout(() => {
+                    nextStage(stage + 1);
+                }, 1200);
+            } else {
+                feedbackEl.textContent = "Попробуй ещё раз! ";
+                feedbackEl.className = "feedback wrong";
+            }
+        }
+    </script>
+</body>
+</html>

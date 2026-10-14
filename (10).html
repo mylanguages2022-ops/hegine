@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Визуальный словарь: Hello, Nanny Shine!</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Визуальный словарь: Hello, Nanny Shine!" />
+    <meta property="og:description" content="Интерактивный словарь с героями Spotlight для изучения первых английских слов: Hello, Goodbye, I'm." />
+    <meta property="og:image" content="https://example.com/preview-dictionary.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://example.com/dictionary-1a.html" />
+    <meta property="og:locale" content="ru_RU" />
+    <style>
+        body { font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; background-color: #f0f8ff; color: #333; text-align: center; padding: 20px; }
+        h1 { color: #ff6b6b; }
+        .dictionary { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 800px; margin: 0 auto; }
+        .card { background: white; border: 3px solid #4ecdc4; border-radius: 15px; padding: 20px; width: 200px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 12px rgba(0,0,0,0.15); background-color: #e6fffa; }
+        .word { font-size: 24px; font-weight: bold; color: #1a535c; margin-bottom: 5px; }
+        .ipa { font-size: 16px; color: #ff6b6b; font-style: italic; margin-bottom: 10px; }
+        .translation { font-size: 18px; color: #555; }
+        .icon { font-size: 40px; margin-bottom: 10px; }
+        .hint { margin-top: 30px; color: #666; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h1>🌟 Мои первые английские слова 🌟</h1>
+    <p>Нажми на карточку, чтобы услышать, как она звучит!</p>
+    
+    <div class="dictionary">
+        <div class="card" onclick="speak('Hello')">
+            <div class="icon">👋</div>
+            <div class="word">Hello</div>
+            <div class="ipa">/həˈləʊ/</div>
+            <div class="translation">привет</div>
+        </div>
+        <div class="card" onclick="speak('Goodbye')">
+            <div class="icon">🚶‍♂️</div>
+            <div class="word">Goodbye</div>
+            <div class="ipa">/ˌɡʊdˈbaɪ/</div>
+            <div class="translation">пока</div>
+        </div>
+        <div class="card" onclick="speak('I am')">
+            <div class="icon">👤</div>
+            <div class="word">I'm</div>
+            <div class="ipa">/aɪm/</div>
+            <div class="translation">я…</div>
+        </div>
+        <div class="card" onclick="speak('Nanny Shine')">
+            <div class="icon">🧚‍♀️</div>
+            <div class="word">Nanny Shine</div>
+            <div class="ipa">/ˈnæni ʃaɪn/</div>
+            <div class="translation">Нэнни Шайн</div>
+        </div>
+        <div class="card" onclick="speak('Larry')">
+            <div class="icon">👦</div>
+            <div class="word">Larry</div>
+            <div class="ipa">/ˈlæri/</div>
+            <div class="translation">Ларри</div>
+        </div>
+        <div class="card" onclick="speak('Lulu')">
+            <div class="icon">👧</div>
+            <div class="word">Lulu</div>
+            <div class="ipa">/ˈluːluː/</div>
+            <div class="translation">Лулу</div>
+        </div>
+        <div class="card" onclick="speak('Chuckles')">
+            <div class="icon">🐵</div>
+            <div class="word">Chuckles</div>
+            <div class="ipa">/ˈtʃʌkəlz/</div>
+            <div class="translation">Чаклз</div>
+        </div>
+    </div>
+    
+    <p class="hint">💡 Совет: Используйте этот словарь перед сном или в машине для лёгкого повторения.</p>
+
+    <script>
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-GB'; // Британское произношение, как в Spotlight
+            utterance.rate = 0.8; // Чуть медленнее для лучшего восприятия ребёнком
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>

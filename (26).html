@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Словарь урока 1b: Hello Again!</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Словарь урока 1b: Hello Again!" />
+    <meta property="og:description" content="Интерактивный словарь: Hello, Goodbye, I'm, What's your name? с героями Spotlight" />
+    <meta property="og:image" content="https://example.com/preview-dictionary-1b.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://example.com/dictionary-1b.html" />
+    <meta property="og:locale" content="ru_RU" />
+    <style>
+        body { 
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: #333; 
+            text-align: center; 
+            padding: 20px; 
+        }
+        h1 { color: white; font-size: 32px; margin-bottom: 30px; }
+        .dictionary { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 20px; 
+            max-width: 900px; 
+            margin: 0 auto; 
+        }
+        .card { 
+            background: white; 
+            border: 3px solid #667eea; 
+            border-radius: 20px; 
+            padding: 25px; 
+            width: 220px; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2); 
+        }
+        .card:hover { 
+            transform: translateY(-10px) scale(1.05); 
+            box-shadow: 0 12px 24px rgba(0,0,0,0.3); 
+            background: #f8f9ff; 
+        }
+        .word { 
+            font-size: 26px; 
+            font-weight: bold; 
+            color: #667eea; 
+            margin-bottom: 8px; 
+        }
+        .ipa { 
+            font-size: 18px; 
+            color: #764ba2; 
+            font-style: italic; 
+            margin-bottom: 12px; 
+        }
+        .translation { 
+            font-size: 20px; 
+            color: #555; 
+        }
+        .icon { 
+            font-size: 50px; 
+            margin-bottom: 15px; 
+        }
+        .hint { 
+            margin-top: 40px; 
+            color: white; 
+            font-size: 16px; 
+        }
+    </style>
+</head>
+<body>
+    <h1>🌟 Словарь урока 1b 🌟</h1>
+    <p style="color: white; font-size: 18px;">Нажми на карточку, чтобы услышать произношение!</p>
+    
+    <div class="dictionary">
+        <div class="card" onclick="speak('Hello')">
+            <div class="icon"></div>
+            <div class="word">Hello</div>
+            <div class="ipa">/həˈləʊ/</div>
+            <div class="translation">привет</div>
+        </div>
+        <div class="card" onclick="speak('Goodbye')">
+            <div class="icon">🚶</div>
+            <div class="word">Goodbye</div>
+            <div class="ipa">/ˌɡʊdˈbaɪ/</div>
+            <div class="translation">пока</div>
+        </div>
+        <div class="card" onclick="speak('I am')">
+            <div class="icon">👤</div>
+            <div class="word">I'm</div>
+            <div class="ipa">/aɪm/</div>
+            <div class="translation">я…</div>
+        </div>
+        <div class="card" onclick="speak('What is your name')">
+            <div class="icon">❓</div>
+            <div class="word">What's your name?</div>
+            <div class="ipa">/wɒts jɔː nem/</div>
+            <div class="translation">Как тебя зовут?</div>
+        </div>
+    </div>
+    
+    <p class="hint">💡 Используй словарь перед сном для лёгкого повторения</p>
+
+    <script>
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-GB';
+            utterance.rate = 0.8;
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>

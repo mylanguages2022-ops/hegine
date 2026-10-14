@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Волшебная коробка — Magic Box</title>
+<style>
+  :root{
+    --cream:#FFF9F0;
+    --honey:#F7C948;
+    --honey-deep:#E8A93B;
+    --green:#8FB88A;
+    --green-deep:#6E9C69;
+    --pink:#F48FB1;
+    --red:#E5534B;
+    --ink:#4A3F35;
+    --board:#FBEBD3;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:"Comic Sans MS","Trebuchet MS",Verdana,sans-serif;
+    background:
+      radial-gradient(circle at 12% 8%, #FFFDF7 0%, rgba(255,253,247,0) 45%),
+      radial-gradient(circle at 88% 92%, #FFF4E2 0%, rgba(255,244,226,0) 50%),
+      var(--cream);
+    color:var(--ink);
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:18px 14px 40px;
+  }
+
+  header{text-align:center;max-width:760px;width:100%}
+  h1{
+    font-size:clamp(26px,6vw,42px);
+    margin:6px 0 2px;
+    color:var(--green-deep);
+    letter-spacing:.5px;
+  }
+  .sub{font-size:clamp(13px,3.4vw,16px);color:#9A8B7A;margin:0 0 4px}
+
+  .phrase-card{
+    width:100%;max-width:760px;
+    background:#fff;
+    border:3px solid var(--board);
+    border-radius:24px;
+    box-shadow:0 6px 0 #EFE2CC, 0 12px 26px rgba(160,140,110,.14);
+    padding:14px 18px;
+    margin:16px 0 8px;
+    text-align:center;
+  }
+  .phrase-en{font-size:clamp(22px,5.6vw,34px);font-weight:bold;color:var(--ink);line-height:1.2}
+  .phrase-tr{font-size:clamp(14px,3.6vw,18px);color:var(--honey-deep);margin-top:4px}
+  .phrase-ru{font-size:clamp(15px,4vw,20px);color:#7E7166;margin-top:6px}
+  .speak-btn{
+    margin-top:10px;border:none;cursor:pointer;
+    background:var(--honey);color:#5B4A1F;
+    font-family:inherit;font-size:16px;font-weight:bold;
+    padding:9px 20px;border-radius:999px;
+    box-shadow:0 4px 0 var(--honey-deep);
+    transition:transform .1s;
+  }
+  .speak-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--honey-deep)}
+
+  .stage{
+    width:100%;max-width:760px;
+    display:flex;flex-direction:column;align-items:center;
+    margin-top:6px;
+  }
+
+  /* ---- box ---- */
+  .box-wrap{
+    position:relative;height:210px;width:230px;
+    display:flex;align-items:flex-end;justify-content:center;
+    margin:6px auto 0;
+  }
+  .box-svg{width:210px;height:auto;transition:transform .35s cubic-bezier(.34,1.56,.64,1)}
+  .box-wrap.wiggle .box-svg{animation:wiggle .5s ease-in-out 2}
+  @keyframes wiggle{
+    0%,100%{transform:rotate(0) translateY(0)}
+    25%{transform:rotate(-4deg) translateY(-6px)}
+    75%{transform:rotate(4deg) translateY(-6px)}
+  }
+
+  /* ---- cake ---- */
+  .cake-holder{
+    position:absolute;left:50%;top:-10px;transform:translateX(-50%) translateY(34px) scale(.2);
+    opacity:0;transition:transform .55s cubic-bezier(.34,1.56,.64,1),opacity .3s;
+    width:170px;
+  }
+  .cake-holder.out{transform:translateX(-50%) translateY(-52px) scale(1);opacity:1}
+  .cake-holder svg{width:100%;height:auto;display:block}
+
+  .buttons{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+
+  .big-btn{
+    font-family:inherit;cursor:pointer;border:none;
+    font-size:clamp(17px,4.4vw,21px);font-weight:bold;
+    padding:15px 30px;border-radius:22px;
+    background:var(--green);color:#fff;
+    box-shadow:0 6px 0 var(--green-deep), 0 10px 18px rgba(110,156,105,.24);
+    transition:transform .1s;min-width:170px;
+  }
+  .big-btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--green-deep)}
+  .big-btn.honey{background:var(--honey);color:#5B4A1F;box-shadow:0 6px 0 var(--honey-deep),0 10px 18px rgba(232,169,59,.24)}
+  .big-btn.honey:active{box-shadow:0 2px 0 var(--honey-deep)}
+  .big-btn.soft{background:#fff;color:var(--ink);box-shadow:0 6px 0 var(--board),0 10px 18px rgba(160,140,110,.14)}
+  .big-btn.hidden{display:none}
+  .btn-sub{display:block;font-size:13px;font-weight:normal;opacity:.85;margin-top:2px}
+
+  .yesno{display:flex;gap:18px;justify-content:center;margin-top:10px}
+  .yn{
+    font-family:inherit;cursor:pointer;border:none;background:#fff;
+    width:130px;padding:14px 10px;border-radius:22px;
+    box-shadow:0 6px 0 var(--board),0 10px 18px rgba(160,140,110,.14);
+    transition:transform .1s;
+  }
+  .yn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--board)}
+  .yn .big{display:block;font-size:26px;font-weight:bold;color:var(--ink)}
+  .yn .small{display:block;font-size:13px;color:var(--honey-deep)}
+  .yn .ru{display:block;font-size:13px;color:#9A8B7A}
+
+  .feedback{
+    min-height:34px;margin-top:14px;text-align:center;
+    font-size:clamp(17px,4.4vw,22px);font-weight:bold;color:var(--green-deep);
+    transition:opacity .2s;
+  }
+  .feedback.warn{color:var(--honey-deep)}
+
+  /* ---- shelf ---- */
+  .shelf{
+    width:100%;max-width:760px;margin-top:26px;
+    background:#fff;border:3px dashed #EFE2CC;border-radius:24px;
+    padding:12px 16px 16px;text-align:center;
+  }
+  .shelf h2{font-size:16px;margin:2px 0 10px;color:#9A8B7A;font-weight:normal}
+  .shelf-row{display:flex;gap:10px;justify-content:center;min-height:56px;flex-wrap:wrap}
+  .shelf-row svg{width:52px;height:auto;animation:pop .4s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+
+  /* ---- adult guide ---- */
+  details{
+    max-width:760px;width:100%;margin-top:26px;
+    background:#fff;border:3px solid var(--board);border-radius:22px;padding:6px 18px;
+  }
+  details summary{cursor:pointer;font-weight:bold;color:var(--green-deep);padding:10px 0;font-size:15px}
+  details ol{padding-left:20px;line-height:1.65;font-size:15px;color:#6B6058}
+  details li{margin-bottom:8px}
+  details .en{color:var(--honey-deep);font-weight:bold}
+
+  audio{display:none}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Волшебная коробка</h1>
+  <p class="sub">Magic Box · играем и говорим по-английски</p>
+</header>
+
+<div class="phrase-card" id="phraseCard">
+  <div class="phrase-en" id="phraseEn">What's this?</div>
+  <div class="phrase-tr" id="phraseTr">/wɒts ðɪs/</div>
+  <div class="phrase-ru" id="phraseRu">Что это?</div>
+  <button class="speak-btn" id="speakBtn">Послушать ещё раз</button>
+</div>
+
+<div class="stage">
+  <div class="box-wrap" id="boxWrap">
+    <div class="cake-holder" id="cakeHolder"></div>
+    <svg class="box-svg" id="boxSvg" viewBox="0 0 200 170" aria-hidden="true">
+      <ellipse cx="100" cy="163" rx="72" ry="9" fill="rgba(160,140,110,.18)"/>
+      <!-- lid -->
+      <rect x="16" y="52" width="168" height="34" rx="12" fill="#F7C948" stroke="#E8A93B" stroke-width="5"/>
+      <rect x="16" y="52" width="168" height="12" rx="6" fill="#FFE08A" opacity=".8"/>
+      <!-- body -->
+      <rect x="28" y="82" width="144" height="74" rx="14" fill="#F0B93F" stroke="#E8A93B" stroke-width="5"/>
+      <rect x="28" y="82" width="144" height="16" rx="8" fill="#FFE08A" opacity=".55"/>
+      <!-- ribbon -->
+      <rect x="88" y="52" width="24" height="104" fill="#8FB88A" opacity=".9"/>
+      <rect x="88" y="52" width="24" height="104" fill="none" stroke="#6E9C69" stroke-width="4"/>
+      <!-- bow -->
+      <path d="M100 56 C 82 34, 56 40, 68 58 Z" fill="#8FB88A" stroke="#6E9C69" stroke-width="4"/>
+      <path d="M100 56 C 118 34, 144 40, 132 58 Z" fill="#8FB88A" stroke="#6E9C69" stroke-width="4"/>
+      <circle cx="100" cy="57" r="8" fill="#6E9C69"/>
+      <!-- sparkles -->
+      <g fill="#F7C948">
+        <path d="M172 24 l4 9 9 4 -9 4 -4 9 -4-9 -9-4 9-4z"/>
+        <path d="M24 20 l3 7 7 3 -7 3 -3 7 -3-7 -7-3 7-3z" opacity=".8"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="buttons" id="mainButtons">
+    <button class="big-btn" id="btnOpen">Открыть коробку</button>
+    <button class="big-btn honey hidden" id="btnGive">Вот торт для тебя <span class="btn-sub">Here's a cake for you</span></button>
+    <button class="big-btn honey hidden" id="btnThanks">Thank you! <span class="btn-sub">/ˈθæŋk juː/ — Спасибо!</span></button>
+    <button class="big-btn soft hidden" id="btnNext">Ещё торт <span class="btn-sub">Another cake</span></button>
+  </div>
+
+  <div class="yesno hidden" id="yesNo">
+    <button class="yn" id="btnYes">
+      <span class="big">Yes</span>
+      <span class="small">/jes/</span>
+      <span class="ru">Да</span>
+    </button>
+    <button class="yn" id="btnNo">
+      <span class="big">No</span>
+      <span class="small">/nəʊ/</span>
+      <span class="ru">Нет</span>
+    </button>
+  </div>
+
+  <div class="feedback" id="feedback"></div>
+</div>
+
+<div class="shelf">
+  <h2>Тортики, которые мы собрали:</h2>
+  <div class="shelf-row" id="shelfRow"></div>
+</div>
+
+<details>
+  <summary>Подсказка для взрослого — как играть</summary>
+  <ol>
+    <li>Положите в мешочек или коробку вырезанные или нарисованные тортики разных цветов: розовый, красный, жёлтый.</li>
+    <li>Спросите: <span class="en">What's this? /wɒts ðɪs/</span> — «Что это?»</li>
+    <li>Достаньте один, покажите и назовите: <span class="en">It's a yellow cake.</span></li>
+    <li>Спросите: <span class="en">Pink?</span> Пусть ребёнок покачает головой (<span class="en">no /nəʊ/</span> — нет) или кивнёт (<span class="en">yes /jes/</span> — да).</li>
+    <li>Затем передайте картинку торта ребёнку и скажите: <span class="en">Here's a cake for you.</span></li>
+    <li>Подскажите мягко: <span class="en">Thank you!</span> Если слова не идут — достаточно улыбки и принятия угощения.</li>
+  </ol>
+  <ol>
+    <li>Ребёнок нажимает большие кнопки — так он сам ведёт игру и повторяет фразы за голосом.</li>
+    <li>Неправильный ответ не наказывается: игра подсказывает мягко и даёт попробовать снова.</li>
+  </ol>
+</details>
+
+<script>
+(function(){
+  "use strict";
+
+  var CAKES = {
+    yellow:{ en:"yellow", ru:"жёлтый", hex:"#F5C242", deep:"#E0A62B", cream:"#FFF0BE" },
+    pink:  { en:"pink",   ru:"розовый", hex:"#F48FB1", deep:"#DE729A", cream:"#FFE2EC" },
+    red:   { en:"red",    ru:"красный", hex:"#E5534B", deep:"#C93F38", cream:"#FFD9D6" }
+  };
+
+  var el = function(id){ return document.getElementById(id); };
+  var phraseEn=el("phraseEn"), phraseTr=el("phraseTr"), phraseRu=el("phraseRu");
+  var boxWrap=el("boxWrap"), cakeHolder=el("cakeHolder"), feedback=el("feedback");
+  var btnOpen=el("btnOpen"), btnGive=el("btnGive"), btnThanks=el("btnThanks"), btnNext=el("btnNext");
+  var yesNo=el("yesNo"), btnYes=el("btnYes"), btnNo=el("btnNo");
+  var shelfRow=el("shelfRow");
+
+  var state = "start";
+  var current = null;
+  var askColor = null;
+  var collected = [];
+  var queue = [];
+
+  /* ---------- speech ---------- */
+  var voiceEN = null, voiceRU = null;
+  function pickVoices(){
+    if(!("speechSynthesis" in window)) return;
+    var vs = window.speechSynthesis.getVoices() || [];
+    function find(lang, pref){
+      for(var i=0;i<vs.length;i++){
+        var v=vs[i];
+        if(v.lang && v.lang.toLowerCase().replace("_","-").indexOf(lang)===0){
+          if(!pref) return v;
+          if(v.name.toLowerCase().indexOf(pref)>-1) return v;
+        }
+      }
+      return null;
+    }
+    voiceEN = find("en-gb","female") || find("en-gb") || find("en");
+    voiceRU = find("ru");
+  }
+  if("speechSynthesis" in window){
+    pickVoices();
+    window.speechSynthesis.onvoiceschanged = pickVoices;
+  }
+
+  function speak(text, lang){
+    if(!("speechSynthesis" in window)) return;
+    try{
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = lang === "ru" ? "ru-RU" : "en-GB";
+      u.rate = lang === "ru" ? 0.95 : 0.82;
+      u.pitch = 1.15;
+      var v = lang === "ru" ? voiceRU : voiceEN;
+      if(v) u.voice = v;
+      window.speechSynthesis.speak(u);
+    }catch(e){}
+  }
+
+  /* ---------- svg builders ---------- */
+  function cakeSVG(c){
+    return '<svg viewBox="0 0 140 150" aria-hidden="true">' +
+      '<ellipse cx="70" cy="141" rx="52" ry="7" fill="rgba(160,140,110,.16)"/>' +
+      '<ellipse cx="70" cy="130" rx="56" ry="11" fill="#FFFFFF" stroke="#EFE2CC" stroke-width="3"/>' +
+      // bottom layer
+      '<rect x="24" y="92" width="92" height="34" rx="9" fill="' + c.hex + '" stroke="' + c.deep + '" stroke-width="3.5"/>' +
+      // middle layer
+      '<rect x="32" y="64" width="76" height="32" rx="9" fill="' + c.hex + '" stroke="' + c.deep + '" stroke-width="3.5"/>' +
+      // frosting drips
+      '<path d="M24 100 q10 12 20 0 q10 12 20 0 q10 12 20 0 q10 12 20 0 l0 -10 -80 0z" fill="' + c.cream + '" opacity=".95"/>' +
+      '<path d="M32 72 q9 11 19 0 q9 11 19 0 q9 11 19 0 l0 -10 -57 0z" fill="' + c.cream + '" opacity=".95"/>' +
+      // top frosting
+      '<rect x="38" y="52" width="64" height="16" rx="8" fill="' + c.cream + '" stroke="' + c.deep + '" stroke-width="3"/>' +
+      // cherry
+      '<circle cx="70" cy="46" r="9" fill="#E5534B" stroke="#C93F38" stroke-width="2.5"/>' +
+      '<circle cx="66.5" cy="43" r="2.6" fill="#fff" opacity=".75"/>' +
+      // candle
+      '<rect x="66" y="20" width="8" height="24" rx="3" fill="#8FB88A" stroke="#6E9C69" stroke-width="2.5"/>' +
+      '<path d="M70 8 c6 7 6 12 0 15 c-6 -3 -6 -8 0 -15z" fill="#F7C948"/>' +
+      '<path d="M70 12 c3 4 3 7 0 9 c-3 -2 -3 -5 0 -9z" fill="#FFF0BE"/>' +
+      '</svg>';
+  }
+
+  function showPhrase(en, tr, ru, speakIt, lang){
+    phraseEn.textContent = en;
+    phraseTr.textContent = tr;
+    phraseRu.textContent = ru;
+    if(speakIt !== false) speak(en, lang || "en");
+  }
+
+  function say(fb, warn){
+    feedback.textContent = fb;
+    feedback.className = "feedback" + (warn ? " warn" : "");
+  }
+
+  function setButtons(list){
+    [btnOpen, btnGive, btnThanks, btnNext].forEach(function(b){ b.classList.add("hidden"); });
+    list.forEach(function(b){ b.classList.remove("hidden"); });
+  }
+
+  /* ---------- game flow ---------- */
+  function newQueue(){
+    queue = ["yellow","pink","red"];
+    // shuffle
+    for(var i=queue.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var t = queue[i]; queue[i]=queue[j]; queue[j]=t;
+    }
+  }
+
+  function startRound(){
+    current = queue.shift();
+    var c = CAKES[current];
+    askColor = current;
+    // sometimes ask about a colour it is NOT, so kids really listen
+    var keys = ["yellow","pink","red"].filter(function(k){ return k !== current; });
+    if(Math.random() < 0.5) askColor = keys[Math.floor(Math.random()*keys.length)];
+
+    state = "closed";
+    cakeHolder.className = "cake-holder";
+    cakeHolder.innerHTML = cakeSVG(c);
+    yesNo.classList.add("hidden");
+    showPhrase("What's this?", "/wɒts ðɪs/", "Что это?", true, "en");
+    say("Нажми на коробку — и посмотрим, кто там прячется!", false);
+    setButtons([btnOpen]);
+    boxWrap.classList.add("wiggle");
+    setTimeout(function(){ boxWrap.classList.remove("wiggle"); }, 1100);
+  }
+
+  function openBox(){
+    boxWrap.classList.remove("wiggle");
+    cakeHolder.classList.add("out");
+    btnOpen.classList.add("hidden");
+    var c = CAKES[current];
+    state = "named";
+    setTimeout(function(){
+      showPhrase("It's a " + c.en + " cake.", "/ɪts ə " + c.en + " keɪk/",
+                 "Это " + c.ru + " торт.", true, "en");
+      say("Молодец! Теперь ответь на вопрос.", false);
+      setTimeout(askQuestion, 1400);
+    }, 520);
+  }
+
+  function askQuestion(){
+    var c = CAKES[askColor];
+    state = "question";
+    showPhrase(c.en.charAt(0).toUpperCase() + c.en.slice(1) + "?",
+               "/" + c.en + "/ — " + c.ru + "?",
+               "Да или нет?", true, "en");
+    say("Покачай головой или кивни — и нажми кнопку.", false);
+    yesNo.classList.remove("hidden");
+  }
+
+  function answer(saidYes){
+    var isRight = (askColor === current);
+    var correct = isRight ? saidYes : !saidYes;
+    var c = CAKES[current];
+
+    if(correct){
+      yesNo.classList.add("hidden");
+      state = "give";
+      if(saidYes){
+        say("Yes! It's a " + c.en + " cake. Well done!", false);
+        speak("Yes! It is a " + c.en + " cake. Well done!", "en");
+      }else{
+        say("No, it isn't. It's a " + c.en + " cake. Clever!", false);
+        speak("No, it is not. It is a " + c.en + " cake. Clever!", "en");
+      }
+      setTimeout(function(){
+        showPhrase("Here's a cake for you.", "/hɪəz ə keɪk fə juː/",
+                   "Вот торт для тебя.", true, "en");
+        setButtons([btnGive]);
+      }, 1300);
+    }else{
+      say("Ой, посмотри внимательно — этот торт " + c.ru + ". Попробуй ещё раз!", true);
+      var word = isRight ? "Yes" : "No";
+      speak("Look again.", "en");
+    }
+  }
+
+  function giveCake(){
+    state = "thanks";
+    showPhrase("Thank you!", "/ˈθæŋk juː/", "Спасибо!", false, "en");
+    speak("Here is a cake for you.", "en");
+    say("Скажи «Thank you!» — или просто улыбнись", false);
+    setButtons([btnThanks]);
+    setTimeout(function(){ speak("Thank you!", "en"); }, 1200);
+  }
+
+  function thanks(){
+    collected.push(current);
+    var s = document.createElement("div");
+    s.innerHTML = cakeSVG(CAKES[current]);
+    s.style.width = "52px";
+    shelfRow.appendChild(s);
+
+    speak("Thank you! Well done!", "en");
+    say("Молодец!", false);
+
+    if(queue.length){
+      state = "next";
+      showPhrase("Thank you!", "/ˈθæŋk juː/", "Спасибо!", false, "en");
+      setButtons([btnNext]);
+    }else{
+      state = "end";
+      showPhrase("Well done!", "/wel dʌn/", "Молодец! Ты собрал все тортики!", true, "en");
+      say("Ты собрал все три тортика! Нажми «Открыть коробку», чтобы играть снова.", false);
+      setButtons([]);
+      btnOpen.textContent = "Играть снова";
+      btnOpen.classList.remove("hidden");
+      newQueue();
+    }
+  }
+
+  function nextRound(){
+    btnOpen.textContent = "Открыть коробку";
+    startRound();
+  }
+
+  /* ---------- wiring ---------- */
+  btnOpen.addEventListener("click", function(){
+    if(state === "start" || state === "end" || state === "closed"){
+      if(state === "closed"){ openBox(); }
+      else { newQueue(); startRound(); }
+    }
+  });
+  btnGive.addEventListener("click", giveCake);
+  btnThanks.addEventListener("click", thanks);
+  btnNext.addEventListener("click", nextRound);
+  btnYes.addEventListener("click", function(){ answer(true); });
+  btnNo.addEventListener("click", function(){ answer(false); });
+  el("speakBtn").addEventListener("click", function(){
+    speak(phraseEn.textContent, phraseEn.textContent.indexOf("?")>-1 && phraseRu.textContent.indexOf("Да или")>-1 ? "en" : "en");
+  });
+  boxWrap.addEventListener("click", function(){
+    if(state === "closed") openBox();
+  });
+
+  // kick off
+  newQueue();
+  startRound();
+  window.addEventListener("pointerdown", pickVoices, {once:true});
+})();
+</script>
+</body>
+</html>

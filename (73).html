@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квест: Tea Time!</title>
+    <meta property="og:title" content="Квест: Чаепитие с героями">
+    <meta property="og:description" content="Интерактивный квест из 20 шагов для урока 11 модуля 2 Spotlight.">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=Tea+Time+Quest">
+    <meta property="og:url" content="https://example.com/quest-lesson-11">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #e8f8f5; color: #2c3e50; text-align: center; padding: 20px; margin: 0; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        h1 { color: #16a085; margin-top: 0; }
+        .progress-bar { width: 100%; height: 15px; background: #ecf0f1; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+        .progress { height: 100%; background: #2ecc71; width: 0%; transition: width 0.3s; }
+        .step-text { font-size: 1.2em; margin-bottom: 20px; min-height: 40px; }
+        .options { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; margin-bottom: 20px; }
+        .opt-btn { font-size: 2.5em; padding: 15px; border: 3px solid #bdc3c7; background: #fff; border-radius: 15px; cursor: pointer; transition: all 0.2s; min-width: 100px; }
+        .opt-btn:hover { border-color: #3498db; transform: scale(1.05); }
+        .opt-btn.correct { background: #d5f5e3; border-color: #2ecc71; }
+        .opt-btn.wrong { background: #fadbd8; border-color: #e74c3c; }
+        .word-btn { font-size: 1.5em; padding: 10px 20px; border: 2px solid #9b59b6; background: #f4ecf7; border-radius: 10px; cursor: pointer; }
+        .word-btn:hover { background: #e8daef; }
+        .controls { margin-top: 20px; }
+        button { padding: 10px 20px; font-size: 1em; border: none; border-radius: 10px; cursor: pointer; margin: 5px; }
+        .back-btn { background: #95a5a6; color: #fff; }
+        .speak-btn { background: #3498db; color: #fff; font-size: 1.2em; }
+        .hidden { display: none; }
+        .final-msg { font-size: 1.5em; color: #16a085; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍰 Чаепитие с героями</h1>
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        <div id="questArea">
+            <div class="step-text" id="stepText"></div>
+            <button class="speak-btn" id="speakBtn" onclick="speakCurrent()">🔊 Послушать</button>
+            <div class="options" id="optionsArea"></div>
+        </div>
+        <div class="controls">
+            <button class="back-btn" id="backBtn" onclick="goBack()">⬅ Назад</button>
+        </div>
+    </div>
+
+    <script>
+        const steps = [
+            { type: 'choice', text: 'Покажи, где чай (tea)! 🍵', audio: 'tea', options: ['🍵', '🥛', '🍋'], correct: 0 },
+            { type: 'choice', text: 'Покажи, где чашка (cup)! ☕', audio: 'cup', options: ['🍰', '☕', '🍓'], correct: 1 },
+            { type: 'choice', text: 'Покажи, где торт (cake)! 🍰', audio: 'cake', options: ['🍋', '🍵', '🍰'], correct: 2 },
+            { type: 'choice', text: 'Покажи, где молоко (milk)! 🥛', audio: 'milk', options: ['🥛', '🍓', '☕'], correct: 0 },
+            { type: 'tf', text: 'Это лимон (lemon)? 🍋', audio: 'lemon', img: '🍋', correct: true },
+            { type: 'tf', text: 'Это джем (jam)? 🍋', audio: 'jam', img: '🍋', correct: false },
+            { type: 'tf', text: 'I like tea. (Я люблю чай) 🍵', audio: 'I like tea', img: '🍵', correct: true },
+            { type: 'tf', text: "I don't like milk. (Я не люблю молоко) 🥛", audio: "I don't like milk", img: '🥛', correct: true },
+            { type: 'fill', text: 'I like ___ with lemon.', audio: 'I like tea with lemon', options: ['tea', 'cup'], correct: 0 },
+            { type: 'fill', text: 'Do you like ___?', audio: 'Do you like jam', options: ['milk', 'jam'], correct: 1 },
+            { type: 'choice', text: 'Покажи, где лимон (lemon)! 🍋', audio: 'lemon', options: ['🍓', '🍋', '🍰'], correct: 1 },
+            { type: 'tf', text: 'Это торт (cake)? 🍓', audio: 'cake', img: '🍓', correct: false },
+            { type: 'choice', text: 'Покажи, где джем (jam)! 🍓', audio: 'jam', options: ['🍓', '🥛', '🍵'], correct: 0 },
+            { type: 'fill', text: 'This is ___.', audio: 'This is milk', options: ['cake', 'milk'], correct: 1 },
+            { type: 'tf', text: 'I like cake. (Я люблю торт) 🍰', audio: 'I like cake', img: '🍰', correct: true },
+            { type: 'fill', text: 'I like tea with ___.', audio: 'I like tea with jam', options: ['jam', 'cup'], correct: 0 },
+            { type: 'choice', text: 'Покажи, где чашка (cup)! ☕', audio: 'cup', options: ['🍋', '🍰', '☕'], correct: 2 },
+            { type: 'tf', text: "I don't like jam. (Я не люблю джем) 🍓", audio: "I don't like jam", img: '🍓', correct: true },
+            { type: 'fill', text: 'Do you like ___?', audio: 'Do you like milk', options: ['tea', 'milk'], correct: 1 },
+            { type: 'choice', text: 'Покажи, где чай (tea)! 🍵', audio: 'tea', options: ['🍵', '🍋', '🍓'], correct: 0 }
+        ];
+
+        let currentStep = 0;
+        let history = [];
+        let currentAudioText = '';
+
+        function renderStep() {
+            if (currentStep >= steps.length) {
+                document.getElementById('questArea').innerHTML = '<div class="final-msg">🎉 Ура! Стол накрыт. Чаепитие начинается! 🎉</div>';
+                document.getElementById('backBtn').classList.add('hidden');
+                document.getElementById('progress').style.width = '100%';
+                return;
+            }
+
+            const step = steps[currentStep];
+            currentAudioText = step.audio;
+            document.getElementById('stepText').innerText = step.text;
+            document.getElementById('progress').style.width = ((currentStep / steps.length) * 100) + '%';
+            
+            const optArea = document.getElementById('optionsArea');
+            optArea.innerHTML = '';
+
+            if (step.type === 'choice') {
+                step.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'opt-btn';
+                    btn.innerText = opt;
+                    btn.onclick = () => checkChoice(idx, step.correct, btn);
+                    optArea.appendChild(btn);
+                });
+            } else if (step.type === 'tf') {
+                const yesBtn = document.createElement('button');
+                yesBtn.className = 'opt-btn';
+                yesBtn.innerText = step.img + ' ✅';
+                yesBtn.onclick = () => checkTF(true, step.correct, yesBtn);
+                optArea.appendChild(yesBtn);
+
+                const noBtn = document.createElement('button');
+                noBtn.className = 'opt-btn';
+                noBtn.innerText = '❌';
+                noBtn.onclick = () => checkTF(false, step.correct, noBtn);
+                optArea.appendChild(noBtn);
+            } else if (step.type === 'fill') {
+                step.options.forEach((opt, idx) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'word-btn';
+                    btn.innerText = opt;
+                    btn.onclick = () => checkChoice(idx, step.correct, btn);
+                    optArea.appendChild(btn);
+                });
+            }
+
+            speak(currentAudioText);
+        }
+
+        function checkChoice(selected, correct, btn) {
+            if (selected === correct) {
+                btn.classList.add('correct');
+                setTimeout(() => { currentStep++; history.push(currentStep - 1); renderStep(); }, 800);
+            } else {
+                btn.classList.add('wrong');
+                setTimeout(() => btn.classList.remove('wrong'), 800);
+            }
+        }
+
+        function checkTF(selected, correct, btn) {
+            if (selected === correct) {
+                btn.classList.add('correct');
+                setTimeout(() => { currentStep++; history.push(currentStep - 1); renderStep(); }, 800);
+            } else {
+                btn.classList.add('wrong');
+                setTimeout(() => btn.classList.remove('wrong'), 800);
+            }
+        }
+
+        function goBack() {
+            if (history.length > 0) {
+                currentStep = history.pop();
+                renderStep();
+            }
+        }
+
+        function speakCurrent() {
+            speak(currentAudioText);
+        }
+
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                let gbVoice = voices.find(v => v.lang === 'en-GB');
+                if (!gbVoice) gbVoice = voices.find(v => v.lang.startsWith('en'));
+                if (gbVoice) utterance.voice = gbVoice;
+                utterance.lang = 'en-GB';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {};
+        }
+
+        renderStep();
+    </script>
+</body>
+</html>

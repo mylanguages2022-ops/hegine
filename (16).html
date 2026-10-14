@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик — The Ugly Duckling</title>
+<meta name="description" content="Словарик урока The Ugly Duckling: swan, duckling, pond, reflection, beautiful, fly, sky, wing.">
+<style>
+body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:linear-gradient(180deg,#e8f4fb 0%,#cfe9f5 100%);color:#1f3a4a;padding:24px 16px 48px}
+h1{text-align:center;font-size:28px;margin:0 0 6px}
+.sub{text-align:center;font-size:15px;color:#4a6b7a;margin:0 0 22px}
+.filters{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:24px}
+.filters button{border:none;background:#fff;color:#1f3a4a;padding:9px 16px;border-radius:20px;font-size:14px;cursor:pointer;box-shadow:0 2px 6px rgba(31,58,74,.12);transition:transform .15s,background .2s}
+.filters button:hover{transform:translateY(-2px)}
+.filters button.active{background:#4aa8d8;color:#fff}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:16px;max-width:900px;margin:0 auto}
+.card{background:#fff;border-radius:18px 18px 26px 26px;padding:16px 12px 18px;text-align:center;position:relative;box-shadow:0 4px 12px rgba(31,58,74,.14);border:2px solid #bfe0f0;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 8px 18px rgba(31,58,74,.2)}
+.card::after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:10px;background:radial-gradient(ellipse at center,#9fd0e8 0%,transparent 70%);border-radius:50%;opacity:.5}
+.card.speaking{background:#e6f6ff;border-color:#4aa8d8}
+.emoji{font-size:40px;line-height:1}
+.en{font-size:18px;font-weight:700;margin:8px 0 2px}
+.ipa{font-size:13px;color:#5b7d8c;margin:0}
+.ru{font-size:14px;margin:6px 0 10px;color:#2c4a58}
+.sound{border:none;background:#4aa8d8;color:#fff;width:38px;height:38px;border-radius:50%;font-size:17px;cursor:pointer;box-shadow:0 3px 8px rgba(74,168,216,.4);transition:transform .15s}
+.sound:hover{transform:scale(1.08)}
+footer{text-align:center;font-size:13px;color:#5b7d8c;margin-top:36px}
+@media(max-width:480px){h1{font-size:22px}.grid{grid-template-columns:repeat(2,1fr);gap:12px}.emoji{font-size:32px}.en{font-size:16px}}
+</style>
+</head>
+<body>
+<h1>🦢 The Ugly Duckling</h1>
+<p class="sub">Нажми на карточку и послушай слово</p>
+<div class="filters">
+<button class="active" data-cat="all">Все</button>
+<button data-cat="birds">Птицы</button>
+<button data-cat="nature">Природа</button>
+<button data-cat="actions">Действия</button>
+<button data-cat="feelings">Красота</button>
+</div>
+<div class="grid" id="grid"></div>
+<footer>Spotlight Starter • Module 5, Lesson 7</footer>
+<script>
+var words=[
+{e:"🦢",en:"swan",ipa:"/swɒn/",ru:"лебедь",cat:"birds"},
+{e:"🐤",en:"duckling",ipa:"/ˈdʌklɪŋ/",ru:"утёнок",cat:"birds"},
+{e:"🦆",en:"duck",ipa:"/dʌk/",ru:"утка",cat:"birds"},
+{e:"🪿",en:"goose",ipa:"/ɡuːs/",ru:"гусь",cat:"birds"},
+{e:"🕊️",en:"bird",ipa:"/bɜːd/",ru:"птица",cat:"birds"},
+{e:"💧",en:"pond",ipa:"/pɒnd/",ru:"пруд",cat:"nature"},
+{e:"🪞",en:"reflection",ipa:"/rɪˈflekʃn/",ru:"отражение",cat:"nature"},
+{e:"☁️",en:"sky",ipa:"/skaɪ/",ru:"небо",cat:"nature"},
+{e:"🌅",en:"dawn",ipa:"/dɔːn/",ru:"рассвет",cat:"nature"},
+{e:"🌿",en:"reeds",ipa:"/riːdz/",ru:"камыши",cat:"nature"},
+{e:"🪽",en:"wing",ipa:"/wɪŋ/",ru:"крыло",cat:"actions"},
+{e:"🕊️",en:"fly",ipa:"/flaɪ/",ru:"летать",cat:"actions"},
+{e:"🏊",en:"swim",ipa:"/swɪm/",ru:"плавать",cat:"actions"},
+{e:"👀",en:"look",ipa:"/lʊk/",ru:"смотреть",cat:"actions"},
+{e:"✨",en:"beautiful",ipa:"/ˈbjuːtɪfl/",ru:"красивый",cat:"feelings"},
+{e:"😊",en:"happy",ipa:"/ˈhæpi/",ru:"счастливый",cat:"feelings"},
+{e:"🌟",en:"free",ipa:"/friː/",ru:"свободный",cat:"feelings"},
+{e:"💛",en:"lovely",ipa:"/ˈlʌvli/",ru:"милый",cat:"feelings"}
+];
+var grid=document.getElementById("grid");
+var buttons=document.querySelectorAll(".filters button");
+var currentVoice=null;
+function makeCard(w){
+var card=document.createElement("div");
+card.className="card";
+card.setAttribute("data-cat",w.cat);
+var em=document.createElement("div");em.className="emoji";em.textContent=w.e;
+var en=document.createElement("div");en.className="en";en.textContent=w.en;
+var ipa=document.createElement("div");ipa.className="ipa";ipa.textContent=w.ipa;
+var ru=document.createElement("div");ru.className="ru";ru.textContent=w.ru;
+var btn=document.createElement("button");btn.className="sound";btn.textContent="🔊";
+btn.addEventListener("click",function(){speak(w.en,card);});
+card.appendChild(em);card.appendChild(en);card.appendChild(ipa);card.appendChild(ru);card.appendChild(btn);
+return card;
+}
+function render(cat){
+grid.innerHTML="";
+for(var i=0;i<words.length;i++){
+if(cat==="all"||words[i].cat===cat){grid.appendChild(makeCard(words[i]));}
+}
+}
+function speak(text,card){
+if(window.speechSynthesis){
+window.speechSynthesis.cancel();
+var u=new SpeechSynthesisUtterance(text);
+u.lang="en-GB";u.rate=0.85;
+var voices=window.speechSynthesis.getVoices();
+for(var i=0;i<voices.length;i++){
+if(voices[i].lang==="en-GB"){u.voice=voices[i];break;}
+}
+card.classList.add("speaking");
+u.onend=function(){card.classList.remove("speaking");};
+window.speechSynthesis.speak(u);
+}
+}
+for(var i=0;i<buttons.length;i++){
+buttons[i].addEventListener("click",function(){
+for(var j=0;j<buttons.length;j++){buttons[j].classList.remove("active");}
+this.classList.add("active");
+render(this.getAttribute("data-cat"));
+});
+}
+render("all");
+if(window.speechSynthesis){window.speechSynthesis.onvoiceschanged=function(){};}
+</script>
+</body>
+</html>

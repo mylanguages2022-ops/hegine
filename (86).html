@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик-витрина — Парад игрушек</title>
+
+<meta property="og:title" content="Словарик-витрина — Парад игрушек">
+<meta property="og:description" content="Говорящие карточки-витрины урока 7b Spotlight: игрушки plane, train, bus, размеры big/small и фразы Larry's got / I've got. Британское произношение по клику.">
+<meta property="og:image" content="https://spotlight-lessons.example.com/og/7b-dictionary-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Словарик-витрина Парад игрушек">
+<meta property="og:url" content="https://spotlight-lessons.example.com/7b/dictionary">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Spotlight — уроки для родителя и ребёнка">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Интерактивный словарик урока 7b Spotlight в виде витрин с озвучкой en-GB: игрушки, размеры и фразы Larry's got / I've got.">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
+    background:linear-gradient(180deg,#f0e6ff 0%,#e6d9ff 100%);
+    color:#3a2e4a;padding:26px 14px 60px;min-height:100vh;
+  }
+  .wrap{max-width:960px;margin:0 auto}
+  header{text-align:center;margin-bottom:24px}
+  header h1{
+    font-size:clamp(1.5rem,4.5vw,2.4rem);color:#8a5ac0;letter-spacing:.3px;
+  }
+  header h1::before{content:'🎪 ';}
+  header p{margin-top:8px;font-size:1rem;color:#6a5a7a;line-height:1.5}
+  .hint{
+    background:#fff;border:3px dashed #c0a0e0;border-radius:14px;
+    padding:14px 18px;margin:18px 0 26px;font-size:.97rem;color:#6a4a8a;line-height:1.55;
+  }
+  .filters{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:28px}
+  .filters button{
+    border:2px solid #d0b0f0;background:#fff;color:#8a5ac0;
+    padding:9px 18px;border-radius:999px;font-size:.92rem;font-weight:700;
+    cursor:pointer;font-family:inherit;transition:.18s;
+  }
+  .filters button:hover{background:#f4eaff;transform:translateY(-2px)}
+  .filters button.active{background:#8a5ac0;border-color:#8a5ac0;color:#fff;box-shadow:0 4px 0 #6a3aa0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:20px}
+
+  /* ---------- ВИТРИНА ---------- */
+  .card{
+    background:#fff;border-radius:12px;padding:20px 15px 14px;
+    border:3px solid #8a5ac0;cursor:pointer;position:relative;
+    transition:.18s;box-shadow:0 5px 0 rgba(138,90,192,.4);
+  }
+  .card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:8px;
+    background:linear-gradient(90deg, #8a5ac0 0%, #c0a0e0 50%, #8a5ac0 100%);
+    border-radius:12px 12px 0 0;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:0 9px 0 rgba(138,90,192,.4)}
+  .card:active{transform:translateY(0);box-shadow:0 3px 0 rgba(138,90,192,.4)}
+  .card.playing{animation:shine .5s}
+  @keyframes shine{0%,100%{box-shadow:0 5px 0 rgba(138,90,192,.4)}50%{box-shadow:0 5px 20px rgba(138,90,192,.8)}}
+  .card .emoji{font-size:2.2rem;line-height:1;text-align:center;display:block;margin-bottom:8px}
+  .card .en{
+    font-size:1.2rem;font-weight:700;color:#6a3aa0;text-align:center;
+    display:block;line-height:1.25;word-break:break-word;
+  }
+  .card .tr{
+    display:block;text-align:center;font-size:.88rem;color:#9a8a9a;
+    margin-top:5px;font-family:"Segoe UI",Arial,sans-serif;letter-spacing:.2px;
+  }
+  .card .ru{
+    display:block;text-align:center;font-size:1.02rem;color:#5a4a6a;
+    margin-top:9px;font-weight:600;
+  }
+  /* ценник-динамик */
+  .speak-btn{
+    position:absolute;top:14px;right:14px;width:42px;height:28px;border-radius:6px;
+    border:2px solid #8a5ac0;cursor:pointer;font-size:.75rem;font-weight:700;
+    background:#fff8e0;color:#8a5ac0;
+    box-shadow:0 2px 0 #6a3aa0;transition:.15s;
+    display:flex;align-items:center;justify-content:center;gap:3px;
+  }
+  .speak-btn::before{content:'🔊';}
+  .speak-btn:hover{background:#ffefc0;transform:scale(1.05) rotate(-3deg)}
+  .speak-btn:active{transform:scale(.95);box-shadow:0 1px 0 #6a3aa0}
+
+  .cat-toys{border-color:#8a5ac0;box-shadow:0 5px 0 rgba(138,90,192,.4)}
+  .cat-toys .en{color:#6a3aa0}
+  .cat-size{border-color:#ff9f43;box-shadow:0 5px 0 rgba(255,159,67,.5)}
+  .cat-size::before{background:linear-gradient(90deg, #ff9f43 0%, #ffc078 50%, #ff9f43 100%)}
+  .cat-size .en{color:#c06a10}
+  .cat-got{border-color:#4ec97a;box-shadow:0 5px 0 rgba(78,201,122,.45)}
+  .cat-got::before{background:linear-gradient(90deg, #4ec97a 0%, #7fe0a0 50%, #4ec97a 100%)}
+  .cat-got .en{color:#2a8a5a}
+  .empty{
+    text-align:center;padding:40px 20px;color:#9a8a9a;font-size:1.05rem;
+    background:#fff;border-radius:14px;border:3px dashed #d0b0f0;
+  }
+  footer{text-align:center;margin-top:36px;font-size:.9rem;color:#9a8a9a;line-height:1.6}
+  @media (max-width:520px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:14px}
+    .card .en{font-size:1.02rem}
+    .card .emoji{font-size:1.9rem}
+    .speak-btn{width:36px;height:24px;font-size:.7rem;top:10px;right:10px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Парад игрушек</h1>
+    <p>словарик-витрина · игрушки, размеры и фразы «у кого есть»</p>
+  </header>
+
+  <div class="hint">
+    🔊 Нажмите на витрину — ценник-динамик озвучит слово британским голосом. Играйте в «Экскурсию»: ребёнок показывает на настоящую игрушку, находит такую же витрину, нажимает и повторяет фразу <b>I've got a big...</b> или <b>Larry's got a...</b>
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">На этой полке пока пусто.</div>
+
+  <footer>
+    Spotlight · Module 7 · Lesson 7b<br>
+    Витрины можно переставлять и слушать сколько угодно раз.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var RATE = 0.85;
+  var voices = [];
+
+  function loadVoices(){
+    if(!('speechSynthesis' in window)) return;
+    voices = window.speechSynthesis.getVoices() || [];
+  }
+  loadVoices();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    setTimeout(loadVoices, 300);
+    setTimeout(loadVoices, 1200);
+  }
+
+  function pickVoice(){
+    if(!voices.length) loadVoices();
+    var v;
+    v = voices.find(function(x){ return x.lang === 'en-GB'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en-gb') === 0; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang === 'en-US'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en') === 0; });
+    return v || null;
+  }
+
+  var speakingCard = null;
+
+  function speak(text, cardEl){
+    if(!('speechSynthesis' in window)){
+      if(cardEl) flash(cardEl);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    if(speakingCard){ speakingCard.classList.remove('playing'); speakingCard = null; }
+
+    var u = new SpeechSynthesisUtterance(text);
+    var v = pickVoice();
+    if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+    u.rate = RATE;
+    u.pitch = 1.05;
+    u.volume = 1;
+
+    if(cardEl){
+      cardEl.classList.add('playing');
+      speakingCard = cardEl;
+      u.onend = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+      u.onerror = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+    }
+    window.speechSynthesis.speak(u);
+  }
+
+  function flash(el){
+    el.classList.add('playing');
+    setTimeout(function(){ el.classList.remove('playing'); }, 600);
+  }
+
+  var CATS = {
+    all:  '🎪 Все витрины',
+    toys: '✈️ Игрушки',
+    size: '📏 Размеры',
+    got:  '🎁 У кого есть'
+  };
+
+  var WORDS = [
+    {c:'toys', e:'✈️', en:'plane',      ipa:'/pleɪn/',       ru:'самолёт'},
+    {c:'toys', e:'🚂', en:'train',      ipa:'/treɪn/',       ru:'поезд'},
+    {c:'toys', e:'🚌', en:'bus',        ipa:'/bʌs/',         ru:'автобус'},
+    {c:'toys', e:'🚗', en:'car',        ipa:'/kɑː/',         ru:'машинка'},
+    {c:'toys', e:'🪁', en:'kite',       ipa:'/kaɪt/',        ru:'воздушный змей'},
+    {c:'toys', e:'⚽', en:'ball',       ipa:'/bɔːl/',        ru:'мяч'},
+    {c:'toys', e:'🧸', en:'teddy bear', ipa:'/ˈtedi beə/',   ru:'плюшевый мишка'},
+    {c:'toys', e:'🛥️', en:'boat',      ipa:'/bəʊt/',        ru:'лодка'},
+    {c:'toys', e:'🪆', en:'doll',       ipa:'/dɒl/',         ru:'кукла'},
+
+    {c:'size', e:'🤗', en:'big',        ipa:'/bɪɡ/',         ru:'большой'},
+    {c:'size', e:'🤏', en:'small',      ipa:'/smɔːl/',       ru:'маленький'},
+
+    {c:'got', e:'✈️', en:"Larry's got a plane.",      ipa:'/ˈlæriz ɡɒt ə pleɪn/',      ru:'у Ларри есть самолёт'},
+    {c:'got', e:'🚂', en:"Larry's got a train.",      ipa:'/ˈlæriz ɡɒt ə treɪn/',      ru:'у Ларри есть поезд'},
+    {c:'got', e:'⚽', en:"I've got a big ball.",      ipa:'/aɪv ɡɒt ə bɪɡ bɔːl/',      ru:'у меня есть большой мяч'},
+    {c:'got', e:'🚗', en:"I've got a small car.",     ipa:'/aɪv ɡɒt ə smɔːl kɑː/',     ru:'у меня есть маленькая машинка'},
+    {c:'got', e:'🤗', en:"This is big.",              ipa:'/ðɪs ɪz bɪɡ/',               ru:'это большое'},
+    {c:'got', e:'🤏', en:"This is small.",            ipa:'/ðɪs ɪz smɔːl/',             ru:'это маленькое'},
+    {c:'got', e:'🎤', en:'What have you got?',        ipa:'/wɒt hæv ju ɡɒt/',           ru:'что у тебя есть?'}
+  ];
+
+  var filtersBox = document.getElementById('filters');
+  var current = 'all';
+
+  Object.keys(CATS).forEach(function(key){
+    var b = document.createElement('button');
+    b.textContent = CATS[key];
+    b.dataset.cat = key;
+    if(key === 'all') b.classList.add('active');
+    b.addEventListener('click', function(){
+      current = key;
+      Array.prototype.forEach.call(filtersBox.children, function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      render();
+    });
+    filtersBox.appendChild(b);
+  });
+
+  var grid  = document.getElementById('grid');
+  var empty = document.getElementById('empty');
+
+  function render(){
+    grid.innerHTML = '';
+    var list = WORDS.filter(function(w){ return current === 'all' || w.c === current; });
+    empty.style.display = list.length ? 'none' : 'block';
+
+    list.forEach(function(w){
+      var card = document.createElement('div');
+      card.className = 'card cat-' + w.c;
+      card.setAttribute('role','button');
+      card.setAttribute('tabindex','0');
+
+      var sp = document.createElement('button');
+      sp.className = 'speak-btn';
+      sp.title = 'Прослушать произношение';
+      sp.setAttribute('aria-label','Прослушать ' + w.en);
+      sp.addEventListener('click', function(ev){
+        ev.stopPropagation();
+        speak(w.en, card);
+      });
+
+      var em = document.createElement('span');
+      em.className = 'emoji';
+      em.textContent = w.e;
+
+      var en = document.createElement('span');
+      en.className = 'en';
+      en.textContent = w.en;
+
+      var tr = document.createElement('span');
+      tr.className = 'tr';
+      tr.textContent = w.ipa;
+
+      var ru = document.createElement('span');
+      ru.className = 'ru';
+      ru.textContent = w.ru;
+
+      card.appendChild(sp);
+      card.appendChild(em);
+      card.appendChild(en);
+      card.appendChild(tr);
+      card.appendChild(ru);
+
+      card.addEventListener('click', function(){ speak(w.en, card); });
+      card.addEventListener('keydown', function(ev){
+        if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); speak(w.en, card); }
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  render();
+
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = function(){ loadVoices(); };
+  }
+})();
+</script>
+</body>
+</html>

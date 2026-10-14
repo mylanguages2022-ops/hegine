@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Словарь: Tea Time!</title>
+    <meta property="og:title" content="Интерактивный словарь: Tea Time!">
+    <meta property="og:description" content="Словарь с озвучкой для урока 11 модуля 2 Spotlight.">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=Tea+Time+Dictionary">
+    <meta property="og:url" content="https://example.com/dict-lesson-11">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fff9f0; color: #333; text-align: center; padding: 20px; }
+        h1 { color: #d35400; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; max-width: 800px; margin: 0 auto; }
+        .card { background: #fff; border: 2px solid #f39c12; border-radius: 15px; padding: 20px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; align-items: center; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .card .emoji { font-size: 3em; margin-bottom: 10px; }
+        .card .word { font-size: 1.5em; font-weight: bold; color: #2c3e50; }
+        .card .trans { font-size: 0.9em; color: #7f8c8d; margin: 5px 0; }
+        .card .translate { font-size: 1.1em; color: #d35400; }
+        .speaker-btn { background: #3498db; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.2em; cursor: pointer; margin-top: 10px; transition: background 0.2s; }
+        .speaker-btn:hover { background: #2980b9; }
+    </style>
+</head>
+<body>
+    <h1>🍰 Tea Time! Словарь</h1>
+    <div class="grid" id="dictGrid"></div>
+
+    <script>
+        const words = [
+            { emoji: '🍵', word: 'tea', trans: '/tiː/', translate: 'чай' },
+            { emoji: '☕', word: 'cup', trans: '/kʌp/', translate: 'чашка' },
+            { emoji: '🍰', word: 'cake', trans: '/keɪk/', translate: 'торт' },
+            { emoji: '🍓', word: 'jam', trans: '/dʒæm/', translate: 'джем' },
+            { emoji: '🍋', word: 'lemon', trans: '/ˈlemən/', translate: 'лимон' },
+            { emoji: '🥛', word: 'milk', trans: '/mɪlk/', translate: 'молоко' },
+            { emoji: '👍', word: 'I like', trans: '/aɪ laɪk/', translate: 'мне нравится' },
+            { emoji: '👎', word: "I don't like", trans: '/aɪ dəʊnt laɪk/', translate: 'мне не нравится' },
+            { emoji: '❓', word: 'Do you like...?', trans: '/duː juː laɪk/', translate: 'Ты любишь...?' }
+        ];
+
+        const grid = document.getElementById('dictGrid');
+        words.forEach(item => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <div class="emoji">${item.emoji}</div>
+                <div class="word">${item.word}</div>
+                <div class="trans">${item.trans}</div>
+                <div class="translate">${item.translate}</div>
+                <button class="speaker-btn" onclick="speak('${item.word.replace("'", "\\'")}')">🔊</button>
+            `;
+            card.addEventListener('click', (e) => {
+                if(!e.target.classList.contains('speaker-btn')) {
+                    speak(item.word);
+                }
+            });
+            grid.appendChild(card);
+        });
+
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                let gbVoice = voices.find(v => v.lang === 'en-GB');
+                if (!gbVoice) gbVoice = voices.find(v => v.lang.startsWith('en'));
+                if (gbVoice) utterance.voice = gbVoice;
+                utterance.lang = 'en-GB';
+                utterance.rate = 0.85;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = () => {};
+        }
+    </script>
+</body>
+</html>

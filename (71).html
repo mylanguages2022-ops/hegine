@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик урока 5d — Let's Count!</title>
+
+<meta property="og:title" content="Словарик урока 5d — Let's Count!">
+<meta property="og:description" content="Говорящие карточки урока 5d Spotlight: школьные вещи, числа 6–10, слова magic, new, count, fingers и вопросы инспектора How many...? Британское произношение по клику.">
+<meta property="og:image" content="https://spotlight-lessons.example.com/og/5d-dictionary-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Словарик урока 5d — Let's Count!">
+<meta property="og:url" content="https://spotlight-lessons.example.com/5d/dictionary">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Spotlight — уроки для родителя и ребёнка">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Интерактивный словарик урока 5d Spotlight с озвучкой en-GB: school items, numbers 6-10, magic, new, count, fingers и фразы классной переписи.">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
+    background:
+      linear-gradient(#f6efe0,#f6efe0) padding-box,
+      #f6efe0;
+    background-image:
+      linear-gradient(rgba(44,93,143,.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(44,93,143,.06) 1px, transparent 1px);
+    background-size:26px 26px;
+    color:#3a3226;padding:20px 14px 60px;min-height:100vh;
+  }
+  .wrap{max-width:960px;margin:0 auto}
+  header{text-align:center;margin-bottom:20px}
+  header h1{
+    font-size:clamp(1.5rem,4.5vw,2.4rem);color:#2c5d8f;
+    letter-spacing:.5px;
+  }
+  header h1 .stampword{
+    display:inline-block;border:3px double #c0392b;color:#c0392b;
+    padding:2px 12px;border-radius:8px;transform:rotate(-2deg);
+    font-size:.7em;vertical-align:middle;margin-left:8px;
+  }
+  header p{margin-top:8px;font-size:1rem;color:#6b6152;line-height:1.5}
+  .hint{
+    background:#fffdf8;border:3px dashed #b89a6a;border-radius:6px;
+    padding:14px 18px;margin:18px 0 22px;font-size:.97rem;color:#5a4a30;line-height:1.55;
+    box-shadow:3px 3px 0 rgba(184,154,106,.35);
+  }
+  .filters{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:24px}
+  .filters button{
+    border:2px solid #b89a6a;background:#fffdf8;color:#5a4a30;
+    padding:9px 17px;border-radius:4px;font-size:.92rem;font-weight:700;
+    cursor:pointer;font-family:inherit;transition:.18s;
+  }
+  .filters button:hover{background:#f3e8d2;transform:translateY(-2px)}
+  .filters button.active{background:#2c5d8f;border-color:#2c5d8f;color:#fff;box-shadow:0 4px 0 #1d4265}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:15px}
+  .card{
+    background:#fffdf8;border-radius:6px;padding:16px 15px 14px;
+    border:2px solid #2c5d8f;cursor:pointer;position:relative;
+    transition:.18s;box-shadow:4px 4px 0 rgba(44,93,143,.25);
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:6px 8px 0 rgba(44,93,143,.25)}
+  .card:active{transform:translateY(0);box-shadow:3px 3px 0 rgba(44,93,143,.25)}
+  .card.playing{border-color:#2e8b57;box-shadow:4px 4px 0 rgba(46,139,87,.35);background:#f2fbf5}
+  .card .emoji{font-size:2.2rem;line-height:1;text-align:center;display:block;margin-bottom:8px}
+  .card .en{
+    font-size:1.2rem;font-weight:700;color:#2c5d8f;text-align:center;
+    display:block;line-height:1.25;word-break:break-word;
+  }
+  .card .tr{
+    display:block;text-align:center;font-size:.88rem;color:#8a7d68;
+    margin-top:5px;font-family:"Segoe UI",Arial,sans-serif;letter-spacing:.2px;
+  }
+  .card .ru{
+    display:block;text-align:center;font-size:1.02rem;color:#5a4a30;
+    margin-top:9px;font-weight:600;
+  }
+  .speak-btn{
+    position:absolute;top:9px;right:9px;width:40px;height:40px;border-radius:50%;
+    border:2px double #fff;background:#c0392b;color:#fff;font-size:1.1rem;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 3px 0 #8e2a1f;transition:.15s;
+  }
+  .speak-btn:hover{background:#a93226;transform:scale(1.08)}
+  .speak-btn:active{transform:scale(.94);box-shadow:0 1px 0 #8e2a1f}
+  .cat-school{border-color:#2e8b57;box-shadow:4px 4px 0 rgba(46,139,87,.25)}
+  .cat-num{border-color:#8a5fd0;box-shadow:4px 4px 0 rgba(138,95,208,.25)}
+  .cat-magic{border-color:#c0392b;box-shadow:4px 4px 0 rgba(192,57,43,.25)}
+  .cat-phrase{border-color:#2c5d8f;box-shadow:4px 4px 0 rgba(44,93,143,.25)}
+  .empty{
+    text-align:center;padding:40px 20px;color:#8a7d68;font-size:1.05rem;
+    background:#fffdf8;border-radius:6px;border:3px dashed #b89a6a;
+  }
+  footer{text-align:center;margin-top:34px;font-size:.9rem;color:#8a7d68;line-height:1.6}
+  @media (max-width:520px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:11px}
+    .card .en{font-size:1.02rem}
+    .card .emoji{font-size:1.9rem}
+    .speak-btn{width:34px;height:34px;font-size:1rem;top:6px;right:6px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>🕵️ Словарик урока 5d <span class="stampword">OK</span></h1>
+    <p><strong>Let's Count!</strong> — Давай посчитаем!</p>
+  </header>
+
+  <div class="hint">
+    🔊 Нажмите на карточку — и красная печать-динамик озвучит слово британским голосом. Играйте в перепись: вы показываете предмет в комнате, ребёнок находит нужную карточку, нажимает и повторяет вслух. Потом меняйтесь ролями — инспектором становится ребёнок.
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">В этой группе пока нет карточек.</div>
+
+  <footer>
+    Spotlight · Module 5 · Lesson 5d<br>
+    Словарик можно открывать сколько угодно раз — хоть каждый день по две минуты.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var RATE = 0.85;
+  var voices = [];
+
+  function loadVoices(){
+    if(!('speechSynthesis' in window)) return;
+    voices = window.speechSynthesis.getVoices() || [];
+  }
+  loadVoices();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    setTimeout(loadVoices, 300);
+    setTimeout(loadVoices, 1200);
+  }
+
+  function pickVoice(){
+    if(!voices.length) loadVoices();
+    var v;
+    v = voices.find(function(x){ return x.lang === 'en-GB'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en-gb') === 0; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang === 'en-US'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en') === 0; });
+    return v || null;
+  }
+
+  var speakingCard = null;
+
+  function speak(text, cardEl){
+    if(!('speechSynthesis' in window)){
+      if(cardEl) flash(cardEl);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    if(speakingCard){ speakingCard.classList.remove('playing'); speakingCard = null; }
+
+    var u = new SpeechSynthesisUtterance(text);
+    var v = pickVoice();
+    if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+    u.rate = RATE;
+    u.pitch = 1.05;
+    u.volume = 1;
+
+    if(cardEl){
+      cardEl.classList.add('playing');
+      speakingCard = cardEl;
+      u.onend = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+      u.onerror = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+    }
+    window.speechSynthesis.speak(u);
+  }
+
+  function flash(el){
+    el.classList.add('playing');
+    setTimeout(function(){ el.classList.remove('playing'); }, 700);
+  }
+
+  var CATS = {
+    all:     '🌈 Все слова',
+    school:  '🎒 Школьные вещи',
+    num:     '🔢 Числа',
+    magic:   '✨ Особые слова',
+    phrase:  '💬 Фразы инспектора'
+  };
+
+  var WORDS = [
+    {c:'school', e:'🏫', en:'school',       ipa:'/skuːl/',       ru:'школа'},
+    {c:'school', e:'🖊️', en:'pen',          ipa:'/pen/',         ru:'ручка'},
+    {c:'school', e:'✏️', en:'pencil',       ipa:'/ˈpensl/',      ru:'карандаш'},
+    {c:'school', e:'🗂️', en:'pencil case',  ipa:'/ˈpensl keɪs/', ru:'пенал'},
+    {c:'school', e:'🧽', en:'rubber',        ipa:'/ˈrʌbə/',       ru:'ластик'},
+    {c:'school', e:'📖', en:'book',         ipa:'/bʊk/',         ru:'книга'},
+    {c:'school', e:'🎒', en:'schoolbag',    ipa:'/ˈskuːlbæɡ/',   ru:'школьный портфель'},
+    {c:'school', e:'🪑', en:'desk',         ipa:'/desk/',        ru:'парта'},
+
+    {c:'num', e:'6️⃣', en:'six',   ipa:'/sɪks/',   ru:'шесть'},
+    {c:'num', e:'7️⃣', en:'seven', ipa:'/ˈsevən/', ru:'семь'},
+    {c:'num', e:'8️⃣', en:'eight', ipa:'/eɪt/',    ru:'восемь'},
+    {c:'num', e:'9️⃣', en:'nine',  ipa:'/naɪn/',   ru:'девять'},
+    {c:'num', e:'🔟', en:'ten',   ipa:'/ten/',     ru:'десять'},
+
+    {c:'magic', e:'✨', en:'magic',    ipa:'/ˈmædʒɪk/', ru:'волшебный'},
+    {c:'magic', e:'🎁', en:'new',       ipa:'/njuː/',     ru:'новый'},
+    {c:'magic', e:'🧮', en:'count',     ipa:'/kaʊnt/',    ru:'считать'},
+    {c:'magic', e:'✋', en:'fingers',   ipa:'/ˈfɪŋɡəz/',  ru:'пальцы'},
+    {c:'magic', e:'🟩', en:'green',     ipa:'/ɡriːn/',    ru:'зелёный'},
+
+    {c:'phrase', e:'✋', en:"Let's count our fingers!", ipa:'/lets kaʊnt ˈaʊə ˈfɪŋɡəz/', ru:'давай посчитаем наши пальцы!'},
+    {c:'phrase', e:'🟩', en:'How many green desks?',   ipa:'/haʊ ˈmeni ɡriːn desks/',   ru:'сколько зелёных парт?'},
+    {c:'phrase', e:'❓', en:"Where's the rubber?",      ipa:'/weəz ðə ˈrʌbə/',           ru:'где ластик?'},
+    {c:'phrase', e:'📖', en:"It's on the book.",        ipa:'/ɪts n ðə bʊk/',            ru:'он на книге'},
+    {c:'phrase', e:'🪑', en:"It's on the desk.",        ipa:'/ɪts n ðə desk/',           ru:'он на парте'},
+    {c:'phrase', e:'🗂️', en:"It's in the pencil case.", ipa:'/ɪts ɪn ðə ˈpensl keɪs/',    ru:'он в пенале'},
+    {c:'phrase', e:'❓', en:'How many books?',          ipa:'/haʊ ˈmeni bks/',           ru:'сколько книг?'},
+    {c:'phrase', e:'🎨', en:'Colour seven pencils',     ipa:'/ˈkʌlə ˈsevən ˈpenslz/',     ru:'раскрась семь карандашей'}
+  ];
+
+  var filtersBox = document.getElementById('filters');
+  var current = 'all';
+
+  Object.keys(CATS).forEach(function(key){
+    var b = document.createElement('button');
+    b.textContent = CATS[key];
+    b.dataset.cat = key;
+    if(key === 'all') b.classList.add('active');
+    b.addEventListener('click', function(){
+      current = key;
+      Array.prototype.forEach.call(filtersBox.children, function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      render();
+    });
+    filtersBox.appendChild(b);
+  });
+
+  var grid  = document.getElementById('grid');
+  var empty = document.getElementById('empty');
+
+  function render(){
+    grid.innerHTML = '';
+    var list = WORDS.filter(function(w){ return current === 'all' || w.c === current; });
+    empty.style.display = list.length ? 'none' : 'block';
+
+    list.forEach(function(w){
+      var card = document.createElement('div');
+      card.className = 'card cat-' + w.c;
+      card.setAttribute('role','button');
+      card.setAttribute('tabindex','0');
+
+      var sp = document.createElement('button');
+      sp.className = 'speak-btn';
+      sp.innerHTML = '🔊';
+      sp.title = 'Прослушать произношение';
+      sp.setAttribute('aria-label','Прослушать ' + w.en);
+      sp.addEventListener('click', function(ev){
+        ev.stopPropagation();
+        speak(w.en, card);
+      });
+
+      var em = document.createElement('span');
+      em.className = 'emoji';
+      em.textContent = w.e;
+
+      var en = document.createElement('span');
+      en.className = 'en';
+      en.textContent = w.en;
+
+      var tr = document.createElement('span');
+      tr.className = 'tr';
+      tr.textContent = w.ipa;
+
+      var ru = document.createElement('span');
+      ru.className = 'ru';
+      ru.textContent = w.ru;
+
+      card.appendChild(sp);
+      card.appendChild(em);
+      card.appendChild(en);
+      card.appendChild(tr);
+      card.appendChild(ru);
+
+      card.addEventListener('click', function(){ speak(w.en, card); });
+      card.addEventListener('keydown', function(ev){
+        if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); speak(w.en, card); }
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  render();
+
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = function(){ loadVoices(); };
+  }
+})();
+</script>
+</body>
+</html>

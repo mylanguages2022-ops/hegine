@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квест: Волшебное приключение с Nanny Shine</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Квест: Волшебное приключение с Nanny Shine" />
+    <meta property="og:description" content="Интерактивный квест для закрепления первых английских фраз: Hello, Goodbye, I'm. Пройди все этапы и получи награду!" />
+    <meta property="og:image" content="https://example.com/preview-quest.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://example.com/quest-1a.html" />
+    <meta property="og:locale" content="ru_RU" />
+    <style>
+        body { font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; text-align: center; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .quest-container { background: white; border-radius: 20px; padding: 30px; max-width: 600px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 4px solid #ff6b6b; }
+        h2 { color: #1a535c; margin-bottom: 20px; }
+        .stage { display: none; }
+        .stage.active { display: block; animation: fadeIn 0.5s; }
+        .btn { background-color: #4ecdc4; color: white; border: none; padding: 15px 30px; font-size: 18px; border-radius: 50px; cursor: pointer; margin: 10px; transition: transform 0.2s, background 0.2s; font-family: inherit; font-weight: bold; }
+        .btn:hover { transform: scale(1.05); background-color: #45b7af; }
+        .btn-option { display: block; width: 80%; margin: 10px auto; background-color: #ffe66d; color: #333; }
+        .btn-option:hover { background-color: #ffd93d; }
+        .character { font-size: 60px; margin-bottom: 15px; }
+        .progress { margin-top: 20px; color: #888; font-size: 14px; }
+        .reward { font-size: 80px; animation: bounce 1s infinite; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        .feedback { margin-top: 15px; font-weight: bold; min-height: 24px; }
+        .correct { color: #2ecc71; }
+        .wrong { color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="quest-container">
+        <div id="stage-0" class="stage active">
+            <div class="character">🧚‍♀️</div>
+            <h2>Привет! Я Nanny Shine!</h2>
+            <p>А теперь я приготовила для нас настоящее приключение. Чтобы добраться до финала и получить волшебную награду, нужно вспомнить всё, с чем мы сегодня познакомились. Готов?</p>
+            <button class="btn" onclick="nextStage(1)">Да, готов!</button>
+        </div>
+
+        <div id="stage-1" class="stage">
+            <div class="character">👋</div>
+            <h2>Этап 1: Встреча</h2>
+            <p>Мы встретили друга. Что нужно сказать первым делом?</p>
+            <button class="btn btn-option" onclick="checkAnswer(1, false)">Goodbye</button>
+            <button class="btn btn-option" onclick="checkAnswer(1, true)">Hello</button>
+            <div id="feedback-1" class="feedback"></div>
+        </div>
+
+        <div id="stage-2" class="stage">
+            <div class="character">👦</div>
+            <h2>Этап 2: Знакомство</h2>
+            <p>Ларри хочет представиться. Как он скажет "Я — Ларри"?</p>
+            <button class="btn btn-option" onclick="checkAnswer(2, true)">I'm Larry</button>
+            <button class="btn btn-option" onclick="checkAnswer(2, false)">Hello Larry</button>
+            <div id="feedback-2" class="feedback"></div>
+        </div>
+
+        <div id="stage-3" class="stage">
+            <div class="character">🐵</div>
+            <h2>Этап 3: Движение</h2>
+            <p>Чаклз хочет похлопать в ладоши! Какое слово он кричит, когда мы хлопаем (clap your hands)?</p>
+            <button class="btn btn-option" onclick="checkAnswer(3, true)">Hello</button>
+            <button class="btn btn-option" onclick="checkAnswer(3, false)">Goodbye</button>
+            <div id="feedback-3" class="feedback"></div>
+        </div>
+
+        <div id="stage-4" class="stage">
+            <div class="character">👀</div>
+            <h2>Этап 4: Кто пропал?</h2>
+            <p>Здесь были Ларри, Лулу и Чаклз. Но один спрятался. Кто говорит "I'm Lulu"?</p>
+            <button class="btn btn-option" onclick="checkAnswer(4, false)">Мальчик</button>
+            <button class="btn btn-option" onclick="checkAnswer(4, true)">Девочка</button>
+            <button class="btn btn-option" onclick="checkAnswer(4, false)">Обезьянка</button>
+            <div id="feedback-4" class="feedback"></div>
+        </div>
+
+        <div id="stage-5" class="stage">
+            <div class="character">👧</div>
+            <h2>Этап 5: Твоя очередь!</h2>
+            <p>Nanny Shine спрашивает: "What's your name?". Что ты ей ответишь?</p>
+            <button class="btn btn-option" onclick="checkAnswer(5, true)">I'm [твоё имя]</button>
+            <button class="btn btn-option" onclick="checkAnswer(5, false)">Goodbye</button>
+            <div id="feedback-5" class="feedback"></div>
+        </div>
+
+        <div id="stage-6" class="stage">
+            <div class="character">🚶‍♂️</div>
+            <h2>Этап 6: Прощание</h2>
+            <p>Наше приключение заканчивается. Пора идти домой. Что мы скажем?</p>
+            <button class="btn btn-option" onclick="checkAnswer(6, false)">Hello</button>
+            <button class="btn btn-option" onclick="checkAnswer(6, true)">Goodbye</button>
+            <div id="feedback-6" class="feedback"></div>
+        </div>
+
+        <div id="stage-7" class="stage">
+            <div class="character">🏆</div>
+            <h2>Поздравляем!</h2>
+            <p>Ты прошёл все испытания!</p>
+            <div class="reward">🌟🏅🌟</div>
+            <p>Ты настоящий друг Nanny Shine, Larry, Lulu и Chuckles!</p>
+            <button class="btn" onclick="location.reload()">Пройти ещё раз</button>
+        </div>
+
+        <div class="progress">Этап <span id="current-stage">1</span> из 6</div>
+    </div>
+
+    <script>
+        let currentStage = 1;
+
+        function nextStage(stageNum) {
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            document.getElementById('stage-' + stageNum).classList.add('active');
+            if(stageNum <= 6) {
+                document.getElementById('current-stage').textContent = stageNum;
+            } else {
+                document.querySelector('.progress').style.display = 'none';
+            }
+        }
+
+        function checkAnswer(stage, isCorrect) {
+            const feedbackEl = document.getElementById('feedback-' + stage);
+            if (isCorrect) {
+                feedbackEl.textContent = "Отлично! Правильно! 🎉";
+                feedbackEl.className = "feedback correct";
+                setTimeout(() => {
+                    nextStage(stage + 1);
+                }, 1000);
+            } else {
+                feedbackEl.textContent = "Попробуй ещё раз! Подумай, что мы учили. 🤔";
+                feedbackEl.className = "feedback wrong";
+            }
+        }
+    </script>
+</body>
+</html>

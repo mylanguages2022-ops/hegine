@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotlight Starter 3b: Большой квест</title>
+    <meta property="og:title" content="Spotlight Starter 3b: Организуй праздник для Чаклза">
+    <meta property="og:description" content="Большой интерактивный квест из 20 шагов для закрепления лексики и фраз урока 3b.">
+    <meta property="og:image" content="https://example.com/og-image-quest-3b.jpg">
+    <meta property="og:url" content="https://example.com/spotlight-3b-quest">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <style>
+        body { font-family: 'Comic Sans MS', 'Arial', sans-serif; background-color: #fffacd; text-align: center; padding: 20px; margin: 0; }
+        .container { max-width: 650px; margin: 20px auto; background: white; padding: 30px; border-radius: 20px; border: 4px solid #f39c12; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        h1 { color: #d35400; font-size: 26px; margin-bottom: 10px; }
+        p { font-size: 20px; color: #2c3e50; line-height: 1.5; margin-bottom: 25px; }
+        .btn { display: inline-block; margin: 8px; padding: 15px 25px; font-size: 18px; border: none; border-radius: 12px; cursor: pointer; transition: 0.2s; color: white; font-weight: bold; min-width: 140px; }
+        .btn:hover { opacity: 0.9; transform: scale(1.03); }
+        .hidden { display: none; }
+        .success { color: #27ae60; font-size: 24px; font-weight: bold; }
+        .progress { font-size: 16px; color: #7f8c8d; margin-bottom: 15px; font-weight: bold; background: #ecf0f1; padding: 10px; border-radius: 10px; }
+        .emoji { font-size: 45px; margin: 10px 0; }
+        .bg-pink { background-color: #ff69b4; }
+        .bg-red { background-color: #e74c3c; }
+        .bg-yellow { background-color: #f1c40f; color: #333; }
+        .bg-green { background-color: #27ae60; }
+        .bg-blue { background-color: #3498db; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress" id="progress">Шаг 1 из 20</div>
+        <div id="game-area"></div>
+    </div>
+    <script>
+        const steps = [
+            { emoji: "🐵", text: "Чаклз проснулся и хочет устроить праздник! Сначала нужно проснуться. Что сказать?", options: [{t: "Stand up!", c: true}, {t: "Sit down!", c: false}] },
+            { emoji: "👏", text: "Отлично! Чаклз потягивается. Давай похлопаем в ладоши!", options: [{t: "Clap your hands!", c: true}, {t: "Sit down!", c: false}] },
+            { emoji: "🪑", text: "Теперь нужно сесть и составить план праздника.", options: [{t: "Sit down!", c: true}, {t: "Stand up!", c: false}] },
+            { emoji: "👩", text: "Кто первый гость на нашем празднике? Женщина в жёлтом платье.", options: [{t: "Mummy", c: true}, {t: "Daddy", c: false}] },
+            { emoji: "👨", text: "Верно! А кто второй гость? Мужчина в полосатой рубашке.", options: [{t: "Mummy", c: false}, {t: "Daddy", c: true}] },
+            { emoji: "🍰", text: "Гости проголодались. Что мы будем им давать?", options: [{t: "Cake", c: true}, {t: "Stand up", c: false}] },
+            { emoji: "🩷", text: "Mummy любит нежные цвета. Какой торт для неё?", options: [{t: "Pink cake", c: true}, {t: "Red cake", c: false}] },
+            { emoji: "❤️", text: "А Daddy любит яркий цвет. Какой торт для него?", options: [{t: "Yellow cake", c: false}, {t: "Red cake", c: true}] },
+            { emoji: "💛", text: "Подожди, а это жёлтый торт. Он для Mummy?", options: [{t: "Yes", c: false}, {t: "No", c: true}] },
+            { emoji: "🤔", text: "Правильно, не для неё. А для кого тогда жёлтый торт?", options: [{t: "For Daddy", c: true}, {t: "For Mummy", c: false}] },
+            { emoji: "🎁", text: "Торты готовы! Давай отдадим розовый торт маме. Что сказать?", options: [{t: "Here's a cake for you!", c: true}, {t: "Sit down!", c: false}] },
+            { emoji: "👩🦰", text: "Mummy получила торт! Что она говорит?", options: [{t: "Thank you!", c: true}, {t: "No!", c: false}] },
+            { emoji: "🎁", text: "Теперь отдаём красный торт папе. Повтори фразу!", options: [{t: "Here's a cake for you!", c: true}, {t: "Clap your hands!", c: false}] },
+            { emoji: "👨‍🦱", text: "Daddy очень рад! Что он говорит?", options: [{t: "Thank you!", c: true}, {t: "Stand up!", c: false}] },
+            { emoji: "🍽️", text: "Все получили угощения. Стол накрыт правильно?", options: [{t: "Yes", c: true}, {t: "No", c: false}] },
+            { emoji: "💃", text: "Пора праздновать! Давай потанцуем и похлопаем!", options: [{t: "Clap your hands!", c: true}, {t: "Sit down!", c: false}] },
+            { emoji: "🪑", text: "Мы устали танцевать. Пора снова сесть за стол.", options: [{t: "Sit down!", c: true}, {t: "Stand up!", c: false}] },
+            { emoji: "😋", text: "Торт очень вкусный. Тебе нравится?", options: [{t: "Yes", c: true}, {t: "No", c: false}] },
+            { emoji: "😊", text: "Mummy и Daddy счастливы. Мы всё сделали правильно?", options: [{t: "Yes", c: true}, {t: "No", c: false}] },
+            { emoji: "🎉", text: "Праздник удался! Чаклз говорит тебе огромное спасибо!", options: [{t: "Ура!", c: true}, {t: "Ещё раз!", c: true}] }
+        ];
+
+        let currentStep = 0;
+        const gameArea = document.getElementById('game-area');
+        const progress = document.getElementById('progress');
+
+        function renderStep() {
+            if (currentStep >= steps.length) {
+                gameArea.innerHTML = `<div class="emoji">🏆</div><h1>Ты прошёл весь квест!</h1><p class="success">Чаклз, Mummy и Daddy в восторге! Ты знаешь все команды, цвета и вежливые фразы.</p><button class="btn bg-green" onclick="location.reload()">Пройти ещё раз</button>`;
+                progress.classList.add('hidden');
+                return;
+            }
+            const step = steps[currentStep];
+            progress.textContent = `Шаг ${currentStep + 1} из ${steps.length}`;
+            
+            let buttonsHtml = step.options.map((opt, index) => 
+                `<button class="btn ${index === 0 ? 'bg-blue' : 'bg-green'}" onclick="handleAnswer(${opt.c})">${opt.t}</button>`
+            ).join('');
+
+            gameArea.innerHTML = `
+                <div class="emoji">${step.emoji}</div>
+                <h1>${currentStep === 0 ? 'Начинаем праздник!' : 'Отлично!'}</h1>
+                <p>${step.text}</p>
+                <div>${buttonsHtml}</div>
+            `;
+        }
+
+        function handleAnswer(isCorrect) {
+            if (isCorrect) {
+                currentStep++;
+                renderStep();
+            } else {
+                gameArea.innerHTML = `<div class="emoji">🤔</div><p>Почти угадал! Попробуй ещё раз, подумай внимательно.</p><button class="btn bg-yellow" onclick="renderStep()">Назад</button>`;
+            }
+        }
+
+        renderStep();
+    </script>
+</body>
+</html>

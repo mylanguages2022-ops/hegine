@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>СУПЕР-АКТИВНАЯ физминутка + глаза! Let's MOVE!</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="СУПЕР-АКТИВНАЯ физминутка + глаза!" />
+    <meta property="og:description" content="Максимально активная физминутка с динамичными упражнениями для глаз! Бегай, прыгай, следи глазами!" />
+    <meta property="og:image" content="https://example.com/preview-super-active.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://example.com/super-active-1a.html" />
+    <meta property="og:locale" content="ru_RU" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body { 
+            font-family: 'Comic Sans MS', 'Chalkboard SE', 'Arial', sans-serif; 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+            min-height: 100vh; 
+            overflow: hidden;
+        }
+        
+        .container { 
+            background: white; 
+            border-radius: 30px; 
+            padding: 15px; 
+            max-width: 95vw; 
+            width: 95vw;
+            height: 95vh;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        h1 { 
+            color: #f5576c; 
+            font-size: 28px; 
+            margin-bottom: 5px;
+            animation: pulse 0.5s infinite;
+            text-transform: uppercase;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .subtitle {
+            color: #667eea;
+            font-size: 18px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .activity-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(180deg, #fff5f7 0%, #ffe0e6 100%);
+            border-radius: 20px;
+            padding: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .character-display {
+            font-size: 80px;
+            margin: 5px 0;
+            position: relative;
+            z-index: 2;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+        }
+        
+        .instruction {
+            font-size: 24px;
+            color: #333;
+            margin: 10px 0;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            max-width: 100%;
+            line-height: 1.3;
+            font-weight: bold;
+        }
+        
+        .english-phrase {
+            font-size: 36px;
+            color: #f5576c;
+            font-weight: bold;
+            margin: 10px 0;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+            animation: bounce 0.3s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-10px) scale(1.1); }
+        }
+        
+        .activity-type {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .type-body {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+        }
+        
+        .type-eyes {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(79, 172, 254, 0.4);
+        }
+        
+        .btn { 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+            color: white; 
+            border: none; 
+            padding: 18px 35px; 
+            font-size: 22px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            margin: 10px; 
+            transition: all 0.2s;
+            font-family: inherit; 
+            font-weight: bold;
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5);
+            text-transform: uppercase;
+        }
+        
+        .btn:hover { 
+            transform: translateY(-5px) scale(1.1); 
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.7);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #ffe0e6;
+            border-radius: 15px;
+            margin: 8px 0;
+            overflow: hidden;
+            border: 3px solid #f5576c;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f093fb, #f5576c, #ffd93d);
+            transition: width 0.3s;
+            border-radius: 12px;
+        }
+        
+        .counter {
+            font-size: 20px;
+            color: #f5576c;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .timer {
+            font-size: 32px;
+            color: #f5576c;
+            font-weight: bold;
+            margin: 10px 0;
+            animation: pulse 0.5s infinite;
+        }
+        
+        @keyframes jump {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-40px) rotate(-10deg); }
+            50% { transform: translateY(0) rotate(0deg); }
+            75% { transform: translateY(-20px) rotate(10deg); }
+        }
+        
+        @keyframes run {
+            0% { transform: translateX(-150px); }
+            50% { transform: translateX(150px); }
+            100% { transform: translateX(-150px); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(360deg) scale(1.2); }
+            100% { transform: rotate(720deg) scale(1); }
+        }
+        
+        @keyframes fastClap {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        
+        @keyframes wave {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(25deg); }
+            75% { transform: rotate(-25deg); }
+        }
+        
+        .jumping { animation: jump 0.4s infinite; }
+        .running { animation: run 1s infinite linear; }
+        .spinning { animation: spin 0.8s infinite linear; }
+        .clapping { animation: fastClap 0.3s infinite; }
+        .waving { animation: wave 0.5s infinite; }
+        
+        .start-screen, .end-screen {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        
+        .exercise-screen {
+            display: none;
+            height: 100%;
+        }
+        
+        .emoji-big {
+            font-size: 50px;
+            margin: 8px;
+            display: inline-block;
+            animation: bounce 0.5s infinite;
+        }
+        
+        .stars {
+            font-size: 45px;
+            margin: 15px 0;
+            animation: pulse 0.5s infinite;
+        }
+        
+        .combo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            color: #ffd93d;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: rgba(255,255,255,0.9);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+        }
+        
+        .particle {
+            position: absolute;
+            font-size: 25px;
+            animation: fall linear;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(600px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .speed-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #f5576c;
+            background: white;
+            padding: 8px 12px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        
+        /* Стили для глазных заданий */
+        .eye-target {
+            position: absolute;
+            font-size: 40px;
+            transition: all 0.1s;
+            cursor: pointer;
+            z-index: 10;
+        }
+        
+        .eye-target:hover {
+            transform: scale(1.2);
+        }
+        
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+            margin: 10px auto;
+        }
+        
+        .hero-cell {
+            font-size: 35px;
+            padding: 10px;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        
+        .hero-cell:hover {
+            transform: scale(1.1);
+            background: #fff5f7;
+        }
+        
+        .hero-cell.correct {
+            background: #d4edda;
+            animation: bounce 0.5s;
+        }
+        
+        .hero-cell.wrong {
+            background: #f8d7da;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .flying-object {
+            position: absolute;
+            font-size: 50px;
+            animation: fly 3s infinite linear;
+        }
+        
+        @keyframes fly {
+            0% { top: 10%; left: 10%; }
+            25% { top: 80%; left: 80%; }
+            50% { top: 10%; left: 80%; }
+            75% { top: 80%; left: 10%; }
+            100% { top: 10%; left: 10%; }
+        }
+        
+        @media (max-width: 600px) {
+            h1 { font-size: 22px; }
+            .instruction { font-size: 20px; }
+            .english-phrase { font-size: 28px; }
+            .character-display { font-size: 60px; }
+            .btn { font-size: 18px; padding: 15px 30px; }
+            .hero-cell { font-size: 28px; padding: 8px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Start Screen -->
+        <div id="start-screen" class="start-screen">
+            <div class="character-display">🔥</div>
+            <h1>⚡ СУПЕР-АКТИВНАЯ ФИЗМИНУТКА! ⚡</h1>
+            <p class="subtitle">Тело + Глаза = Супер-сила!</p>
+            <div style="font-size: 50px; margin: 15px 0;">
+                <span class="emoji-big">🏃</span>
+                <span class="emoji-big"></span>
+                <span class="emoji-big">🎉</span>
+            </div>
+            <p style="font-size: 18px; margin: 15px 0; color: #666;">
+                Бегай, прыгай, следи глазами!<br>
+                Быстро! Активно! Весело!
+            </p>
+            <button class="btn" onclick="startActivity()">ПОЕХАЛИ! 🚀</button>
+        </div>
+
+        <!-- Exercise Screen -->
+        <div id="exercise-screen" class="exercise-screen">
+            <div class="speed-indicator">СКОРОСТЬ: <span id="speed">🔥</span></div>
+            <div class="combo">⭐ <span id="combo-count">0</span></div>
+            
+            <div class="counter">Задание <span id="current-activity">1</span> / <span id="total-activities">14</span></div>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill" style="width: 7%"></div>
+            </div>
+            
+            <div class="activity-area" id="activity-area">
+                <div id="activity-type" class="activity-type type-body">GO!</div>
+                <div id="character" class="character-display">🐵</div>
+                <div id="instruction" class="instruction"></div>
+                <div id="phrase" class="english-phrase"></div>
+                <div id="timer" class="timer">⏱️ <span id="time-left">10</span></div>
+            </div>
+            
+            <div class="particles" id="particles"></div>
+        </div>
+
+        <!-- End Screen -->
+        <div id="end-screen" class="end-screen" style="display: none;">
+            <div class="character-display">🎉</div>
+            <h1>ТЫ СУПЕР-ГЕРОЙ!</h1>
+            <div class="stars">⭐⭐⭐⭐⭐</div>
+            <p style="font-size: 20px; margin: 15px 0; color: #f5576c; font-weight: bold;">
+                Счёт: <span id="final-score">0</span> очков!
+            </p>
+            <div style="font-size: 60px; margin: 20px 0;">
+                <span class="emoji-big">👏</span>
+                <span class="emoji-big"></span>
+            </div>
+            <button class="btn" onclick="location.reload()">ЕЩЁ РАЗ! 🔄</button>
+        </div>
+    </div>
+
+    <script>
+        const activities = [
+            // ТЕЛО
+            {
+                type: 'body',
+                character: '🐵',
+                instruction: 'БЕГИ на месте БЫСТРО!',
+                phrase: 'Run! Run! Run!',
+                animation: 'running',
+                duration: 7,
+                points: 10
+            },
+            // ГЛАЗА - следи за объектом
+            {
+                type: 'eyes',
+                character: '',
+                instruction: 'Следи глазами за мячом! Он летает!',
+                phrase: 'Follow the ball!',
+                animation: 'none',
+                duration: 6,
+                points: 15,
+                eyeTask: 'follow'
+            },
+            // ТЕЛО
+            {
+                type: 'body',
+                character: '👦',
+                instruction: 'ПРЫГАЙ высоко! Выше!',
+                phrase: 'Jump! Jump!',
+                animation: 'jumping',
+                duration: 7,
+                points: 10
+            },
+            // ГЛАЗА - найди героя
+            {
+                type: 'eyes',
+                character: '',
+                instruction: 'Найди Чаклза! Нажми на него!',
+                phrase: 'Find Chuckles!',
+                animation: 'none',
+                duration: 8,
+                points: 20,
+                eyeTask: 'find-hero'
+            },
+            // ТЕЛО
+            {
+                type: 'body',
+                character: '',
+                instruction: 'ХЛОПАЙ быстро-быстро!',
+                phrase: 'Clap! Clap!',
+                animation: 'clapping',
+                duration: 6,
+                points: 10
+            },
+            // ГЛАЗА - моргни когда увидишь
+            {
+                type: 'eyes',
+                character: '',
+                instruction: 'МОРГНИ когда увидишь звёздочку!',
+                phrase: 'Blink when you see star!',
+                animation: 'none',
+                duration: 7,
+                points: 15,
+                eyeTask: 'blink-reaction'
+            },
+            // ТЕЛО
+            {
+                type: 'body',
+                character: '',
+                instruction: 'КРУЖИСЬ вокруг себя!',
+                phrase: 'Turn around!',
+                animation: 'spinning',
+                duration: 6,
+                points: 15
+            },
+            // ГЛАЗА - быстро переведи взгляд
+            {
+                type: 'eyes',
+                character: '',
+                instruction: 'Смотри ВЛЕВО! Теперь ВПРАВО! ВВЕРХ! ВНИЗ!',
+                phrase: 'Look left, right, up, down!',
+                animation: 'none',
+                duration: 6,
+                points: 15,
+                eyeTask: 'look-directions'
+            },
+            // ТЕЛО
+            {
+                type: 'body',
+                character: '',
+                instruction: 'ТОПАЙ ногами ГРОМКО!',
+                phrase: 'Stamp your feet!',
+                animation: 'jumping',
+                duration: 6,
+                points: 10
+            },
+            // ГЛАЗА - следи за двумя объектами
+            {
+                type: 'eyes',
+                character: '',
+                instruction: 'Следи за ДВУМЯ мячами одновременно!',
+                phrase: 'Follow two balls!',
+                animation: 'none',
+                duration: 7,
+                points: 20,
+                eyeTask: 'follow-two'
+            },
+            // ТЕЛО
+            {
+                type: 'body',
+                character: '‍♀️',
+                instruction: 'МАШИ руками как крыльями!',
+                phrase: 'Fly! Fly!',
+                animation: 'waving',
+                duration: 6,
+                points: 10
+            },
+            // ГЛАЗА - зажмурься и открой
+            {
+                type: 'eyes',
+                character: '',
+                instruction: 'Зажмурься крепко! Теперь открой широко!',
+                phrase: 'Close eyes! Open wide!',
+                animation: 'none',
+                duration: 5,
+                points: 10,
+                eyeTask: 'close-open'
+            },
+            // ТЕЛО - комбо
+            {
+                type: 'body',
+                character: '🎉',
+                instruction: 'ПРЫГАЙ и ХЛОПАЙ одновременно!',
+                phrase: 'Jump and clap!',
+                animation: 'jumping',
+                duration: 8,
+                points: 20
+            },
+            // ФИНАЛ
+            {
+                type: 'body',
+                character: '👋',
+                instruction: 'Помашите GOODBYE!',
+                phrase: 'Goodbye! Goodbye!',
+                animation: 'waving',
+                duration: 5,
+                points: 10
+            }
+        ];
+
+        let currentActivity = 0;
+        let timerInterval;
+        let timeLeft;
+        let score = 0;
+        let combo = 0;
+        let eyeTaskInterval;
+
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const emojis = ['⭐', '✨', '💫', '🔥', ''];
+            
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = '-50px';
+                particle.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                container.appendChild(particle);
+                
+                setTimeout(() => particle.remove(), 4000);
+            }
+        }
+
+        function updateScore(points) {
+            combo++;
+            const multiplier = Math.min(combo, 3);
+            const totalPoints = points * multiplier;
+            score += totalPoints;
+            document.getElementById('combo-count').textContent = combo + ' комбо!';
+            
+            if (combo % 3 === 0) {
+                createParticles();
+            }
+        }
+
+        function startActivity() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('exercise-screen').style.display = 'block';
+            document.getElementById('total-activities').textContent = activities.length;
+            showActivity();
+        }
+
+        function clearEyeTask() {
+            clearInterval(eyeTaskInterval);
+            const area = document.getElementById('activity-area');
+            const eyeElements = area.querySelectorAll('.eye-target, .flying-object, .hero-grid');
+            eyeElements.forEach(el => el.remove());
+        }
+
+        function setupEyeTask(task) {
+            const area = document.getElementById('activity-area');
+            
+            if (task === 'follow') {
+                const ball = document.createElement('div');
+                ball.className = 'flying-object';
+                ball.textContent = '⚽';
+                area.appendChild(ball);
+            }
+            else if (task === 'find-hero') {
+                const grid = document.createElement('div');
+                grid.className = 'hero-grid';
+                const heroes = ['👦', '👧', '🐵', '‍♀️', '👦', '👧', '🐵', '‍♀️'];
+                // Перемешаем
+                heroes.sort(() => Math.random() - 0.5);
+                heroes.forEach((hero, i) => {
+                    const cell = document.createElement('div');
+                    cell.className = 'hero-cell';
+                    cell.textContent = hero;
+                    cell.onclick = () => {
+                        if (hero === '🐵') {
+                            cell.classList.add('correct');
+                            updateScore(10);
+                            speak('Yes! Chuckles!');
+                        } else {
+                            cell.classList.add('wrong');
+                            setTimeout(() => cell.classList.remove('wrong'), 500);
+                        }
+                    };
+                    grid.appendChild(cell);
+                });
+                area.appendChild(grid);
+            }
+            else if (task === 'blink-reaction') {
+                eyeTaskInterval = setInterval(() => {
+                    if (Math.random() > 0.6) {
+                        const star = document.createElement('div');
+                        star.className = 'eye-target';
+                        star.textContent = '⭐';
+                        star.style.left = Math.random() * 80 + 10 + '%';
+                        star.style.top = Math.random() * 60 + 20 + '%';
+                        area.appendChild(star);
+                        setTimeout(() => star.remove(), 800);
+                    }
+                }, 1000);
+            }
+            else if (task === 'look-directions') {
+                const arrows = ['⬅️', '➡️', '⬆️', '⬇️'];
+                let arrowIndex = 0;
+                eyeTaskInterval = setInterval(() => {
+                    const arrow = document.createElement('div');
+                    arrow.className = 'eye-target';
+                    arrow.textContent = arrows[arrowIndex % 4];
+                    arrow.style.left = '50%';
+                    arrow.style.top = '50%';
+                    arrow.style.transform = 'translate(-50%, -50%)';
+                    arrow.style.fontSize = '80px';
+                    area.appendChild(arrow);
+                    setTimeout(() => arrow.remove(), 1200);
+                    arrowIndex++;
+                }, 1500);
+            }
+            else if (task === 'follow-two') {
+                const ball1 = document.createElement('div');
+                ball1.className = 'flying-object';
+                ball1.textContent = '⚽';
+                ball1.style.animationDuration = '2.5s';
+                area.appendChild(ball1);
+                
+                const ball2 = document.createElement('div');
+                ball2.className = 'flying-object';
+                ball2.textContent = '🏀';
+                ball2.style.animationDuration = '3.5s';
+                ball2.style.animationDelay = '0.5s';
+                area.appendChild(ball2);
+            }
+            else if (task === 'close-open') {
+                const eye = document.createElement('div');
+                eye.className = 'eye-target';
+                eye.textContent = '👁️';
+                eye.style.left = '50%';
+                eye.style.top = '50%';
+                eye.style.transform = 'translate(-50%, -50%)';
+                eye.style.fontSize = '100px';
+                area.appendChild(eye);
+                
+                setTimeout(() => {
+                    eye.textContent = '';
+                }, 2000);
+                
+                setTimeout(() => {
+                    eye.textContent = '👀';
+                }, 3500);
+            }
+        }
+
+        function showActivity() {
+            const act = activities[currentActivity];
+            const charEl = document.getElementById('character');
+            const instructionEl = document.getElementById('instruction');
+            const phraseEl = document.getElementById('phrase');
+            const timerEl = document.getElementById('timer');
+            const typeEl = document.getElementById('activity-type');
+            
+            clearInterval(timerInterval);
+            clearEyeTask();
+            charEl.className = 'character-display';
+            
+            typeEl.textContent = act.type === 'body' ? 'ДВИЖЕНИЕ ТЕЛА' : 'УПРАЖНЕНИЕ ДЛЯ ГЛАЗ';
+            typeEl.className = 'activity-type ' + (act.type === 'body' ? 'type-body' : 'type-eyes');
+            
+            charEl.textContent = act.character;
+            instructionEl.textContent = act.instruction;
+            phraseEl.textContent = act.phrase;
+            
+            const progress = ((currentActivity + 1) / activities.length) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            document.getElementById('current-activity').textContent = currentActivity + 1;
+            
+            if (act.animation !== 'none') {
+                charEl.classList.add(act.animation);
+            }
+            
+            timerEl.style.display = 'block';
+            timeLeft = act.duration;
+            document.getElementById('time-left').textContent = timeLeft;
+            
+            const speeds = ['🔥', '🔥🔥', '🔥🔥🔥', '⚡⚡'];
+            document.getElementById('speed').textContent = speeds[Math.floor(currentActivity / 4)];
+            
+            if (act.eyeTask) {
+                setupEyeTask(act.eyeTask);
+            }
+            
+            startTimer();
+            speak(act.phrase);
+            
+            setTimeout(() => {
+                if (currentActivity < activities.length - 1) {
+                    updateScore(act.points);
+                    nextActivity();
+                } else {
+                    updateScore(act.points);
+                    showEnd();
+                }
+            }, act.duration * 1000);
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('time-left').textContent = timeLeft;
+                if (timeLeft <= 3) {
+                    document.getElementById('time-left').style.color = '#ff0000';
+                } else {
+                    document.getElementById('time-left').style.color = '#f5576c';
+                }
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                }
+            }, 1000);
+        }
+
+        function nextActivity() {
+            clearInterval(timerInterval);
+            clearEyeTask();
+            currentActivity++;
+            
+            if (currentActivity < activities.length) {
+                document.getElementById('activity-area').style.opacity = '0';
+                setTimeout(() => {
+                    showActivity();
+                    document.getElementById('activity-area').style.opacity = '1';
+                }, 200);
+            } else {
+                showEnd();
+            }
+        }
+
+        function showEnd() {
+            document.getElementById('exercise-screen').style.display = 'none';
+            document.getElementById('end-screen').style.display = 'block';
+            document.getElementById('final-score').textContent = score;
+            createParticles();
+            createParticles();
+        }
+
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-GB';
+            utterance.rate = 1.1;
+            utterance.volume = 1;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'Enter') {
+                e.preventDefault();
+                if (document.getElementById('start-screen').style.display !== 'none') {
+                    startActivity();
+                } else if (document.getElementById('end-screen').style.display !== 'none') {
+                    location.reload();
+                }
+            }
+        });
+    </script>
+</body>
+</html>

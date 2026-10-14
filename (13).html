@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Квест — Охота за игрушками</title>
+<meta property="og:title" content="Квест «Охота за игрушками» по Spotlight">
+<meta property="og:description" content="20 шагов, три механики и озвучка: предлоги on и under, игрушки, фразы Where is...? и It's on/under...">
+<meta property="og:image" content="https://example.com/og-toy-hunt-quest.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://example.com/toy-hunt-quest">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<style>
+  body { font-family: 'Segoe UI', 'Comic Sans MS', sans-serif; background: linear-gradient(160deg, #fff4e0, #e6f3ff); margin: 0; min-height: 100vh; color: #2c3e50; display: flex; justify-content: center; padding: 24px; }
+  .wrap { max-width: 640px; width: 100%; }
+  h1 { text-align: center; color: #e07b39; margin-bottom: 6px; }
+  .bar { background: #ffe3c2; border-radius: 20px; height: 16px; overflow: hidden; margin: 14px 0 22px; }
+  .bar-fill { height: 100%; width: 0; background: linear-gradient(90deg, #f6a623, #e07b39); transition: width 0.4s ease; }
+  .card { background: #fff; border-radius: 20px; padding: 26px 22px; box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+  .story { font-size: 1.05em; color: #6b7a89; margin-bottom: 14px; line-height: 1.5; }
+  .question { font-size: 1.35em; font-weight: bold; color: #2f6fb0; margin: 14px 0 20px; }
+  .question .tr { display: block; font-size: 0.65em; color: #93a1ae; font-weight: normal; font-style: italic; margin-top: 4px; }
+  .options { display: grid; gap: 12px; }
+  .option { background: #f4f9ff; border: 2px solid #d6e7f7; border-radius: 14px; padding: 14px 16px; cursor: pointer; font-size: 1.05em; transition: all 0.15s ease; text-align: left; }
+  .option:hover { background: #e6f1fd; border-color: #9cc6ec; }
+  .option.correct { background: #dcf5dd; border-color: #78c97a; }
+  .option.wrong { background: #fde3e3; border-color: #e79b9b; }
+  .option .tr { color: #93a1ae; font-size: 0.85em; font-style: italic; margin-left: 6px; }
+  .feedback { margin-top: 16px; font-size: 1.05em; min-height: 24px; }
+  .feedback.good { color: #3d9a3d; }
+  .feedback.bad { color: #c94f2e; }
+  .btn-row { margin-top: 18px; display: flex; gap: 10px; flex-wrap: wrap; }
+  button.nav { background: #2f6fb0; color: #fff; border: none; border-radius: 12px; padding: 10px 18px; font-size: 1em; cursor: pointer; }
+  button.nav:hover { background: #245a91; }
+  button.nav.ghost { background: #eef3f8; color: #2f6fb0; }
+  button.nav.ghost:hover { background: #dfe9f3; }
+  button.speak { background: #ffd9a0; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; font-size: 17px; vertical-align: middle; margin-left: 8px; }
+  button.speak:hover { background: #ffc46b; }
+  .done { text-align: center; font-size: 1.2em; color: #3d9a3d; margin-top: 12px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>🕵️ Охота за игрушками</h1>
+  <div class="bar"><div class="bar-fill" id="bar"></div></div>
+  <div class="card" id="card"></div>
+</div>
+
+<script>
+const steps = [
+  {
+    story: 'Лулу потеряла мяч. Чаклз хихикает и подсказывает: посмотри, где он лежит!',
+    q: 'Где мяч?',
+    qTr: '/weə(r) ɪz ðə bɔːl/',
+    speak: 'Where is the ball',
+    options: [
+      { t: 'under the chair', tr: '/ˈʌndə(r) ðə tʃeə(r)/', ru: 'под стулом', correct: true },
+      { t: 'on the bed', tr: '/ɒn ðə bed/', ru: 'на кровати' }
+    ],
+    ok: 'Yes! It’s under the chair. /jes, ɪts ˈʌndə(r) ðə tʃeə(r)/ — да, он под стулом.',
+    no: 'Почти! Посмотри ещё раз под стул. It’s under the chair.'
+  },
+  {
+    story: 'Мяч найден, но змей куда-то улетел.',
+    q: 'Where is the kite?',
+    qTr: '/weə(r) ɪz ðə kaɪt/ — где змей?',
+    speak: 'Where is the kite',
+    options: [
+      { t: 'on the bed', tr: '/ɒn ðə bed/', ru: 'на кровати', correct: true },
+      { t: 'under the table', tr: '/ˈʌndə(r) ðə ˈteɪbl/', ru: 'под столом' }
+    ],
+    ok: 'Great! It’s on the bed. /ɡreɪt, ɪts ɒn ðə bed/ — он на кровати.',
+    no: 'Посмотри выше — он на кровати. It’s on the bed.'
+  },
+  {
+    story: 'Мишка сидит и ждёт, когда его заметят.',
+    q: 'Where is the teddy bear?',
+    qTr: '/weə(r) ɪz ðə ˈtedi beə(r)/ — где мишка?',
+    speak: 'Where is the teddy bear',
+    options: [
+      { t: 'on the pillow', tr: '/ɒn ðə ˈpɪləʊ/', ru: 'на подушке', correct: true },
+      { t: 'under the chair', tr: '/ˈʌndə(r) ðə tʃeə(r)/', ru: 'под стулом' }
+    ],
+    ok: 'Yes! It’s on the pillow.',
+    no: 'Мишка повыше — он на подушке. It’s on the pillow.'
+  },
+  {
+    story: 'Лодка качается на волнах — но на самом деле она на полке.',
+    q: 'Where is the boat?',
+    qTr: '/weə(r) ɪz ðə bəʊt/ — где лодка?',
+    speak: 'Where is the boat',
+    options: [
+      { t: 'on the shelf', tr: '/ɒn ðə ʃelf/', ru: 'на полке', correct: true },
+      { t: 'under the bed', tr: '/ˈʌndə(r) ðə bed/', ru: 'под кроватью' }
+    ],
+    ok: 'Well done! It’s on the shelf. /wel dʌn, ɪts ɒn ðə ʃelf/ — молодец, она на полке.',
+    no: 'Посмотри на полку. It’s on the shelf.'
+  },
+  {
+    story: 'Кукла спряталась, но Чаклз её выдал.',
+    q: 'Where is the doll?',
+    qTr: '/weə(r) ɪz ðə dɒl/ — где кукла?',
+    speak: 'Where is the doll',
+    options: [
+      { t: 'under the table', tr: '/ˈʌndə(r) ðə ˈteɪbl/', ru: 'под столом', correct: true },
+      { t: 'on the bed', tr: '/ɒn ðə bed/', ru: 'на кровати' }
+    ],
+    ok: 'Exactly! It’s under the table.',
+    no: 'Загляни под стол — она там. It’s under the table.'
+  },
+  {
+    story: 'Машинка уехала далеко-далеко. Куда же?',
+    q: 'Where is the car?',
+    qTr: '/weə(r) ɪz ðə kɑː(r)/ — где машинка?',
+    speak: 'Where is the car',
+    options: [
+      { t: 'under the chair', tr: '/ˈʌndə(r) ðə tʃeə(r)/', ru: 'под стулом', correct: true },
+      { t: 'on the shelf', tr: '/ɒn ðə ʃelf/', ru: 'на полке' }
+    ],
+    ok: 'Yes! It’s under the chair.',
+    no: 'Она под стулом. It’s under the chair.'
+  },
+  {
+    story: 'Выберите правильный предлог. Мяч лежит НА кровати.',
+    q: 'The ball is ___ the bed.',
+    qTr: '/ðə bɔːl ɪz ... ðə bed/ — мяч ... кровати',
+    speak: 'The ball is on the bed',
+    options: [
+      { t: 'on', tr: '/ɒn/', ru: 'на', correct: true },
+      { t: 'under', tr: '/ˈʌndə(r)/', ru: 'под' }
+    ],
+    ok: 'Correct! On the bed.',
+    no: 'Мяч лежит сверху — on. On the bed.'
+  },
+  {
+    story: 'Кукла лежит ПОД столом.',
+    q: 'The doll is ___ the table.',
+    qTr: '/ðə dɒl ɪz ... ðə ˈteɪbl/ — кукла ... столом',
+    speak: 'The doll is under the table',
+    options: [
+      { t: 'under', tr: '/ˈʌndə(r)/', ru: 'под', correct: true },
+      { t: 'on', tr: '/ɒn/', ru: 'на' }
+    ],
+    ok: 'Right! Under the table.',
+    no: 'Она снизу — under. Under the table.'
+  },
+  {
+    story: 'Найдите подходящую фразу для картинки: змей на кровати.',
+    q: 'Choose the correct sentence',
+    qTr: 'выбери правильное предложение',
+    speak: 'It is on the bed',
+    options: [
+      { t: "It’s on the bed.", tr: '/ɪts ɒn ðə bed/', ru: 'он на кровати', correct: true },
+      { t: "It’s under the bed.", tr: '/ɪts ˈʌndə(r) ðə bed/', ru: 'он под кроватью' }
+    ],
+    ok: 'Perfect! It’s on the bed.',
+    no: 'Змей лежит сверху — It’s on the bed.'
+  },
+  {
+    story: 'Машинка под стулом. Как сказать?',
+    q: 'Choose the correct sentence',
+    qTr: 'выбери правильное предложение',
+    speak: 'It is under the chair',
+    options: [
+      { t: "It’s under the chair.", tr: '/ɪts ˈʌndə(r) ðə tʃeə(r)/', ru: 'она под стулом', correct: true },
+      { t: "It’s on the chair.", tr: '/ɪts ɒn ðə tʃeə(r)/', ru: 'она на стуле' }
+    ],
+    ok: 'Great! It’s under the chair.',
+    no: 'Она снизу — It’s under the chair.'
+  },
+  {
+    story: 'Чаклз спрашивает про мяч. Помогите Лулу ответить.',
+    q: 'Where is the ball?',
+    qTr: '/weə(r) ɪz ðə bɔːl/',
+    speak: 'Where is the ball',
+    options: [
+      { t: "It’s under the chair.", tr: '/ɪts ˈʌndə(r) ðə tʃeə(r)/', ru: 'он под стулом', correct: true },
+      { t: "It’s on the shelf.", tr: '/ɪts ɒn ðə ʃelf/', ru: 'он на полке' }
+    ],
+    ok: 'Yes! It’s under the chair.',
+    no: 'Мяч под стулом. It’s under the chair.'
+  },
+  {
+    story: 'Посмотрите на картинку: мишка на подушке. Ответьте на вопрос.',
+    q: 'Where is the teddy bear?',
+    qTr: '/weə(r) ɪz ðə ˈtedi beə(r)/',
+    speak: 'Where is the teddy bear',
+    options: [
+      { t: "It’s on the pillow.", tr: '/ɪts ɒn ðə ˈpɪləʊ/', ru: 'он на подушке', correct: true },
+      { t: "It’s under the table.", tr: '/ɪts ˈʌndə(r) ðə ˈteɪbl/', ru: 'он под столом' }
+    ],
+    ok: 'Correct! It’s on the pillow.',
+    no: 'Мишка на подушке. It’s on the pillow.'
+  },
+  {
+    story: 'Лодка на полке. Произнесите фразу вслух.',
+    q: 'Say it: The boat is ___ the shelf.',
+    qTr: '/ðə bəʊt ɪz ... ðə ʃelf/',
+    speak: 'The boat is on the shelf',
+    options: [
+      { t: 'on', tr: '/ɒn/', ru: 'на', correct: true },
+      { t: 'under', tr: '/ˈʌndə(r)/', ru: 'под' }
+    ],
+    ok: 'Yes! On the shelf.',
+    no: 'Лодка стоит сверху — on. On the shelf.'
+  },
+  {
+    story: 'Найдите пару: слово и перевод.',
+    q: 'Match the word: under',
+    qTr: '/ˈʌndə(r)/',
+    speak: 'under',
+    options: [
+      { t: 'под', ru: 'предлог места', correct: true },
+      { t: 'на', ru: 'предлог места' }
+    ],
+    ok: 'Right! Under — под.',
+    no: 'Under значит под.'
+  },
+  {
+    story: 'Найдите пару: слово и перевод.',
+    q: 'Match the word: on',
+    qTr: '/ɒn/',
+    speak: 'on',
+    options: [
+      { t: 'на', ru: 'предлог места', correct: true },
+      { t: 'под', ru: 'предлог места' }
+    ],
+    ok: 'Correct! On — на.',
+    no: 'On значит на.'
+  },
+  {
+    story: 'Кукла спряталась. Задайте правильный вопрос.',
+    q: 'Choose the question',
+    qTr: 'выбери вопрос',
+    speak: 'Where is the doll',
+    options: [
+      { t: 'Where is the doll?', tr: '/weə(r) ɪz ðə dɒl/', ru: 'где кукла?', correct: true },
+      { t: 'Where is the car?', tr: '/weə(r) ɪz ðə kɑː(r)/', ru: 'где машинка?' }
+    ],
+    ok: 'Yes! Where is the doll?',
+    no: 'Мы ищем куклу. Where is the doll?'
+  },
+  {
+    story: 'Машинка под столом. Ответьте на вопрос.',
+    q: 'Where is the car?',
+    qTr: '/weə(r) ɪz ðə kɑː(r)/',
+    speak: 'Where is the car',
+    options: [
+      { t: "It’s under the table.", tr: '/ɪts ˈʌndə(r) ðə ˈteɪbl/', ru: 'она под столом', correct: true },
+      { t: "It’s on the table.", tr: '/ɪts ɒn ðə ˈteɪbl/', ru: 'она на столе' }
+    ],
+    ok: 'Great! It’s under the table.',
+    no: 'Она под столом. It’s under the table.'
+  },
+  {
+    story: 'Змей на кровати. Выберите верную фразу.',
+    q: 'Choose the correct sentence',
+    qTr: 'выбери правильное предложение',
+    speak: 'The kite is on the bed',
+    options: [
+      { t: 'The kite is on the bed.', tr: '/ðə kaɪt ɪz ɒn ðə bed/', ru: 'змей на кровати', correct: true },
+      { t: 'The kite is under the bed.', tr: '/ðə kaɪt ɪz ˈʌndə(r) ðə bed/', ru: 'змей под кроватью' }
+    ],
+    ok: 'Correct! The kite is on the bed.',
+    no: 'Змей сверху — The kite is on the bed.'
+  },
+  {
+    story: 'Мишка сидит на подушке. Скажите вслух.',
+    q: 'Say it: The teddy bear is ___ the pillow.',
+    qTr: '/ðə ˈtedi beə(r) ɪz ... ðə ˈpɪləʊ/',
+    speak: 'The teddy bear is on the pillow',
+    options: [
+      { t: 'on', tr: '/ɒn/', ru: 'на', correct: true },
+      { t: 'under', tr: '/ˈʌndə(r)/', ru: 'под' }
+    ],
+    ok: 'Yes! On the pillow.',
+    no: 'Он на подушке — on.'
+  },
+  {
+    story: 'Последний шаг! Лулу собрала все игрушки в коробку и благодарит вас.',
+    q: 'Where are the toys now?',
+    qTr: '/weə(r) ɑː(r) ðə tɔɪz naʊ/ — где игрушки сейчас?',
+    speak: 'The toys are in the box',
+    options: [
+      { t: 'in the box', tr: '/ɪn ðə bɒks/', ru: 'в коробке', correct: true },
+      { t: 'under the box', tr: '/ˈʌndə(r) ðə bɒks/', ru: 'под коробкой' }
+    ],
+    ok: 'Wonderful! The toys are in the box. You did it! /juː dɪd ɪt/ — ты справился!',
+    no: 'Они внутри — in the box.'
+  }
+];
+
+let current = 0;
+let mistakes = 0;
+const card = document.getElementById('card');
+const bar = document.getElementById('bar');
+
+let voices = [];
+function loadVoices() { voices = window.speechSynthesis.getVoices(); }
+loadVoices();
+window.speechSynthesis.onvoiceschanged = loadVoices;
+
+function speak(text) {
+  if (!('speechSynthesis' in window)) return;
+  const utter = new SpeechSynthesisUtterance(text);
+  let voice = voices.find(v => v.lang === 'en-GB');
+  if (!voice) voice = voices.find(v => v.lang === 'en-US');
+  if (voice) utter.voice = voice;
+  utter.lang = voice ? voice.lang : 'en-GB';
+  utter.rate = 0.85;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utter);
+}
+
+function render() {
+  bar.style.width = Math.round((current / steps.length) * 100) + '%';
+  if (current >= steps.length) {
+    card.innerHTML = `<div class="done">🎉 Победа! Все игрушки найдены!<br>Вы прошли охоту до конца. Great job! /ɡreɪt dʒɒb/ — отличная работа!</div>
+      <div class="btn-row"><button class="nav ghost" onclick="restart()">Пройти снова</button></div>`;
+    return;
+  }
+  const s = steps[current];
+  let html = `<div class="story">${s.story}</div>
+    <div class="question">${s.q}<span class="tr">${s.qTr}</span>
+      <button class="speak" onclick="speak('${s.speak.replace(/'/g, "\\'")}')">🔊</button>
+    </div>
+    <div class="options">`;
+  s.options.forEach((o, i) => {
+    html += `<div class="option" data-i="${i}">${o.t}${o.tr ? ` <span class="tr">${o.tr}</span>` : ''}${o.ru ? ` — ${o.ru}` : ''}</div>`;
+  });
+  html += `</div><div class="feedback" id="fb"></div>
+    <div class="btn-row">
+      ${current > 0 ? '<button class="nav ghost" onclick="goBack()">← Назад</button>' : ''}
+    </div>`;
+  card.innerHTML = html;
+  card.querySelectorAll('.option').forEach(el => {
+    el.addEventListener('click', () => choose(parseInt(el.dataset.i), el));
+  });
+  speak(s.speak);
+}
+
+function choose(i, el) {
+  const s = steps[current];
+  const fb = document.getElementById('fb');
+  if (s.options[i].correct) {
+    el.classList.add('correct');
+    fb.textContent = s.ok;
+    fb.className = 'feedback good';
+    card.querySelectorAll('.option').forEach(o => o.style.pointerEvents = 'none');
+    setTimeout(() => { current++; render(); }, 1300);
+  } else {
+    el.classList.add('wrong');
+    fb.textContent = s.no;
+    fb.className = 'feedback bad';
+    mistakes++;
+  }
+}
+
+function goBack() {
+  if (current > 0) { current--; render(); }
+}
+
+function restart() {
+  current = 0; mistakes = 0; render();
+}
+
+render();
+</script>
+</body>
+</html>

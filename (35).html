@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotlight Starter 3a: Большой квест для Чаклза</title>
+    <meta property="og:title" content="Spotlight Starter 3a: Помоги Чаклзу устроить праздник">
+    <meta property="og:description" content="Большой интерактивный мини-квест для закрепления команд, цветов, семьи и вежливых фраз из урока 3a.">
+    <meta property="og:image" content="https://example.com/og-image-quest.jpg">
+    <meta property="og:url" content="https://example.com/spotlight-3a-quest">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <style>
+        body { font-family: 'Comic Sans MS', 'Arial', sans-serif; background-color: #fffacd; text-align: center; padding: 20px; }
+        .container { max-width: 650px; margin: 0 auto; background: white; padding: 30px; border-radius: 20px; border: 4px solid #ffd700; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        h1 { color: #d35400; font-size: 28px; }
+        p { font-size: 20px; color: #2c3e50; line-height: 1.5; }
+        .btn { display: inline-block; margin: 10px; padding: 15px 30px; font-size: 20px; border: none; border-radius: 12px; cursor: pointer; transition: 0.3s; color: white; font-weight: bold; }
+        .btn-pink { background-color: #ff69b4; }
+        .btn-red { background-color: #e74c3c; }
+        .btn-yellow { background-color: #f1c40f; color: #333; }
+        .btn-green { background-color: #27ae60; }
+        .btn-blue { background-color: #3498db; }
+        .btn:hover { opacity: 0.9; transform: scale(1.05); }
+        .hidden { display: none; }
+        .success { color: #27ae60; font-size: 24px; font-weight: bold; }
+        .progress { font-size: 18px; color: #7f8c8d; margin-bottom: 20px; font-weight: bold; }
+        .emoji { font-size: 40px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress" id="progress">Шаг 1 из 10</div>
+        
+        <div id="step1">
+            <div class="emoji"></div>
+            <h1>Чаклз проснулся!</h1>
+            <p>Он хочет играть, но сначала нужно размяться. Как сказать «Встань»?</p>
+            <button class="btn btn-green" onclick="checkStep(1, 'correct')">Stand up!</button>
+            <button class="btn btn-blue" onclick="checkStep(1, 'wrong')">Sit down!</button>
+        </div>
+        
+        <div id="step2" class="hidden">
+            <div class="emoji">🪑</div>
+            <h1>Отлично! Ты встал!</h1>
+            <p>А теперь Чаклз устал и хочет отдохнуть. Как сказать «Сядь»?</p>
+            <button class="btn btn-pink" onclick="checkStep(2, 'wrong')">Clap your hands!</button>
+            <button class="btn btn-red" onclick="checkStep(2, 'correct')">Sit down!</button>
+        </div>
+        
+        <div id="step3" class="hidden">
+            <div class="emoji"></div>
+            <h1>Молодец!</h1>
+            <p>Чаклз радуется и хлопает в ладоши. Повтори за ним!</p>
+            <button class="btn btn-yellow" onclick="checkStep(3, 'correct')">Clap your hands!</button>
+            <button class="btn btn-green" onclick="checkStep(3, 'wrong')">Stand up!</button>
+        </div>
+        
+        <div id="step4" class="hidden">
+            <div class="emoji">👩</div>
+            <h1>К Чаклзу пришли гости!</h1>
+            <p>Кто эта женщина в жёлтом платье?</p>
+            <button class="btn btn-blue" onclick="checkStep(4, 'correct')">Mummy</button>
+            <button class="btn btn-red" onclick="checkStep(4, 'wrong')">Daddy</button>
+        </div>
+        
+        <div id="step5" class="hidden">
+            <div class="emoji">👨</div>
+            <h1>Верно!</h1>
+            <p>А кто этот мужчина в полосатой рубашке?</p>
+            <button class="btn btn-yellow" onclick="checkStep(5, 'wrong')">Mummy</button>
+            <button class="btn btn-green" onclick="checkStep(5, 'correct')">Daddy</button>
+        </div>
+        
+        <div id="step6" class="hidden">
+            <div class="emoji"></div>
+            <h1>Время угощения!</h1>
+            <p>Mummy принесла торт. Какого он цвета?</p>
+            <button class="btn btn-pink" onclick="checkStep(6, 'correct')">Pink cake</button>
+            <button class="btn btn-yellow" onclick="checkStep(6, 'wrong')">Yellow cake</button>
+        </div>
+
+        <div id="step7" class="hidden">
+            <div class="emoji">🍰</div>
+            <h1>Вкусно!</h1>
+            <p>Daddy тоже принёс торт. Посмотри на картинку, какого он цвета?</p>
+            <button class="btn btn-red" onclick="checkStep(7, 'correct')">Red cake</button>
+            <button class="btn btn-pink" onclick="checkStep(7, 'wrong')">Pink cake</button>
+        </div>
+
+        <div id="step8" class="hidden">
+            <div class="emoji"></div>
+            <h1>Почти всё!</h1>
+            <p>А это последний торт. Он цвета солнышка. Как он называется?</p>
+            <button class="btn btn-blue" onclick="checkStep(8, 'wrong')">Red cake</button>
+            <button class="btn btn-yellow" onclick="checkStep(8, 'correct')">Yellow cake</button>
+        </div>
+        
+        <div id="step9" class="hidden">
+            <div class="emoji">🎁</div>
+            <h1>Ты собрал все торты!</h1>
+            <p>Теперь передай один из них Чаклзу. Что нужно сказать?</p>
+            <button class="btn btn-green" onclick="checkStep(9, 'correct')">Here's a cake for you!</button>
+            <button class="btn btn-red" onclick="checkStep(9, 'wrong')">Sit down!</button>
+        </div>
+        
+        <div id="step10" class="hidden">
+            <div class="emoji">🐵</div>
+            <h1>Чаклз получил торт!</h1>
+            <p>Что он говорит в ответ?</p>
+            <button class="btn btn-yellow" onclick="checkStep(10, 'correct')">Thank you!</button>
+            <button class="btn btn-blue" onclick="checkStep(10, 'wrong')">No!</button>
+        </div>
+        
+        <div id="final" class="hidden">
+            <div class="emoji">🎉🏆🎉</div>
+            <h1>Праздник удался!</h1>
+            <p class="success">Ты прошёл весь большой квест!</p>
+            <p>Ты знаешь команды, узнаёшь семью, называешь цвета тортов и умеешь быть вежливым. Чаклз очень доволен!</p>
+            <button class="btn btn-green" onclick="location.reload()">Пройти ещё раз</button>
+        </div>
+        
+        <div id="error" class="hidden">
+            <div class="emoji">🤔</div>
+            <p>Почти угадал! Попробуй ещё раз, посмотри внимательно.</p>
+            <button class="btn btn-yellow" onclick="goBack()">Назад</button>
+        </div>
+    </div>
+    <script>
+        let currentStep = 1;
+        let lastCorrectStep = 1;
+        const totalSteps = 10;
+        
+        function updateProgress() {
+            document.getElementById('progress').textContent = 'Шаг ' + currentStep + ' из ' + totalSteps;
+        }
+        
+        function checkStep(step, answer) {
+            if (answer === 'correct') {
+                document.getElementById('step' + step).classList.add('hidden');
+                if (step < totalSteps) {
+                    document.getElementById('step' + (step + 1)).classList.remove('hidden');
+                    currentStep = step + 1;
+                    lastCorrectStep = currentStep;
+                } else {
+                    document.getElementById('final').classList.remove('hidden');
+                    document.getElementById('progress').classList.add('hidden');
+                }
+                updateProgress();
+            } else {
+                document.getElementById('step' + step).classList.add('hidden');
+                document.getElementById('error').classList.remove('hidden');
+            }
+        }
+        
+        function goBack() {
+            document.getElementById('error').classList.add('hidden');
+            document.getElementById('step' + lastCorrectStep).classList.remove('hidden');
+            currentStep = lastCorrectStep;
+            updateProgress();
+        }
+    </script>
+</body>
+</html>

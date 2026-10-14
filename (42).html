@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Квест: Чаепитие с героями">
+    <meta property="og:description" content="Интерактивный квест для урока Tea Time! с 21 шагом">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=Tea+Party+Quest">
+    <meta property="og:url" content="https://example.com/lesson11-quest">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <title>Квест: Чаепитие с героями</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #a8e6cf 0%, #ffd3b6 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 { color: #2d3436; text-align: center; margin-bottom: 20px; font-size: 2em; }
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #dfe6e9;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00b894, #00cec9);
+            transition: width 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .step { display: none; animation: fadeIn 0.5s; }
+        .step.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .question { font-size: 1.5em; color: #2d3436; margin-bottom: 20px; text-align: center; }
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .option {
+            background: #74b9ff;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .option:hover { background: #0984e3; transform: translateY(-3px); }
+        .option:active { transform: scale(0.95); }
+        .option.correct { background: #00b894; animation: pulse 0.5s; }
+        .option.wrong { background: #d63031; animation: shake 0.5s; }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .emoji { font-size: 3em; }
+        .feedback { text-align: center; font-size: 1.3em; margin: 20px 0; min-height: 40px; }
+        .feedback.correct { color: #00b894; }
+        .feedback.wrong { color: #d63031; }
+        .nav-buttons { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .next-btn, .restart-btn, .back-btn {
+            background: #fdcb6e;
+            color: #2d3436;
+            border: none;
+            border-radius: 15px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .next-btn:hover, .restart-btn:hover, .back-btn:hover {
+            background: #f39c12;
+            transform: translateY(-3px);
+        }
+        .back-btn { background: #b2bec3; }
+        .back-btn:hover { background: #636e72; color: white; }
+        .speaker-btn {
+            background: #00b894;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 2em;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: block;
+            margin: 10px auto;
+        }
+        .speaker-btn:hover { background: #00a383; }
+        .final-message { text-align: center; font-size: 1.5em; color: #2d3436; }
+        .final-emoji { font-size: 4em; text-align: center; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🍰 Чаепитие с героями</h1>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill">0%</div>
+        </div>
+        <div id="questContent"></div>
+    </div>
+
+    <script>
+        const steps = [
+            { type: 'choice', question: 'Что это? 🍵', options: [{ text: 'tea', emoji: '🍵', correct: true }, { text: 'milk', emoji: '🥛', correct: false }, { text: 'cake', emoji: '🍰', correct: false }], speak: 'tea' },
+            { type: 'choice', question: 'Покажи чашку ☕', options: [{ text: 'cup', emoji: '☕', correct: true }, { text: 'jam', emoji: '🍯', correct: false }, { text: 'lemon', emoji: '🍋', correct: false }], speak: 'cup' },
+            { type: 'choice', question: 'Что это? 🍰', options: [{ text: 'jam', emoji: '🍯', correct: false }, { text: 'cake', emoji: '🍰', correct: true }, { text: 'tea', emoji: '🍵', correct: false }], speak: 'cake' },
+            { type: 'choice', question: 'Найди джем 🍯', options: [{ text: 'milk', emoji: '🥛', correct: false }, { text: 'jam', emoji: '🍯', correct: true }, { text: 'cup', emoji: '☕', correct: false }], speak: 'jam' },
+            { type: 'choice', question: 'Что это? 🍋', options: [{ text: 'lemon', emoji: '🍋', correct: true }, { text: 'cake', emoji: '🍰', correct: false }, { text: 'tea', emoji: '🍵', correct: false }], speak: 'lemon' },
+            { type: 'choice', question: 'Покажи молоко 🥛', options: [{ text: 'tea', emoji: '🍵', correct: false }, { text: 'milk', emoji: '🥛', correct: true }, { text: 'jam', emoji: '🍯', correct: false }], speak: 'milk' },
+            { type: 'phrase', question: 'Как сказать "Я люблю чай"?', options: [{ text: 'I like tea', correct: true }, { text: "I don't like tea", correct: false }], speak: 'I like tea' },
+            { type: 'phrase', question: 'Как спросить "Ты любишь чай?"', options: [{ text: 'Do you like tea?', correct: true }, { text: 'I like tea', correct: false }], speak: 'Do you like tea?' },
+            { type: 'choice', question: 'Что добавим в чай? 🍋', options: [{ text: 'lemon', emoji: '🍋', correct: true }, { text: 'cake', emoji: '🍰', correct: false }, { text: 'cup', emoji: '☕', correct: false }], speak: 'I like tea with lemon' },
+            { type: 'choice', question: 'Что это? 🍯', options: [{ text: 'jam', emoji: '🍯', correct: true }, { text: 'milk', emoji: '🥛', correct: false }, { text: 'lemon', emoji: '🍋', correct: false }], speak: 'jam' },
+            { type: 'phrase', question: 'Как сказать "Я люблю чай с молоком"?', options: [{ text: 'I like tea with milk', correct: true }, { text: 'I like tea with lemon', correct: false }], speak: 'I like tea with milk' },
+            { type: 'choice', question: 'Что это? ☕', options: [{ text: 'cup', emoji: '☕', correct: true }, { text: 'tea', emoji: '🍵', correct: false }, { text: 'cake', emoji: '🍰', correct: false }], speak: 'cup' },
+            { type: 'choice', question: 'Найди торт 🍰', options: [{ text: 'jam', emoji: '🍯', correct: false }, { text: 'cake', emoji: '🍰', correct: true }, { text: 'lemon', emoji: '🍋', correct: false }], speak: 'cake' },
+            { type: 'phrase', question: 'Как сказать "Мне не нравится чай с лимоном"?', options: [{ text: "I don't like tea with lemon", correct: true }, { text: 'I like tea with lemon', correct: false }], speak: "I don't like tea with lemon" },
+            { type: 'choice', question: 'Что это? 🥛', options: [{ text: 'milk', emoji: '🥛', correct: true }, { text: 'tea', emoji: '🍵', correct: false }, { text: 'jam', emoji: '🍯', correct: false }], speak: 'milk' },
+            { type: 'choice', question: 'Что добавим в чай? 🍯', options: [{ text: 'jam', emoji: '🍯', correct: true }, { text: 'cup', emoji: '☕', correct: false }, { text: 'milk', emoji: '🥛', correct: false }], speak: 'I like tea with jam' },
+            { type: 'phrase', question: 'Как спросить "Ты любишь джем?"', options: [{ text: 'Do you like jam?', correct: true }, { text: 'I like jam', correct: false }], speak: 'Do you like jam?' },
+            { type: 'choice', question: 'Что это? 🍋', options: [{ text: 'lemon', emoji: '🍋', correct: true }, { text: 'cake', emoji: '🍰', correct: false }, { text: 'milk', emoji: '🥛', correct: false }], speak: 'lemon' },
+            { type: 'choice', question: 'Найди чай 🍵', options: [{ text: 'tea', emoji: '🍵', correct: true }, { text: 'jam', emoji: '🍯', correct: false }, { text: 'cup', emoji: '☕', correct: false }], speak: 'tea' },
+            { type: 'phrase', question: 'Как сказать "Я люблю чай с джемом"?', options: [{ text: 'I like tea with jam', correct: true }, { text: 'I like tea with milk', correct: false }], speak: 'I like tea with jam' },
+            { type: 'choice', question: 'Что это? ☕', options: [{ text: 'cup', emoji: '☕', correct: true }, { text: 'lemon', emoji: '🍋', correct: false }, { text: 'cake', emoji: '🍰', correct: false }], speak: 'cup' }
+        ];
+
+        let currentStep = 0;
+        let correctAnswers = 0;
+
+        function renderStep() {
+            const content = document.getElementById('questContent');
+            const step = steps[currentStep];
+            let html = `<div class="step active">`;
+            html += `<div class="question">${step.question}</div>`;
+            html += `<button class="speaker-btn" onclick="speak('${step.speak}')">🔊</button>`;
+            html += `<div class="options">`;
+            step.options.forEach((option, index) => {
+                html += `<button class="option" onclick="checkAnswer(${index}, ${option.correct})">`;
+                if (option.emoji) html += `<div class="emoji">${option.emoji}</div>`;
+                html += `<div>${option.text}</div>`;
+                html += `</button>`;
+            });
+            html += `</div>`;
+            html += `<div class="feedback" id="feedback"></div>`;
+            html += `<div class="nav-buttons">`;
+            if (currentStep > 0) html += `<button class="back-btn" onclick="goBack()">← Назад</button>`;
+            html += `</div>`;
+            html += `</div>`;
+            content.innerHTML = html;
+            updateProgress();
+        }
+
+        function checkAnswer(index, isCorrect) {
+            const options = document.querySelectorAll('.option');
+            const feedback = document.getElementById('feedback');
+            options.forEach(opt => opt.style.pointerEvents = 'none');
+            if (isCorrect) {
+                options[index].classList.add('correct');
+                feedback.textContent = 'Отлично! 🎉';
+                feedback.className = 'feedback correct';
+                correctAnswers++;
+                setTimeout(() => {
+                    currentStep++;
+                    if (currentStep < steps.length) renderStep();
+                    else showFinalMessage();
+                }, 1500);
+            } else {
+                options[index].classList.add('wrong');
+                feedback.textContent = 'Попробуй ещё раз! 💪';
+                feedback.className = 'feedback wrong';
+                setTimeout(() => {
+                    options[index].classList.remove('wrong');
+                    options.forEach(opt => opt.style.pointerEvents = 'auto');
+                    feedback.textContent = '';
+                }, 1500);
+            }
+        }
+
+        function goBack() {
+            if (currentStep > 0) {
+                currentStep--;
+                renderStep();
+            }
+        }
+
+        function showFinalMessage() {
+            const content = document.getElementById('questContent');
+            content.innerHTML = `
+                <div class="final-message">
+                    <div class="final-emoji">🎉🍰🎉</div>
+                    <p>Поздравляем! Ты прошёл все 21 шаг квеста!</p>
+                    <p>Теперь ты знаешь, как устроить настоящее английское чаепитие!</p>
+                    <p>Правильных ответов: ${correctAnswers} из ${steps.length}</p>
+                    <button class="restart-btn" onclick="restartQuest()">Пройти ещё раз</button>
+                </div>
+            `;
+            document.getElementById('progressFill').style.width = '100%';
+            document.getElementById('progressFill').textContent = '100%';
+        }
+
+        function restartQuest() {
+            currentStep = 0;
+            correctAnswers = 0;
+            renderStep();
+        }
+
+        function updateProgress() {
+            const progress = ((currentStep / steps.length) * 100).toFixed(0);
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('progressFill').textContent = progress + '%';
+        }
+
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                const britishVoice = voices.find(voice => voice.lang === 'en-GB') || 
+                                    voices.find(voice => voice.lang.startsWith('en'));
+                if (britishVoice) utterance.voice = britishVoice;
+                utterance.lang = 'en-GB';
+                utterance.rate = 0.85;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+        renderStep();
+    </script>
+</body>
+</html>

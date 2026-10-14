@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Словарь цветов: Red, Blue, Yellow, Green</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Словарь цветов: Red, Blue, Yellow, Green" />
+    <meta property="og:description" content="Интерактивный словарь цветов с произношением для урока English Spotlight 2a" />
+    <meta property="og:image" content="https://example.com/preview-color-dictionary.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://example.com/color-dictionary-2a.html" />
+    <meta property="og:locale" content="ru_RU" />
+    <style>
+        body { 
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: #333; 
+            text-align: center; 
+            padding: 20px; 
+            min-height: 100vh;
+        }
+        h1 { color: white; font-size: 36px; margin-bottom: 10px; }
+        .subtitle { color: white; font-size: 18px; margin-bottom: 30px; }
+        .dictionary { 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 25px; 
+            max-width: 900px; 
+            margin: 0 auto; 
+        }
+        .card { 
+            border: 4px solid white;
+            border-radius: 25px; 
+            padding: 30px; 
+            width: 200px; 
+            cursor: pointer; 
+            transition: all 0.3s; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .card:hover { 
+            transform: translateY(-15px) scale(1.08); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+        }
+        .card-red { background: #ff6b6b; }
+        .card-blue { background: #4dabf7; }
+        .card-yellow { background: #ffd43b; }
+        .card-green { background: #69db7c; }
+        .word { 
+            font-size: 32px; 
+            font-weight: bold; 
+            color: white; 
+            margin-bottom: 10px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .ipa { 
+            font-size: 20px; 
+            color: white; 
+            font-style: italic; 
+            margin-bottom: 15px; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        .translation { 
+            font-size: 22px; 
+            color: white; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+        .hint { 
+            margin-top: 40px; 
+            color: white; 
+            font-size: 16px; 
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Colors — Цвета 🎨</h1>
+    <p class="subtitle">Нажми на цвет, чтобы услышать произношение!</p>
+    
+    <div class="dictionary">
+        <div class="card card-red" onclick="speak('red')">
+            <div class="word">red</div>
+            <div class="ipa">/red/</div>
+            <div class="translation">красный</div>
+        </div>
+        <div class="card card-blue" onclick="speak('blue')">
+            <div class="word">blue</div>
+            <div class="ipa">/bluː/</div>
+            <div class="translation">синий</div>
+        </div>
+        <div class="card card-yellow" onclick="speak('yellow')">
+            <div class="word">yellow</div>
+            <div class="ipa">/ˈjeləʊ/</div>
+            <div class="translation">жёлтый</div>
+        </div>
+        <div class="card card-green" onclick="speak('green')">
+            <div class="word">green</div>
+            <div class="ipa">/griːn/</div>
+            <div class="translation">зелёный</div>
+        </div>
+    </div>
+    
+    <p class="hint">💡 Слушай цвета перед сном — они запомнятся сами!</p>
+
+    <script>
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-GB';
+            utterance.rate = 0.8;
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>

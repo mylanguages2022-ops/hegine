@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotlight Starter: Квест Портфолио</title>
+    <meta property="og:title" content="Spotlight Starter: Мастерская портфолио Чаклза">
+    <meta property="og:description" content="Максимально большой интерактивный квест из 40 шагов с уровнями для закрепления лексики о семье и цветах.">
+    <meta property="og:image" content="https://example.com/og-image-portfolio-quest.jpg">
+    <meta property="og:url" content="https://example.com/spotlight-portfolio-quest">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <style>
+        body { font-family: 'Comic Sans MS', 'Arial', sans-serif; background-color: #fff8e1; text-align: center; padding: 20px; margin: 0; }
+        .container { max-width: 700px; margin: 20px auto; background: white; padding: 30px; border-radius: 20px; border: 4px solid #ffca28; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
+        h1 { color: #f57f17; font-size: 26px; margin-bottom: 10px; }
+        p { font-size: 20px; color: #333; line-height: 1.5; margin-bottom: 25px; }
+        .btn { display: inline-block; margin: 8px; padding: 15px 25px; font-size: 18px; border: none; border-radius: 12px; cursor: pointer; transition: 0.2s; color: white; font-weight: bold; min-width: 140px; }
+        .btn:hover { opacity: 0.9; transform: scale(1.03); }
+        .hidden { display: none; }
+        .success { color: #2e7d32; font-size: 24px; font-weight: bold; }
+        .progress { font-size: 16px; color: #555; margin-bottom: 15px; font-weight: bold; background: #ffecb3; padding: 10px; border-radius: 10px; }
+        .emoji { font-size: 50px; margin: 10px 0; }
+        .bg-orange { background-color: #ff9800; }
+        .bg-blue { background-color: #03a9f4; }
+        .bg-green { background-color: #4caf50; }
+        .bg-purple { background-color: #9c27b0; }
+        .bg-pink { background-color: #e91e63; }
+        .bg-red { background-color: #f44336; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="progress" id="progress">Уровень 1: Начало. Шаг 1 из 40</div>
+        <div id="game-area"></div>
+    </div>
+    <script>
+        const steps = [
+            // Уровень 1: Сбор портфолио (1-8)
+            { level: "Уровень 1: Сбор портфолио", emoji: "🎒", text: "Чаклз хочет создать своё портфолио! Но сначала нужно поздороваться.", options: [{t: "Hello!", c: true}, {t: "Goodbye!", c: false}] },
+            { level: "Уровень 1: Сбор портфолио", emoji: "📁", text: "Отлично! Нам нужна папка для рисунков. Как она называется?", options: [{t: "Portfolio", c: true}, {t: "Ball", c: false}] },
+            { level: "Уровень 1: Сбор портфолио", emoji: "🖍️", text: "Чтобы рисовать, нам нужны...", options: [{t: "Crayons", c: true}, {t: "Daddy", c: false}] },
+            { level: "Уровень 1: Сбор портфолио", emoji: "📄", text: "И конечно, нам нужен чистый...", options: [{t: "Paper", c: true}, {t: "Car", c: false}] },
+            { level: "Уровень 1: Сбор портфолио", emoji: "🐵", text: "Чаклз готов начать! Он говорит...", options: [{t: "Let's go!", c: true}, {t: "Sit down!", c: false}] },
+            { level: "Уровень 1: Сбор портфолио", emoji: "✏️", text: "Первый шаг: взять карандаш. Какой цвет возьмём первым? Красный.", options: [{t: "Red", c: true}, {t: "Blue", c: false}] },
+            { level: "Уровень 1: Сбор портфолио", emoji: "✏️", text: "Второй шаг: взять синий карандаш.", options: [{t: "Blue", c: true}, {t: "Yellow", c: false}] },
+            { level: "Уровень 1: Сбор портфолио", emoji: "✏️", text: "Третий шаг: взять жёлтый карандаш.", options: [{t: "Yellow", c: true}, {t: "Green", c: false}] },
+            
+            // Уровень 2: Цветовая мастерская (9-16)
+            { level: "Уровень 2: Цветовая мастерская", emoji: "🎨", text: "Мы в мастерской! Смешаем красный и жёлтый. Какой цвет получится?", options: [{t: "Orange", c: true}, {t: "Purple", c: false}] },
+            { level: "Уровень 2: Цветовая мастерская", emoji: "🎨", text: "А если смешать красный и синий?", options: [{t: "Purple", c: true}, {t: "Green", c: false}] },
+            { level: "Уровень 2: Цветовая мастерская", emoji: "🌿", text: "Цвет травы и листьев?", options: [{t: "Green", c: true}, {t: "Pink", c: false}] },
+            { level: "Уровень 2: Цветовая мастерская", emoji: "🌸", text: "Цвет нежного цветочка?", options: [{t: "Pink", c: true}, {t: "Orange", c: false}] },
+            { level: "Уровень 2: Цветовая мастерская", emoji: "👀", text: "Проверка! Покажи мне синий цвет.", options: [{t: "Blue", c: true}, {t: "Red", c: false}] },
+            { level: "Уровень 2: Цветовая мастерская", emoji: "👀", text: "А теперь покажи фиолетовый.", options: [{t: "Purple", c: true}, {t: "Yellow", c: false}] },
+            { level: "Уровень 2: Цветовая мастерская", emoji: "👀", text: "И покажи розовый.", options: [{t: "Pink", c: true}, {t: "Green", c: false}] },
+            { level: "Уровень 2: Цветовая мастерская", emoji: "👏", text: "Молодец! Все цвета собраны. Давай похлопаем!", options: [{t: "Clap your hands!", c: true}, {t: "Sit down!", c: false}] },
+
+            // Уровень 3: Рисуем семью (17-24)
+            { level: "Уровень 3: Рисуем семью", emoji: "👩", text: "Начинаем рисовать! Кто это в жёлтом платье?", options: [{t: "Mummy", c: true}, {t: "Daddy", c: false}] },
+            { level: "Уровень 3: Рисуем семью", emoji: "👨", text: "А кто это в синей рубашке?", options: [{t: "Daddy", c: true}, {t: "Mummy", c: false}] },
+            { level: "Уровень 3: Рисуем семью", emoji: "👧", text: "Это девочка с бантиком. Это...", options: [{t: "Lulu", c: true}, {t: "Larry", c: false}] },
+            { level: "Уровень 3: Рисуем семью", emoji: "👦", text: "А это мальчик в кепке. Это...", options: [{t: "Larry", c: true}, {t: "Chuckles", c: false}] },
+            { level: "Уровень 3: Рисуем семью", emoji: "👵", text: "Добрая няня с зонтиком. Это...", options: [{t: "Nanny Shine", c: true}, {t: "Mummy", c: false}] },
+            { level: "Уровень 3: Рисуем семью", emoji: "🐵", text: "И конечно, зелёная обезьянка!", options: [{t: "Chuckles", c: true}, {t: "Daddy", c: false}] },
+            { level: "Уровень 3: Рисуем семью", emoji: "🗣️", text: "Как сказать 'Это моя семья'?", options: [{t: "This is my family", c: true}, {t: "This is my ball", c: false}] },
+            { level: "Уровень 3: Рисуем семью", emoji: "🗣️", text: "Как сказать 'Это моя мама'?", options: [{t: "This is my Mummy", c: true}, {t: "This is my Daddy", c: false}] },
+
+            // Уровень 4: Презентация и вопросы (25-32)
+            { level: "Уровень 4: Презентация", emoji: "❓", text: "Чаклз показывает рисунок и спрашивает: 'Кто это?'", options: [{t: "Who's this?", c: true}, {t: "What colour?", c: false}] },
+            { level: "Уровень 4: Презентация", emoji: "❓", text: "А как спросить 'Какого это цвета?'", options: [{t: "What colour is this?", c: true}, {t: "Who's this?", c: false}] },
+            { level: "Уровень 4: Презентация", emoji: "👗", text: "Платье мамы розовое. Выбери цвет.", options: [{t: "Pink", c: true}, {t: "Purple", c: false}] },
+            { level: "Уровень 4: Презентация", emoji: "👕", text: "Рубашка папы синяя. Выбери цвет.", options: [{t: "Blue", c: true}, {t: "Orange", c: false}] },
+            { level: "Уровень 4: Презентация", emoji: "👍", text: "Рисунок получился замечательным! Как это сказать по-английски?", options: [{t: "It's lovely", c: true}, {t: "It's sad", c: false}] },
+            { level: "Уровень 4: Презентация", emoji: "🤔", text: "Проверка: это оранжевый цвет?", options: [{t: "Yes", c: true}, {t: "No", c: false}] },
+            { level: "Уровень 4: Презентация", emoji: "🤔", text: "А это фиолетовый цвет?", options: [{t: "Yes", c: true}, {t: "No", c: false}] },
+            { level: "Уровень 4: Презентация", emoji: "🤲", text: "Чаклз передаёт тебе рисунок. Что ты говоришь?", options: [{t: "Thank you", c: true}, {t: "Who's this?", c: false}] },
+
+            // Уровень 5: Финал и танец (33-40)
+            { level: "Уровень 5: Финал и танец", emoji: "📁", text: "Пора убирать рисунок в портфолио. Говорим...", options: [{t: "Here you are", c: true}, {t: "Stand up", c: false}] },
+            { level: "Уровень 5: Финал и танец", emoji: "💃", text: "Работа закончена! Время танцевать. Красный шаг!", options: [{t: "Red step!", c: true}, {t: "Blue clap!", c: false}] },
+            { level: "Уровень 5: Финал и танец", emoji: "💃", text: "Синий хлопок!", options: [{t: "Blue clap!", c: true}, {t: "Green turn!", c: false}] },
+            { level: "Уровень 5: Финал и танец", emoji: "💃", text: "Зелёный поворот!", options: [{t: "Green turn!", c: true}, {t: "Yellow jump!", c: false}] },
+            { level: "Уровень 5: Финал и танец", emoji: "💃", text: "Жёлтый прыжок!", options: [{t: "Yellow jump!", c: true}, {t: "Pink bow!", c: false}] },
+            { level: "Уровень 5: Финал и танец", emoji: "💃", text: "Фиолетовый: руки вверх!", options: [{t: "Purple up!", c: true}, {t: "Orange side!", c: false}] },
+            { level: "Уровень 5: Финал и танец", emoji: "💃", text: "Оранжевый: руки в стороны!", options: [{t: "Orange side!", c: true}, {t: "Red step!", c: false}] },
+            { level: "Уровень 5: Финал и танец", emoji: "🎉", text: "Портфолио собрано, танец окончен! Чаклз говорит тебе огромное спасибо!", options: [{t: "You're welcome!", c: true}, {t: "Goodbye!", c: true}] }
+        ];
+
+        let currentStep = 0;
+        const gameArea = document.getElementById('game-area');
+        const progress = document.getElementById('progress');
+
+        function renderStep() {
+            if (currentStep >= steps.length) {
+                gameArea.innerHTML = `<div class="emoji">🏆</div><h1>Ты прошёл весь огромный квест!</h1><p class="success">Чаклз в полном восторге! Твоё портфолио идеально, ты знаешь все цвета, членов семьи и вежливые фразы. Ты настоящий художник и мастер английского!</p><button class="btn bg-green" onclick="location.reload()">Пройти ещё раз</button>`;
+                progress.classList.add('hidden');
+                return;
+            }
+            const step = steps[currentStep];
+            progress.textContent = `${step.level}. Шаг ${currentStep + 1} из ${steps.length}`;
+            
+            let buttonsHtml = step.options.map((opt, index) => 
+                `<button class="btn ${index === 0 ? 'bg-blue' : 'bg-purple'}" onclick="handleAnswer(${opt.c})">${opt.t}</button>`
+            ).join('');
+
+            gameArea.innerHTML = `
+                <div class="emoji">${step.emoji}</div>
+                <h1>${currentStep === 0 ? 'Начинаем собирать портфолио!' : 'Отличная работа!'}</h1>
+                <p>${step.text}</p>
+                <div>${buttonsHtml}</div>
+            `;
+        }
+
+        function handleAnswer(isCorrect) {
+            if (isCorrect) {
+                currentStep++;
+                renderStep();
+            } else {
+                gameArea.innerHTML = `<div class="emoji">🤔</div><p>Почти угадал! Попробуй ещё раз, подумай внимательно.</p><button class="btn bg-orange" onclick="renderStep()">Назад</button>`;
+            }
+        }
+
+        renderStep();
+    </script>
+</body>
+</html>

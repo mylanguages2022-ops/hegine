@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spotlight Starter: Словарь Портфолио</title>
+    <meta property="og:title" content="Spotlight Starter: Интерактивный словарь Портфолио">
+    <meta property="og:description" content="Карточки с английскими словами, транскрипцией и переводом для урока о семье и цветах в портфолио.">
+    <meta property="og:image" content="https://example.com/og-image-portfolio-dictionary.jpg">
+    <meta property="og:url" content="https://example.com/spotlight-portfolio-dictionary">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <style>
+        body { font-family: 'Comic Sans MS', 'Arial', sans-serif; background-color: #f3e5f5; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px; }
+        .card { background: white; border-radius: 15px; padding: 20px; width: 220px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.1); cursor: pointer; transition: transform 0.2s; border: 2px solid #ce93d8; }
+        .card:hover { transform: scale(1.05); }
+        .word { font-size: 24px; font-weight: bold; color: #4a148c; margin-bottom: 10px; }
+        .transcription { font-size: 16px; color: #7b1fa2; font-style: italic; }
+        .translation { font-size: 18px; color: #d81b60; margin-top: 10px; display: none; }
+        .card.active .translation { display: block; }
+    </style>
+</head>
+<body>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">This is my family</div><div class="transcription">/ðɪs ɪz maɪ ˈfæmɪli/</div><div class="translation">Это моя семья</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">Who’s this?</div><div class="transcription">/huːz ðɪs/</div><div class="translation">Кто это?</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">What colour is this?</div><div class="transcription">/wɒt ˈkʌlər ɪz ðɪs/</div><div class="translation">Какого это цвета?</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">It’s lovely</div><div class="transcription">/ɪts ˈlʌvli/</div><div class="translation">Это мило / Прекрасно</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">Purple</div><div class="transcription">/ˈpɜːpl/</div><div class="translation">Фиолетовый</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">Orange</div><div class="transcription">/ˈɒrɪndʒ/</div><div class="translation">Оранжевый</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">Green</div><div class="transcription">/ɡriːn/</div><div class="translation">Зелёный</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">Red</div><div class="transcription">/red/</div><div class="translation">Красный</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">Yellow</div><div class="transcription">/ˈjeləʊ/</div><div class="translation">Жёлтый</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">Blue</div><div class="transcription">/bluː/</div><div class="translation">Синий</div></div>
+    <div class="card" onclick="this.classList.toggle('active')"><div class="word">Pink</div><div class="transcription">/pɪŋk/</div><div class="translation">Розовый</div></div>
+</body>
+</html>

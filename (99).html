@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик-домики — В гостях у Няни Шайн</title>
+
+<meta property="og:title" content="Словарик-домики — В гостях у Няни Шайн">
+<meta property="og:description" content="Говорящие домики урока 8a Spotlight: питомцы Няни Шайн — cat, dog, rabbit, mouse, duck, tortoise и фразы This is / That is. Британское произношение по клику.">
+<meta property="og:image" content="https://spotlight-lessons.example.com/og/8a-dictionary-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Домики со словами про питомцев">
+<meta property="og:url" content="https://spotlight-lessons.example.com/8a/dictionary">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Spotlight — уроки для родителя и ребёнка">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Интерактивный словарик урока 8a Spotlight в виде домиков для питомцев с озвучкой en-GB.">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
+    background:linear-gradient(180deg, #cde9c9 0%, #a8d89c 55%, #8bc785 100%);
+    color:#2e4a28;padding:30px 14px 60px;min-height:100vh;
+    background-image:
+      radial-gradient(rgba(255,255,255,.15) 1px, transparent 1.5px),
+      radial-gradient(rgba(255,255,255,.1) 1px, transparent 1.5px);
+    background-size:28px 28px, 48px 48px;
+    background-position:0 0, 14px 14px;
+  }
+  .wrap{max-width:920px;margin:0 auto}
+  header{text-align:center;margin-bottom:24px}
+  header h1{
+    font-size:clamp(1.5rem,4.5vw,2.3rem);color:#5a3a1a;letter-spacing:.3px;
+    text-shadow:1px 1px 0 #fff;
+  }
+  header h1::before{content:'🏡 ';}
+  header p{margin-top:8px;font-size:1rem;color:#3a5a34;line-height:1.5}
+  .hint{
+    background:#fffdf5;border:3px dashed #8b5a2b;border-radius:12px;
+    padding:14px 18px;margin:18px 0 26px;font-size:.97rem;color:#6a4220;line-height:1.55;
+  }
+  .filters{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:34px}
+  .filters button{
+    border:2px solid #8b5a2b;background:#fffdf5;color:#5a3a1a;
+    padding:9px 18px;border-radius:20px;font-size:.92rem;font-weight:700;
+    cursor:pointer;font-family:inherit;transition:.18s;
+  }
+  .filters button:hover{background:#f6e5c8;transform:translateY(-2px)}
+  .filters button.active{background:#8b5a2b;border-color:#8b5a2b;color:#fff;box-shadow:0 4px 0 #5a3218}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:36px 22px}
+
+  /* ---------- ДОМИК ---------- */
+  .card{
+    background:#fffdf5;border-radius:6px;
+    padding:64px 14px 14px;cursor:pointer;position:relative;
+    transition:.18s;box-shadow:0 6px 0 rgba(90,58,26,.3);
+    border:2px solid #8b5a2b;
+  }
+  /* крыша */
+  .card::before{
+    content:'';position:absolute;top:-30px;left:-6px;right:-6px;height:40px;
+    background:linear-gradient(180deg, #c0392b 0%, #a02818 100%);
+    clip-path:polygon(0 100%, 50% 0, 100% 100%);
+    filter:drop-shadow(0 2px 1px rgba(0,0,0,.25));
+  }
+  .card:hover{transform:translateY(-5px);box-shadow:0 10px 0 rgba(90,58,26,.3)}
+  .card:active{transform:translateY(0);box-shadow:0 3px 0 rgba(90,58,26,.3)}
+  .card.playing{animation:door .55s}
+  @keyframes door{0%,100%{transform:scale(1)}30%{transform:scale(1.04) rotate(-1deg)}70%{transform:scale(1.02) rotate(1deg)}}
+  /* окошко с мордочкой */
+  .card .window{
+    position:absolute;top:-8px;left:50%;transform:translateX(-50%);
+    width:50px;height:50px;border-radius:50%;background:#fffdf5;
+    border:4px solid #8b5a2b;display:flex;align-items:center;justify-content:center;
+    font-size:1.9rem;box-shadow:inset 0 0 0 2px #d9b480;
+  }
+  .card .en{
+    font-size:1.2rem;font-weight:700;color:#5a3a1a;text-align:center;
+    display:block;line-height:1.25;word-break:break-word;
+  }
+  .card .tr{
+    display:block;text-align:center;font-size:.85rem;color:#8b6a4a;
+    margin-top:4px;font-family:"Segoe UI",Arial,sans-serif;letter-spacing:.2px;
+  }
+  .card .ru{
+    display:block;text-align:center;font-size:1rem;color:#3a4a34;
+    margin-top:8px;font-weight:600;
+  }
+  /* дверца с динамиком */
+  .speak-btn{
+    display:block;margin:12px auto 0;width:48px;height:60px;
+    background:linear-gradient(180deg, #8b5a2b 0%, #5a3a1a 100%);
+    border:2px solid #3a2210;border-radius:4px 4px 0 0;cursor:pointer;
+    color:#fffdf5;font-size:1.1rem;transition:.15s;
+    box-shadow:inset -3px 0 0 rgba(0,0,0,.25), 0 3px 0 #3a2210;
+    position:relative;
+  }
+  .speak-btn::before{
+    content:'';position:absolute;right:6px;top:50%;transform:translateY(-50%);
+    width:6px;height:6px;border-radius:50%;background:#ffd23e;
+    box-shadow:0 0 4px rgba(255,210,62,.8);
+  }
+  .speak-btn:hover{background:linear-gradient(180deg, #a07038 0%, #6a4a2a 100%);transform:scale(1.05)}
+  .speak-btn:active{transform:scale(.96);box-shadow:inset -3px 0 0 rgba(0,0,0,.25), 0 1px 0 #3a2210}
+  /* варианты крыш */
+  .cat-pet::before{background:linear-gradient(180deg, #c0392b 0%, #a02818 100%)}
+  .cat-pet .window{border-color:#c0392b}
+  .cat-phrase::before{background:linear-gradient(180deg, #2e7d32 0%, #1f5622 100%)}
+  .cat-phrase .window{border-color:#2e7d32}
+  .cat-question::before{background:linear-gradient(180deg, #3a6ea8 0%, #1f4e79 100%)}
+  .cat-question .window{border-color:#3a6ea8}
+  .cat-house::before{background:linear-gradient(180deg, #8b5a2b 0%, #5a3a1a 100%)}
+  .cat-house .window{border-color:#8b5a2b}
+  .empty{
+    text-align:center;padding:40px 20px;color:#6a7a62;font-size:1.05rem;
+    background:#fffdf5;border-radius:12px;border:3px dashed #8b5a2b;
+  }
+  footer{text-align:center;margin-top:40px;font-size:.9rem;color:#3a5a34;line-height:1.6}
+  @media (max-width:560px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:32px 14px}
+    .card{padding-top:56px}
+    .card .window{width:42px;height:42px;font-size:1.5rem}
+    .card .en{font-size:1rem}
+    .speak-btn{width:42px;height:52px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Дворик Няни Шайн</h1>
+    <p>словарик-домики · питомцы и фразы-знакомства</p>
+  </header>
+
+  <div class="hint">
+    🏡 Нажмите на дверцу домика — и услышите, кто живёт внутри, британским голосом. Играйте в Няню: ребёнок «обходит домики» и называет каждого питомца вслух.
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">В этой части двора домиков пока нет.</div>
+
+  <footer>
+    Spotlight · Module 8 · Lesson 8a<br>
+    Дверцы можно открывать бесконечно: питомцы всегда дома.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var RATE = 0.85;
+  var voices = [];
+
+  function loadVoices(){
+    if(!('speechSynthesis' in window)) return;
+    voices = window.speechSynthesis.getVoices() || [];
+  }
+  loadVoices();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    setTimeout(loadVoices, 300);
+    setTimeout(loadVoices, 1200);
+  }
+
+  function pickVoice(){
+    if(!voices.length) loadVoices();
+    var v;
+    v = voices.find(function(x){ return x.lang === 'en-GB'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en-gb') === 0; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang === 'en-US'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en') === 0; });
+    return v || null;
+  }
+
+  var speakingCard = null;
+
+  function speak(text, cardEl){
+    if(!('speechSynthesis' in window)){
+      if(cardEl) flash(cardEl);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    if(speakingCard){ speakingCard.classList.remove('playing'); speakingCard = null; }
+
+    var u = new SpeechSynthesisUtterance(text);
+    var v = pickVoice();
+    if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+    u.rate = RATE;
+    u.pitch = 1.05;
+    u.volume = 1;
+
+    if(cardEl){
+      cardEl.classList.add('playing');
+      speakingCard = cardEl;
+      u.onend = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+      u.onerror = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+    }
+    window.speechSynthesis.speak(u);
+  }
+
+  function flash(el){
+    el.classList.add('playing');
+    setTimeout(function(){ el.classList.remove('playing'); }, 600);
+  }
+
+  var CATS = {
+    all:      '🏡 Весь двор',
+    pet:      '🐾 Питомцы',
+    phrase:   '🌿 Фразы-знакомства',
+    question: '❓ Вопросы',
+    house:    '🏠 Дом'
+  };
+
+  var WORDS = [
+    {c:'pet', e:'🐱', en:'cat',      ipa:'/kæt/',       ru:'кошка'},
+    {c:'pet', e:'🐶', en:'dog',      ipa:'/dɒɡ/',       ru:'собака'},
+    {c:'pet', e:'🐰', en:'rabbit',   ipa:'/ˈræbɪt/',    ru:'кролик'},
+    {c:'pet', e:'🐭', en:'mouse',    ipa:'/maʊs/',      ru:'мышка'},
+    {c:'pet', e:'🦆', en:'duck',     ipa:'/dʌk/',       ru:'утка'},
+    {c:'pet', e:'🐢', en:'tortoise', ipa:'/ˈtɔːtəs/',   ru:'черепаха'},
+
+    {c:'phrase', e:'👉', en:'This is a cat.',      ipa:'/ðɪs ɪz ə kæt/',      ru:'это кошка'},
+    {c:'phrase', e:'👉', en:'This is a dog.',      ipa:'/ðɪs ɪz ə dɒɡ/',      ru:'это собака'},
+    {c:'phrase', e:'👉', en:'This is a rabbit.',   ipa:'/ðɪs ɪz ə ˈræbɪt/',   ru:'это кролик'},
+    {c:'phrase', e:'👈', en:'That is a duck.',     ipa:'/ðæt ɪz ə dʌk/',      ru:'вон там утка'},
+    {c:'phrase', e:'👈', en:'That is a tortoise.', ipa:'/ðæt ɪz ə ˈtɔːtəs/', ru:'вон там черепаха'},
+
+    {c:'question', e:'❓', en:"Who's this?",  ipa:'/huːz ðɪs/',  ru:'кто это (близко)?'},
+    {c:'question', e:'❓', en:"Who's that?",  ipa:'/huːz ðæt/',  ru:'а кто вон там (подальше)?'},
+
+    {c:'house', e:'🏠', en:'house',  ipa:'/haʊs/',  ru:'дом'}
+  ];
+
+  var filtersBox = document.getElementById('filters');
+  var current = 'all';
+
+  Object.keys(CATS).forEach(function(key){
+    var b = document.createElement('button');
+    b.textContent = CATS[key];
+    b.dataset.cat = key;
+    if(key === 'all') b.classList.add('active');
+    b.addEventListener('click', function(){
+      current = key;
+      Array.prototype.forEach.call(filtersBox.children, function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      render();
+    });
+    filtersBox.appendChild(b);
+  });
+
+  var grid  = document.getElementById('grid');
+  var empty = document.getElementById('empty');
+
+  function render(){
+    grid.innerHTML = '';
+    var list = WORDS.filter(function(w){ return current === 'all' || w.c === current; });
+    empty.style.display = list.length ? 'none' : 'block';
+
+    list.forEach(function(w){
+      var card = document.createElement('div');
+      card.className = 'card cat-' + w.c;
+      card.setAttribute('role','button');
+      card.setAttribute('tabindex','0');
+
+      var win = document.createElement('div');
+      win.className = 'window';
+      win.textContent = w.e;
+
+      var en = document.createElement('span');
+      en.className = 'en';
+      en.textContent = w.en;
+
+      var tr = document.createElement('span');
+      tr.className = 'tr';
+      tr.textContent = w.ipa;
+
+      var ru = document.createElement('span');
+      ru.className = 'ru';
+      ru.textContent = w.ru;
+
+      var sp = document.createElement('button');
+      sp.className = 'speak-btn';
+      sp.innerHTML = '🔊';
+      sp.title = 'Прослушать произношение';
+      sp.setAttribute('aria-label','Прослушать ' + w.en);
+      sp.addEventListener('click', function(ev){
+        ev.stopPropagation();
+        speak(w.en, card);
+      });
+
+      card.appendChild(win);
+      card.appendChild(en);
+      card.appendChild(tr);
+      card.appendChild(ru);
+      card.appendChild(sp);
+
+      card.addEventListener('click', function(){ speak(w.en, card); });
+      card.addEventListener('keydown', function(ev){
+        if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); speak(w.en, card); }
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  render();
+
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = function(){ loadVoices(); };
+  }
+})();
+</script>
+</body>
+</html>

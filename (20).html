@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Словарь: Королевское чаепитие</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Словарь: Королевское чаепитие" />
+    <meta property="og:description" content="Интерактивный словарь с произношением: king, queen, yes, no, cup для урока английского языка." />
+    <meta property="og:image" content="https://example.com/preview-royal-dictionary.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://example.com/dictionary-2b.html" />
+    <meta property="og:locale" content="ru_RU" />
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; color: #333; text-align: center; padding: 20px; }
+        h1 { color: #4a4a4a; margin-bottom: 30px; }
+        .dictionary { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 800px; margin: 0 auto; }
+        .card { background: white; border-radius: 15px; padding: 25px; width: 180px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 6px solid #5c6bc0; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+        .word { font-size: 26px; font-weight: bold; color: #333; margin-bottom: 5px; }
+        .ipa { font-size: 16px; color: #888; font-style: italic; margin-bottom: 10px; }
+        .translation { font-size: 18px; color: #555; }
+        .icon { font-size: 40px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>👑 Нажми на карточку, чтобы услышать слово</h1>
+    <div class="dictionary">
+        <div class="card" onclick="speak('king')">
+            <div class="icon">🤴</div>
+            <div class="word">king</div>
+            <div class="ipa">/kɪŋ/</div>
+            <div class="translation">король</div>
+        </div>
+        <div class="card" onclick="speak('queen')">
+            <div class="icon">👸</div>
+            <div class="word">queen</div>
+            <div class="ipa">/kwiːn/</div>
+            <div class="translation">королева</div>
+        </div>
+        <div class="card" onclick="speak('yes')">
+            <div class="icon">👍</div>
+            <div class="word">yes</div>
+            <div class="ipa">/jes/</div>
+            <div class="translation">да</div>
+        </div>
+        <div class="card" onclick="speak('no')">
+            <div class="icon">👎</div>
+            <div class="word">no</div>
+            <div class="ipa">/nəʊ/</div>
+            <div class="translation">нет</div>
+        </div>
+        <div class="card" onclick="speak('cup')">
+            <div class="icon">☕</div>
+            <div class="word">cup</div>
+            <div class="ipa">/kʌp/</div>
+            <div class="translation">чашка</div>
+        </div>
+    </div>
+    <script>
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-GB';
+            utterance.rate = 0.8;
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квест: Знакомство с героями</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Квест: Знакомство с героями Spotlight" />
+    <meta property="og:description" content="Пройди все испытания и научись знакомиться по-английски!" />
+    <meta property="og:image" content="https://example.com/preview-quest-1b.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://example.com/quest-1b.html" />
+    <meta property="og:locale" content="ru_RU" />
+    <style>
+        body { 
+            font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif; 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+            color: #333; 
+            text-align: center; 
+            padding: 20px; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .quest-container { 
+            background: white; 
+            border-radius: 25px; 
+            padding: 30px; 
+            max-width: 650px; 
+            width: 90%; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2); 
+            border: 4px solid #f5576c; 
+        }
+        h2 { color: #f5576c; margin-bottom: 20px; font-size: 28px; }
+        .stage { display: none; }
+        .stage.active { display: block; animation: fadeIn 0.5s; }
+        .btn { 
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+            color: white; 
+            border: none; 
+            padding: 15px 30px; 
+            font-size: 20px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            margin: 10px; 
+            transition: all 0.3s; 
+            font-family: inherit; 
+            font-weight: bold; 
+            box-shadow: 0 6px 15px rgba(245, 87, 108, 0.4); 
+        }
+        .btn:hover { 
+            transform: scale(1.08); 
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.6); 
+        }
+        .btn-option { 
+            display: block; 
+            width: 85%; 
+            margin: 12px auto; 
+            background: white; 
+            color: #f5576c; 
+            border: 3px solid #f5576c; 
+        }
+        .btn-option:hover { 
+            background: #f5576c; 
+            color: white; 
+        }
+        .character { font-size: 70px; margin-bottom: 15px; }
+        .progress { margin-top: 20px; color: #888; font-size: 16px; }
+        .reward { font-size: 90px; animation: bounce 1s infinite; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        .feedback { margin-top: 15px; font-weight: bold; min-height: 24px; font-size: 18px; }
+        .correct { color: #2ecc71; }
+        .wrong { color: #e74c3c; }
+    </style>
+</head>
+<body>
+    <div class="quest-container">
+        <div id="stage-0" class="stage active">
+            <div class="character">‍♀️</div>
+            <h2>Привет! Я Nanny Shine!</h2>
+            <p style="font-size: 18px; line-height: 1.5;">Помнишь наш прошлый урок? Сегодня мы отправимся в новое приключение! Нужно будет вспомнить, как здороваться, прощаться и знакомиться. Готов?</p>
+            <button class="btn" onclick="nextStage(1)">Да, готов! 🚀</button>
+        </div>
+
+        <div id="stage-1" class="stage">
+            <div class="character">👋</div>
+            <h2>Этап 1: Встреча</h2>
+            <p style="font-size: 18px;">Ты встретил друга. Что скажешь первым?</p>
+            <button class="btn btn-option" onclick="checkAnswer(1, false)">Goodbye</button>
+            <button class="btn btn-option" onclick="checkAnswer(1, true)">Hello</button>
+            <div id="feedback-1" class="feedback"></div>
+        </div>
+
+        <div id="stage-2" class="stage">
+            <div class="character">👦</div>
+            <h2>Этап 2: Знакомство</h2>
+            <p style="font-size: 18px;">Larry хочет представиться. Как он скажет "Я — Ларри"?</p>
+            <button class="btn btn-option" onclick="checkAnswer(2, true)">I'm Larry</button>
+            <button class="btn btn-option" onclick="checkAnswer(2, false)">Hello Larry</button>
+            <div id="feedback-2" class="feedback"></div>
+        </div>
+
+        <div id="stage-3" class="stage">
+            <div class="character">❓</div>
+            <h2>Этап 3: Новый вопрос</h2>
+            <p style="font-size: 18px;">Как спросить "Как тебя зовут?" по-английски?</p>
+            <button class="btn btn-option" onclick="checkAnswer(3, false)">Hello?</button>
+            <button class="btn btn-option" onclick="checkAnswer(3, true)">What's your name?</button>
+            <button class="btn btn-option" onclick="checkAnswer(3, false)">Goodbye?</button>
+            <div id="feedback-3" class="feedback"></div>
+        </div>
+
+        <div id="stage-4" class="stage">
+            <div class="character">👧</div>
+            <h2>Этап 4: Ответ</h2>
+            <p style="font-size: 18px;">Тебя спросили: "What's your name?" Что ответишь?</p>
+            <button class="btn btn-option" onclick="checkAnswer(4, true)">I'm [твоё имя]</button>
+            <button class="btn btn-option" onclick="checkAnswer(4, false)">Goodbye</button>
+            <div id="feedback-4" class="feedback"></div>
+        </div>
+
+        <div id="stage-5" class="stage">
+            <div class="character">🐵</div>
+            <h2>Этап 5: Кто это?</h2>
+            <p style="font-size: 18px;">Кто говорит "I'm Lulu"?</p>
+            <button class="btn btn-option" onclick="checkAnswer(5, false)">Мальчик</button>
+            <button class="btn btn-option" onclick="checkAnswer(5, true)">Девочка</button>
+            <button class="btn btn-option" onclick="checkAnswer(5, false)">Обезьянка</button>
+            <div id="feedback-5" class="feedback"></div>
+        </div>
+
+        <div id="stage-6" class="stage">
+            <div class="character">🚶</div>
+            <h2>Этап 6: Прощание</h2>
+            <p style="font-size: 18px;">Приключение заканчивается. Что скажем?</p>
+            <button class="btn btn-option" onclick="checkAnswer(6, false)">Hello</button>
+            <button class="btn btn-option" onclick="checkAnswer(6, true)">Goodbye</button>
+            <div id="feedback-6" class="feedback"></div>
+        </div>
+
+        <div id="stage-7" class="stage">
+            <div class="character">🏆</div>
+            <h2>Поздравляем!</h2>
+            <p style="font-size: 20px;">Ты прошёл все испытания!</p>
+            <div class="reward">🌟🌟</div>
+            <p style="font-size: 18px;">Ты настоящий друг Nanny Shine, Larry, Lulu и Chuckles!</p>
+            <button class="btn" onclick="location.reload()">Пройти ещё раз </button>
+        </div>
+
+        <div class="progress">Этап <span id="current-stage">1</span> из 6</div>
+    </div>
+
+    <script>
+        let currentStage = 1;
+
+        function nextStage(stageNum) {
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            document.getElementById('stage-' + stageNum).classList.add('active');
+            if(stageNum <= 6) {
+                document.getElementById('current-stage').textContent = stageNum;
+            } else {
+                document.querySelector('.progress').style.display = 'none';
+            }
+        }
+
+        function checkAnswer(stage, isCorrect) {
+            const feedbackEl = document.getElementById('feedback-' + stage);
+            if (isCorrect) {
+                feedbackEl.textContent = "Отлично! Правильно! 🎉";
+                feedbackEl.className = "feedback correct";
+                setTimeout(() => {
+                    nextStage(stage + 1);
+                }, 1200);
+            } else {
+                feedbackEl.textContent = "Попробуй ещё раз! ";
+                feedbackEl.className = "feedback wrong";
+            }
+        }
+    </script>
+</body>
+</html>

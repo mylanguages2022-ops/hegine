@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Словарь: Tea Time</title>
+    <meta property="og:title" content="Интерактивный словарь: Tea Time">
+    <meta property="og:description" content="Повторяем слова к уроку Tea Time! в формате Spotlight.">
+    <meta property="og:image" content="https://example.com/image1200x630.jpg">
+    <meta property="og:url" content="https://example.com/dictionary">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <style>
+        body { font-family: 'Comic Sans MS', cursive, sans-serif; background: #fff9e6; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        h1 { color: #d35400; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; max-width: 800px; width: 100%; }
+        .card { background: #fff; border: 3px solid #f39c12; border-radius: 15px; padding: 20px; text-align: center; cursor: pointer; transition: transform 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card:hover { transform: translateY(-5px); }
+        .card .emoji { font-size: 40px; }
+        .card .en { font-size: 24px; color: #2c3e50; margin: 10px 0; font-weight: bold; }
+        .card .ru { font-size: 18px; color: #7f8c8d; display: none; }
+        .card.flipped .ru { display: block; }
+    </style>
+</head>
+<body>
+    <h1>🫖 Tea Time Vocabulary</h1>
+    <div class="grid">
+        <div class="card" onclick="this.classList.toggle('flipped')">
+            <div class="emoji">🍵</div>
+            <div class="en">tea</div>
+            <div class="ru">чай</div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('flipped')">
+            <div class="emoji">☕</div>
+            <div class="en">cup</div>
+            <div class="ru">чашка</div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('flipped')">
+            <div class="emoji">🍰</div>
+            <div class="en">cake</div>
+            <div class="ru">торт</div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('flipped')">
+            <div class="emoji">🍓</div>
+            <div class="en">jam</div>
+            <div class="ru">джем</div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('flipped')">
+            <div class="emoji">🍋</div>
+            <div class="en">lemon</div>
+            <div class="ru">лимон</div>
+        </div>
+        <div class="card" onclick="this.classList.toggle('flipped')">
+            <div class="emoji">🥛</div>
+            <div class="en">milk</div>
+            <div class="ru">молоко</div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квест: Эмоции Гадкого утёнка</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Квест: Эмоции Гадкого утёнка" />
+    <meta property="og:description" content="Интерактивная игра по сказке о Гадком утёнке: учимся понимать эмоции и называть цвета." />
+    <meta property="og:image" content="https://example.com/preview-duckling-quest.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://example.com/quest-duckling.html" />
+    <meta property="og:locale" content="ru_RU" />
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fef3c7; color: #4a4a4a; text-align: center; padding: 20px; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .quest-container { background: white; border-radius: 20px; padding: 30px; max-width: 600px; width: 90%; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top: 6px solid #f59e0b; }
+        h2 { color: #b45309; margin-bottom: 20px; }
+        .stage { display: none; }
+        .stage.active { display: block; animation: fadeIn 0.4s; }
+        .btn { background: #f59e0b; color: white; border: none; padding: 12px 25px; font-size: 18px; border-radius: 8px; cursor: pointer; margin: 10px; transition: background 0.2s; font-family: inherit; }
+        .btn:hover { background: #d97706; }
+        .btn-option { display: block; width: 100%; margin: 10px 0; background: #fffbeb; color: #4a4a4a; border: 2px solid #fcd34d; text-align: left; }
+        .btn-option:hover { background: #fef3c7; border-color: #f59e0b; }
+        .feedback { margin-top: 15px; font-weight: bold; min-height: 24px; }
+        .correct { color: #059669; }
+        .wrong { color: #dc2626; }
+        .icon-large { font-size: 60px; margin-bottom: 15px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div class="quest-container">
+        <div id="stage-0" class="stage active">
+            <div class="icon-large">📖</div>
+            <h2>Сказка продолжается!</h2>
+            <p>Мама-утка удивлена, а утята хотят понять, что происходит. Помоги им разобраться в эмоциях и цветах!</p>
+            <button class="btn" onclick="nextStage(1)">Начать историю</button>
+        </div>
+
+        <div id="stage-1" class="stage">
+            <div class="icon-large">😲</div>
+            <h2>Этап 1</h2>
+            <p>Мама-утка видит необычного утёнка и говорит: "_______!" Что она говорит?</p>
+            <button class="btn btn-option" onclick="checkAnswer(1, false)">Hello!</button>
+            <button class="btn btn-option" onclick="checkAnswer(1, true)">Oh dear!</button>
+            <button class="btn btn-option" onclick="checkAnswer(1, false)">Goodbye!</button>
+            <div id="feedback-1" class="feedback"></div>
+        </div>
+
+        <div id="stage-2" class="stage">
+            <div class="icon-large">🦆</div>
+            <h2>Этап 2</h2>
+            <p>Мы смотрим на грустного утёнка. Какой вопрос мы зададим?</p>
+            <button class="btn btn-option" onclick="checkAnswer(2, true)">Is Duck happy?</button>
+            <button class="btn btn-option" onclick="checkAnswer(2, false)">What's your name?</button>
+            <div id="feedback-2" class="feedback"></div>
+        </div>
+
+        <div id="stage-3" class="stage">
+            <div class="icon-large">🎨</div>
+            <h2>Этап 3</h2>
+            <p>А теперь спросим про его цвет. Как это будет по-английски?</p>
+            <button class="btn btn-option" onclick="checkAnswer(3, false)">It's a book.</button>
+            <button class="btn btn-option" onclick="checkAnswer(3, true)">What colour is it?</button>
+            <button class="btn btn-option" onclick="checkAnswer(3, false)">My cup is blue.</button>
+            <div id="feedback-3" class="feedback"></div>
+        </div>
+
+        <div id="stage-4" class="stage">
+            <div class="icon-large">😕</div>
+            <h2>Этап 4</h2>
+            <p>Мама-утка качает головой и вздыхает. Какую фразу она использует?</p>
+            <button class="btn btn-option" onclick="checkAnswer(4, true)">What a terrible thing!</button>
+            <button class="btn btn-option" onclick="checkAnswer(4, false)">Yes, it is!</button>
+            <div id="feedback-4" class="feedback"></div>
+        </div>
+
+        <div id="stage-5" class="stage">
+            <div class="icon-large">🌟</div>
+            <h2>Отличная работа!</h2>
+            <p>Ты помог утятам понять чувства мамы и заметил все цвета. Сказка становится ещё интереснее!</p>
+            <button class="btn" onclick="location.reload()">Прочитать ещё раз</button>
+        </div>
+    </div>
+
+    <script>
+        let currentStage = 1;
+        function nextStage(stageNum) {
+            document.querySelectorAll('.stage').forEach(el => el.classList.remove('active'));
+            document.getElementById('stage-' + stageNum).classList.add('active');
+        }
+        function checkAnswer(stage, isCorrect) {
+            const feedbackEl = document.getElementById('feedback-' + stage);
+            if (isCorrect) {
+                feedbackEl.textContent = "Верно!";
+                feedbackEl.className = "feedback correct";
+                setTimeout(() => nextStage(stage + 1), 800);
+            } else {
+                feedbackEl.textContent = "Подумай ещё раз.";
+                feedbackEl.className = "feedback wrong";
+            }
+        }
+    </script>
+</body>
+</html>

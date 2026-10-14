@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Словарь: The Ugly Duckling (Эмоции)</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Словарь: The Ugly Duckling (Эмоции)" />
+    <meta property="og:description" content="Интерактивный словарь с фразами и эмоциями из сказки о Гадком утёнке для урока Spotlight." />
+    <meta property="og:image" content="https://example.com/preview-duckling-dictionary.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="https://example.com/dictionary-duckling.html" />
+    <meta property="og:locale" content="ru_RU" />
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #fdfbf7; color: #4a4a4a; text-align: center; padding: 20px; }
+        h1 { color: #d97706; margin-bottom: 30px; font-size: 28px; }
+        .dictionary { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; max-width: 900px; margin: 0 auto; }
+        .card { background: white; border-radius: 15px; padding: 25px; width: 220px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-top: 5px solid #f59e0b; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+        .word { font-size: 22px; font-weight: bold; color: #b45309; margin-bottom: 5px; }
+        .ipa { font-size: 15px; color: #9ca3af; font-style: italic; margin-bottom: 10px; }
+        .translation { font-size: 17px; color: #4b5563; }
+        .icon { font-size: 40px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <h1>🦆 Нажми на карточку, чтобы услышать фразу</h1>
+    <div class="dictionary">
+        <div class="card" onclick="speak('Oh dear!')">
+            <div class="icon">😲</div>
+            <div class="word">Oh dear!</div>
+            <div class="ipa">/əʊ dɪə/</div>
+            <div class="translation">о боже! / вот те на!</div>
+        </div>
+        <div class="card" onclick="speak('What a terrible thing!')">
+            <div class="icon">😕</div>
+            <div class="word">What a terrible thing!</div>
+            <div class="ipa">/wɒt ə ˈterəbl θɪŋ/</div>
+            <div class="translation">какая ужасная вещь!</div>
+        </div>
+        <div class="card" onclick="speak('Who is this?')">
+            <div class="icon">❓</div>
+            <div class="word">Who is this?</div>
+            <div class="ipa">/huː ɪz ðɪs/</div>
+            <div class="translation">кто это?</div>
+        </div>
+        <div class="card" onclick="speak('Is Duck happy?')">
+            <div class="icon">😊</div>
+            <div class="word">Is Duck happy?</div>
+            <div class="ipa">/ɪz dʌk ˈhæpi/</div>
+            <div class="translation">утёнок счастлив?</div>
+        </div>
+        <div class="card" onclick="speak('What colour is it?')">
+            <div class="icon">🎨</div>
+            <div class="word">What colour is it?</div>
+            <div class="ipa">/wɒt ˈkʌlər ɪz ɪt/</div>
+            <div class="translation">какого он цвета?</div>
+        </div>
+    </div>
+    <script>
+        function speak(text) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-GB';
+            utterance.rate = 0.85;
+            window.speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>

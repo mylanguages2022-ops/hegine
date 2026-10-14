@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Словарик-полароиды — Два Дэнни</title>
+
+<meta property="og:title" content="Словарик-полароиды — Два Дэнни">
+<meta property="og:description" content="Говорящие снимки-полароиды урока 8b Spotlight: this/that, Danny the dog, звери Няни Шайн и фразы-двойняшки. Британское произношение по клику.">
+<meta property="og:image" content="https://spotlight-lessons.example.com/og/8b-dictionary-1200x630.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Полароидные снимки со словами">
+<meta property="og:url" content="https://spotlight-lessons.example.com/8b/dictionary">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:site_name" content="Spotlight — уроки для родителя и ребёнка">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="description" content="Интерактивный словарик урока 8b Spotlight в виде полароидных снимков с озвучкой en-GB: this, that, Danny the dog и звери Няни Шайн.">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:"Comic Sans MS","Segoe UI",Verdana,sans-serif;
+    background-color:#2f3a44;
+    background-image:
+      radial-gradient(rgba(255,255,255,.05) 1px, transparent 1.4px),
+      linear-gradient(180deg, #37424c 0%, #2a343d 100%);
+    background-size:26px 26px, 100% 100%;
+    color:#e8ecef;padding:30px 14px 60px;min-height:100vh;
+  }
+  .wrap{max-width:940px;margin:0 auto}
+  header{text-align:center;margin-bottom:24px}
+  header h1{
+    font-size:clamp(1.5rem,4.5vw,2.3rem);color:#fff;letter-spacing:.5px;
+  }
+  header h1::before{content:'📸 ';}
+  header p{margin-top:8px;font-size:1rem;color:#aebbc4;line-height:1.5}
+  .hint{
+    background:#f7f4ec;border:3px dashed #9aa7b0;border-radius:6px;
+    padding:14px 18px;margin:18px 0 26px;font-size:.97rem;color:#3a4650;line-height:1.55;
+    transform:rotate(-.4deg);
+  }
+  .filters{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin-bottom:34px}
+  .filters button{
+    border:2px solid #9aa7b0;background:#f7f4ec;color:#3a4650;
+    padding:9px 18px;border-radius:4px;font-size:.92rem;font-weight:700;
+    cursor:pointer;font-family:inherit;transition:.18s;
+  }
+  .filters button:hover{background:#fff;transform:translateY(-2px)}
+  .filters button.active{background:#e8b23a;border-color:#e8b23a;color:#2f3a44;box-shadow:0 4px 0 #b08420}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:34px 24px}
+
+  /* ---------- ПОЛАРОИД ---------- */
+  .card{
+    background:#f7f4ec;border-radius:4px;
+    padding:12px 12px 16px;cursor:pointer;position:relative;
+    transition:.18s;box-shadow:0 8px 18px rgba(0,0,0,.45);
+    transform:rotate(-1.6deg);
+  }
+  .card:nth-child(3n){transform:rotate(1.4deg)}
+  .card:nth-child(5n){transform:rotate(-.6deg)}
+  .card::before{
+    content:'';position:absolute;top:-12px;left:50%;transform:translateX(-50%) rotate(-3deg);
+    width:74px;height:22px;background:rgba(232,178,58,.55);
+    border-left:1px dashed rgba(255,255,255,.5);border-right:1px dashed rgba(255,255,255,.5);
+  }
+  .card:hover{transform:rotate(0) translateY(-6px);box-shadow:0 14px 26px rgba(0,0,0,.5)}
+  .card:active{transform:rotate(0) translateY(-2px)}
+  .card.playing{animation:flash .5s}
+  @keyframes flash{0%{filter:brightness(1)}30%{filter:brightness(1.35)}100%{filter:brightness(1)}}
+  .card .photo{
+    background:linear-gradient(160deg,#dfe8ee 0%,#c8d4dc 100%);
+    border-radius:3px;height:110px;
+    display:flex;align-items:center;justify-content:center;font-size:3.4rem;
+    position:relative;overflow:hidden;
+  }
+  .card .photo::after{
+    content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;
+    background:linear-gradient(100deg, transparent 0%, rgba(255,255,255,.5) 50%, transparent 100%);
+    transform:skewX(-18deg);
+  }
+  .card .en{
+    display:block;margin-top:12px;text-align:center;
+    font-family:"Segoe Script","Comic Sans MS",cursive;
+    font-size:1.14rem;font-weight:700;color:#2f3a44;line-height:1.3;word-break:break-word;
+  }
+  .card .tr{
+    display:block;text-align:center;font-size:.82rem;color:#7a8890;margin-top:3px;
+    font-family:"Segoe UI",Arial,sans-serif;letter-spacing:.2px;
+  }
+  .card .ru{
+    display:block;text-align:center;font-size:.98rem;color:#4a565e;margin-top:7px;font-weight:600;
+  }
+  .speak-btn{
+    position:absolute;bottom:12px;right:10px;width:38px;height:38px;border-radius:50%;
+    border:2px solid #2f3a44;background:#e8b23a;color:#2f3a44;font-size:1rem;cursor:pointer;
+    box-shadow:0 3px 0 #b08420;transition:.15s;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .speak-btn:hover{background:#f2c14e;transform:scale(1.1) rotate(-8deg)}
+  .speak-btn:active{transform:scale(.94)}
+  .cat-this .photo{background:linear-gradient(160deg,#d8ecd8 0%,#b8d8b8 100%)}
+  .cat-that .photo{background:linear-gradient(160deg,#d8e4f0 0%,#b0c8e0 100%)}
+  .cat-pet .photo{background:linear-gradient(160deg,#f0e0d0 0%,#e0c8b0 100%)}
+  .cat-twin .photo{background:linear-gradient(160deg,#f0d8e0 0%,#e0b8c8 100%)}
+  .empty{
+    text-align:center;padding:40px 20px;color:#aebbc4;font-size:1.05rem;
+    background:#f7f4ec;border-radius:6px;border:3px dashed #9aa7b0;color:#3a4650;
+  }
+  footer{text-align:center;margin-top:40px;font-size:.9rem;color:#aebbc4;line-height:1.6}
+  @media (max-width:560px){
+    .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:28px 14px}
+    .card .photo{height:88px;font-size:2.6rem}
+    .card .en{font-size:1rem}
+    .speak-btn{width:32px;height:32px;font-size:.9rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>Альбом Няни Шайн</h1>
+    <p>словарик-полароиды · этот, тот и все-все-все</p>
+  </header>
+
+  <div class="hint">
+    📸 Нажмите на снимок — и услышите подпись британским голосом. Играйте в фотографа: ребёнок «снимает» предмет рядом (this) или вдали (that), находит нужный полароид и озвучивает его.
+  </div>
+
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">В альбоме пока нет снимков.</div>
+
+  <footer>
+    Spotlight · Module 8 · Lesson 8b<br>
+    Альбом можно листать бесконечно: плёнка не кончается.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var RATE = 0.85;
+  var voices = [];
+
+  function loadVoices(){
+    if(!('speechSynthesis' in window)) return;
+    voices = window.speechSynthesis.getVoices() || [];
+  }
+  loadVoices();
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    setTimeout(loadVoices, 300);
+    setTimeout(loadVoices, 1200);
+  }
+
+  function pickVoice(){
+    if(!voices.length) loadVoices();
+    var v;
+    v = voices.find(function(x){ return x.lang === 'en-GB'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en-gb') === 0; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang === 'en-US'; });
+    if(v) return v;
+    v = voices.find(function(x){ return x.lang && x.lang.toLowerCase().indexOf('en') === 0; });
+    return v || null;
+  }
+
+  var speakingCard = null;
+
+  function speak(text, cardEl){
+    if(!('speechSynthesis' in window)){
+      if(cardEl) flash(cardEl);
+      return;
+    }
+    window.speechSynthesis.cancel();
+    if(speakingCard){ speakingCard.classList.remove('playing'); speakingCard = null; }
+
+    var u = new SpeechSynthesisUtterance(text);
+    var v = pickVoice();
+    if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-GB'; }
+    u.rate = RATE;
+    u.pitch = 1.05;
+    u.volume = 1;
+
+    if(cardEl){
+      cardEl.classList.add('playing');
+      speakingCard = cardEl;
+      u.onend = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+      u.onerror = function(){ cardEl.classList.remove('playing'); if(speakingCard===cardEl) speakingCard=null; };
+    }
+    window.speechSynthesis.speak(u);
+  }
+
+  function flash(el){
+    el.classList.add('playing');
+    setTimeout(function(){ el.classList.remove('playing'); }, 600);
+  }
+
+  var CATS = {
+    all:  '📸 Весь альбом',
+    this: '👉 Вот этот (this)',
+    that: '👈 Вон тот (that)',
+    pet:  '🐾 Звери',
+    twin: '👯 Двойняшки'
+  };
+
+  var WORDS = [
+    {c:'this', e:'🐶', en:'this',            ipa:'/ðɪs/',  ru:'этот (близко)'},
+    {c:'this', e:'🐶', en:'This is Danny the dog.', ipa:'/ðɪs ɪz ˈdæni ðə dɒɡ/', ru:'вот этот пёс — Дэнни'},
+    {c:'this', e:'🐱', en:'This is a cat.',  ipa:'/ðɪs ɪz ə kæt/', ru:'вот это кошка'},
+    {c:'this', e:'❓', en:"Who's this?",      ipa:'/huːz ðɪs/', ru:'кто это?'},
+
+    {c:'that', e:'🐕', en:'that',            ipa:'/ðæt/',  ru:'тот (подальше)'},
+    {c:'that', e:'🐕', en:"That's Danny the dog, too.", ipa:'/ðæts ˈdæni ðə dɒɡ tuː/', ru:'и вон тот пёс — тоже Дэнни'},
+    {c:'that', e:'🦆', en:'That is a duck.', ipa:'/ðæt ɪz ə dʌk/', ru:'вон там утка'},
+    {c:'that', e:'❓', en:"Who's that?",     ipa:'/huːz ðæt/', ru:'а кто вон там?'},
+
+    {c:'pet', e:'🐶', en:'dog',      ipa:'/dɒɡ/',      ru:'собака'},
+    {c:'pet', e:'🐱', en:'cat',      ipa:'/kæt/',      ru:'кошка'},
+    {c:'pet', e:'🐰', en:'rabbit',   ipa:'/ˈræbɪt/',   ru:'кролик'},
+    {c:'pet', e:'🐭', en:'mouse',    ipa:'/maʊs/',     ru:'мышка'},
+    {c:'pet', e:'🦆', en:'duck',     ipa:'/dʌk/',      ru:'утка'},
+    {c:'pet', e:'🐢', en:'tortoise', ipa:'/ˈtɔtəs/',  ru:'черепаха'},
+
+    {c:'twin', e:'✌️', en:'too',     ipa:'/tuː/',      ru:'тоже'},
+    {c:'twin', e:'👯', en:'This is a rabbit and that\'s a rabbit, too.', ipa:'/ðɪs ɪz ə ˈræbɪt ænd ðæts ə ˈræbɪt tuː/', ru:'вот кролик, и вон тоже кролик'},
+    {c:'twin', e:'🐾', en:'Danny',   ipa:'/ˈdæni/',    ru:'Дэнни'}
+  ];
+
+  var filtersBox = document.getElementById('filters');
+  var current = 'all';
+
+  Object.keys(CATS).forEach(function(key){
+    var b = document.createElement('button');
+    b.textContent = CATS[key];
+    b.dataset.cat = key;
+    if(key === 'all') b.classList.add('active');
+    b.addEventListener('click', function(){
+      current = key;
+      Array.prototype.forEach.call(filtersBox.children, function(x){ x.classList.remove('active'); });
+      b.classList.add('active');
+      render();
+    });
+    filtersBox.appendChild(b);
+  });
+
+  var grid  = document.getElementById('grid');
+  var empty = document.getElementById('empty');
+
+  function render(){
+    grid.innerHTML = '';
+    var list = WORDS.filter(function(w){ return current === 'all' || w.c === current; });
+    empty.style.display = list.length ? 'none' : 'block';
+
+    list.forEach(function(w){
+      var card = document.createElement('div');
+      card.className = 'card cat-' + w.c;
+      card.setAttribute('role','button');
+      card.setAttribute('tabindex','0');
+
+      var photo = document.createElement('div');
+      photo.className = 'photo';
+      photo.textContent = w.e;
+
+      var en = document.createElement('span');
+      en.className = 'en';
+      en.textContent = w.en;
+
+      var tr = document.createElement('span');
+      tr.className = 'tr';
+      tr.textContent = w.ipa;
+
+      var ru = document.createElement('span');
+      ru.className = 'ru';
+      ru.textContent = w.ru;
+
+      var sp = document.createElement('button');
+      sp.className = 'speak-btn';
+      sp.innerHTML = '🔊';
+      sp.title = 'Прослушать произношение';
+      sp.setAttribute('aria-label','Прослушать ' + w.en);
+      sp.addEventListener('click', function(ev){
+        ev.stopPropagation();
+        speak(w.en, card);
+      });
+
+      card.appendChild(photo);
+      card.appendChild(en);
+      card.appendChild(tr);
+      card.appendChild(ru);
+      card.appendChild(sp);
+
+      card.addEventListener('click', function(){ speak(w.en, card); });
+      card.addEventListener('keydown', function(ev){
+        if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); speak(w.en, card); }
+      });
+
+      grid.appendChild(card);
+    });
+  }
+
+  render();
+
+  if('speechSynthesis' in window){
+    window.speechSynthesis.onvoiceschanged = function(){ loadVoices(); };
+  }
+})();
+</script>
+</body>
+</html>

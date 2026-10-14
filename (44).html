@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="Словарь урока 11: Tea Time!">
+    <meta property="og:description" content="Интерактивный словарь с озвучкой для урока Tea Time!">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630.png?text=Tea+Time+Vocabulary">
+    <meta property="og:url" content="https://example.com/lesson11-vocabulary">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="ru_RU">
+    <title>Словарь урока 11: Tea Time!</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Comic Sans MS', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 { color: #2d3436; margin-bottom: 30px; text-align: center; font-size: 2em; }
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            width: 100%;
+        }
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+        .card:active { transform: scale(0.95); }
+        .emoji { font-size: 4em; }
+        .word { font-size: 1.5em; font-weight: bold; color: #2d3436; }
+        .transcription { font-size: 1em; color: #636e72; }
+        .translation { font-size: 1.1em; color: #0984e3; }
+        .speaker-btn {
+            background: #00b894;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .speaker-btn:hover { background: #00a383; }
+        .speaker-btn:active { transform: scale(0.9); }
+    </style>
+</head>
+<body>
+    <h1>🍰 Tea Time! Словарь урока 11</h1>
+    <div class="cards-container">
+        <div class="card" onclick="speak('tea')">
+            <div class="emoji">🍵</div>
+            <div class="word">tea</div>
+            <div class="transcription">/tiː/</div>
+            <div class="translation">чай</div>
+            <button class="speaker-btn" onclick="event.stopPropagation(); speak('tea')">🔊</button>
+        </div>
+        <div class="card" onclick="speak('cup')">
+            <div class="emoji">☕</div>
+            <div class="word">cup</div>
+            <div class="transcription">/kʌp/</div>
+            <div class="translation">чашка</div>
+            <button class="speaker-btn" onclick="event.stopPropagation(); speak('cup')">🔊</button>
+        </div>
+        <div class="card" onclick="speak('cake')">
+            <div class="emoji">🍰</div>
+            <div class="word">cake</div>
+            <div class="transcription">/keɪk/</div>
+            <div class="translation">торт</div>
+            <button class="speaker-btn" onclick="event.stopPropagation(); speak('cake')">🔊</button>
+        </div>
+        <div class="card" onclick="speak('jam')">
+            <div class="emoji">🍯</div>
+            <div class="word">jam</div>
+            <div class="transcription">/dʒæm/</div>
+            <div class="translation">джем</div>
+            <button class="speaker-btn" onclick="event.stopPropagation(); speak('jam')">🔊</button>
+        </div>
+        <div class="card" onclick="speak('lemon')">
+            <div class="emoji">🍋</div>
+            <div class="word">lemon</div>
+            <div class="transcription">/ˈlemən/</div>
+            <div class="translation">лимон</div>
+            <button class="speaker-btn" onclick="event.stopPropagation(); speak('lemon')">🔊</button>
+        </div>
+        <div class="card" onclick="speak('milk')">
+            <div class="emoji">🥛</div>
+            <div class="word">milk</div>
+            <div class="transcription">/mɪlk/</div>
+            <div class="translation">молоко</div>
+            <button class="speaker-btn" onclick="event.stopPropagation(); speak('milk')">🔊</button>
+        </div>
+        <div class="card" onclick="speak('I like tea')">
+            <div class="emoji">❤️</div>
+            <div class="word">I like tea</div>
+            <div class="transcription">/aɪ laɪk tiː/</div>
+            <div class="translation">Я люблю чай</div>
+            <button class="speaker-btn" onclick="event.stopPropagation(); speak('I like tea')">🔊</button>
+        </div>
+        <div class="card" onclick="speak('I like tea with lemon')">
+            <div class="emoji">🍵🍋</div>
+            <div class="word">I like tea with lemon</div>
+            <div class="transcription">/aɪ laɪk tiː wɪð ˈlemən/</div>
+            <div class="translation">Я люблю чай с лимоном</div>
+            <button class="speaker-btn" onclick="event.stopPropagation(); speak('I like tea with lemon')">🔊</button>
+        </div>
+        <div class="card" onclick="speak('Do you like tea?')">
+            <div class="emoji">❓</div>
+            <div class="word">Do you like tea?</div>
+            <div class="transcription">/duː juː laɪk tiː/</div>
+            <div class="translation">Ты любишь чай?</div>
+            <button class="speaker-btn" onclick="event.stopPropagation(); speak('Do you like tea?')">🔊</button>
+        </div>
+    </div>
+
+    <script>
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                const voices = window.speechSynthesis.getVoices();
+                const britishVoice = voices.find(voice => voice.lang === 'en-GB') || 
+                                    voices.find(voice => voice.lang.startsWith('en'));
+                if (britishVoice) utterance.voice = britishVoice;
+                utterance.lang = 'en-GB';
+                utterance.rate = 0.85;
+                utterance.pitch = 1;
+                utterance.volume = 1;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+        window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+    </script>
+</body>
+</html>
