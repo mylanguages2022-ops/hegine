@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Буква Д — Гайк и Моне</title>
+<style>
+  :root{
+    --wood1:#d7a86e;
+    --wood2:#b8894e;
+    --wood3:#8d6234;
+    --brick1:#e57373;
+    --brick2:#c62828;
+    --brick3:#8e1c1c;
+    --roof1:#8d6e63;
+    --roof2:#5d4037;
+    --roof3:#3e2723;
+    --cream:#fff8ee;
+    --cream2:#ffe9c8;
+    --sky:#90caf9;
+    --sun:#ffd54f;
+    --text:#2b1d12;
+    --text2:#5a4632;
+    --coral:#ff7043;
+    --teal:#26a69a;
+    --purple:#7e57c2;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0;}
+  body{
+    font-family:"Nunito","Comic Sans MS","Trebuchet MS",sans-serif;
+    background:linear-gradient(180deg, var(--sky) 0%, var(--cream2) 40%, var(--cream) 100%);
+    background-attachment:fixed;
+    color:var(--text);
+    min-height:100vh;
+    padding-bottom:90px;
+    overflow-x:hidden;
+  }
+  /* Летящие птички и облака */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(ellipse 60px 20px at 15% 15%, rgba(255,255,255,.85), transparent 70%),
+      radial-gradient(ellipse 80px 25px at 75% 20%, rgba(255,255,255,.75), transparent 70%),
+      radial-gradient(ellipse 50px 18px at 40% 35%, rgba(255,255,255,.7), transparent 70%),
+      radial-gradient(circle 3px at 60% 50%, rgba(141,110,99,.5), transparent 70%),
+      radial-gradient(circle 3px at 25% 65%, rgba(141,110,99,.4), transparent 70%),
+      radial-gradient(circle 3px at 85% 75%, rgba(141,110,99,.45), transparent 70%),
+      radial-gradient(circle 2px at 50% 85%, rgba(141,110,99,.35), transparent 70%);
+    animation:cloudDrift 30s ease-in-out infinite alternate;
+  }
+  @keyframes cloudDrift{
+    from{transform:translate(0,0);}
+    to{transform:translate(30px,10px);}
+  }
+  header, nav, main{position:relative; z-index:2;}
+
+  /* Шапка */
+  header{
+    padding:14px 16px 12px;
+    background:linear-gradient(180deg, rgba(255,248,238,.95), rgba(255,233,200,.85));
+    border-bottom:4px solid var(--wood2);
+    box-shadow:0 8px 24px rgba(93,64,55,.25);
+    position:sticky; top:0; z-index:20;
+    backdrop-filter:blur(10px);
+  }
+  header h1{
+    margin:0; font-size:22px; text-align:center;
+    color:var(--roof3);
+    font-weight:900;
+    text-shadow:0 2px 0 rgba(255,255,255,.9), 0 4px 10px rgba(141,110,99,.4);
+    display:flex; align-items:center; justify-content:center; gap:10px;
+  }
+  header h1 .house{
+    font-size:32px;
+    animation:houseWobble 3s ease-in-out infinite;
+    display:inline-block;
+  }
+  @keyframes houseWobble{
+    0%,100%{transform:rotate(-4deg) scale(1);}
+    50%{transform:rotate(4deg) scale(1.1);}
+  }
+  header .heroes{
+    font-size:13px; color:var(--text2); text-align:center; margin-top:4px;
+    font-weight:700;
+  }
+  header .heroes b{color:var(--roof3);}
+
+  /* HUD */
+  .hud{
+    display:flex; gap:8px; justify-content:center; margin-top:10px; flex-wrap:wrap;
+  }
+  .hud .chip{
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border:2px solid rgba(93,64,55,.2);
+    border-radius:20px; padding:5px 14px; font-size:12px; color:var(--text);
+    font-weight:800;
+    box-shadow:
+      0 3px 0 rgba(93,64,55,.2),
+      0 6px 12px rgba(93,64,55,.15),
+      inset 0 2px 0 rgba(255,255,255,.9);
+  }
+
+  /* Прогресс-тропинка к дому */
+  .path-progress{
+    height:26px; background:linear-gradient(180deg, #e8d5b7, #d0b88e);
+    border-radius:14px; margin-top:10px; overflow:hidden;
+    box-shadow:inset 0 2px 4px rgba(0,0,0,.15);
+    position:relative;
+    border:2px solid rgba(93,64,55,.25);
+  }
+  .path-progress > div{
+    height:100%; width:0%;
+    background:linear-gradient(180deg, var(--wood1), var(--wood2));
+    border-radius:12px;
+    box-shadow:
+      inset 0 2px 0 rgba(255,255,255,.5),
+      inset 0 -2px 0 rgba(0,0,0,.1);
+    transition:width .6s cubic-bezier(.34,1.56,.64,1);
+    position:relative;
+    display:flex; align-items:center; justify-content:flex-end;
+    padding-right:8px;
+    color:#fff; font-size:12px; font-weight:900;
+    text-shadow:0 1px 2px rgba(0,0,0,.3);
+  }
+  .path-progress > div::after{
+    content:"🏠"; position:absolute; right:-4px; top:-1px;
+    font-size:24px;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.2));
+  }
+
+  /* Навигация */
+  nav{
+    display:flex; flex-wrap:wrap; gap:6px; padding:12px; justify-content:center;
+    background:rgba(255,248,238,.75);
+    border-bottom:2px solid rgba(93,64,55,.15);
+    position:sticky; top:120px; z-index:19;
+    backdrop-filter:blur(10px);
+  }
+  nav button{
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border:2px solid rgba(93,64,55,.2);
+    color:var(--text); padding:6px 12px; border-radius:18px;
+    font-size:12px; cursor:pointer; font-family:inherit;
+    font-weight:800;
+    box-shadow:
+      0 3px 0 rgba(93,64,55,.2),
+      0 5px 10px rgba(93,64,55,.15),
+      inset 0 2px 0 rgba(255,255,255,.9);
+    transition:all .2s cubic-bezier(.34,1.56,.64,1);
+  }
+  nav button:hover{transform:translateY(-2px);}
+  nav button:active{transform:translateY(1px); box-shadow:0 1px 0 rgba(93,64,55,.2);}
+  nav button.active{
+    background:linear-gradient(180deg, var(--wood1), var(--wood2));
+    color:#fff; border-color:transparent;
+    box-shadow:
+      0 3px 0 var(--roof3),
+      0 6px 14px rgba(184,137,78,.5),
+      inset 0 2px 0 rgba(255,255,255,.4);
+    text-shadow:0 1px 2px rgba(0,0,0,.2);
+  }
+
+  main{padding:20px 16px; max-width:900px; margin:0 auto;}
+  section{display:none; animation:fadeIn .4s cubic-bezier(.34,1.56,.64,1);}
+  section.active{display:block;}
+  @keyframes fadeIn{
+    from{opacity:0; transform:translateY(20px) scale(.98);}
+    to{opacity:1; transform:none;}
+  }
+
+  h2{
+    font-size:22px; margin:0 0 6px;
+    color:var(--roof3); font-weight:900;
+    display:flex; align-items:center; gap:8px;
+    text-shadow:0 2px 0 rgba(255,255,255,.8);
+  }
+  .sub{color:var(--text2); font-size:14px; margin:0 0 16px; font-weight:600;}
+
+  /* Задания */
+  .task{
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border:3px solid rgba(93,64,55,.2);
+    border-radius:24px;
+    padding:18px; margin-bottom:16px;
+    box-shadow:
+      0 6px 0 rgba(93,64,55,.15),
+      0 12px 24px rgba(93,64,55,.12),
+      inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .task .q{font-size:18px; font-weight:800; margin-bottom:12px; text-align:center;}
+
+  /* Персонажи */
+  .character{
+    display:flex; align-items:flex-start; gap:10px;
+    margin-bottom:14px;
+  }
+  .character.mone-bubble{flex-direction:row-reverse;}
+  .character .avatar{
+    width:54px; height:54px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:32px; flex-shrink:0;
+    box-shadow:
+      0 4px 0 rgba(0,0,0,.1),
+      0 8px 16px rgba(0,0,0,.15),
+      inset 0 3px 0 rgba(255,255,255,.6),
+      inset 0 -3px 8px rgba(0,0,0,.15);
+    animation:breathe 3s ease-in-out infinite;
+  }
+  .character .avatar.gayk{background:radial-gradient(circle at 35% 30%, #d9a878, #8b5a3c);}
+  .character .avatar.mone{background:radial-gradient(circle at 35% 30%, #f5f5f5, #c4c4c4);}
+  @keyframes breathe{
+    0%,100%{transform:scale(1) translateY(0);}
+    50%{transform:scale(1.05) translateY(-3px);}
+  }
+  .character .bubble{
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border:2px solid rgba(93,64,55,.2);
+    border-radius:20px 20px 20px 6px;
+    padding:12px 16px;
+    font-size:15px; font-weight:600;
+    box-shadow:0 4px 10px rgba(93,64,55,.15);
+    line-height:1.5;
+    flex:1;
+  }
+  .character.mone-bubble .bubble{
+    border-radius:20px 20px 6px 20px;
+  }
+  .character .bubble b{color:var(--roof3); font-weight:900;}
+
+  /* Огромная буква Д */
+  .big-letter-display{
+    text-align:center; padding:20px;
+    font-size:180px; font-weight:900;
+    color:var(--roof3);
+    line-height:1;
+    text-shadow:
+      0 4px 0 rgba(255,255,255,.9),
+      0 8px 0 rgba(184,137,78,.4),
+      0 16px 30px rgba(93,64,55,.4);
+    animation:pulseBig 2s ease-in-out infinite;
+    user-select:none;
+  }
+  .big-letter-display .low{
+    color:var(--wood2); font-size:100px;
+  }
+  @keyframes pulseBig{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.03);}
+  }
+
+  /* Кнопки */
+  .btn{
+    background:linear-gradient(180deg, var(--wood1), var(--wood2));
+    color:#fff; border:none;
+    padding:12px 24px;
+    border-radius:22px; font-size:15px; font-family:inherit;
+    font-weight:900; cursor:pointer; margin:4px;
+    box-shadow:
+      0 5px 0 var(--roof3),
+      0 10px 20px rgba(184,137,78,.4),
+      inset 0 2px 0 rgba(255,255,255,.3);
+    transition:all .15s cubic-bezier(.34,1.56,.64,1);
+    text-shadow:0 1px 2px rgba(0,0,0,.2);
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn:active{
+    transform:translateY(3px);
+    box-shadow:0 1px 0 var(--roof3), 0 3px 6px rgba(184,137,78,.3), inset 0 2px 0 rgba(255,255,255,.3);
+  }
+  .btn.brick{
+    background:linear-gradient(180deg, #ef5350, var(--brick2));
+    box-shadow:0 5px 0 var(--brick3), 0 10px 20px rgba(198,40,40,.4), inset 0 2px 0 rgba(255,255,255,.3);
+  }
+  .btn.brick:active{box-shadow:0 1px 0 var(--brick3);}
+  .btn.roof{
+    background:linear-gradient(180deg, var(--roof1), var(--roof2));
+    box-shadow:0 5px 0 var(--roof3), 0 10px 20px rgba(93,64,55,.4), inset 0 2px 0 rgba(255,255,255,.3);
+  }
+  .btn.roof:active{box-shadow:0 1px 0 var(--roof3);}
+  .btn.sun{
+    background:linear-gradient(180deg, #ffe082, var(--sun));
+    color:#7a5b00;
+    box-shadow:0 5px 0 #c9a227, 0 10px 20px rgba(255,213,79,.4), inset 0 2px 0 rgba(255,255,255,.6);
+    text-shadow:none;
+  }
+  .btn.sun:active{box-shadow:0 1px 0 #c9a227;}
+  .btn.ghost{
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    color:var(--text);
+    border:2px solid rgba(93,64,55,.25);
+    box-shadow:0 4px 0 rgba(93,64,55,.2), 0 8px 16px rgba(93,64,55,.15), inset 0 2px 0 rgba(255,255,255,.9);
+    text-shadow:none;
+  }
+  .btn.ghost:active{box-shadow:0 1px 0 rgba(93,64,55,.2);}
+  .center{text-align:center;}
+
+  /* Опции */
+  .options{display:flex; flex-wrap:wrap; gap:10px; justify-content:center;}
+  .opt{
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border:3px solid rgba(93,64,55,.2);
+    border-radius:18px; padding:12px 20px;
+    font-size:22px; font-weight:900; color:var(--roof3);
+    cursor:pointer; font-family:inherit; min-width:64px;
+    transition:all .2s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 4px 0 rgba(93,64,55,.2), 0 8px 16px rgba(93,64,55,.15), inset 0 2px 0 rgba(255,255,255,.9);
+  }
+  .opt:hover{transform:translateY(-3px);}
+  .opt:active{transform:translateY(1px);}
+  .opt.correct{
+    background:linear-gradient(180deg, #c8e6c9, #66bb6a);
+    color:#1b5e20; border-color:transparent;
+    box-shadow:0 4px 0 #2e7d32, 0 8px 16px rgba(102,187,106,.4), inset 0 2px 0 rgba(255,255,255,.5);
+    animation:pop .4s cubic-bezier(.34,1.56,.64,1);
+  }
+  .opt.wrong{
+    background:linear-gradient(180deg, #fca5a5, #f87171);
+    color:#7f1d1d; border-color:transparent;
+    box-shadow:0 4px 0 #dc2626, 0 8px 16px rgba(248,113,113,.4);
+    animation:shake .4s;
+  }
+  @keyframes pop{0%{transform:scale(.9);} 60%{transform:scale(1.08);} 100%{transform:scale(1);}}
+  @keyframes shake{0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);}}
+  .fb{margin-top:10px; font-size:15px; min-height:22px; text-align:center; font-weight:700; color:var(--text2);}
+
+  /* Дом буквы */
+  .letter-house{
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border:4px solid var(--wood2);
+    border-radius:20px;
+    padding:20px; text-align:center;
+    position:relative;
+    box-shadow:0 6px 0 rgba(184,137,78,.3), 0 12px 24px rgba(184,137,78,.2);
+  }
+  .letter-house::before{
+    content:""; position:absolute; top:-16px; left:50%; transform:translateX(-50%);
+    width:80%; height:20px;
+    background:repeating-linear-gradient(90deg, var(--wood1) 0 12px, var(--brick1) 12px 24px);
+    border-radius:10px 10px 0 0;
+  }
+
+  /* Слоги */
+  .syllables-row{
+    display:flex; gap:10px; justify-content:center; flex-wrap:wrap;
+    margin:16px 0;
+  }
+  .syl-card{
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border:3px solid rgba(93,64,55,.2);
+    border-radius:20px; padding:16px 22px;
+    font-size:38px; font-weight:900; color:var(--roof3);
+    cursor:pointer; font-family:inherit;
+    transition:all .25s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 5px 0 rgba(93,64,55,.2), 0 10px 20px rgba(93,64,55,.15), inset 0 3px 0 rgba(255,255,255,.9);
+    min-width:90px;
+    text-align:center;
+  }
+  .syl-card .d-hi{
+    color:var(--brick2); font-size:42px;
+    text-shadow:0 0 8px rgba(198,40,40,.4);
+  }
+  .syl-card:hover{transform:translateY(-4px);}
+  .syl-card.active{
+    background:linear-gradient(180deg, #ffe082, var(--wood1));
+    color:var(--roof3);
+    box-shadow:0 5px 0 var(--roof3), 0 10px 20px rgba(215,168,110,.5);
+    transform:scale(1.08);
+  }
+  .syl-card.done{
+    background:linear-gradient(180deg, #ffcc80, var(--brick1));
+    color:#5a1f00;
+    box-shadow:0 5px 0 var(--brick3), 0 10px 20px rgba(229,115,115,.4);
+  }
+
+  /* Карточки слов */
+  .word-cards{
+    display:grid; gap:14px;
+    grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));
+  }
+  .word-card{
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border:3px solid rgba(93,64,55,.2);
+    border-radius:24px; padding:16px; text-align:center;
+    cursor:pointer; transition:all .25s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 6px 0 rgba(93,64,55,.2), 0 12px 24px rgba(93,64,55,.15), inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .word-card:hover{transform:translateY(-4px);}
+  .word-card .em{font-size:52px;}
+  .word-card .word{
+    font-size:22px; font-weight:900; color:var(--roof3);
+    margin:8px 0 4px;
+    letter-spacing:1px;
+  }
+  .word-card .word .d-hi{
+    color:var(--brick2); font-size:24px;
+    text-shadow:0 0 8px rgba(198,40,40,.4);
+  }
+  .word-card .syls{
+    font-size:14px; color:var(--text2); font-weight:700;
+  }
+
+  /* Позиция буквы */
+  .word-position{
+    display:flex; justify-content:center; gap:6px; margin:16px 0;
+  }
+  .letter-box{
+    width:56px; height:56px;
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border:3px solid rgba(93,64,55,.2);
+    border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:28px; font-weight:900; color:var(--text);
+    box-shadow:inset 0 3px 0 rgba(255,255,255,.9), 0 3px 0 rgba(93,64,55,.15);
+  }
+  .letter-box.d-letter{
+    background:linear-gradient(180deg, #ffcc80, var(--brick1));
+    color:#5a1f00;
+    border-color:var(--brick3);
+    box-shadow:0 3px 0 var(--brick3), 0 6px 12px rgba(229,115,115,.4), inset 0 3px 0 rgba(255,255,255,.5);
+    animation:pop .4s;
+  }
+
+  /* Чтение */
+  .sentence-reader{
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border:3px solid rgba(93,64,55,.2);
+    border-radius:24px; padding:24px;
+    text-align:center;
+    box-shadow:0 6px 0 rgba(93,64,55,.15), 0 12px 24px rgba(93,64,55,.12), inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .sentence-reader .pic{font-size:80px; margin-bottom:8px;}
+  .sentence-reader .sentence{
+    font-size:26px; font-weight:900; line-height:1.5;
+    color:var(--text); margin:12px 0;
+  }
+  .sentence-reader .word{
+    display:inline-block; padding:2px 8px; margin:2px;
+    border-radius:10px; cursor:pointer; transition:all .2s;
+    background:rgba(93,64,55,.05);
+  }
+  .sentence-reader .word .d-hi{color:var(--brick2);}
+  .sentence-reader .word:hover{background:var(--wood1); color:#fff;}
+  .sentence-reader .word.read{
+    background:linear-gradient(180deg, #ffcc80, var(--brick1));
+    color:#5a1f00;
+  }
+
+  /* Сборка */
+  .build-slots{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:16px 0; min-height:56px;}
+  .build-slot{
+    background:rgba(93,64,55,.08);
+    border:3px dashed rgba(93,64,55,.35);
+    border-radius:14px; padding:8px 16px;
+    font-size:22px; font-weight:900;
+    min-width:60px;
+    display:flex; align-items:center; justify-content:center;
+    transition:all .2s;
+    color:var(--text2);
+  }
+  .build-slot.filled{
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border-style:solid; border-color:var(--wood2);
+    color:var(--roof3);
+    box-shadow:0 3px 0 rgba(93,64,55,.15);
+  }
+  .letter-pool{display:flex; gap:8px; justify-content:center; flex-wrap:wrap;}
+  .letter-pool button{
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border:3px solid rgba(93,64,55,.2);
+    border-radius:14px; padding:10px 16px;
+    font-size:22px; font-weight:900; color:var(--roof3);
+    cursor:pointer; font-family:inherit;
+    box-shadow:0 3px 0 rgba(93,64,55,.2), inset 0 2px 0 rgba(255,255,255,.9);
+    transition:all .15s;
+    min-width:50px;
+  }
+  .letter-pool button:hover{transform:translateY(-2px);}
+  .letter-pool button.used{opacity:.3; pointer-events:none;}
+
+  /* Трассировка */
+  .trace-svg{
+    width:100%; height:240px; background:rgba(255,255,255,.7);
+    border-radius:16px; touch-action:none;
+    border:3px dashed rgba(93,64,55,.3);
+  }
+  .draw-canvas{
+    width:100%; height:240px;
+    background:rgba(255,255,255,.7);
+    border:3px dashed rgba(93,64,55,.3);
+    border-radius:16px; touch-action:none; cursor:crosshair;
+  }
+
+  /* Раскраска */
+  .paint-area{text-align:center; padding:20px;}
+  .paint-letter{
+    font-size:160px; font-weight:900;
+    color:#ddd; line-height:1;
+    transition:color .3s, text-shadow .3s;
+    user-select:none;
+  }
+  .color-picker{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px;}
+  .color-dot{
+    width:44px; height:44px; border-radius:50%;
+    cursor:pointer; border:3px solid #fff;
+    box-shadow:0 3px 0 rgba(93,64,55,.25), 0 6px 12px rgba(0,0,0,.15);
+    transition:all .2s;
+  }
+  .color-dot:hover{transform:scale(1.15);}
+  .color-dot.selected{border-color:var(--roof3); transform:scale(1.15); box-shadow:0 0 0 3px var(--cream), 0 4px 12px rgba(184,137,78,.5);}
+
+  /* Ловля */
+  .catch-area{
+    position:relative; height:300px; overflow:hidden;
+    background:linear-gradient(180deg, var(--sky), var(--cream2));
+    border-radius:20px;
+    border:3px solid rgba(93,64,55,.2);
+    box-shadow:inset 0 0 30px rgba(93,64,55,.1);
+  }
+  .catch-target{
+    position:absolute; top:10px; left:50%; transform:translateX(-50%);
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    padding:6px 16px; border-radius:16px;
+    font-weight:900; font-size:18px;
+    box-shadow:0 4px 8px rgba(0,0,0,.15);
+    z-index:5;
+    color:var(--roof3);
+  }
+  .falling{
+    position:absolute; top:-50px;
+    width:52px; height:52px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; font-weight:900;
+    cursor:pointer;
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border:3px solid rgba(93,64,55,.2);
+    box-shadow:0 4px 8px rgba(0,0,0,.15), inset 0 2px 0 rgba(255,255,255,.9);
+    transition:transform .15s;
+  }
+  .falling:hover{transform:scale(1.1);}
+  .falling.is-d{
+    background:linear-gradient(180deg, #ffcc80, var(--brick1));
+    color:#5a1f00;
+    border-color:var(--brick3);
+  }
+  .falling.caught{opacity:0; pointer-events:none; transform:scale(1.5); transition:all .3s;}
+
+  /* Награды */
+  .badge-grid{
+    display:grid; gap:14px;
+    grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));
+  }
+  .badge{
+    background:linear-gradient(180deg, #fff, var(--cream2));
+    border:3px solid rgba(93,64,55,.2);
+    border-radius:22px; padding:14px; text-align:center;
+    opacity:.4; filter:grayscale(.8);
+    transition:all .3s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 5px 0 rgba(93,64,55,.15), 0 10px 20px rgba(93,64,55,.1), inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .badge.earned{
+    opacity:1; filter:none;
+    background:linear-gradient(180deg, #ffcc80, var(--wood1));
+    border-color:var(--roof3);
+    box-shadow:0 5px 0 var(--roof3), 0 12px 24px rgba(215,168,110,.5), inset 0 3px 0 rgba(255,255,255,.5);
+  }
+  .badge .icon{font-size:44px;}
+  .badge .title{font-size:13px; margin-top:6px; font-weight:800; color:var(--text);}
+
+  /* Подсказки */
+  .hint-box{
+    background:linear-gradient(180deg, rgba(215,168,110,.3), rgba(215,168,110,.15));
+    border-left:5px solid var(--wood1);
+    padding:10px 14px; border-radius:14px;
+    font-size:14px; color:var(--text); margin:10px 0;
+    font-weight:600;
+  }
+  .note-box{
+    background:linear-gradient(180deg, rgba(229,115,115,.2), rgba(229,115,115,.08));
+    border-left:5px solid var(--brick1);
+    padding:12px 14px; border-radius:14px;
+    font-size:14px; color:var(--text); margin:12px 0;
+    font-weight:600; line-height:1.5;
+  }
+
+  @media (max-width:520px){
+    header h1{font-size:18px;}
+    nav{top:auto; position:relative;}
+    .big-letter-display{font-size:130px;}
+    .big-letter-display .low{font-size:80px;}
+    .sentence-reader .sentence{font-size:20px;}
+    .letter-box{width:44px; height:44px; font-size:22px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="house">🏠</span> Буква Д <span class="house">🏠</span></h1>
+  <div class="heroes">🐻 <b>Гайк</b> и 🐰 <b>Моне</b> учат букву Д</div>
+  <div class="hud">
+    <div class="chip" id="hudPoints">🏠 Очки: 0</div>
+    <div class="chip" id="hudTasks">✅ Заданий: 0</div>
+    <div class="chip" id="hudLevel">🎓 Уровень: 1</div>
+  </div>
+  <div class="path-progress"><div id="pathFill">0%</div></div>
+</header>
+
+<nav id="nav"></nav>
+
+<main>
+
+<!-- 1. ЗНАКОМСТВО -->
+<section id="sec-intro" class="active">
+  <h2>👋 Знакомься — буква Д</h2>
+  <p class="sub">Пятая буква алфавита! Она согласная и звонкая, как стук дятла.</p>
+  <div class="letter-house">
+    <div class="big-letter-display">Д<span class="low">д</span></div>
+    <div class="character">
+      <div class="avatar gayk">🐻</div>
+      <div class="bubble"><b>Гайк:</b> Это буква <b>Д</b>! Заглавная — большая, строчная — маленькая. Она согласная, бывает твёрдой и мягкой.</div>
+    </div>
+    <div class="character mone-bubble">
+      <div class="avatar mone">🐰</div>
+      <div class="bubble"><b>Моне:</b> Произнеси: <b>«Д-д-д»</b> — как будто стучит <b>дятел</b>! 🪶 Или капает <b>дождь</b>! 🌧️</div>
+    </div>
+  </div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn" onclick="speak('Д'); completeTask('sound');">🔊 Спеть Д</button>
+    <button class="btn brick" onclick="completeTask('intro');">✅ Запомнил!</button>
+  </div>
+  <div class="fb" id="introFb"></div>
+</section>
+
+<!-- 2. ЗВУК -->
+<section id="sec-sound">
+  <h2>🔔 Звук Д</h2>
+  <p class="sub">Буква Д звучит по-разному. Послушай и повтори!</p>
+  <div id="soundGame"></div>
+</section>
+
+<!-- 3. ФОРМА -->
+<section id="sec-shape">
+  <h2>🔷 Форма буквы Д</h2>
+  <p class="sub">Заглавная Д — как домик: крыша сверху и две ножки внизу.</p>
+  <div class="letter-house">
+    <div style="font-size:140px; font-weight:900; color:var(--roof3); line-height:1; text-shadow:0 4px 0 rgba(255,255,255,.9), 0 8px 20px rgba(184,137,78,.4);">Д</div>
+    <div class="hint-box" style="text-align:left;">
+      🏠 <b>Крыша</b> — широкая перекладинка сверху<br>
+      📏 <b>Левая ножка</b> — вертикальная палочка<br>
+      📏 <b>Правая ножка</b> — вертикальная палочка<br>
+      ➖ Похожа на домик!
+    </div>
+    <div style="font-size:100px; font-weight:900; color:var(--wood2); line-height:1; text-shadow:0 4px 0 rgba(255,255,255,.9);">д</div>
+    <div class="hint-box" style="text-align:left;">
+      Строчная <b>д</b> — круглая с хвостиками сверху и снизу.
+    </div>
+  </div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn brick" onclick="completeTask('shape');">✅ Я вижу форму!</button>
+  </div>
+</section>
+
+<!-- 4. ЗАГЛАВНАЯ/СТРОЧНАЯ -->
+<section id="sec-case">
+  <h2>🅳 Заглавная и строчная</h2>
+  <p class="sub">Найди пару: большая Д — маленькая д.</p>
+  <div id="caseGame"></div>
+</section>
+
+<!-- 5. ОБВОДИЛКА -->
+<section id="sec-trace">
+  <h2>✏️ Обведи букву Д</h2>
+  <p class="sub">Проведи пальцем по контуру — как будто рисуешь домик!</p>
+  <svg viewBox="0 0 400 260" class="trace-svg" id="traceSvg">
+    <text id="traceLetter" x="200" y="210" text-anchor="middle" font-size="220" font-family="Georgia, serif" font-weight="900" fill="none" stroke="rgba(184,137,78,.3)" stroke-width="14" stroke-linejoin="round">Д</text>
+    <path id="tracePath" fill="none" stroke="#8d6234" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <div class="center" style="margin-top:12px;">
+    <button class="btn ghost" onclick="clearTrace()">Стереть</button>
+    <button class="btn" onclick="completeTask('trace');">✅ Готово</button>
+  </div>
+  <div class="fb" id="traceFb"></div>
+</section>
+
+<!-- 6. НАЙДИ Д -->
+<section id="sec-find">
+  <h2>🔍 Найди букву Д</h2>
+  <p class="sub">Среди других букв найди все Д!</p>
+  <div id="findGame"></div>
+</section>
+
+<!-- 7. МЕСТО В СЛОВЕ -->
+<section id="sec-position">
+  <h2>📍 Где спряталась Д?</h2>
+  <p class="sub">Д может быть в начале, в середине или в конце слова.</p>
+  <div id="positionGame"></div>
+</section>
+
+<!-- 8. СЛОГИ С Д -->
+<section id="sec-syllables">
+  <h2>📖 Читаем слоги с Д</h2>
+  <p class="sub">Согласная Д + гласная = слог! Нажми, чтобы услышать.</p>
+  <div id="syllableGame"></div>
+</section>
+
+<!-- 9. СЛОВА С Д -->
+<section id="sec-words">
+  <h2>📚 Слова с буквой Д</h2>
+  <p class="sub">Нажимай на слова, чтобы услышать. Буква Д подсвечена.</p>
+  <div class="word-cards" id="wordCards"></div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn brick" onclick="completeTask('words');">✅ Я прочитал!</button>
+  </div>
+</section>
+
+<!-- 10. ЧИТАЕМ ПРЕДЛОЖЕНИЯ -->
+<section id="sec-sentences">
+  <h2>🐢 Читаем предложения</h2>
+  <p class="sub">Нажимай на слова по порядку и читай вслух.</p>
+  <div id="sentenceGame"></div>
+</section>
+
+<!-- 11. СОБЕРИ СЛОВО -->
+<section id="sec-build">
+  <h2>🧩 Собери слово с Д</h2>
+  <p class="sub">Расставь буквы по порядку.</p>
+  <div id="buildGame"></div>
+</section>
+
+<!-- 12. ЛОВЛЯ Д -->
+<section id="sec-catch">
+  <h2>🎯 Ловля буквы Д</h2>
+  <p class="sub">Ловите только буквы Д! Остальные пропускай.</p>
+  <div class="catch-area" id="catchArea">
+    <div class="catch-target">Лови: Д</div>
+  </div>
+  <div class="center" style="margin-top:12px;">
+    <button class="btn" onclick="startCatch()">🚀 Начать</button>
+  </div>
+  <div class="fb" id="catchFb"></div>
+</section>
+
+<!-- 13. ПИШЕМ Д -->
+<section id="sec-write">
+  <h2>🖌️ Пишем букву Д</h2>
+  <p class="sub">Напиши букву Д пальцем или мышкой.</p>
+  <canvas class="draw-canvas" id="writeCanvas"></canvas>
+  <div class="center" style="margin-top:12px;">
+    <button class="btn ghost" onclick="clearWrite()">Стереть</button>
+    <button class="btn brick" onclick="completeTask('write');">✅ Готово</button>
+  </div>
+</section>
+
+<!-- 14. РАСКРАСЬ Д -->
+<section id="sec-paint">
+  <h2>🎨 Раскрась букву Д</h2>
+  <p class="sub">Выбери цвет — буква Д оживёт!</p>
+  <div class="paint-area">
+    <div class="paint-letter" id="paintLetter">Д</div>
+    <div class="color-picker" id="colorPicker"></div>
+  </div>
+</section>
+
+<!-- 15. НАГРАДЫ -->
+<section id="sec-badges">
+  <h2>🏅 Награды за букву Д</h2>
+  <p class="sub">Собери все награды — стань мастером буквы Д!</p>
+  <div class="badge-grid" id="badgeGrid"></div>
+  <div class="center" style="margin-top:20px;">
+    <button class="btn ghost" onclick="resetAll()">Начать заново</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* ==================== ДАННЫЕ ==================== */
+const WORDS_D = [
+  {w:'ДОМ',syls:['ДОМ'],em:'🏠',pos:'start'},
+  {w:'ДВЕРЬ',syls:['ДВЕРЬ'],em:'🚪',pos:'start'},
+  {w:'ДОЖДЬ',syls:['ДОЖДЬ'],em:'🌧️',pos:'start'},
+  {w:'ДЯТЕЛ',syls:['ДЯ','ТЕЛ'],em:'🪶',pos:'start'},
+  {w:'ДЕРЕВО',syls:['ДЕ','РЕ','ВО'],em:'🌳',pos:'start'},
+  {w:'ДРУГ',syls:['ДРУГ'],em:'👦',pos:'start'},
+  {w:'ДОРОГА',syls:['ДО','РО','ГА'],em:'🛣️',pos:'start'},
+  {w:'ДЕД',syls:['ДЕД'],em:'👴',pos:'start'},
+  {w:'ДУДКА',syls:['ДУД','КА'],em:'🎺',pos:'start'},
+  {w:'ДЫНЯ',syls:['ДЫ','НЯ'],em:'🍈',pos:'start'},
+  {w:'ДИВАН',syls:['ДИ','ВАН'],em:'🛋️',pos:'start'},
+  {w:'ДЕЛЬФИН',syls:['ДЕЛЬ','ФИН'],em:'🐬',pos:'start'},
+  {w:'ДОКТОР',syls:['ДОК','ТОР'],em:'👨‍⚕️',pos:'start'},
+  {w:'ДЕВОЧКА',syls:['ДЕ','ВОЧ','КА'],em:'👧',pos:'start'},
+  {w:'ДОСКА',syls:['ДОС','КА'],em:'📋',pos:'start'},
+  {w:'ДОЖДИК',syls:['ДОЖ','ДИК'],em:'💧',pos:'start'},
+  {w:'ДРАКОН',syls:['ДРА','КОН'],em:'🐉',pos:'start'},
+  {w:'ДОМИК',syls:['ДО','МИК'],em:'🏡',pos:'start'},
+  {w:'ДУБ',syls:['ДУБ'],em:'🌳',pos:'start'},
+  {w:'ДОРОЖКА',syls:['ДО','РОЖ','КА'],em:'🛤️',pos:'start'},
+  {w:'САД',syls:['САД'],em:'🌷',pos:'end'},
+  {w:'ВИД',syls:['ВИД'],em:'👀',pos:'end'},
+  {w:'ВКЛАД',syls:['ВКЛАД'],em:'💰',pos:'end'},
+  {w:'ГОРОД',syls:['ГО','РОД'],em:'🏙️',pos:'end'},
+  {w:'МЕДВЕДЬ',syls:['МЕД','ВЕДЬ'],em:'🐻',pos:'middle'},
+  {w:'КОНФЕТА',syls:['КОН','ФЕ','ТА'],em:'🍬',pos:'middle'},
+  {w:'ПОГОДА',syls:['ПО','ГО','ДА'],em:'☁️',pos:'middle'},
+  {w:'СВОБОДА',syls:['СВО','БО','ДА'],em:'🕊️',pos:'middle'},
+  {w:'ЛОШАДЬ',syls:['ЛО','ШАДЬ'],em:'🐴',pos:'middle'},
+  {w:'ТЕТРАДЬ',syls:['ТЕТ','РАДЬ'],em:'📓',pos:'middle'},
+];
+
+/* Слоги с Д */
+const SYL_D = ['ДА','ДО','ДУ','ДЫ','ДИ','ДЕ','ДЁ','ДЯ','ДЮ','ДЭ'];
+
+/* Предложения с Д */
+const SENTENCES = [
+  {pic:'🏠',words:['ДОМ','СТОИТ','У','ДОРОГИ']},
+  {pic:'🪶',words:['ДЯТЕЛ','СТУЧИТ','ПО','ДЕРЕВУ']},
+  {pic:'👴',words:['ДЕД','ИГРАЕТ','НА','ДУДКЕ']},
+  {pic:'🌧️',words:['ИДЁТ','ТЁПЛЫЙ','ДОЖДЬ']},
+  {pic:'👦',words:['У','ГАЙКА','ЕСТЬ','ДРУГ']},
+  {pic:'🐬',words:['ДЕЛЬФИН','ПЛЫВЁТ','В','МОРЕ']},
+  {pic:'🐉',words:['ДРАКОН','ЛЕТИТ','НАД','ГОРОДОМ']},
+  {pic:'🍈',words:['НА','СТОЛЕ','ЛЕЖИТ','ДЫНЯ']},
+  {pic:'👨‍⚕️',words:['ДОКТОР','ЛЕЧИТ','ДЕТЕЙ']},
+  {pic:'🌳',words:['В','САДУ','РАСТЁТ','ДУБ']},
+];
+
+/* Звуковые ситуации */
+const SOUNDS = [
+  {s:'Д',desc:'Согласная буква Д',icon:'🔤'},
+  {s:'ТУК-ТУК',desc:'Как стучит дятел',icon:'🪶'},
+  {s:'КАП-КАП',desc:'Как капает дождь',icon:'🌧️'},
+  {s:'ДУ-ДУ',desc:'Как играет дудка',icon:'🎺'},
+  {s:'ДИНЬ-ДИНЬ',desc:'Как звенит звоночек',icon:'🔔'},
+  {s:'ДА!',desc:'Как отвечаем',icon:'✅'},
+];
+
+/* ==================== ПРОГРЕСС ==================== */
+const KEY = 'letter_d_v1';
+const DEFAULT = {tasks:{}, points:0, badges:{}, catchScore:0};
+let P = load();
+function load(){
+  try{
+    const r = localStorage.getItem(KEY);
+    if(r){ return Object.assign({}, DEFAULT, JSON.parse(r)); }
+  }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT));
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(P)); }catch(e){} }
+
+function completeTask(name){
+  if(!P.tasks[name]){
+    P.tasks[name] = true;
+    P.points += 5;
+    addPoints(0);
+    save();
+    checkBadges();
+    document.querySelectorAll('.fb').forEach(f=>{ if(!f.textContent) f.textContent = '✅ Молодец!'; });
+  }
+  updateHUD();
+}
+function addPoints(n=1){
+  P.points += n;
+  save();
+  updateHUD();
+  checkBadges();
+}
+function earnBadge(id,title,icon){
+  if(!P.badges[id]){ P.badges[id]={title,icon}; renderBadges(); save(); }
+}
+function updateHUD(){
+  document.getElementById('hudPoints').textContent = `🏠 Очки: ${P.points}`;
+  const taskCount = Object.keys(P.tasks).length;
+  document.getElementById('hudTasks').textContent = `✅ Заданий: ${taskCount}`;
+  const level = Math.min(5, 1 + Math.floor(P.points/20));
+  document.getElementById('hudLevel').textContent = `🎓 Уровень: ${level}`;
+  const max = 100;
+  const pct = Math.min(100, Math.round(P.points/max*100));
+  const fill = document.getElementById('pathFill');
+  fill.style.width = pct + '%';
+  fill.textContent = pct > 10 ? pct+'%' : '';
+}
+function checkBadges(){
+  const t = Object.keys(P.tasks).length;
+  if(t>=1) earnBadge('start','Первый шаг','👣');
+  if(t>=3) earnBadge('three','3 задания','🥉');
+  if(t>=7) earnBadge('seven','7 заданий','🥈');
+  if(t>=12) earnBadge('twelve','12 заданий','🥇');
+  if(P.points>=30) earnBadge('p30','30 очков','⭐');
+  if(P.points>=60) earnBadge('p60','60 очков','🌟');
+  if(P.points>=100) earnBadge('p100','100 очков','✨');
+  if(P.catchScore>=10) earnBadge('catch10','Ловкач','🎯');
+  if(P.tasks.syllables && P.tasks.words) earnBadge('reader','Читатель','📖');
+  if(P.tasks.trace && P.tasks.write) earnBadge('writer','Писатель','✏️');
+  if(P.tasks.sound && P.tasks.intro) earnBadge('singer','Певец','🎵');
+  if(t >= Object.keys(DEFAULT.tasks).length + 8) earnBadge('master','Мастер Д','🏆');
+}
+
+/* ==================== НАВИГАЦИЯ ==================== */
+const SECTIONS = [
+  ['intro','👋 Знакомство'],
+  ['sound','🔔 Звук'],
+  ['shape','🔷 Форма'],
+  ['case','🅳 Пара'],
+  ['trace','✏️ Обведи'],
+  ['find','🔍 Найди'],
+  ['position','📍 Место'],
+  ['syllables','📖 Слоги'],
+  ['words','📚 Слова'],
+  ['sentences','🐢 Предложения'],
+  ['build','🧩 Собери'],
+  ['catch','🎯 Ловля'],
+  ['write','🖌️ Пиши'],
+  ['paint','🎨 Раскрась'],
+  ['badges','🏅 Награды'],
+];
+function buildNav(){
+  const n = document.getElementById('nav');
+  n.innerHTML = '';
+  SECTIONS.forEach(([id,label],i)=>{
+    const b = document.createElement('button');
+    b.textContent = label;
+    b.onclick = ()=>show('sec-'+id, b);
+    if(i===0) b.classList.add('active');
+    n.appendChild(b);
+  });
+}
+function show(id, btn){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+/* ==================== 2. ЗВУК ==================== */
+function renderSound(){
+  const c = document.getElementById('soundGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character"><div class="avatar gayk">🐻</div><div class="bubble"><b>Гайк:</b> Д — согласная буква. Она бывает твёрдой (ДА) и мягкой (ДИ). Нажимай и слушай!</div></div>
+      <div class="word-cards" id="soundCards"></div>
+    </div>
+  `;
+  const cards = document.getElementById('soundCards');
+  SOUNDS.forEach(s=>{
+    const el = document.createElement('div');
+    el.className = 'word-card';
+    el.innerHTML = `<div class="em">${s.icon}</div>
+      <div class="word">${s.s}</div>
+      <div class="syls">${s.desc}</div>`;
+    el.onclick = ()=>{
+      speak(s.s);
+      addPoints(1);
+      completeTask('sound');
+    };
+    cards.appendChild(el);
+  });
+}
+
+/* ==================== 4. ПАРА ==================== */
+function newCaseGame(){
+  const opts = shuffle([
+    {ch:'Д', isD:true},
+    {ch:'д', isD:true},
+    {ch:'А', isD:false},
+    {ch:'т', isD:false},
+    {ch:'Б', isD:false},
+    {ch:'о', isD:false},
+  ]);
+  const c = document.getElementById('caseGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character mone-bubble"><div class="avatar mone">🐰</div><div class="bubble"><b>Моне:</b> Найди <b>заглавную Д</b> (большую)!</div></div>
+      <div class="options" id="caseOpts"></div>
+      <div class="fb" id="caseFb"></div>
+    </div>
+    <div class="center"><button class="btn ghost" onclick="newCaseGame()">Ещё</button></div>
+  `;
+  const optsEl = document.getElementById('caseOpts');
+  opts.forEach(o=>{
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = o.ch;
+    b.style.fontSize = '28px';
+    b.onclick = ()=>{
+      const ok = o.ch === 'Д';
+      b.classList.add(ok?'correct':'wrong');
+      if(ok){
+        document.getElementById('caseFb').textContent = '🎉 Верно!';
+        speak('Д');
+        addPoints(2);
+        completeTask('case');
+        setTimeout(newCaseGame, 1200);
+      }else{
+        document.getElementById('caseFb').textContent = '❌ Это не заглавная Д.';
+      }
+    };
+    optsEl.appendChild(b);
+  });
+}
+
+/* ==================== 5. ОБВОДИЛКА ==================== */
+let traceReady = false;
+function setupTrace(){
+  const svg = document.getElementById('traceSvg');
+  const path = document.getElementById('tracePath');
+  if(traceReady) return;
+  traceReady = true;
+  let drawing = false, d = '';
+  const pt = e=>{
+    const r = svg.getBoundingClientRect();
+    const t = e.touches? e.touches[0] : e;
+    return {x:(t.clientX-r.left)/r.width*400, y:(t.clientY-r.top)/r.height*260};
+  };
+  const start = e=>{ drawing=true; const q=pt(e); d=`M ${q.x} ${q.y}`; path.setAttribute('d', d); };
+  const move = e=>{ if(!drawing) return; e.preventDefault(); const q=pt(e); d+=` L ${q.x} ${q.y}`; path.setAttribute('d', d); };
+  const end = ()=>{
+    if(!drawing) return;
+    drawing=false;
+    if(d.length > 80){
+      document.getElementById('traceFb').textContent = '✏️ Здорово! Ты обвёл Д!';
+      addPoints(3);
+      completeTask('trace');
+    }
+  };
+  svg.addEventListener('mousedown', start);
+  svg.addEventListener('mousemove', move);
+  svg.addEventListener('mouseup', end);
+  svg.addEventListener('mouseleave', end);
+  svg.addEventListener('touchstart', start, {passive:false});
+  svg.addEventListener('touchmove', move, {passive:false});
+  svg.addEventListener('touchend', end);
+}
+function clearTrace(){ document.getElementById('tracePath')?.setAttribute('d',''); }
+
+/* ==================== 6. НАЙДИ Д ==================== */
+function newFindGame(){
+  const letters = ['Д','А','Б','Д','В','Г','Д','Е','Ж','Д','З','Д'];
+  const shuffled = shuffle(letters);
+  const c = document.getElementById('findGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character"><div class="avatar gayk">🐻</div><div class="bubble"><b>Гайк:</b> Нажми на <b>все буквы Д</b>! Их спряталось 5.</div></div>
+      <div class="options" id="findOpts" style="gap:8px;"></div>
+      <div class="fb" id="findFb">Найдено: 0 из 5</div>
+    </div>
+    <div class="center"><button class="btn ghost" onclick="newFindGame()">Новая сетка</button></div>
+  `;
+  let found = 0;
+  const opts = document.getElementById('findOpts');
+  shuffled.forEach(ch=>{
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = ch;
+    b.style.fontSize = '30px';
+    b.style.minWidth = '60px';
+    b.onclick = ()=>{
+      if(b.dataset.done) return;
+      if(ch === 'Д'){
+        b.classList.add('correct');
+        b.dataset.done = '1';
+        found++;
+        speak('Д');
+        addPoints(2);
+        document.getElementById('findFb').textContent = `Найдено: ${found} из 5`;
+        if(found >= 5){
+          document.getElementById('findFb').textContent = '🎉 Все буквы Д найдены!';
+          completeTask('find');
+          earnBadge('find','Искатель','🔍');
+          setTimeout(newFindGame, 1500);
+        }
+      }else{
+        b.classList.add('wrong');
+        setTimeout(()=>b.classList.remove('wrong'), 500);
+      }
+    };
+    opts.appendChild(b);
+  });
+}
+
+/* ==================== 7. МЕСТО ==================== */
+function newPositionGame(){
+  const w = WORDS_D[Math.floor(Math.random()*WORDS_D.length)];
+  const letters = w.w.split('');
+  const c = document.getElementById('positionGame');
+  const options = [
+    {name:'в начале', key:'start', icon:'1️⃣'},
+    {name:'в середине', key:'middle', icon:'2️⃣'},
+    {name:'в конце', key:'end', icon:'3️⃣'},
+  ];
+  c.innerHTML = `
+    <div class="task">
+      <div class="character mone-bubble"><div class="avatar mone">🐰</div><div class="bubble"><b>Моне:</b> Где в слове <b>${w.w}</b> ${w.em} спряталась буква <b>Д</b>?</div></div>
+      <div class="word-position" id="posLetters"></div>
+      <div class="options" id="posOpts"></div>
+      <div class="fb" id="posFb"></div>
+    </div>
+    <div class="center"><button class="btn ghost" onclick="newPositionGame()">Ещё слово</button></div>
+  `;
+  const posLetters = document.getElementById('posLetters');
+  letters.forEach(ch=>{
+    const el = document.createElement('div');
+    el.className = 'letter-box' + (ch === 'Д' ? ' d-letter' : '');
+    el.textContent = ch;
+    posLetters.appendChild(el);
+  });
+  const posOpts = document.getElementById('posOpts');
+  options.forEach(o=>{
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.style.fontSize = '16px';
+    b.innerHTML = `${o.icon} ${o.name}`;
+    b.onclick = ()=>{
+      const ok = o.key === w.pos;
+      b.classList.add(ok?'correct':'wrong');
+      if(ok){
+        document.getElementById('posFb').textContent = '🎉 Верно!';
+        speak(w.w);
+        addPoints(3);
+        completeTask('position');
+        setTimeout(newPositionGame, 1400);
+      }else{
+        document.getElementById('posFb').textContent = '❌ Посмотри внимательно на буквы.';
+      }
+    };
+    posOpts.appendChild(b);
+  });
+}
+
+/* ==================== 8. СЛОГИ ==================== */
+function renderSyllables(){
+  const c = document.getElementById('syllableGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character"><div class="avatar gayk">🐻</div><div class="bubble"><b>Гайк:</b> Д + гласная = слог! Нажимай и слушай.</div></div>
+      <div class="syllables-row" id="sylRow"></div>
+      <div class="fb" id="sylFb">Прочитано слогов: 0</div>
+    </div>
+    <div class="center" style="margin-top:12px;">
+      <button class="btn brick" onclick="completeTask('syllables');">✅ Я прочитал!</button>
+    </div>
+  `;
+  const row = document.getElementById('sylRow');
+  let count = 0;
+  SYL_D.forEach(syl=>{
+    const el = document.createElement('div');
+    el.className = 'syl-card';
+    el.innerHTML = syl.replace('Д','<span class="d-hi">Д</span>');
+    el.onclick = ()=>{
+      el.classList.add('active');
+      setTimeout(()=>el.classList.remove('active'), 500);
+      speak(syl);
+      count++;
+      document.getElementById('sylFb').textContent = `Прочитано слогов: ${count}`;
+      addPoints(1);
+    };
+    row.appendChild(el);
+  });
+}
+
+/* ==================== 9. СЛОВА ==================== */
+function renderWords(){
+  const g = document.getElementById('wordCards');
+  g.innerHTML = '';
+  WORDS_D.forEach(w=>{
+    const el = document.createElement('div');
+    el.className = 'word-card';
+    const wordHi = w.w.split('').map(ch=>ch==='Д'?'<span class="d-hi">Д</span>':ch).join('');
+    el.innerHTML = `<div class="em">${w.em}</div>
+      <div class="word">${wordHi}</div>
+      <div class="syls">${w.syls.join(' • ')}</div>`;
+    el.onclick = ()=>{
+      speak(w.w);
+      addPoints(1);
+      completeTask('words');
+    };
+    g.appendChild(el);
+  });
+}
+
+/* ==================== 10. ПРЕДЛОЖЕНИЯ ==================== */
+let sentState = null;
+function newSentence(){
+  const s = SENTENCES[Math.floor(Math.random()*SENTENCES.length)];
+  sentState = {s, idx:0};
+  const c = document.getElementById('sentenceGame');
+  c.innerHTML = `
+    <div class="sentence-reader">
+      <div class="pic">${s.pic}</div>
+      <div class="sentence" id="sentRow">
+        ${s.words.map((w,i)=>`<span class="word" data-i="${i}" data-w="${w}">${w}</span>`).join(' ')}
+      </div>
+      <div class="fb" id="sentFb">Нажимай слова по порядку.</div>
+    </div>
+    <div class="center" style="margin-top:14px;">
+      <button class="btn sun" onclick="readAll()">🔊 Прочитать всё</button>
+      <button class="btn ghost" onclick="newSentence()">Другое</button>
+    </div>
+  `;
+  c.querySelectorAll('#sentRow .word').forEach(el=>{
+    el.onclick = ()=>{
+      speak(el.dataset.w);
+      addPoints(1);
+      el.classList.add('read');
+      const i = +el.dataset.i;
+      if(i === sentState.idx){
+        sentState.idx++;
+        if(sentState.idx >= s.words.length){
+          document.getElementById('sentFb').textContent = '🎉 Предложение прочитано!';
+          completeTask('sentences');
+          addPoints(3);
+          setTimeout(newSentence, 2000);
+        }
+      }
+    };
+  });
+}
+function readAll(){
+  if(!sentState) return;
+  speak(sentState.s.words.join(' '));
+  document.querySelectorAll('#sentRow .word').forEach(el=>el.classList.add('read'));
+  completeTask('sentences');
+  addPoints(3);
+}
+
+/* ==================== 11. СОБЕРИ СЛОВО ==================== */
+let buildState = null;
+function newBuild(){
+  const pool = WORDS_D.filter(w=>w.w.length <= 6);
+  const target = pool[Math.floor(Math.random()*pool.length)];
+  buildState = {target, picked:[]};
+  const c = document.getElementById('buildGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character mone-bubble"><div class="avatar mone">🐰</div><div class="bubble"><b>Моне:</b> Собери слово по картинке: ${target.em}</div></div>
+      <div class="build-slots" id="buildSlots">
+        ${target.w.split('').map(()=>`<div class="build-slot"></div>`).join('')}
+      </div>
+      <div class="letter-pool" id="buildPool"></div>
+      <div class="fb" id="buildFb"></div>
+    </div>
+    <div class="center"><button class="btn ghost" onclick="newBuild()">Новое слово</button></div>
+  `;
+  const pool2 = document.getElementById('buildPool');
+  const letters = target.w.split('');
+  const distract = ['О','У','И'].filter(l=>!letters.includes(l)).slice(0,2);
+  shuffle([...letters, ...distract]).forEach(ch=>{
+    const b = document.createElement('button');
+    b.textContent = ch;
+    b.onclick = ()=>{
+      if(b.dataset.used) return;
+      b.dataset.used = '1';
+      b.classList.add('used');
+      const slot = [...document.querySelectorAll('#buildSlots .build-slot')].find(s=>!s.classList.contains('filled'));
+      if(!slot) return;
+      slot.textContent = ch;
+      slot.classList.add('filled');
+      buildState.picked.push(ch);
+      if(buildState.picked.length === target.w.length){
+        const built = buildState.picked.join('');
+        if(built === target.w){
+          document.getElementById('buildFb').textContent = '🎉 Правильно!';
+          speak(target.w);
+          addPoints(3);
+          completeTask('build');
+          earnBadge('build','Строитель','🧩');
+          setTimeout(newBuild, 1500);
+        }else{
+          document.getElementById('buildFb').textContent = `❌ Получилось «${built}». Попробуй ещё.`;
+          setTimeout(newBuild, 1400);
+        }
+      }
+    };
+    pool2.appendChild(b);
+  });
+}
+
+/* ==================== 12. ЛОВЛЯ ==================== */
+let catchTimer = null, catchScore = 0, catchActive = false;
+function startCatch(){
+  if(catchActive) return;
+  catchActive = true;
+  catchScore = 0;
+  document.getElementById('catchFb').textContent = 'Лови Д!';
+  const area = document.getElementById('catchArea');
+  area.querySelectorAll('.falling').forEach(f=>f.remove());
+  const loop = setInterval(()=>{
+    if(!catchActive){ clearInterval(loop); return; }
+    const isD = Math.random() < 0.4;
+    const ch = isD ? 'Д' : ['А','Б','В','Г','Е','Ж','З'][Math.floor(Math.random()*7)];
+    const el = document.createElement('div');
+    el.className = 'falling' + (isD ? ' is-d' : '');
+    el.textContent = ch;
+    el.style.left = (5 + Math.random()*80) + '%';
+    area.appendChild(el);
+    let top = -50;
+    const int = setInterval(()=>{
+      top += 2.5;
+      el.style.top = top + 'px';
+      if(top > area.clientHeight){
+        clearInterval(int);
+        if(el.parentNode) el.parentNode.removeChild(el);
+      }
+    }, 30);
+    el.onclick = ()=>{
+      clearInterval(int);
+      if(isD){
+        el.classList.add('caught');
+        catchScore++;
+        document.getElementById('catchFb').textContent = `Поймано: ${catchScore}`;
+        speak('Д');
+        addPoints(1);
+        P.catchScore = Math.max(P.catchScore, catchScore);
+        save();
+        checkBadges();
+        setTimeout(()=>el.remove(), 300);
+        if(catchScore >= 10){
+          catchActive = false;
+          document.getElementById('catchFb').textContent = '🎉 Отлично! Поймано 10!';
+          completeTask('catch');
+        }
+      }else{
+        el.style.background = '#fca5a5';
+        setTimeout(()=>el.remove(), 300);
+      }
+    };
+  }, 800);
+}
+
+/* ==================== 13. ПИШЕМ Д ==================== */
+let writeCtx = null, writeDrawing = false;
+function setupWrite(){
+  const c = document.getElementById('writeCanvas');
+  const r = c.getBoundingClientRect();
+  c.width = r.width; c.height = 240;
+  writeCtx = c.getContext('2d');
+  writeCtx.lineWidth = 10;
+  writeCtx.lineCap = 'round';
+  writeCtx.strokeStyle = '#8d6234';
+  writeCtx.shadowColor = '#8d6234';
+  writeCtx.shadowBlur = 8;
+  const pt = e=>{
+    const rr = c.getBoundingClientRect();
+    const t = e.touches? e.touches[0] : e;
+    return {x: t.clientX - rr.left, y: t.clientY - rr.top};
+  };
+  c.addEventListener('mousedown', e=>{ writeDrawing=true; const q=pt(e); writeCtx.beginPath(); writeCtx.moveTo(q.x,q.y); });
+  c.addEventListener('mousemove', e=>{ if(!writeDrawing) return; const q=pt(e); writeCtx.lineTo(q.x,q.y); writeCtx.stroke(); });
+  c.addEventListener('mouseup', ()=>writeDrawing=false);
+  c.addEventListener('mouseleave', ()=>writeDrawing=false);
+  c.addEventListener('touchstart', e=>{ e.preventDefault(); writeDrawing=true; const q=pt(e); writeCtx.beginPath(); writeCtx.moveTo(q.x,q.y); }, {passive:false});
+  c.addEventListener('touchmove', e=>{ e.preventDefault(); if(!writeDrawing) return; const q=pt(e); writeCtx.lineTo(q.x,q.y); writeCtx.stroke(); }, {passive:false});
+  c.addEventListener('touchend', ()=>writeDrawing=false);
+}
+function clearWrite(){ if(writeCtx){ const c=document.getElementById('writeCanvas'); writeCtx.clearRect(0,0,c.width,c.height); } }
+
+/* ==================== 14. РАСКРАСЬ ==================== */
+const PAINT_COLORS = ['#d7a86e','#b8894e','#8d6234','#e57373','#c62828','#8d6e63','#5d4037','#26a69a','#7e57c2'];
+function renderPaint(){
+  const picker = document.getElementById('colorPicker');
+  picker.innerHTML = '';
+  PAINT_COLORS.forEach(c=>{
+    const d = document.createElement('div');
+    d.className = 'color-dot';
+    d.style.background = c;
+    d.onclick = ()=>{
+      document.querySelectorAll('.color-dot').forEach(x=>x.classList.remove('selected'));
+      d.classList.add('selected');
+      const el = document.getElementById('paintLetter');
+      el.style.color = c;
+      el.style.textShadow = `0 4px 0 rgba(255,255,255,.9), 0 8px 20px ${c}66`;
+      speak('Д');
+      addPoints(2);
+      completeTask('paint');
+    };
+    picker.appendChild(d);
+  });
+}
+
+/* ==================== 15. НАГРАДЫ ==================== */
+const BADGES = [
+  {id:'start',t:'Первый шаг',i:'👣'},
+  {id:'three',t:'3 задания',i:'🥉'},
+  {id:'seven',t:'7 заданий',i:'🥈'},
+  {id:'twelve',t:'12 заданий',i:'🥇'},
+  {id:'p30',t:'30 очков',i:'⭐'},
+  {id:'p60',t:'60 очков',i:'🌟'},
+  {id:'p100',t:'100 очков',i:'✨'},
+  {id:'find',t:'Искатель',i:'🔍'},
+  {id:'catch10',t:'Ловкач',i:'🎯'},
+  {id:'build',t:'Строитель',i:'🧩'},
+  {id:'reader',t:'Читатель',i:'📖'},
+  {id:'writer',t:'Писатель',i:'✏️'},
+  {id:'singer',t:'Певец',i:'🎵'},
+  {id:'master',t:'Мастер Д',i:'🏆'},
+];
+function renderBadges(){
+  const g = document.getElementById('badgeGrid');
+  if(!g) return;
+  g.innerHTML = '';
+  BADGES.forEach(b=>{
+    const earned = !!P.badges[b.id];
+    const d = document.createElement('div');
+    d.className = 'badge' + (earned?' earned':'');
+    d.innerHTML = `<div class="icon">${b.i}</div><div class="title">${b.t}</div>`;
+    g.appendChild(d);
+  });
+}
+
+/* ==================== ОБЩЕЕ ==================== */
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function speak(text){
+  if('speechSynthesis' in window){
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ru-RU'; u.rate = 0.8; u.pitch = 1.15;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  }
+}
+function resetAll(){
+  if(!confirm('Начать заново с буквой Д?')) return;
+  P = JSON.parse(JSON.stringify(DEFAULT));
+  save();
+  updateHUD();
+  renderBadges();
+  newCaseGame();
+  newFindGame();
+  newPositionGame();
+  newSentence();
+  newBuild();
+}
+
+/* ==================== СТАРТ ==================== */
+function init(){
+  buildNav();
+  renderSound();
+  renderSyllables();
+  renderWords();
+  renderPaint();
+  renderBadges();
+  updateHUD();
+  setupTrace();
+  setupWrite();
+  newCaseGame();
+  newFindGame();
+  newPositionGame();
+  newSentence();
+  newBuild();
+}
+init();
+</script>
+</body>
+</html>

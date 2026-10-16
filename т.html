@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Буква Т — Гайк и Моне</title>
+<style>
+  :root{
+    --terra1:#ffccbc;--terra2:#ff8a65;--terra3:#e64a19;--terra4:#bf360c;
+    --tiger1:#ffcc80;--tiger2:#ffa726;--tiger3:#ef6c00;--tiger4:#e65100;
+    --teal1:#80cbc4;--teal2:#26a69a;--teal3:#00695c;
+    --cream:#fffaf5;--cream2:#ffe0b2;--cream-bg:#fff5ef;
+    --text:#2a1a10;--text2:#5a3a20;
+    --green:#66bb6a;--purple:#7e57c2;--pink:#f48fb1;--sky:#64b5f6;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0;}
+  body{
+    font-family:"Nunito","Comic Sans MS","Trebuchet MS",sans-serif;
+    background:linear-gradient(180deg, var(--terra1) 0%, var(--cream-bg) 40%, var(--cream) 100%);
+    background-attachment:fixed; color:var(--text);
+    min-height:100vh; padding-bottom:90px; overflow-x:hidden;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(circle 5px at 15% 20%, rgba(239,108,0,.4), transparent 70%),
+      radial-gradient(circle 4px at 75% 15%, rgba(255,138,101,.5), transparent 70%),
+      radial-gradient(circle 6px at 40% 55%, rgba(38,166,154,.5), transparent 70%),
+      radial-gradient(circle 5px at 85% 75%, rgba(255,167,38,.5), transparent 70%),
+      radial-gradient(circle 4px at 25% 85%, rgba(239,108,0,.45), transparent 70%),
+      radial-gradient(circle 5px at 60% 40%, rgba(255,138,101,.5), transparent 70%),
+      radial-gradient(circle 3px at 50% 10%, rgba(255,255,255,.85), transparent 70%),
+      radial-gradient(circle 3px at 90% 45%, rgba(38,166,154,.5), transparent 70%);
+    animation:tigerFloat 20s ease-in-out infinite alternate;
+  }
+  @keyframes tigerFloat{
+    from{transform:translate(0,0) rotate(0deg);}
+    to{transform:translate(20px,-20px) rotate(5deg);}
+  }
+  header, nav, main{position:relative; z-index:2;}
+  header{
+    padding:14px 16px 12px;
+    background:linear-gradient(180deg, rgba(255,250,245,.95), rgba(255,224,178,.85));
+    border-bottom:4px solid var(--tiger3);
+    box-shadow:0 8px 24px rgba(191,54,12,.25);
+    position:sticky; top:0; z-index:20; backdrop-filter:blur(10px);
+  }
+  header h1{
+    margin:0; font-size:22px; text-align:center; color:var(--terra4);
+    font-weight:900;
+    text-shadow:0 2px 0 rgba(255,255,255,.9), 0 4px 10px rgba(239,108,0,.4);
+    display:flex; align-items:center; justify-content:center; gap:10px;
+  }
+  header h1 .tiger{
+    font-size:32px; animation:tigerBounce 2s ease-in-out infinite; display:inline-block;
+  }
+  @keyframes tigerBounce{
+    0%,100%{transform:translateY(0) rotate(-8deg);}
+    50%{transform:translateY(-4px) rotate(8deg);}
+  }
+  header .heroes{font-size:13px; color:var(--text2); text-align:center; margin-top:4px; font-weight:700;}
+  header .heroes b{color:var(--terra4);}
+  .hud{display:flex; gap:8px; justify-content:center; margin-top:10px; flex-wrap:wrap;}
+  .hud .chip{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:2px solid rgba(191,54,12,.15);
+    border-radius:20px; padding:5px 14px; font-size:12px;
+    font-weight:800;
+    box-shadow:0 3px 0 rgba(191,54,12,.15), 0 6px 12px rgba(191,54,12,.12), inset 0 2px 0 rgba(255,255,255,.9);
+  }
+  .path-progress{
+    height:26px; background:linear-gradient(180deg, #ffddb8, #ffc890);
+    border-radius:14px; margin-top:10px; overflow:hidden;
+    box-shadow:inset 0 2px 4px rgba(0,0,0,.15);
+    position:relative; border:2px solid rgba(191,54,12,.2);
+  }
+  .path-progress > div{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, var(--tiger2), var(--teal2), var(--tiger2), var(--teal2));
+    background-size:200% 100%; border-radius:12px;
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.5), inset 0 -2px 0 rgba(0,0,0,.1);
+    transition:width .6s cubic-bezier(.34,1.56,.64,1);
+    animation:tigerShift 4s linear infinite;
+    position:relative; display:flex; align-items:center; justify-content:flex-end;
+    padding-right:8px; color:#fff; font-size:12px; font-weight:900;
+    text-shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+  .path-progress > div::after{
+    content:"🐯"; position:absolute; right:-4px; top:-1px; font-size:24px;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.2));
+  }
+  @keyframes tigerShift{from{background-position:0 0;} to{background-position:200% 0;}}
+  nav{
+    display:flex; flex-wrap:wrap; gap:6px; padding:12px; justify-content:center;
+    background:rgba(255,250,245,.75);
+    border-bottom:2px solid rgba(191,54,12,.1);
+    position:sticky; top:120px; z-index:19; backdrop-filter:blur(10px);
+  }
+  nav button{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:2px solid rgba(191,54,12,.15);
+    color:var(--text); padding:6px 12px; border-radius:18px;
+    font-size:12px; cursor:pointer; font-family:inherit; font-weight:800;
+    box-shadow:0 3px 0 rgba(191,54,12,.15), 0 5px 10px rgba(191,54,12,.1), inset 0 2px 0 rgba(255,255,255,.9);
+    transition:all .2s cubic-bezier(.34,1.56,.64,1);
+  }
+  nav button:hover{transform:translateY(-2px);}
+  nav button.active{
+    background:linear-gradient(180deg, var(--tiger1), var(--tiger2));
+    color:#fff; border-color:transparent;
+    box-shadow:0 3px 0 var(--tiger4), 0 6px 14px rgba(255,167,38,.5), inset 0 2px 0 rgba(255,255,255,.4);
+  }
+  main{padding:20px 16px; max-width:900px; margin:0 auto;}
+  section{display:none; animation:fadeIn .4s cubic-bezier(.34,1.56,.64,1);}
+  section.active{display:block;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(20px) scale(.98);} to{opacity:1; transform:none;}}
+  h2{font-size:22px; margin:0 0 6px; color:var(--terra4); font-weight:900; display:flex; align-items:center; gap:8px; text-shadow:0 2px 0 rgba(255,255,255,.8);}
+  .sub{color:var(--text2); font-size:14px; margin:0 0 16px; font-weight:600;}
+  .task{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(191,54,12,.15); border-radius:24px;
+    padding:18px; margin-bottom:16px;
+    box-shadow:0 6px 0 rgba(191,54,12,.12), 0 12px 24px rgba(191,54,12,.1), inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .task .q{font-size:18px; font-weight:800; margin-bottom:12px; text-align:center;}
+  .character{display:flex; align-items:flex-start; gap:10px; margin-bottom:14px;}
+  .character.mone-bubble{flex-direction:row-reverse;}
+  .character .avatar{
+    width:54px; height:54px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:32px; flex-shrink:0;
+    box-shadow:0 4px 0 rgba(0,0,0,.1), 0 8px 16px rgba(0,0,0,.15), inset 0 3px 0 rgba(255,255,255,.6), inset 0 -3px 8px rgba(0,0,0,.15);
+    animation:breathe 3s ease-in-out infinite;
+  }
+  .character .avatar.gayk{background:radial-gradient(circle at 35% 30%, #d9a878, #8b5a3c);}
+  .character .avatar.mone{background:radial-gradient(circle at 35% 30%, #f5f5f5, #c4c4c4);}
+  @keyframes breathe{0%,100%{transform:scale(1);} 50%{transform:scale(1.05) translateY(-3px);}}
+  .character .bubble{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:2px solid rgba(191,54,12,.15);
+    border-radius:20px 20px 20px 6px;
+    padding:12px 16px; font-size:15px; font-weight:600;
+    box-shadow:0 4px 10px rgba(191,54,12,.12);
+    line-height:1.5; flex:1;
+  }
+  .character.mone-bubble .bubble{border-radius:20px 20px 6px 20px;}
+  .character .bubble b{color:var(--terra4); font-weight:900;}
+  .big-letter-display{
+    text-align:center; padding:20px; font-size:180px; font-weight:900;
+    color:var(--terra4); line-height:1;
+    text-shadow:0 4px 0 rgba(255,255,255,.9), 0 8px 0 rgba(239,108,0,.4), 0 16px 30px rgba(191,54,12,.4);
+    animation:pulseBig 2s ease-in-out infinite; user-select:none;
+  }
+  .big-letter-display .low{color:var(--tiger3); font-size:100px;}
+  @keyframes pulseBig{0%,100%{transform:scale(1);} 50%{transform:scale(1.03);}}
+  .btn{
+    background:linear-gradient(180deg, var(--tiger1), var(--tiger2));
+    color:#3a1a00; border:none; padding:12px 24px;
+    border-radius:22px; font-size:15px; font-family:inherit;
+    font-weight:900; cursor:pointer; margin:4px;
+    box-shadow:0 5px 0 var(--tiger4), 0 10px 20px rgba(255,167,38,.4), inset 0 2px 0 rgba(255,255,255,.5);
+    transition:all .15s cubic-bezier(.34,1.56,.64,1);
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn:active{transform:translateY(3px);}
+  .btn.terra{
+    background:linear-gradient(180deg, var(--terra1), var(--terra2));
+    color:#fff;
+    box-shadow:0 5px 0 var(--terra4), 0 10px 20px rgba(230,74,25,.4), inset 0 2px 0 rgba(255,255,255,.3);
+    text-shadow:0 1px 2px rgba(0,0,0,.2);
+  }
+  .btn.teal{
+    background:linear-gradient(180deg, var(--teal1), var(--teal2));
+    color:#003a33;
+    box-shadow:0 5px 0 var(--teal3), 0 10px 20px rgba(38,166,154,.4), inset 0 2px 0 rgba(255,255,255,.4);
+  }
+  .btn.green{
+    background:linear-gradient(180deg, #a5d6a7, var(--green));
+    color:#1b5e20;
+    box-shadow:0 5px 0 #2e7d32, 0 10px 20px rgba(102,187,106,.4), inset 0 2px 0 rgba(255,255,255,.5);
+  }
+  .btn.ghost{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    color:var(--text); border:2px solid rgba(191,54,12,.2);
+    box-shadow:0 4px 0 rgba(191,54,12,.15), 0 8px 16px rgba(191,54,12,.1), inset 0 2px 0 rgba(255,255,255,.9);
+  }
+  .center{text-align:center;}
+  .options{display:flex; flex-wrap:wrap; gap:10px; justify-content:center;}
+  .opt{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(191,54,12,.15);
+    border-radius:18px; padding:12px 20px;
+    font-size:22px; font-weight:900; color:var(--terra4);
+    cursor:pointer; font-family:inherit; min-width:64px;
+    transition:all .2s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 4px 0 rgba(191,54,12,.15), 0 8px 16px rgba(191,54,12,.1), inset 0 2px 0 rgba(255,255,255,.9);
+  }
+  .opt:hover{transform:translateY(-3px);}
+  .opt.correct{
+    background:linear-gradient(180deg, #c8e6c9, var(--green));
+    color:#1b5e20; border-color:transparent;
+    box-shadow:0 4px 0 #2e7d32, 0 8px 16px rgba(102,187,106,.4), inset 0 2px 0 rgba(255,255,255,.5);
+    animation:pop .4s;
+  }
+  .opt.wrong{
+    background:linear-gradient(180deg, #fca5a5, #f87171);
+    color:#7f1d1d; border-color:transparent; animation:shake .4s;
+  }
+  @keyframes pop{0%{transform:scale(.9);} 60%{transform:scale(1.08);} 100%{transform:scale(1);}}
+  @keyframes shake{0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);}}
+  .fb{margin-top:10px; font-size:15px; min-height:22px; text-align:center; font-weight:700; color:var(--text2);}
+  .letter-house{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:4px solid var(--tiger3); border-radius:20px;
+    padding:20px; text-align:center; position:relative;
+    box-shadow:0 6px 0 rgba(239,108,0,.3), 0 12px 24px rgba(239,108,0,.2);
+  }
+  .letter-house::before{
+    content:""; position:absolute; top:-16px; left:50%; transform:translateX(-50%);
+    width:80%; height:20px;
+    background:repeating-linear-gradient(90deg, var(--tiger1) 0 12px, var(--terra2) 12px 24px);
+    border-radius:10px 10px 0 0;
+  }
+  .syllables-row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:16px 0;}
+  .syl-card{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(191,54,12,.15);
+    border-radius:20px; padding:16px 22px;
+    font-size:38px; font-weight:900; color:var(--terra4);
+    cursor:pointer; font-family:inherit;
+    transition:all .25s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 5px 0 rgba(191,54,12,.15), 0 10px 20px rgba(191,54,12,.1), inset 0 3px 0 rgba(255,255,255,.9);
+    min-width:90px; text-align:center;
+  }
+  .syl-card .t-hi{color:var(--terra3); font-size:42px; text-shadow:0 0 8px rgba(230,74,25,.5);}
+  .syl-card:hover{transform:translateY(-4px);}
+  .syl-card.active{
+    background:linear-gradient(180deg, #ffccbc, var(--terra1));
+    color:var(--terra4);
+    box-shadow:0 5px 0 var(--terra4), 0 10px 20px rgba(255,138,101,.5);
+    transform:scale(1.08);
+  }
+  .syl-card.done{
+    background:linear-gradient(180deg, #b2dfdb, var(--teal1));
+    color:var(--teal3);
+    box-shadow:0 5px 0 var(--teal3), 0 10px 20px rgba(38,166,154,.5);
+  }
+  .word-cards{display:grid; gap:14px; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));}
+  .word-card{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(191,54,12,.15); border-radius:24px;
+    padding:16px; text-align:center; cursor:pointer;
+    transition:all .25s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 6px 0 rgba(191,54,12,.15), 0 12px 24px rgba(191,54,12,.1), inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .word-card:hover{transform:translateY(-4px);}
+  .word-card .em{font-size:52px;}
+  .word-card .word{
+    font-size:22px; font-weight:900; color:var(--terra4);
+    margin:8px 0 4px; letter-spacing:1px;
+  }
+  .word-card .word .t-hi{color:var(--terra3); font-size:24px; text-shadow:0 0 8px rgba(230,74,25,.4);}
+  .word-card .syls{font-size:14px; color:var(--text2); font-weight:700;}
+  .word-position{display:flex; justify-content:center; gap:6px; margin:16px 0;}
+  .letter-box{
+    width:56px; height:56px;
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(191,54,12,.15); border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:28px; font-weight:900; color:var(--text);
+    box-shadow:inset 0 3px 0 rgba(255,255,255,.9), 0 3px 0 rgba(191,54,12,.12);
+  }
+  .letter-box.t-letter{
+    background:linear-gradient(180deg, #ffccbc, var(--terra1));
+    color:var(--terra4); border-color:var(--terra4);
+    box-shadow:0 3px 0 var(--terra4), 0 6px 12px rgba(255,138,101,.4), inset 0 3px 0 rgba(255,255,255,.5);
+    animation:pop .4s;
+  }
+  .sentence-reader{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(191,54,12,.15); border-radius:24px;
+    padding:24px; text-align:center;
+    box-shadow:0 6px 0 rgba(191,54,12,.12), 0 12px 24px rgba(191,54,12,.1), inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .sentence-reader .pic{font-size:80px; margin-bottom:8px;}
+  .sentence-reader .sentence{font-size:26px; font-weight:900; line-height:1.5; color:var(--text); margin:12px 0;}
+  .sentence-reader .word{
+    display:inline-block; padding:2px 8px; margin:2px;
+    border-radius:10px; cursor:pointer; transition:all .2s;
+    background:rgba(191,54,12,.05);
+  }
+  .sentence-reader .word:hover{background:var(--tiger2); color:#fff;}
+  .sentence-reader .word.read{
+    background:linear-gradient(180deg, #ffccbc, var(--terra1)); color:var(--terra4);
+  }
+  .build-slots{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:16px 0; min-height:56px;}
+  .build-slot{
+    background:rgba(191,54,12,.06);
+    border:3px dashed rgba(191,54,12,.3);
+    border-radius:14px; padding:8px 16px;
+    font-size:22px; font-weight:900; min-width:60px;
+    display:flex; align-items:center; justify-content:center;
+    transition:all .2s; color:var(--text2);
+  }
+  .build-slot.filled{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border-style:solid; border-color:var(--tiger3);
+    color:var(--terra4); box-shadow:0 3px 0 rgba(191,54,12,.15);
+  }
+  .letter-pool{display:flex; gap:8px; justify-content:center; flex-wrap:wrap;}
+  .letter-pool button{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(191,54,12,.15);
+    border-radius:14px; padding:10px 16px;
+    font-size:22px; font-weight:900; color:var(--terra4);
+    cursor:pointer; font-family:inherit;
+    box-shadow:0 3px 0 rgba(191,54,12,.15), inset 0 2px 0 rgba(255,255,255,.9);
+    transition:all .15s; min-width:50px;
+  }
+  .letter-pool button:hover{transform:translateY(-2px);}
+  .letter-pool button.used{opacity:.3; pointer-events:none;}
+  .trace-svg{
+    width:100%; height:240px; background:rgba(255,255,255,.7);
+    border-radius:16px; touch-action:none;
+    border:3px dashed rgba(191,54,12,.25);
+  }
+  .draw-canvas{
+    width:100%; height:240px;
+    background:rgba(255,255,255,.7);
+    border:3px dashed rgba(191,54,12,.25);
+    border-radius:16px; touch-action:none; cursor:crosshair;
+  }
+  .paint-area{text-align:center; padding:20px;}
+  .paint-letter{
+    font-size:160px; font-weight:900; color:#ddd; line-height:1;
+    transition:color .3s, text-shadow .3s; user-select:none;
+  }
+  .color-picker{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px;}
+  .color-dot{
+    width:44px; height:44px; border-radius:50%;
+    cursor:pointer; border:3px solid #fff;
+    box-shadow:0 3px 0 rgba(191,54,12,.2), 0 6px 12px rgba(0,0,0,.15);
+    transition:all .2s;
+  }
+  .color-dot:hover{transform:scale(1.15);}
+  .color-dot.selected{border-color:var(--terra4); transform:scale(1.15); box-shadow:0 0 0 3px var(--cream), 0 4px 12px rgba(239,108,0,.5);}
+  .catch-area{
+    position:relative; height:300px; overflow:hidden;
+    background:linear-gradient(180deg, var(--terra1), var(--cream-bg));
+    border-radius:20px; border:3px solid rgba(191,54,12,.15);
+    box-shadow:inset 0 0 30px rgba(191,54,12,.1);
+  }
+  .catch-target{
+    position:absolute; top:10px; left:50%; transform:translateX(-50%);
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    padding:6px 16px; border-radius:16px;
+    font-weight:900; font-size:18px;
+    box-shadow:0 4px 8px rgba(0,0,0,.15); z-index:5; color:var(--terra4);
+  }
+  .falling{
+    position:absolute; top:-50px;
+    width:52px; height:52px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; font-weight:900; cursor:pointer;
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(191,54,12,.15);
+    box-shadow:0 4px 8px rgba(0,0,0,.15), inset 0 2px 0 rgba(255,255,255,.9);
+    transition:transform .15s;
+  }
+  .falling:hover{transform:scale(1.1);}
+  .falling.is-t{
+    background:linear-gradient(180deg, #ffccbc, var(--terra1));
+    color:var(--terra4); border-color:var(--terra4);
+  }
+  .falling.caught{opacity:0; pointer-events:none; transform:scale(1.5); transition:all .3s;}
+  .compare-area{display:flex; justify-content:center; gap:24px; flex-wrap:wrap; margin:16px 0;}
+  .compare-card{
+    width:130px; height:130px;
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(191,54,12,.15); border-radius:20px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:64px; font-weight:900; color:var(--terra4);
+    cursor:pointer; transition:all .2s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 5px 0 rgba(191,54,12,.15), 0 10px 20px rgba(191,54,12,.1), inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .compare-card:hover{transform:translateY(-4px);}
+  .compare-card.correct{
+    background:linear-gradient(180deg, #c8e6c9, var(--green));
+    color:#1b5e20; box-shadow:0 5px 0 #2e7d32, 0 10px 20px rgba(102,187,106,.5); animation:pop .4s;
+  }
+  .compare-card.wrong{
+    background:linear-gradient(180deg, #fca5a5, #f87171);
+    color:#7f1d1d; animation:shake .4s;
+  }
+  .rule-box{
+    background:linear-gradient(180deg, rgba(255,167,38,.25), rgba(255,167,38,.1));
+    border:3px solid var(--tiger3); border-radius:14px;
+    padding:16px; font-size:16px; color:var(--text);
+    font-weight:700; line-height:1.6; margin:12px 0;
+  }
+  .rule-box b{color:var(--terra3); font-size:18px;}
+  .badge-grid{display:grid; gap:14px; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));}
+  .badge{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(191,54,12,.15); border-radius:22px;
+    padding:14px; text-align:center; opacity:.4; filter:grayscale(.8);
+    transition:all .3s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 5px 0 rgba(191,54,12,.12), 0 10px 20px rgba(191,54,12,.1), inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .badge.earned{
+    opacity:1; filter:none;
+    background:linear-gradient(180deg, #ffcc80, var(--tiger1));
+    border-color:var(--tiger4);
+    box-shadow:0 5px 0 var(--tiger4), 0 12px 24px rgba(255,167,38,.5), inset 0 3px 0 rgba(255,255,255,.5);
+  }
+  .badge .icon{font-size:44px;}
+  .badge .title{font-size:13px; margin-top:6px; font-weight:800;}
+  .hint-box{
+    background:linear-gradient(180deg, rgba(255,167,38,.3), rgba(255,167,38,.15));
+    border-left:5px solid var(--tiger2);
+    padding:10px 14px; border-radius:14px;
+    font-size:14px; margin:10px 0; font-weight:600;
+  }
+  .note-box{
+    background:linear-gradient(180deg, rgba(38,166,154,.15), rgba(38,166,154,.06));
+    border-left:5px solid var(--teal2);
+    padding:12px 14px; border-radius:14px;
+    font-size:14px; margin:12px 0; font-weight:600; line-height:1.5;
+  }
+  .story-card{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(191,54,12,.15); border-radius:24px;
+    padding:20px; margin-bottom:14px;
+    box-shadow:0 6px 0 rgba(191,54,12,.1), 0 12px 24px rgba(191,54,12,.1);
+  }
+  .story-card .pic{font-size:64px; text-align:center; margin-bottom:10px;}
+  .story-card .text{font-size:17px; font-weight:700; line-height:1.6; text-align:center;}
+  .story-card .text .word{
+    display:inline-block; padding:2px 6px; margin:1px;
+    border-radius:8px; cursor:pointer; transition:all .2s;
+  }
+  .story-card .text .word:hover{background:var(--tiger1);}
+  .story-card .text .word.read{
+    background:linear-gradient(180deg, #ffccbc, var(--terra1)); color:var(--terra4);
+  }
+  .dialogue-role{display:flex; flex-direction:column; gap:12px; margin:16px 0;}
+  .role-line{display:flex; align-items:flex-start; gap:10px; cursor:pointer; transition:all .2s;}
+  .role-line .avatar{
+    width:48px; height:48px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; flex-shrink:0;
+    box-shadow:0 4px 0 rgba(0,0,0,.1), inset 0 2px 0 rgba(255,255,255,.5);
+  }
+  .role-line .avatar.gayk{background:radial-gradient(circle at 35% 30%, #d9a878, #8b5a3c);}
+  .role-line .avatar.mone{background:radial-gradient(circle at 35% 30%, #f5f5f5, #c4c4c4);}
+  .role-line .line{
+    flex:1;
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:2px solid rgba(191,54,12,.15);
+    border-radius:18px; padding:10px 14px;
+    font-size:16px; font-weight:700;
+    box-shadow:0 3px 6px rgba(191,54,12,.1);
+  }
+  .role-line.active .line{
+    background:linear-gradient(180deg, #ffccbc, var(--terra1)); transform:scale(1.02);
+  }
+  .role-line.read .line{
+    background:linear-gradient(180deg, #b2dfdb, var(--teal1)); color:var(--teal3);
+  }
+  .marathon-levels{display:grid; gap:12px; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));}
+  .level-card{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(191,54,12,.15); border-radius:22px;
+    padding:14px; text-align:center;
+    box-shadow:0 5px 0 rgba(191,54,12,.12), 0 10px 20px rgba(191,54,12,.1), inset 0 3px 0 rgba(255,255,255,.9);
+    transition:all .25s; cursor:pointer;
+  }
+  .level-card:hover{transform:translateY(-4px);}
+  .level-card.locked{opacity:.5; filter:grayscale(.7); cursor:not-allowed;}
+  .level-card.done{
+    background:linear-gradient(180deg, #b2dfdb, var(--teal1)); border-color:var(--teal3);
+  }
+  .level-card .lvl-num{font-size:32px; font-weight:900; color:var(--terra3);}
+  .level-card.done .lvl-num{color:var(--teal3);}
+  .level-card .lvl-name{font-size:14px; font-weight:800; margin-top:4px;}
+  .level-card .lvl-desc{font-size:12px; color:var(--text2); margin-top:4px;}
+  @media (max-width:520px){
+    header h1{font-size:18px;}
+    nav{top:auto; position:relative;}
+    .big-letter-display{font-size:130px;}
+    .big-letter-display .low{font-size:80px;}
+    .letter-box{width:44px; height:44px; font-size:22px;}
+    .compare-card{width:100px; height:100px; font-size:52px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="tiger">🐯</span> Буква Т <span class="tiger">🐯</span></h1>
+  <div class="heroes">🐻 <b>Гайк</b> и 🐰 <b>Моне</b> учат букву Т — тигриную и тортовую!</div>
+  <div class="hud">
+    <div class="chip" id="hudPoints">🐯 Очки: 0</div>
+    <div class="chip" id="hudTasks">✅ Заданий: 0</div>
+    <div class="chip" id="hudLevel">🎓 Уровень: 1</div>
+  </div>
+  <div class="path-progress"><div id="pathFill">0%</div></div>
+</header>
+
+<nav id="nav"></nav>
+
+<main>
+
+<!-- 1. ЗНАКОМСТВО -->
+<section id="sec-intro" class="active">
+  <h2>👋 Знакомься — буква Т</h2>
+  <p class="sub">Двадцатая буква алфавита! Она согласная, глухая и похожа на зонтик.</p>
+  <div class="letter-house">
+    <div class="big-letter-display">Т<span class="low">т</span></div>
+    <div class="character">
+      <div class="avatar gayk">🐻</div>
+      <div class="bubble"><b>Гайк:</b> Это буква <b>Т</b>! С неё начинается <b>ТИГР</b> 🐯, <b>ТОРТ</b> 🎂 и <b>ТЮЛЬПАН</b> 🌷!</div>
+    </div>
+    <div class="character mone-bubble">
+      <div class="avatar mone">🐰</div>
+      <div class="bubble"><b>Моне:</b> Произнеси: <b>«Т-т-т»</b> — как тикают <b>часы</b>! ⏰ Как стучит <b>дятел</b>: тук-тук! 🪶 Как топает <b>слон</b>! 🐘</div>
+    </div>
+    <div class="rule-box">
+      🌟 <b>Секрет буквы Т:</b> она <b>глухая</b> — не звенит, а «тукает». Бывает твёрдой (ТОРТ) и мягкой (ТИГР). Похожа на <b>зонтик</b> или <b>гриб</b>!
+    </div>
+  </div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn" onclick="speak('Т'); completeTask('sound');">🔊 Спеть Т</button>
+    <button class="btn terra" onclick="completeTask('intro');">✅ Запомнил!</button>
+  </div>
+  <div class="fb" id="introFb"></div>
+</section>
+
+<!-- 2. ЗВУК -->
+<section id="sec-sound">
+  <h2>🎵 Звук Т</h2>
+  <p class="sub">Буква Т звучит по-разному. Послушай и повтори!</p>
+  <div id="soundGame"></div>
+</section>
+
+<!-- 3. ФОРМА -->
+<section id="sec-shape">
+  <h2>🔷 Форма буквы Т</h2>
+  <p class="sub">Заглавная Т — палочка и перекладинка сверху. Как зонтик!</p>
+  <div class="letter-house">
+    <div style="font-size:140px; font-weight:900; color:var(--terra4); line-height:1; text-shadow:0 4px 0 rgba(255,255,255,.9), 0 8px 20px rgba(239,108,0,.4);">Т</div>
+    <div class="hint-box" style="text-align:left;">
+      📏 <b>Столбик</b> — вертикальная палочка<br>
+      ➖ <b>Перекладинка</b> — сверху, как шляпка<br>
+      ☂️ Похожа на зонтик или гриб!
+    </div>
+    <div style="font-size:100px; font-weight:900; color:var(--tiger3); line-height:1; text-shadow:0 4px 0 rgba(255,255,255,.9);">т</div>
+    <div class="hint-box" style="text-align:left;">
+      Строчная <b>т</b> — палочка с хвостиками сверху и вниз.
+    </div>
+  </div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn terra" onclick="completeTask('shape');">✅ Я вижу форму!</button>
+  </div>
+</section>
+
+<!-- 4. ЗАГЛАВНАЯ/СТРОЧНАЯ -->
+<section id="sec-case">
+  <h2>Т Заглавная и строчная</h2>
+  <p class="sub">Найди пару: большая Т — маленькая т.</p>
+  <div id="caseGame"></div>
+</section>
+
+<!-- 5. ОБВОДИЛКА -->
+<section id="sec-trace">
+  <h2>✏️ Обведи букву Т</h2>
+  <p class="sub">Проведи пальцем по контуру — как будто рисуешь зонтик!</p>
+  <svg viewBox="0 0 400 260" class="trace-svg" id="traceSvg">
+    <text x="200" y="210" text-anchor="middle" font-size="220" font-family="Georgia, serif" font-weight="900" fill="none" stroke="rgba(239,108,0,.3)" stroke-width="14" stroke-linejoin="round">Т</text>
+    <path id="tracePath" fill="none" stroke="#bf360c" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <div class="center" style="margin-top:12px;">
+    <button class="btn ghost" onclick="clearTrace()">Стереть</button>
+    <button class="btn" onclick="completeTask('trace');">✅ Готово</button>
+  </div>
+  <div class="fb" id="traceFb"></div>
+</section>
+
+<!-- 6. НАЙДИ Т -->
+<section id="sec-find">
+  <h2>🔍 Найди букву Т</h2>
+  <p class="sub">Среди других букв найди все Т!</p>
+  <div id="findGame"></div>
+</section>
+
+<!-- 7. Т ИЛИ П -->
+<section id="sec-compare">
+  <h2>🔤 Т или П?</h2>
+  <p class="sub">Т и П похожи, но у Т перекладинка посередине, а у П — сверху!</p>
+  <div id="compareGame"></div>
+</section>
+
+<!-- 8. МЕСТО В СЛОВЕ -->
+<section id="sec-position">
+  <h2>📍 Где спряталась Т?</h2>
+  <p class="sub">Т может быть в начале, в середине или в конце слова.</p>
+  <div id="positionGame"></div>
+</section>
+
+<!-- 9. СЛОГИ С Т -->
+<section id="sec-syllables">
+  <h2>📖 Читаем слоги с Т</h2>
+  <p class="sub">Согласная Т + гласная = слог! Нажми, чтобы услышать.</p>
+  <div id="syllableGame"></div>
+</section>
+
+<!-- 10. СЛОВА С Т -->
+<section id="sec-words">
+  <h2>📚 Слова с буквой Т</h2>
+  <p class="sub">Нажимай на слова, чтобы услышать. Буква Т подсвечена.</p>
+  <div class="word-cards" id="wordCards"></div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn terra" onclick="completeTask('words');">✅ Я прочитал!</button>
+  </div>
+</section>
+
+<!-- 11. ЧИТАЕМ ПРЕДЛОЖЕНИЯ -->
+<section id="sec-sentences">
+  <h2>🐢 Читаем предложения</h2>
+  <p class="sub">Нажимай на слова по порядку и читай вслух.</p>
+  <div id="sentenceGame"></div>
+</section>
+
+<!-- 12. ИСТОРИИ -->
+<section id="sec-stories">
+  <h2>📖 Мини-истории про Т</h2>
+  <p class="sub">Короткие истории с Т-словами. Нажимай на слова.</p>
+  <div id="storyGame"></div>
+  <div class="center" style="margin-top:12px;">
+    <button class="btn" onclick="newStory()">📖 Другая история</button>
+  </div>
+</section>
+
+<!-- 13. ПО РОЛЯМ -->
+<section id="sec-roles">
+  <h2>🎭 Читаем по ролям</h2>
+  <p class="sub">Нажимай на реплику, чтобы прочитать её вслух.</p>
+  <div id="rolesGame"></div>
+  <div class="center"><button class="btn teal" onclick="newRole()">🎭 Другой диалог</button></div>
+</section>
+
+<!-- 14. СОБЕРИ СЛОВО -->
+<section id="sec-build">
+  <h2>🧩 Собери слово с Т</h2>
+  <p class="sub">Расставь буквы по порядку.</p>
+  <div id="buildGame"></div>
+</section>
+
+<!-- 15. ЛОВЛЯ Т -->
+<section id="sec-catch">
+  <h2>🎯 Ловля буквы Т</h2>
+  <p class="sub">Ловите только буквы Т! Остальные пропускай.</p>
+  <div class="catch-area" id="catchArea">
+    <div class="catch-target">Лови: Т</div>
+  </div>
+  <div class="center" style="margin-top:12px;">
+    <button class="btn" onclick="startCatch()">🚀 Начать</button>
+  </div>
+  <div class="fb" id="catchFb"></div>
+</section>
+
+<!-- 16. ПИШЕМ Т -->
+<section id="sec-write">
+  <h2>🖌️ Пишем букву Т</h2>
+  <p class="sub">Напиши букву Т пальцем или мышкой.</p>
+  <canvas class="draw-canvas" id="writeCanvas"></canvas>
+  <div class="center" style="margin-top:12px;">
+    <button class="btn ghost" onclick="clearWrite()">Стереть</button>
+    <button class="btn terra" onclick="completeTask('write');">✅ Готово</button>
+  </div>
+</section>
+
+<!-- 17. РАСКРАСЬ Т -->
+<section id="sec-paint">
+  <h2>🎨 Раскрась букву Т</h2>
+  <p class="sub">Выбери тигриный цвет — буква Т засияет!</p>
+  <div class="paint-area">
+    <div class="paint-letter" id="paintLetter">Т</div>
+    <div class="color-picker" id="colorPicker"></div>
+  </div>
+</section>
+
+<!-- 18. МАРАФОН -->
+<section id="sec-marathon">
+  <h2>🏆 Читательский марафон</h2>
+  <p class="sub">Пройди все 6 уровней чтения!</p>
+  <div class="marathon-levels" id="marathonLevels"></div>
+  <div id="marathonGame" style="margin-top:16px;"></div>
+</section>
+
+<!-- 19. НАГРАДЫ -->
+<section id="sec-badges">
+  <h2>🏅 Награды за букву Т</h2>
+  <p class="sub">Собери все награды — стань мастером буквы Т!</p>
+  <div class="badge-grid" id="badgeGrid"></div>
+  <div class="center" style="margin-top:20px;">
+    <button class="btn ghost" onclick="resetAll()">Начать заново</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* ==================== ДАННЫЕ ==================== */
+const WORDS_T = [
+  {w:'ТИГР',syls:['ТИГР'],em:'🐯',pos:'start'},
+  {w:'ТОРТ',syls:['ТОРТ'],em:'🎂',pos:'start'},
+  {w:'ТЮЛЬПАН',syls:['ТЮЛЬ','ПАН'],em:'🌷',pos:'start'},
+  {w:'ТАРЕЛКА',syls:['ТА','РЕЛ','КА'],em:'🍽️',pos:'start'},
+  {w:'ТЕЛЕФОН',syls:['ТЕ','ЛЕ','ФОН'],em:'📱',pos:'start'},
+  {w:'ТУЧА',syls:['ТУ','ЧА'],em:'☁️',pos:'start'},
+  {w:'ТЕТРАДЬ',syls:['ТЕТ','РАДЬ'],em:'📓',pos:'start'},
+  {w:'ТУФЛИ',syls:['ТУФ','ЛИ'],em:'👠',pos:'start'},
+  {w:'ТАНК',syls:['ТАНК'],em:'🚜',pos:'start'},
+  {w:'ТАПОЧКИ',syls:['ТА','ПОЧ','КИ'],em:'🥿',pos:'start'},
+  {w:'ТОМАТ',syls:['ТО','МАТ'],em:'🍅',pos:'start'},
+  {w:'ТЫКВА',syls:['ТЫК','ВА'],em:'🎃',pos:'start'},
+  {w:'ТОЧКА',syls:['ТОЧ','КА'],em:'⚫',pos:'start'},
+  {w:'ТРАМВАЙ',syls:['ТРАМ','ВАЙ'],em:'🚋',pos:'start'},
+  {w:'ТРОПИНКА',syls:['ТРО','ПИН','КА'],em:'🛤️',pos:'start'},
+  {w:'ТРАВКА',syls:['ТРАВ','КА'],em:'🌿',pos:'start'},
+  {w:'ТЕЛЕВИЗОР',syls:['ТЕ','ЛЕ','ВИ','ЗОР'],em:'📺',pos:'start'},
+  {w:'ТРУБА',syls:['ТРУ','БА'],em:'🎺',pos:'start'},
+  {w:'ТУЧКА',syls:['ТУЧ','КА'],em:'☁️',pos:'start'},
+  {w:'ТАЙГА',syls:['ТАЙ','ГА'],em:'🌲',pos:'start'},
+  {w:'КОТ',syls:['КОТ'],em:'🐱',pos:'end'},
+  {w:'КИТ',syls:['КИТ'],em:'🐋',pos:'end'},
+  {w:'БИЛЕТ',syls:['БИ','ЛЕТ'],em:'🎫',pos:'end'},
+  {w:'БУКЕТ',syls:['БУ','КЕТ'],em:'💐',pos:'end'},
+  {w:'ПАКЕТ',syls:['ПА','КЕТ'],em:'📦',pos:'end'},
+  {w:'САЛЮТ',syls:['СА','ЛЮТ'],em:'🎆',pos:'end'},
+  {w:'ХАЛАТ',syls:['ХА','ЛАТ'],em:'🥼',pos:'end'},
+  {w:'ЗОНТ',syls:['ЗОНТ'],em:'☂️',pos:'end'},
+  {w:'МОСТ',syls:['МОСТ'],em:'🌉',pos:'end'},
+  {w:'ЛИСТ',syls:['ЛИСТ'],em:'🍃',pos:'end'},
+  {w:'ПОРТ',syls:['ПОРТ'],em:'⚓',pos:'end'},
+  {w:'САД',syls:['САД'],em:'🌷',pos:'middle'},
+  {w:'МОТОР',syls:['МО','ТОР'],em:'🏍️',pos:'middle'},
+  {w:'ТОПОР',syls:['ТО','ПОР'],em:'🪓',pos:'middle'},
+  {w:'КАРТИНА',syls:['КАР','ТИ','НА'],em:'🖼️',pos:'middle'},
+  {w:'МОЛОТОК',syls:['МО','ЛО','ТОК'],em:'🔨',pos:'middle'},
+  {w:'ПОРТФЕЛЬ',syls:['ПОРТ','ФЕЛЬ'],em:'🎒',pos:'middle'},
+  {w:'КОМПОТ',syls:['КОМ','ПОТ'],em:'🥤',pos:'middle'},
+  {w:'ПАРАШЮТ',syls:['ПА','РА','ШЮТ'],em:'🪂',pos:'middle'},
+  {w:'СВИТЕРОК',syls:['СВИ','ТЕ','РОК'],em:'🧥',pos:'middle'},
+];
+
+/* Слоги с Т */
+const SYL_T = ['ТА','ТО','ТУ','ТЫ','ТИ','ТЕ','ТЁ','ТЯ','ТЮ','ТЭ','ТРА','ТРО','СТА','СТО','ТКА','ТНО','ТВО','ТРИ'];
+
+/* Предложения */
+const SENTENCES = [
+  {pic:'👧',words:['ТАНЯ','ЕСТ','ТОРТ']},
+  {pic:'🐯',words:['ТИГР','ЖИВЁТ','В','ТАЙГЕ']},
+  {pic:'🌷',words:['В','САДУ','РАСТУТ','ТЮЛЬПАНЫ']},
+  {pic:'☁️',words:['ПО','НЕБУ','ПЛЫВЁТ','ТУЧА']},
+  {pic:'📱',words:['ПАПА','ЗВОНИТ','ПО','ТЕЛЕФОНУ']},
+  {pic:'🐱',words:['КОТ','СПИТ','НА','ТАБУРЕТКЕ']},
+  {pic:'🎂',words:['БАБУШКА','ИСПЕКЛА','ТОРТ']},
+  {pic:'🚋',words:['ТРАМВАЙ','ЕДЕТ','ПО','УЛИЦЕ']},
+  {pic:'🎫',words:['В','КАССЕ','КУПИЛИ','БИЛЕТЫ']},
+  {pic:'💐',words:['ТАНЯ','ПОДАРИЛА','МАМЕ','БУКЕТ']},
+  {pic:'🌿',words:['НА','ЛУГУ','РАСТЁТ','ТРАВКА']},
+  {pic:'☂️',words:['У','МЕНЯ','СИНИЙ','ЗОНТ']},
+  {pic:'🌉',words:['ЧЕРЕЗ','РЕКУ','ПОСТРОИЛИ','МОСТ']},
+  {pic:'🍅',words:['НА','ГРЯДКЕ','РАСТЁТ','ТОМАТ']},
+  {pic:'🪓',words:['ДРОВОСЕК','ВЗЯЛ','ТОПОР']},
+];
+
+/* Звуковые ситуации */
+const SOUNDS = [
+  {s:'Т',desc:'Согласная буква Т',icon:'🔤'},
+  {s:'ТИК-ТАК',desc:'Как тикают часы',icon:'⏰'},
+  {s:'ТУК-ТУК',desc:'Как стучит дятел',icon:'🪶'},
+  {s:'ТОП-ТОП',desc:'Как топает малыш',icon:'👣'},
+  {s:'ТУ-ТУ',desc:'Как гудит поезд',icon:'🚂'},
+  {s:'Т-С-С',desc:'Как просят тишины',icon:'🤫'},
+];
+
+/* Правило Т/П квиз */
+const COMPARE_Q = [
+  {q:'В слове «торт» первая буква?', o:['Т','П'], c:'Т'},
+  {q:'В слове «парк» первая буква?', o:['П','Т'], c:'П'},
+  {q:'В слове «тигр» первая буква?', o:['Т','П'], c:'Т'},
+  {q:'В слове «поезд» первая буква?', o:['П','Т'], c:'П'},
+  {q:'В слове «кот» последняя буква?', o:['Т','П'], c:'Т'},
+];
+
+/* Истории */
+const STORIES = [
+  {pic:'🐯',text:'В тайге живёт тигр. У него красивая полосатая шкура. Тигр тихо ходит по тропинке. Он ищет еду.',
+   tWords:['тайге','тигр','Тигр','тихо','тропинке']},
+  {pic:'🎂',text:'У Тани сегодня день рождения. Бабушка испекла вкусный торт. Таня пригласила гостей. Все танцевали и пели!',
+   tWords:['Тани','торт','Таня','танцевали']},
+  {pic:'🌷',text:'Весной в саду расцвели тюльпаны. Они были яркие и красивые. Таня собрала большой букет. Она подарила его маме.',
+   tWords:['тюльпаны','Таня','тюльпаны','подарила']},
+  {pic:'☁️',text:'По небу плывёт тёмная туча. Скоро будет дождь. Ты взял зонт? Тогда тебе не страшна любая погода!',
+   tWords:['туча','Ты','тогда','тебе']},
+  {pic:'🚋',text:'По улице едет трамвай. Он звенит и тормозит. В трамвае едут пассажиры. Они торопятся на работу.',
+   tWords:['трамвай','тормозит','трамвае','торопятся']},
+];
+
+/* Диалоги по ролям */
+const ROLES = [
+  {lines:[
+    {who:'gayk',text:'Привет, Моне! Ты любишь торт?'},
+    {who:'mone',text:'Привет, Гайк! Очень люблю! А ты?'},
+    {who:'gayk',text:'И я! Особенно с шоколадом.'},
+    {who:'mone',text:'Тогда пойдём в кафе и купим торт!'},
+  ]},
+  {lines:[
+    {who:'mone',text:'Гайк, посмотри, какой тюльпан!'},
+    {who:'gayk',text:'Какой красивый! Он красный.'},
+    {who:'mone',text:'Тюльпаны цветут весной.'},
+    {who:'gayk',text:'Давай соберём букет для мамы!'},
+  ]},
+  {lines:[
+    {who:'gayk',text:'Моне, слышишь? Тик-так, тик-так...'},
+    {who:'mone',text:'Это часы! Они показывают время.'},
+    {who:'gayk',text:'Точно! Уже три часа.'},
+    {who:'mone',text:'Тогда пойдём пить чай с тортом!'},
+  ]},
+];
+
+/* ==================== ПРОГРЕСС ==================== */
+const KEY = 'letter_t_v1';
+const DEFAULT = {tasks:{}, points:0, badges:{}, catchScore:0, compareScore:0, stories:[], roles:[]};
+let P = load();
+function load(){
+  try{
+    const r = localStorage.getItem(KEY);
+    if(r){ return Object.assign({}, DEFAULT, JSON.parse(r)); }
+  }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT));
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(P)); }catch(e){} }
+function completeTask(name){
+  if(!P.tasks[name]){
+    P.tasks[name] = true;
+    P.points += 5; addPoints(0); save(); checkBadges();
+    document.querySelectorAll('.fb').forEach(f=>{ if(!f.textContent) f.textContent = '✅ Молодец!'; });
+  }
+  updateHUD();
+}
+function addPoints(n=1){ P.points += n; save(); updateHUD(); checkBadges(); }
+function earnBadge(id,title,icon){
+  if(!P.badges[id]){ P.badges[id]={title,icon}; renderBadges(); save(); }
+}
+function updateHUD(){
+  document.getElementById('hudPoints').textContent = `🐯 Очки: ${P.points}`;
+  const t = Object.keys(P.tasks).length;
+  document.getElementById('hudTasks').textContent = `✅ Заданий: ${t}`;
+  const lvl = Math.min(5, 1 + Math.floor(P.points/20));
+  document.getElementById('hudLevel').textContent = `🎓 Уровень: ${lvl}`;
+  const pct = Math.min(100, Math.round(P.points/120*100));
+  const fill = document.getElementById('pathFill');
+  fill.style.width = pct + '%';
+  fill.textContent = pct > 10 ? pct+'%' : '';
+}
+function checkBadges(){
+  const t = Object.keys(P.tasks).length;
+  if(t>=1) earnBadge('start','Первый шаг','👣');
+  if(t>=3) earnBadge('three','3 задания','🥉');
+  if(t>=7) earnBadge('seven','7 заданий','🥈');
+  if(t>=12) earnBadge('twelve','12 заданий','🥇');
+  if(t>=16) earnBadge('sixteen','16 заданий','🏆');
+  if(P.points>=30) earnBadge('p30','30 очков','⭐');
+  if(P.points>=60) earnBadge('p60','60 очков','🌟');
+  if(P.points>=120) earnBadge('p120','120 очков','✨');
+  if(P.catchScore>=10) earnBadge('catch10','Ловкач','🎯');
+  if(P.compareScore>=5) earnBadge('compare5','Различаю Т и П','🔤');
+  if(P.tasks.syllables && P.tasks.words) earnBadge('reader','Читатель','📖');
+  if(P.tasks.trace && P.tasks.write) earnBadge('writer','Писатель','✏️');
+  if(P.tasks.sound && P.tasks.intro) earnBadge('singer','Певец','🎵');
+  if(P.stories.length >= 3) earnBadge('story3','3 истории','📖');
+  if(P.stories.length >= 5) earnBadge('storyAll','Все истории','📚');
+  if(P.roles.length >= 2) earnBadge('role2','Актёр','🎭');
+  if(t >= 18) earnBadge('master','Мастер Т','🏆');
+}
+
+/* ==================== НАВИГАЦИЯ ==================== */
+const SECTIONS = [
+  ['intro','👋 Знакомство'],['sound','🎵 Звук'],['shape','🔷 Форма'],
+  ['case','Т Пара'],['trace','✏️ Обведи'],['find','🔍 Найди'],
+  ['compare','🔤 Т или П'],['position','📍 Место'],['syllables','📖 Слоги'],
+  ['words','📚 Слова'],['sentences','🐢 Предложения'],['stories','📖 Истории'],
+  ['roles','🎭 По ролям'],['build','🧩 Собери'],['catch','🎯 Ловля'],
+  ['write','🖌️ Пиши'],['paint','🎨 Раскрась'],['marathon','🏆 Марафон'],
+  ['badges','🏅 Награды'],
+];
+function buildNav(){
+  const n = document.getElementById('nav');
+  n.innerHTML = '';
+  SECTIONS.forEach(([id,label],i)=>{
+    const b = document.createElement('button');
+    b.textContent = label;
+    b.onclick = ()=>show('sec-'+id, b);
+    if(i===0) b.classList.add('active');
+    n.appendChild(b);
+  });
+}
+function show(id, btn){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+/* ==================== ЗВУК ==================== */
+function renderSound(){
+  const c = document.getElementById('soundGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character"><div class="avatar gayk">🐻</div><div class="bubble"><b>Гайк:</b> Т — согласная глухая буква. Бывает твёрдой (ТОРТ) и мягкой (ТИГР). Нажимай и слушай!</div></div>
+      <div class="word-cards" id="soundCards"></div>
+    </div>
+  `;
+  const cards = document.getElementById('soundCards');
+  SOUNDS.forEach(s=>{
+    const el = document.createElement('div');
+    el.className = 'word-card';
+    el.innerHTML = `<div class="em">${s.icon}</div>
+      <div class="word">${s.s}</div>
+      <div class="syls">${s.desc}</div>`;
+    el.onclick = ()=>{ speak(s.s); addPoints(1); completeTask('sound'); };
+    cards.appendChild(el);
+  });
+}
+
+/* ==================== ПАРА ==================== */
+function newCaseGame(){
+  const opts = shuffle([
+    {ch:'Т', isT:true},{ch:'т', isT:true},
+    {ch:'П', isT:false},{ch:'и', isT:false},
+    {ch:'А', isT:false},{ch:'о', isT:false},
+  ]);
+  const c = document.getElementById('caseGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character mone-bubble"><div class="avatar mone">🐰</div><div class="bubble"><b>Моне:</b> Найди <b>заглавную Т</b>!</div></div>
+      <div class="options" id="caseOpts"></div>
+      <div class="fb" id="caseFb"></div>
+    </div>
+    <div class="center"><button class="btn ghost" onclick="newCaseGame()">Ещё</button></div>
+  `;
+  const optsEl = document.getElementById('caseOpts');
+  opts.forEach(o=>{
+    const b = document.createElement('button');
+    b.className = 'opt'; b.textContent = o.ch; b.style.fontSize = '28px';
+    b.onclick = ()=>{
+      const ok = o.ch === 'Т';
+      b.classList.add(ok?'correct':'wrong');
+      if(ok){ document.getElementById('caseFb').textContent = '🎉 Верно!'; speak('Т'); addPoints(2); completeTask('case'); setTimeout(newCaseGame, 1200); }
+      else document.getElementById('caseFb').textContent = '❌ Не заглавная Т.';
+    };
+    optsEl.appendChild(b);
+  });
+}
+
+/* ==================== ТРАССИРОВКА ==================== */
+let traceReady = false;
+function setupTrace(){
+  const svg = document.getElementById('traceSvg');
+  const path = document.getElementById('tracePath');
+  if(traceReady) return;
+  traceReady = true;
+  let drawing = false, d = '';
+  const pt = e=>{ const r = svg.getBoundingClientRect(); const t = e.touches? e.touches[0] : e;
+    return {x:(t.clientX-r.left)/r.width*400, y:(t.clientY-r.top)/r.height*260}; };
+  const start = e=>{ drawing=true; const q=pt(e); d=`M ${q.x} ${q.y}`; path.setAttribute('d', d); };
+  const move = e=>{ if(!drawing) return; e.preventDefault(); const q=pt(e); d+=` L ${q.x} ${q.y}`; path.setAttribute('d', d); };
+  const end = ()=>{ if(!drawing) return; drawing=false;
+    if(d.length > 80){ document.getElementById('traceFb').textContent = '✏️ Молодец!'; addPoints(3); completeTask('trace'); } };
+  svg.addEventListener('mousedown', start); svg.addEventListener('mousemove', move);
+  svg.addEventListener('mouseup', end); svg.addEventListener('mouseleave', end);
+  svg.addEventListener('touchstart', start, {passive:false});
+  svg.addEventListener('touchmove', move, {passive:false});
+  svg.addEventListener('touchend', end);
+}
+function clearTrace(){ document.getElementById('tracePath')?.setAttribute('d',''); }
+
+/* ==================== НАЙДИ ==================== */
+function newFindGame(){
+  const letters = ['Т','А','Б','Т','В','Г','Т','Е','Ж','Т','З','Т'];
+  const shuffled = shuffle(letters);
+  const c = document.getElementById('findGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character"><div class="avatar gayk">🐻</div><div class="bubble"><b>Гайк:</b> Найди <b>все буквы Т</b>! Их 5.</div></div>
+      <div class="options" id="findOpts" style="gap:8px;"></div>
+      <div class="fb" id="findFb">Найдено: 0 из 5</div>
+    </div>
+    <div class="center"><button class="btn ghost" onclick="newFindGame()">Новая</button></div>
+  `;
+  let found = 0;
+  const opts = document.getElementById('findOpts');
+  shuffled.forEach(ch=>{
+    const b = document.createElement('button');
+    b.className = 'opt'; b.textContent = ch; b.style.fontSize = '30px'; b.style.minWidth = '60px';
+    b.onclick = ()=>{
+      if(b.dataset.done) return;
+      if(ch === 'Т'){
+        b.classList.add('correct'); b.dataset.done = '1';
+        found++; speak('Т'); addPoints(2);
+        document.getElementById('findFb').textContent = `Найдено: ${found} из 5`;
+        if(found >= 5){
+          document.getElementById('findFb').textContent = '🎉 Все найдены!';
+          completeTask('find'); earnBadge('find','Искатель','🔍');
+          setTimeout(newFindGame, 1500);
+        }
+      } else { b.classList.add('wrong'); setTimeout(()=>b.classList.remove('wrong'), 500); }
+    };
+    opts.appendChild(b);
+  });
+}
+
+/* ==================== Т ИЛИ П ==================== */
+function newCompareGame(){
+  const t = COMPARE_Q[Math.floor(Math.random()*COMPARE_Q.length)];
+  const c = document.getElementById('compareGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character mone-bubble"><div class="avatar mone">🐰</div><div class="bubble"><b>Моне:</b> ${t.q}</div></div>
+      <div class="compare-area" id="cmpArea"></div>
+      <div class="fb" id="cmpFb">Счёт: ${P.compareScore}</div>
+    </div>
+  `;
+  const area = document.getElementById('cmpArea');
+  shuffle([...t.o]).forEach(ch=>{
+    const card = document.createElement('div');
+    card.className = 'compare-card'; card.textContent = ch;
+    card.onclick = ()=>{
+      const ok = ch === t.c;
+      card.classList.add(ok?'correct':'wrong');
+      if(ok){
+        P.compareScore++; save();
+        document.getElementById('cmpFb').textContent = `Счёт: ${P.compareScore}`;
+        speak(ch); addPoints(3); completeTask('compare'); checkBadges();
+        setTimeout(newCompareGame, 1200);
+      } else {
+        document.getElementById('cmpFb').textContent = '❌ Не та. Счёт: '+P.compareScore;
+        setTimeout(()=>card.classList.remove('wrong'), 600);
+      }
+    };
+    area.appendChild(card);
+  });
+}
+
+/* ==================== МЕСТО ==================== */
+function newPositionGame(){
+  const w = WORDS_T[Math.floor(Math.random()*WORDS_T.length)];
+  const letters = w.w.split('');
+  const c = document.getElementById('positionGame');
+  const options = [
+    {name:'в начале', key:'start', icon:'1️⃣'},
+    {name:'в середине', key:'middle', icon:'2️⃣'},
+    {name:'в конце', key:'end', icon:'3️⃣'},
+  ];
+  c.innerHTML = `
+    <div class="task">
+      <div class="character mone-bubble"><div class="avatar mone">🐰</div><div class="bubble"><b>Моне:</b> Где в слове <b>${w.w}</b> ${w.em} буква <b>Т</b>?</div></div>
+      <div class="word-position" id="posLetters"></div>
+      <div class="options" id="posOpts"></div>
+      <div class="fb" id="posFb"></div>
+    </div>
+    <div class="center"><button class="btn ghost" onclick="newPositionGame()">Ещё</button></div>
+  `;
+  const posLetters = document.getElementById('posLetters');
+  letters.forEach(ch=>{
+    const el = document.createElement('div');
+    el.className = 'letter-box' + (ch === 'Т' ? ' t-letter' : '');
+    el.textContent = ch;
+    posLetters.appendChild(el);
+  });
+  const posOpts = document.getElementById('posOpts');
+  options.forEach(o=>{
+    const b = document.createElement('button');
+    b.className = 'opt'; b.style.fontSize = '16px';
+    b.innerHTML = `${o.icon} ${o.name}`;
+    b.onclick = ()=>{
+      const ok = o.key === w.pos;
+      b.classList.add(ok?'correct':'wrong');
+      if(ok){ document.getElementById('posFb').textContent = '🎉 Верно!'; speak(w.w); addPoints(3); completeTask('position'); setTimeout(newPositionGame, 1400); }
+      else document.getElementById('posFb').textContent = '❌ Посмотри внимательно.';
+    };
+    posOpts.appendChild(b);
+  });
+}
+
+/* ==================== СЛОГИ ==================== */
+function renderSyllables(){
+  const c = document.getElementById('syllableGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character"><div class="avatar gayk">🐻</div><div class="bubble"><b>Гайк:</b> Т + гласная = слог! Нажимай и слушай.</div></div>
+      <div class="syllables-row" id="sylRow"></div>
+      <div class="fb" id="sylFb">Прочитано: 0</div>
+    </div>
+    <div class="center"><button class="btn terra" onclick="completeTask('syllables');">✅ Я прочитал!</button></div>
+  `;
+  const row = document.getElementById('sylRow');
+  let count = 0;
+  SYL_T.forEach(syl=>{
+    const el = document.createElement('div');
+    el.className = 'syl-card';
+    el.innerHTML = syl.replace('Т','<span class="t-hi">Т</span>');
+    el.onclick = ()=>{
+      el.classList.add('active');
+      setTimeout(()=>el.classList.remove('active'), 500);
+      speak(syl); count++;
+      document.getElementById('sylFb').textContent = `Прочитано: ${count}`;
+      addPoints(1);
+    };
+    row.appendChild(el);
+  });
+}
+
+/* ==================== СЛОВА ==================== */
+function renderWords(){
+  const g = document.getElementById('wordCards');
+  g.innerHTML = '';
+  WORDS_T.forEach(w=>{
+    const el = document.createElement('div');
+    el.className = 'word-card';
+    const wordHi = w.w.split('').map(ch=>ch==='Т'?'<span class="t-hi">Т</span>':ch).join('');
+    el.innerHTML = `<div class="em">${w.em}</div>
+      <div class="word">${wordHi}</div>
+      <div class="syls">${w.syls.join(' • ')}</div>`;
+    el.onclick = ()=>{ speak(w.w); addPoints(1); completeTask('words'); };
+    g.appendChild(el);
+  });
+}
+
+/* ==================== ПРЕДЛОЖЕНИЯ ==================== */
+let sentState = null;
+function newSentence(){
+  const s = SENTENCES[Math.floor(Math.random()*SENTENCES.length)];
+  sentState = {s, idx:0};
+  const c = document.getElementById('sentenceGame');
+  c.innerHTML = `
+    <div class="sentence-reader">
+      <div class="pic">${s.pic}</div>
+      <div class="sentence" id="sentRow">
+        ${s.words.map((w,i)=>`<span class="word" data-i="${i}" data-w="${w}">${w}</span>`).join(' ')}
+      </div>
+      <div class="fb" id="sentFb">Нажимай слова по порядку.</div>
+    </div>
+    <div class="center" style="margin-top:14px;">
+      <button class="btn teal" onclick="readAll()">🔊 Прочитать всё</button>
+      <button class="btn ghost" onclick="newSentence()">Другое</button>
+    </div>
+  `;
+  c.querySelectorAll('#sentRow .word').forEach(el=>{
+    el.onclick = ()=>{
+      speak(el.dataset.w); addPoints(1); el.classList.add('read');
+      const i = +el.dataset.i;
+      if(i === sentState.idx){
+        sentState.idx++;
+        if(sentState.idx >= s.words.length){
+          document.getElementById('sentFb').textContent = '🎉 Прочитано!';
+          completeTask('sentences'); addPoints(3);
+          setTimeout(newSentence, 2000);
+        }
+      }
+    };
+  });
+}
+function readAll(){
+  if(!sentState) return;
+  speak(sentState.s.words.join(' '));
+  document.querySelectorAll('#sentRow .word').forEach(el=>el.classList.add('read'));
+  completeTask('sentences'); addPoints(3);
+}
+
+/* ==================== ИСТОРИИ ==================== */
+function newStory(){
+  const s = STORIES[Math.floor(Math.random()*STORIES.length)];
+  const words = s.text.split(' ');
+  const c = document.getElementById('storyGame');
+  c.innerHTML = `
+    <div class="story-card">
+      <div class="pic">${s.pic}</div>
+      <div class="text" id="storyText">
+        ${words.map(w=>`<span class="word" data-w="${w.replace(/[.,!?]/g,'')}">${w}</span>`).join(' ')}
+      </div>
+    </div>
+    <div class="center">
+      <button class="btn teal" onclick="readStory()">🔊 Прочитать всё</button>
+    </div>
+  `;
+  c.querySelectorAll('#storyText .word').forEach(el=>{
+    el.onclick = ()=>{ el.classList.add('read'); speak(el.dataset.w); addPoints(1); };
+  });
+  window._curStory = s;
+}
+function readStory(){
+  const el = document.getElementById('storyText');
+  if(!el) return;
+  const text = el.textContent;
+  speak(text);
+  el.querySelectorAll('.word').forEach(w=>w.classList.add('read'));
+  if(window._curStory && !P.stories.includes(window._curStory.text)){
+    P.stories.push(window._curStory.text); save(); checkBadges();
+  }
+  completeTask('stories'); addPoints(3);
+}
+
+/* ==================== ПО РОЛЯМ ==================== */
+let roleState = null;
+function newRole(){
+  const r = ROLES[Math.floor(Math.random()*ROLES.length)];
+  roleState = r;
+  const c = document.getElementById('rolesGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="dialogue-role" id="roleLines">
+        ${r.lines.map((l,i)=>`
+          <div class="role-line" data-i="${i}">
+            <div class="avatar ${l.who}">${l.who==='gayk'?'🐻':'🐰'}</div>
+            <div class="line">${l.text}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="fb" id="roleFb">Нажимай реплики и читай вслух.</div>
+    </div>
+    <div class="center"><button class="btn teal" onclick="readAllRoles()">🔊 Прочитать всё</button></div>
+  `;
+  c.querySelectorAll('.role-line').forEach(el=>{
+    el.onclick = ()=>{
+      const i = +el.dataset.i;
+      el.classList.add('read'); speak(r.lines[i].text);
+      addPoints(1);
+      if(i === roleState.lines.length - 1){
+        const idx = ROLES.indexOf(r);
+        if(idx >= 0 && !P.roles.includes(idx)){ P.roles.push(idx); save(); checkBadges(); }
+        completeTask('roles');
+      }
+    };
+  });
+}
+function readAllRoles(){
+  if(!roleState) return;
+  roleState.lines.forEach((l,i)=>{
+    setTimeout(()=>{
+      speak(l.text);
+      document.querySelector(`#roleLines .role-line[data-i="${i}"]`)?.classList.add('read');
+    }, i*1500);
+  });
+  const idx = ROLES.indexOf(roleState);
+  if(idx >= 0 && !P.roles.includes(idx)){ P.roles.push(idx); save(); checkBadges(); }
+  completeTask('roles'); addPoints(3);
+}
+
+/* ==================== СОБЕРИ ==================== */
+let buildState = null;
+function newBuild(){
+  const pool = WORDS_T.filter(w=>w.w.length <= 6);
+  const target = pool[Math.floor(Math.random()*pool.length)];
+  buildState = {target, picked:[]};
+  const c = document.getElementById('buildGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character mone-bubble"><div class="avatar mone">🐰</div><div class="bubble"><b>Моне:</b> Собери слово: ${target.em}</div></div>
+      <div class="build-slots" id="buildSlots">
+        ${target.w.split('').map(()=>`<div class="build-slot"></div>`).join('')}
+      </div>
+      <div class="letter-pool" id="buildPool"></div>
+      <div class="fb" id="buildFb"></div>
+    </div>
+    <div class="center"><button class="btn ghost" onclick="newBuild()">Новое</button></div>
+  `;
+  const pool2 = document.getElementById('buildPool');
+  const letters = target.w.split('');
+  const distract = ['О','У','И'].filter(l=>!letters.includes(l)).slice(0,2);
+  shuffle([...letters, ...distract]).forEach(ch=>{
+    const b = document.createElement('button');
+    b.textContent = ch;
+    b.onclick = ()=>{
+      if(b.dataset.used) return;
+      b.dataset.used = '1'; b.classList.add('used');
+      const slot = [...document.querySelectorAll('#buildSlots .build-slot')].find(s=>!s.classList.contains('filled'));
+      if(!slot) return;
+      slot.textContent = ch; slot.classList.add('filled');
+      buildState.picked.push(ch);
+      if(buildState.picked.length === target.w.length){
+        const built = buildState.picked.join('');
+        if(built === target.w){
+          document.getElementById('buildFb').textContent = '🎉 Правильно!';
+          speak(target.w); addPoints(3); completeTask('build');
+          earnBadge('build','Строитель','🧩');
+          setTimeout(newBuild, 1500);
+        } else {
+          document.getElementById('buildFb').textContent = `❌ Получилось «${built}».`;
+          setTimeout(newBuild, 1400);
+        }
+      }
+    };
+    pool2.appendChild(b);
+  });
+}
+
+/* ==================== ЛОВЛЯ ==================== */
+let catchScore = 0, catchActive = false;
+function startCatch(){
+  if(catchActive) return;
+  catchActive = true; catchScore = 0;
+  document.getElementById('catchFb').textContent = 'Лови Т!';
+  const area = document.getElementById('catchArea');
+  area.querySelectorAll('.falling').forEach(f=>f.remove());
+  const loop = setInterval(()=>{
+    if(!catchActive){ clearInterval(loop); return; }
+    const isT = Math.random() < 0.4;
+    const ch = isT ? 'Т' : ['А','Б','В','Г','Д','Е','Ж'][Math.floor(Math.random()*7)];
+    const el = document.createElement('div');
+    el.className = 'falling' + (isT ? ' is-t' : '');
+    el.textContent = ch;
+    el.style.left = (5 + Math.random()*80) + '%';
+    area.appendChild(el);
+    let top = -50;
+    const int = setInterval(()=>{
+      top += 2.5; el.style.top = top + 'px';
+      if(top > area.clientHeight){ clearInterval(int); el.remove(); }
+    }, 30);
+    el.onclick = ()=>{
+      clearInterval(int);
+      if(isT){
+        el.classList.add('caught');
+        catchScore++;
+        document.getElementById('catchFb').textContent = `Поймано: ${catchScore}`;
+        speak('Т'); addPoints(1);
+        P.catchScore = Math.max(P.catchScore, catchScore);
+        save(); checkBadges();
+        setTimeout(()=>el.remove(), 300);
+        if(catchScore >= 10){
+          catchActive = false;
+          document.getElementById('catchFb').textContent = '🎉 Отлично! Поймано 10!';
+          completeTask('catch');
+        }
+      } else { el.style.background = '#fca5a5'; setTimeout(()=>el.remove(), 300); }
+    };
+  }, 800);
+}
+
+/* ==================== ПИШЕМ ==================== */
+let writeCtx = null, writeDrawing = false;
+function setupWrite(){
+  const c = document.getElementById('writeCanvas');
+  const r = c.getBoundingClientRect();
+  c.width = r.width; c.height = 240;
+  writeCtx = c.getContext('2d');
+  writeCtx.lineWidth = 10; writeCtx.lineCap = 'round';
+  writeCtx.strokeStyle = '#bf360c'; writeCtx.shadowColor = '#bf360c'; writeCtx.shadowBlur = 8;
+  const pt = e=>{ const rr = c.getBoundingClientRect(); const t = e.touches? e.touches[0] : e;
+    return {x: t.clientX - rr.left, y: t.clientY - rr.top}; };
+  c.addEventListener('mousedown', e=>{ writeDrawing=true; const q=pt(e); writeCtx.beginPath(); writeCtx.moveTo(q.x,q.y); });
+  c.addEventListener('mousemove', e=>{ if(!writeDrawing) return; const q=pt(e); writeCtx.lineTo(q.x,q.y); writeCtx.stroke(); });
+  c.addEventListener('mouseup', ()=>writeDrawing=false);
+  c.addEventListener('mouseleave', ()=>writeDrawing=false);
+  c.addEventListener('touchstart', e=>{ e.preventDefault(); writeDrawing=true; const q=pt(e); writeCtx.beginPath(); writeCtx.moveTo(q.x,q.y); }, {passive:false});
+  c.addEventListener('touchmove', e=>{ e.preventDefault(); if(!writeDrawing) return; const q=pt(e); writeCtx.lineTo(q.x,q.y); writeCtx.stroke(); }, {passive:false});
+  c.addEventListener('touchend', ()=>writeDrawing=false);
+}
+function clearWrite(){ if(writeCtx){ const c=document.getElementById('writeCanvas'); writeCtx.clearRect(0,0,c.width,c.height); } }
+
+/* ==================== РАСКРАСЬ ==================== */
+const PAINT_COLORS = ['#ffcc80','#ffa726','#ef6c00','#e65100','#ff8a65','#e64a19','#80cbc4','#26a69a','#66bb6a'];
+function renderPaint(){
+  const picker = document.getElementById('colorPicker');
+  picker.innerHTML = '';
+  PAINT_COLORS.forEach(c=>{
+    const d = document.createElement('div');
+    d.className = 'color-dot'; d.style.background = c;
+    d.onclick = ()=>{
+      document.querySelectorAll('.color-dot').forEach(x=>x.classList.remove('selected'));
+      d.classList.add('selected');
+      const el = document.getElementById('paintLetter');
+      el.style.color = c;
+      el.style.textShadow = `0 4px 0 rgba(255,255,255,.9), 0 8px 20px ${c}66`;
+      speak('Т'); addPoints(2); completeTask('paint');
+    };
+    picker.appendChild(d);
+  });
+}
+
+/* ==================== МАРАФОН ==================== */
+const LEVELS = [
+  {n:1,name:'Буквы',desc:'Учим букву Т',unlock:()=>true},
+  {n:2,name:'Слоги',desc:'Читаем слоги',unlock:()=>P.tasks.syllables},
+  {n:3,name:'Слова',desc:'Читаем слова',unlock:()=>P.tasks.words},
+  {n:4,name:'Предложения',desc:'Читаем фразы',unlock:()=>P.tasks.sentences},
+  {n:5,name:'Истории',desc:'Читаем истории',unlock:()=>P.stories.length>=1},
+  {n:6,name:'Мастер',desc:'Всё вместе',unlock:()=>P.stories.length>=3},
+];
+function renderMarathon(){
+  const g = document.getElementById('marathonLevels');
+  if(!g) return;
+  g.innerHTML = '';
+  LEVELS.forEach(l=>{
+    const unlocked = l.unlock();
+    const done = Object.keys(P.tasks).length >= l.n * 3;
+    const el = document.createElement('div');
+    el.className = 'level-card' + (unlocked?'':' locked') + (done?' done':'');
+    el.innerHTML = `
+      <div class="lvl-num">${done?'✓':l.n}</div>
+      <div class="lvl-name">${l.name}</div>
+      <div class="lvl-desc">${l.desc}</div>
+    `;
+    el.onclick = ()=>{
+      if(!unlocked){ document.getElementById('marathonGame').innerHTML = '<div class="hint-box">🔒 Пройди предыдущие уровни!</div>'; return; }
+      startLevel(l.n);
+    };
+    g.appendChild(el);
+  });
+}
+function startLevel(n){
+  const c = document.getElementById('marathonGame');
+  if(n===1) c.innerHTML = '<div class="hint-box">Изучи букву в разделе «Знакомство»!</div>';
+  else if(n===2) c.innerHTML = '<div class="hint-box">Потренируйся в разделе «Слоги»!</div>';
+  else if(n===3) c.innerHTML = '<div class="hint-box">Открой раздел «Слова»!</div>';
+  else if(n===4) c.innerHTML = '<div class="hint-box">Читай «Предложения»!</div>';
+  else if(n===5) c.innerHTML = '<div class="hint-box">Читай «Мини-истории»!</div>';
+  else c.innerHTML = '<div class="hint-box">🎓 Ты мастер буквы Т!</div>';
+}
+
+/* ==================== НАГРАДЫ ==================== */
+const BADGES = [
+  {id:'start',t:'Первый шаг',i:'👣'},{id:'three',t:'3 задания',i:'🥉'},
+  {id:'seven',t:'7 заданий',i:'🥈'},{id:'twelve',t:'12 заданий',i:'🥇'},
+  {id:'sixteen',t:'16 заданий',i:'🏆'},{id:'p30',t:'30 очков',i:'⭐'},
+  {id:'p60',t:'60 очков',i:'🌟'},{id:'p120',t:'120 очков',i:'✨'},
+  {id:'find',t:'Искатель',i:'🔍'},{id:'compare5',t:'Различаю Т и П',i:'🔤'},
+  {id:'catch10',t:'Ловкач',i:'🎯'},{id:'build',t:'Строитель',i:'🧩'},
+  {id:'reader',t:'Читатель',i:'📖'},{id:'writer',t:'Писатель',i:'✏️'},
+  {id:'singer',t:'Певец',i:'🎵'},{id:'story3',t:'3 истории',i:'📖'},
+  {id:'storyAll',t:'Все истории',i:'📚'},{id:'role2',t:'Актёр',i:'🎭'},
+  {id:'master',t:'Мастер Т',i:'🏆'},
+];
+function renderBadges(){
+  const g = document.getElementById('badgeGrid');
+  if(!g) return;
+  g.innerHTML = '';
+  BADGES.forEach(b=>{
+    const earned = !!P.badges[b.id];
+    const d = document.createElement('div');
+    d.className = 'badge' + (earned?' earned':'');
+    d.innerHTML = `<div class="icon">${b.i}</div><div class="title">${b.t}</div>`;
+    g.appendChild(d);
+  });
+}
+
+/* ==================== ОБЩЕЕ ==================== */
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function speak(text){
+  if('speechSynthesis' in window){
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ru-RU'; u.rate = 0.8; u.pitch = 1.15;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  }
+}
+function resetAll(){
+  if(!confirm('Начать заново с буквой Т?')) return;
+  P = JSON.parse(JSON.stringify(DEFAULT));
+  save(); updateHUD(); renderBadges(); renderMarathon();
+  newCaseGame(); newFindGame(); newCompareGame();
+  newPositionGame(); newSentence(); newBuild(); newStory(); newRole();
+}
+
+/* ==================== СТАРТ ==================== */
+function init(){
+  buildNav();
+  renderSound();
+  renderSyllables();
+  renderWords();
+  renderPaint();
+  renderBadges();
+  renderMarathon();
+  updateHUD();
+  setupTrace();
+  setupWrite();
+  newCaseGame();
+  newFindGame();
+  newCompareGame();
+  newPositionGame();
+  newSentence();
+  newBuild();
+  newStory();
+  newRole();
+}
+init();
+</script>
+</body>
+</html>

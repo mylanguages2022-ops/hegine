@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Приключения Гайка — развивающая игра</title>
+<style>
+:root{--ink:#26334a;--muted:#65748b;--sky:#e9f6ff;--cream:#fffaf0;--purple:#8067d8;--green:#48b78b;--yellow:#ffd76a;--pink:#ff9db7;--blue:#68b7f2}
+*{box-sizing:border-box}body{margin:0;font-family:"Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:linear-gradient(160deg,#e7f6ff,#f7efff 55%,#fff6df);min-height:100vh}
+button{font:inherit;cursor:pointer;border:0;transition:transform .12s,filter .12s}button:hover{filter:brightness(1.03);transform:translateY(-2px)}button:focus-visible{outline:4px solid #26334a;outline-offset:3px}
+.app{max-width:1120px;margin:auto;padding:18px}.top{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:#ffffffd9;border:2px solid #fff;border-radius:24px;padding:14px 18px;box-shadow:0 8px 24px #506b8a12}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:58px;height:58px;border-radius:19px;background:linear-gradient(135deg,#ffd76a,#ff9db7);display:grid;place-items:center;font-size:34px}.brand h1{font-size:clamp(20px,4vw,30px);margin:0}.brand p{margin:3px 0 0;color:var(--muted);font-size:14px}.top-actions{display:flex;gap:8px;flex-wrap:wrap}.soft-btn{background:#eef3ff;color:#354463;border-radius:13px;padding:11px 14px;font-weight:800}.save-btn{background:#dff8e9;color:#176747}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.stat{background:#ffffffc9;border:2px solid white;border-radius:17px;padding:10px 14px;display:flex;align-items:center;gap:10px}.stat .emoji{font-size:27px}.stat strong{display:block;font-size:18px}.stat small{color:var(--muted)}
+main{background:#ffffffd9;border:2px solid #fff;border-radius:28px;padding:clamp(14px,3vw,28px);box-shadow:0 12px 30px #506b8a13;min-height:510px}.welcome{text-align:center;padding:18px 0 8px}.hero{font-size:clamp(78px,14vw,130px);line-height:1.15;filter:drop-shadow(0 8px 0 #e5dafa)}h2{font-size:clamp(25px,5vw,38px);margin:10px 0}.lead{font-size:18px;color:var(--muted);max-width:650px;margin:0 auto 20px;line-height:1.5}.primary{background:linear-gradient(135deg,#8067d8,#a18ce9);color:white;border-radius:17px;padding:15px 24px;font-weight:900;font-size:18px;box-shadow:0 5px 0 #5e49a9}.primary:active{transform:translateY(3px);box-shadow:0 2px 0 #5e49a9}
+.section-head{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:18px}.section-head h2{margin:0}.back{background:#f0edff;color:#58449e;padding:10px 14px;border-radius:13px;font-weight:800}
+.worlds{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}.world{min-height:180px;border-radius:22px;padding:18px;text-align:left;border:3px solid #fff;box-shadow:0 6px 0 #dce4f1;display:flex;flex-direction:column;gap:6px;color:#26334a}.world .big{font-size:48px}.world strong{font-size:20px}.world span:last-child{color:#526178;font-size:14px;line-height:1.35}.w1{background:#e2f6ff}.w2{background:#fff0c8}.w3{background:#e7f8df}.w4{background:#ffe5ee}.w5{background:#eee7ff}.w6{background:#e1f7ee}
+.gamebox{max-width:780px;margin:auto;text-align:center}.prompt{font-size:clamp(22px,4vw,31px);font-weight:900;margin:14px 0}.visual{font-size:clamp(76px,14vw,112px);line-height:1.3;margin:10px 0;min-height:125px;display:grid;place-items:center}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px auto;max-width:580px}.choice{background:#f2f6ff;border:3px solid white;box-shadow:0 5px 0 #d8e2f4;border-radius:18px;min-height:72px;padding:12px;font-size:20px;font-weight:900;color:#34435d}.choice .choice-emoji{font-size:30px;display:block;margin-bottom:3px}.choice.correct{background:#d9f8e8;border-color:#75d3a6}.choice.wrong{background:#ffe5e5;border-color:#f4a2a2}.feedback{min-height:35px;font-weight:900;font-size:19px;margin:10px 0;color:#26744f}.feedback.bad{color:#b75b58}.game-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px}.progress-wrap{height:12px;background:#e9edf7;border-radius:99px;overflow:hidden;margin:8px 0 18px}.progress{height:100%;width:0;background:linear-gradient(90deg,#59c998,#7dc8ff);border-radius:99px;transition:width .3s}
+.memory-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;max-width:640px;margin:20px auto}.memory-card{aspect-ratio:1/1;border-radius:16px;background:#cfc2ff;color:#3e3474;font-size:clamp(24px,5vw,42px);font-weight:900;box-shadow:0 5px 0 #a69ad9;border:3px solid white;display:grid;place-items:center;padding:4px}.memory-card.open,.memory-card.matched{background:#e6f7ff;box-shadow:0 4px 0 #b9ddec}.memory-card.matched{background:#d9f8e8}
+.sort-area{display:grid;grid-template-columns:1fr 1fr;gap:12px;max-width:680px;margin:20px auto}.sort-bin{background:#f2f6ff;border:3px dashed #aab9d4;border-radius:18px;min-height:150px;padding:12px}.sort-bin h3{margin:0 0 10px}.sort-bin .drop-items{display:flex;flex-wrap:wrap;gap:7px;justify-content:center}.sort-item{background:#fff;border:2px solid #d9e3f4;border-radius:13px;padding:10px 12px;font-size:25px;min-width:65px}.sort-item.selected{border-color:#8067d8;background:#eee9ff}.sort-bin.target{background:#e4f8ec;border-color:#69c99a}
+.paint-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:16px}.color-dot{width:45px;height:45px;border-radius:50%;border:4px solid white;box-shadow:0 2px 7px #34435d30}.paint-canvas{background:white;border:3px solid #e2e9f5;border-radius:22px;width:min(100%,520px);height:260px;margin:auto;display:grid;place-items:center;font-size:140px;cursor:pointer;user-select:none}
+.footer{text-align:center;color:#728097;font-size:12px;padding:15px 5px}.notice{font-size:14px;color:var(--muted);line-height:1.5}.pill{display:inline-block;background:#fff1be;border-radius:999px;padding:6px 11px;font-size:13px;font-weight:800;margin:3px}
+.modal-bg{position:fixed;inset:0;background:#26334a66;display:grid;place-items:center;padding:16px;z-index:10}.modal{background:white;border-radius:24px;max-width:480px;width:100%;padding:24px;box-shadow:0 15px 60px #18233b40}.modal h2{margin-top:0}.modal-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.hidden{display:none!important}
+@media(max-width:600px){.app{padding:10px}.stats{gap:6px}.stat{padding:9px 7px;gap:5px}.stat .emoji{font-size:22px}.stat strong{font-size:15px}.stat small{font-size:11px}.choices{gap:8px}.choice{font-size:17px;min-height:68px}.memory-grid{gap:6px}.memory-card{border-radius:12px}.world{min-height:155px}.sort-area{gap:7px}.sort-bin{padding:8px}.sort-item{min-width:48px;padding:7px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="top">
+  <div class="brand"><div class="logo">🚀</div><div><h1>Приключения Гайка</h1><p>Большая игра для маленького исследователя</p></div></div>
+  <div class="top-actions"><button class="soft-btn save-btn" id="saveBtn">💾 Сохранить</button><button class="soft-btn" id="loadBtn">📂 Продолжить</button><button class="soft-btn" id="soundBtn">🔊 Звук: вкл.</button></div>
+</header>
+<div class="stats">
+  <div class="stat"><span class="emoji">⭐</span><div><strong id="stars">0</strong><small>звёздочек</small></div></div>
+  <div class="stat"><span class="emoji">🧩</span><div><strong id="played">0</strong><small>игр пройдено</small></div></div>
+  <div class="stat"><span class="emoji">🌈</span><div><strong id="streak">0</strong><small>ответов подряд</small></div></div>
+</div>
+<main id="main"></main>
+<div class="footer">Игра создана для доброго любопытства. Здесь можно пробовать снова — ошибки помогают учиться 💛</div>
+</div>
+<div id="modalRoot"></div>
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const main = $('#main');
+const state = {stars:0,played:0,streak:0,best:0,completed:{},sound:true,screen:'home',game:null,round:0,score:0,answered:false,history:[]};
+let currentCleanup = null;
+const saveKey = 'gaik_big_development_game_v1';
+const worlds = [
+ {id:'animals',title:'Зверята',emoji:'🐻',desc:'Узнаём животных, слушаем и находим пары.',cls:'w1'},
+ {id:'numbers',title:'Весёлый счёт',emoji:'🔢',desc:'Считаем пальчики, фрукты и звёзды.',cls:'w2'},
+ {id:'colors',title:'Цветная планета',emoji:'🎨',desc:'Цвета, формы и внимательность.',cls:'w3'},
+ {id:'memory',title:'Память супергероя',emoji:'🧠',desc:'Ищем одинаковые карточки.',cls:'w4'},
+ {id:'logic',title:'Умные задачки',emoji:'🧩',desc:'Что лишнее? Что идёт следующим?',cls:'w5'},
+ {id:'sort',title:'Разложи по домикам',emoji:'🏠',desc:'Сортируем предметы по группам.',cls:'w6'},
+ {id:'creative',title:'Творческая минутка',emoji:'🖍️',desc:'Выбираем цвет и создаём настроение.',cls:'w2'}
+];
+const data = {
+ animals:[
+  {q:'Кто говорит «мяу»?',e:'🐱',a:['Кошка','Собака','Корова','Утка'],c:0},
+  {q:'Кто самый большой из этих зверей?',e:'🐘',a:['Мышка','Слон','Котёнок','Заяц'],c:1},
+  {q:'Кто умеет плавать и живёт в воде?',e:'🐟',a:['Рыбка','Лошадка','Курица','Бабочка'],c:0},
+  {q:'У кого длинные ушки?',e:'🐰',a:['Медведь','Заяц','Лев','Пингвин'],c:1},
+  {q:'Кто даёт молоко на ферме?',e:'🐄',a:['Корова','Лиса','Волк','Попугай'],c:0},
+  {q:'Кто летает и собирает нектар?',e:'🦋',a:['Черепаха','Бабочка','Свинка','Ёж'],c:1},
+  {q:'У кого есть грива?',e:'🦁',a:['Лев','Рыба','Улитка','Кролик'],c:0},
+  {q:'Кто носит домик на спине?',e:'🐢',a:['Черепаха','Лошадь','Коза','Пчела'],c:0}
+ ],
+ numbers:[
+  {q:'Сколько яблок?',e:'🍎 🍎 🍎',a:['2','3','4','5'],c:1},
+  {q:'Сколько звёздочек?',e:'⭐ ⭐ ⭐ ⭐ ⭐',a:['4','5','6','3'],c:1},
+  {q:'Сколько мячиков?',e:'⚽ ⚽',a:['1','2','3','4'],c:1},
+  {q:'Что идёт после числа 3?',e:'1 · 2 · 3 · ?',a:['5','2','4','1'],c:2},
+  {q:'Сколько пальчиков на одной руке?',e:'🖐️',a:['3','4','5','6'],c:2},
+  {q:'Что больше?',e:'',a:['2','5','Одинаково','1'],c:1,visual:'2   🆚   5'},
+  {q:'Посчитай сердечки',e:'❤️ ❤️ ❤️ ❤️',a:['3','4','5','2'],c:1},
+  {q:'Сколько будет один мячик и ещё один?',e:'⚽ + ⚽',a:['1','2','3','4'],c:1}
+ ],
+ colors:[
+  {q:'Какого цвета солнышко?',e:'☀️',a:['Синее','Жёлтое','Зелёное','Фиолетовое'],c:1},
+  {q:'Найди цвет травы',e:'🌱',a:['Зелёный','Розовый','Серый','Синий'],c:0},
+  {q:'Какого цвета клубника?',e:'🍓',a:['Голубая','Красная','Чёрная','Белая'],c:1},
+  {q:'Какая фигура круглая?',e:'',a:['🔺','🟦','🔴','⭐'],c:2},
+  {q:'Найди треугольник',e:'',a:['🟠','🔺','🟩','💜'],c:1},
+  {q:'Что обычно бывает белым?',e:'',a:['Снег','Апельсин','Лист травы','Уголь'],c:0},
+  {q:'Какого цвета небо в ясный день?',e:'🌤️',a:['Синее','Оранжевое','Коричневое','Розовое'],c:0},
+  {q:'Какая фигура с четырьмя равными сторонами?',e:'',a:['🔺','🟦','⚪','🌙'],c:1}
+ ],
+ logic:[
+  {q:'Что не подходит к остальным?',e:'🍎 🍐 🥕 🍌',a:['Яблоко','Груша','Морковь','Банан'],c:2},
+  {q:'Продолжи ряд',e:'🔴 🔵 🔴 🔵 ?',a:['🔴','🟢','⭐','🔺'],c:0},
+  {q:'Что нужно надеть на ноги?',e:'',a:['🧤 Перчатки','🧦 Носки','🧢 Шапку','🕶️ Очки'],c:1},
+  {q:'Кто просыпается обычно ночью?',e:'🌙',a:['Сова','Петух','Бабочка','Белка'],c:0},
+  {q:'Что легче увидеть в небе?',e:'☁️',a:['Облако','Карандаш','Тарелку','Башмак'],c:0},
+  {q:'Продолжи ряд',e:'🐶 🐶 🐱 🐶 🐶 ?',a:['🐱','🐸','🐶','🐻'],c:0},
+  {q:'Что используют, чтобы рисовать?',e:'',a:['Карандаш','Ложка','Ботинок','Подушка'],c:0},
+  {q:'Что бывает горячим?',e:'',a:['Лёд','Снег','Чай','Сосулька'],c:2}
+ ],
+ sort:[
+  {item:'🐶',group:'Животные'},{item:'🍎',group:'Еда'},{item:'🐱',group:'Животные'},{item:'🍌',group:'Еда'},
+  {item:'🐰',group:'Животные'},{item:'🍓',group:'Еда'},{item:'🐻',group:'Животные'},{item:'🍐',group:'Еда'}
+ ]
+};
+function updateStats(){ $('#stars').textContent=state.stars;$('#played').textContent=state.played;$('#streak').textContent=state.streak; }
+function sound(type='good'){
+ if(!state.sound) return;
+ try {const C=window.AudioContext||window.webkitAudioContext;if(!C)return;const c=new C(),o=c.createOscillator(),g=c.createGain();o.connect(g);g.connect(c.destination);o.type='sine';o.frequency.value=type==='good'?660:type==='bad'?220:440;g.gain.value=.06;o.start();g.gain.exponentialRampToValueAtTime(.001,c.currentTime+.16);o.stop(c.currentTime+.17);o.onended=()=>c.close();}catch(e){}
+}
+function btn(text,cls,fn){const b=document.createElement('button');b.className=cls;b.textContent=text;b.onclick=fn;return b;}
+function showHome(){
+ cleanup();state.screen='home';main.innerHTML=`<div class="welcome"><div class="hero">🧒🏻🚀</div><h2>Привет, Гайк!</h2><p class="lead">Сегодня мы отправимся в большое путешествие! Будем считать, искать, запоминать, узнавать зверят и разгадывать загадки. Выбирай любое приключение — спешить не нужно.</p><button class="primary" id="startAdventure">🌟 Начать приключение</button><p class="notice" style="margin-top:16px">Играть можно вместе со взрослым. Если задание пока трудное, можно попробовать ещё раз или выбрать другую игру.</p></div><div class="section-head"><h2>Куда отправимся?</h2><span class="pill">7 игровых зон</span></div><div class="worlds" id="worlds"></div>`;
+ $('#startAdventure').onclick=()=>document.querySelector('#worlds').scrollIntoView({behavior:'smooth',block:'start'});
+ const container=$('#worlds');
+ worlds.forEach(w=>{const b=document.createElement('button');b.className=`world ${w.cls}`;b.innerHTML=`<span class="big">${w.emoji}</span><strong>${w.title}</strong><span>${w.desc}</span>`;b.onclick=()=>launch(w.id);container.appendChild(b)});
+ updateStats();
+}
+function cleanup(){if(currentCleanup){currentCleanup();currentCleanup=null;}}
+function header(title,sub=''){return `<div class="section-head"><div><h2>${title}</h2>${sub?`<p class="notice">${sub}</p>`:''}</div><button class="back" id="backHome">← На карту</button></div>`;}
+function attachBack(){const b=$('#backHome');if(b)b.onclick=showHome;}
+function launch(id){
+ cleanup();state.game=id;state.screen=id;state.round=0;state.score=0;state.answered=false;
+ if(id==='memory') return memoryGame();
+ if(id==='sort') return sortGame();
+ if(id==='creative') return creativeGame();
+ quizGame(id);
+}
+function quizGame(id){
+ state.screen=id; const qs=[...data[id]]; // stable shuffle each run
+ for(let i=qs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[qs[i],qs[j]]=[qs[j],qs[i]]}
+ state.questions=qs;state.round=0;state.score=0;state.answered=false;renderQuestion();
+}
+function renderQuestion(){
+ const id=state.game,qs=state.questions,q=qs[state.round];
+ if(!q){finishGame();return;}
+ state.answered=false;
+ main.innerHTML=header(worlds.find(w=>w.id===id)?.title||'Игра','Выбирай ответ — здесь можно учиться в своём темпе.')+`<div class="gamebox"><div style="display:flex;justify-content:space-between;color:#6b7890;font-weight:800"><span>Задание ${state.round+1} из ${qs.length}</span><span>⭐ ${state.score}</span></div><div class="progress-wrap"><div class="progress" style="width:${state.round/qs.length*100}%"></div></div><div class="prompt">${q.q}</div><div class="visual">${q.visual||q.e||'🤔'}</div><div class="choices" id="choices"></div><div class="feedback" id="feedback" aria-live="polite"></div><div class="game-actions" id="gameActions"></div></div>`;
+ attachBack();const choices=$('#choices');
+ q.a.forEach((a,i)=>{const b=document.createElement('button');b.className='choice';b.textContent=a;b.onclick=()=>answerQuiz(i,b);choices.appendChild(b)});
+}
+function answerQuiz(i,button){
+ if(state.answered)return;state.answered=true;
+ const q=state.questions[state.round],buttons=[...document.querySelectorAll('.choice')],fb=$('#feedback');
+ if(i===q.c){button.classList.add('correct');fb.textContent=['Ура! Отлично, Гайк! 🌟','Правильно! Так держать! 🎉','Супер-наблюдатель! 🦸'][Math.floor(Math.random()*3)];state.score+=10;state.stars+=2;state.streak++;state.best=Math.max(state.best,state.streak);sound('good');}
+ else{button.classList.add('wrong');buttons[q.c].classList.add('correct');fb.textContent='Хорошая попытка! Посмотри на зелёный ответ и попробуй запомнить 💛';fb.classList.add('bad');state.streak=0;sound('bad');}
+ buttons.forEach(b=>b.disabled=true);updateStats();
+ const actions=$('#gameActions');actions.appendChild(btn(state.round===state.questions.length-1?'Посмотреть результат →':'Следующее задание →','primary',()=>{state.round++;renderQuestion()}));
+}
+function finishGame(){
+ state.played++;state.completed[state.game]=(state.completed[state.game]||0)+1;state.stars+=Math.floor(state.score/10);updateStats();sound('win');
+ main.innerHTML=`<div class="welcome"><div class="hero">🏆🎉</div><h2>Ты молодец, Гайк!</h2><p class="lead">Приключение завершено! Ты потренировал внимательность и узнал что-то новое.</p><div class="stats" style="max-width:520px;margin:20px auto"><div class="stat"><span class="emoji">⭐</span><div><strong>${state.score}</strong><small>очков за игру</small></div></div><div class="stat"><span class="emoji">🎯</span><div><strong>${state.questions.length}</strong><small>заданий</small></div></div><div class="stat"><span class="emoji">💛</span><div><strong>Ура!</strong><small>ты старался</small></div></div></div><button class="primary" id="again">🔁 Сыграть ещё</button> <button class="soft-btn" id="finishHome">🗺️ На карту</button><p class="notice" style="margin-top:20px">Можно отдохнуть, выбрать другую зону или повторить приключение.</p></div>`;
+ $('#again').onclick=()=>launch(state.game);$('#finishHome').onclick=showHome;updateStats();
+}
+function memoryGame(){
+ state.screen='memory';const pairs=[['🐶','Собака'],['🐱','Кошка'],['🍎','Яблоко'],['🚗','Машина'],['🐟','Рыбка'],['⭐','Звезда']];
+ const cards=[...pairs,...pairs].map((p,i)=>({pair:p[0],text:p[0],id:i}));for(let i=cards.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[cards[i],cards[j]]=[cards[j],cards[i]]}
+ let open=[],matched=new Set(),moves=0,lock=false;
+ main.innerHTML=header('Память супергероя','Открывай карточки и находи одинаковые картинки. Не торопись!')+`<div class="gamebox"><div class="prompt">Найди 6 пар</div><p class="notice">Ходов: <strong id="moves">0</strong> · Найдено пар: <strong id="pairsFound">0</strong> из 6</p><div class="memory-grid" id="memoryGrid"></div><div class="game-actions" id="memActions"></div></div>`;
+ attachBack();const grid=$('#memoryGrid');
+ cards.forEach((card,index)=>{const b=document.createElement('button');b.className='memory-card';b.textContent='❔';b.setAttribute('aria-label','Закрытая карточка');b.onclick=()=>flip(index,b);grid.appendChild(b)});
+ function flip(index,b){if(lock||matched.has(index)||open.some(o=>o.index===index))return;b.classList.add('open');b.textContent=cards[index].text;open.push({index,b});sound('tap');if(open.length===2){moves++;$('#moves').textContent=moves;if(cards[open[0].index].pair===cards[open[1].index].pair){open.forEach(o=>{matched.add(o.index);o.b.classList.add('matched')});open=[];$('#pairsFound').textContent=matched.size/2;state.stars+=2;updateStats();sound('good');if(matched.size===cards.length){state.played++;state.completed.memory=(state.completed.memory||0)+1;state.stars+=10;updateStats();$('#memActions').appendChild(btn('Ты нашёл все пары! 🎉 Ещё раз','primary',memoryGame));$('#memActions').appendChild(btn('На карту','soft-btn',showHome));}}else{lock=true;const old=[...open];setTimeout(()=>{old.forEach(o=>{o.b.classList.remove('open');o.b.textContent='❔'});open=[];lock=false},750)}}}
+ currentCleanup=()=>{};
+}
+function sortGame(){
+ state.screen='sort';let items=[...data.sort].sort(()=>Math.random()-.5);let selected=null,done=new Set();
+ main.innerHTML=header('Разложи по домикам','Нажми на предмет, а затем на подходящий домик.')+`<div class="gamebox"><div class="prompt">Кто где живёт?</div><div id="itemsTray" style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:18px 0"></div><div class="sort-area"><div class="sort-bin" data-group="Животные"><h3>🐾 Животные</h3><div class="drop-items"></div></div><div class="sort-bin" data-group="Еда"><h3>🍎 Еда</h3><div class="drop-items"></div></div></div><div class="feedback" id="sortFeedback" aria-live="polite"></div><div class="game-actions" id="sortActions"></div></div>`;
+ attachBack();const tray=$('#itemsTray');
+ items.forEach((item,i)=>{const b=document.createElement('button');b.className='sort-item';b.textContent=item.item;b.title='Выбрать предмет';b.onclick=()=>{selected={item,i,b};document.querySelectorAll('.sort-item').forEach(x=>x.classList.remove('selected'));b.classList.add('selected')};tray.appendChild(b)});
+ document.querySelectorAll('.sort-bin').forEach(bin=>bin.onclick=()=>{if(!selected)return;const correct=selected.item.group===bin.dataset.group;if(correct){bin.querySelector('.drop-items').appendChild(selected.b);selected.b.classList.remove('selected');selected.b.disabled=true;selected.b.style.background='#d9f8e8';done.add(selected.i);selected=null;$('#sortFeedback').textContent='Правильно! Отлично! 🌟';state.stars++;updateStats();sound('good');if(done.size===items.length){state.played++;state.completed.sort=(state.completed.sort||0)+1;state.stars+=8;updateStats();$('#sortActions').appendChild(btn('Ура! Все предметы на месте 🎉','primary',()=>sortGame()));$('#sortActions').appendChild(btn('На карту','soft-btn',showHome));}}else{$('#sortFeedback').textContent='Попробуй другой домик. У тебя получится!';sound('bad')}})
+}
+function creativeGame(){
+ state.screen='creative';const colors=[['#ff7777','Красный'],['#ffc857','Жёлтый'],['#70c7ff','Голубой'],['#70d69b','Зелёный'],['#bd9aff','Фиолетовый'],['#ff9fca','Розовый']];
+ main.innerHTML=header('Творческая минутка','Выбери цвет и нажми на картинку, чтобы менять её настроение.')+`<div class="gamebox"><div class="prompt">Раскрась настроение 🌈</div><div class="paint-canvas" id="paintCanvas" style="background:#fff5c8">🌈</div><div class="paint-row" id="paintColors"></div><p class="notice" id="paintMessage">Какой цвет тебе сегодня нравится?</p><div class="game-actions"><button class="primary" id="newPicture">Поменять картинку 🔄</button><button class="soft-btn" id="paintReward">Готово! ⭐</button></div></div>`;
+ attachBack();let selected=colors[1][0];let idx=0;const pictures=['🌈','🦋','🌼','🚀','🐠','🌞'];const canvas=$('#paintCanvas');
+ colors.forEach(([color,label])=>{const b=btn('', 'color-dot',()=>{selected=color;canvas.style.background=color+'33';$('#paintMessage').textContent='Ты выбрал цвет: '+label+'!';sound('tap')});b.style.background=color;b.title=label;$('#paintColors').appendChild(b)});
+ canvas.onclick=()=>{canvas.style.background=selected+'55';canvas.style.transform='rotate(-2deg) scale(1.02)';setTimeout(()=>canvas.style.transform='',180);$('#paintMessage').textContent='Красиво придумано, Гайк!';};
+ $('#newPicture').onclick=()=>{idx=(idx+1)%pictures.length;canvas.textContent=pictures[idx];canvas.style.background=selected+'33';};
+ $('#paintReward').onclick=()=>{state.stars+=3;state.played++;state.completed.creative=(state.completed.creative||0)+1;updateStats();$('#paintMessage').textContent='Творческая миссия выполнена! +3 звёздочки ⭐';sound('good')};
+}
+function saveGame(show=true){
+ const payload={stars:state.stars,played:state.played,streak:state.streak,best:state.best,completed:state.completed,sound:state.sound,screen:'home'};
+ try{localStorage.setItem(saveKey,JSON.stringify(payload));if(show)modal('Прогресс сохранён 💾','Отлично! Когда вернёшься на этом устройстве и в этом браузере, нажми «Продолжить».', [['Понятно',closeModal]]);}catch(e){if(show)modal('Не удалось сохранить','Возможно, браузер запрещает локальное сохранение. Попробуй открыть HTML-файл в обычном браузере.',[['Понятно',closeModal]])}
+}
+function loadGame(){
+ try{const raw=localStorage.getItem(saveKey);if(!raw){modal('Пока нет сохранения','Сначала нажми «Сохранить», чтобы запомнить звёздочки и пройденные игры.',[['Понятно',closeModal]]);return;}const p=JSON.parse(raw);Object.assign(state,p);updateStats();showHome();modal('С возвращением, Гайк! 🚀','Твой прогресс восстановлен. Продолжим приключение?', [['Ура, играть!',closeModal]]);}catch(e){modal('Не получилось загрузить','Сохранение не удалось прочитать в этом браузере.',[['Понятно',closeModal]])}
+}
+function modal(title,text,actions){const root=$('#modalRoot');root.innerHTML=`<div class="modal-bg" role="dialog" aria-modal="true"><div class="modal"><h2>${title}</h2><p class="notice">${text}</p><div class="modal-actions" id="modalActions"></div></div></div>`;actions.forEach(([label,fn])=>$('#modalActions').appendChild(btn(label,'primary',fn)));}
+function closeModal(){$('#modalRoot').innerHTML=''}
+$('#saveBtn').onclick=()=>saveGame(true);$('#loadBtn').onclick=loadGame;$('#soundBtn').onclick=()=>{state.sound=!state.sound;$('#soundBtn').textContent=state.sound?'🔊 Звук: вкл.':'🔇 Звук: выкл.';if(state.sound)sound('good')};
+showHome();
+})();
+</script>
+</body>
+</html>

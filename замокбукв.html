@@ -1,0 +1,2211 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Алфавит в Волшебном Замке — Гайк и Моне</title>
+<style>
+  :root{
+    --parch:#f4e4c1;
+    --parch2:#e8d3a0;
+    --parch3:#d4b878;
+    --gold:#c9a227;
+    --gold2:#e8c547;
+    --wine:#7b2d26;
+    --wine2:#a13b32;
+    --forest:#3d5a3d;
+    --forest2:#5a7a5a;
+    --ink:#2b1f14;
+    --ink2:#4a3826;
+    --stone:#8a7d6b;
+    --stone2:#b5a894;
+    --shadow:rgba(43,31,20,.25);
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0;}
+  body{
+    font-family:"Georgia","Times New Roman",serif;
+    background:#2b1f14;
+    background-image:
+      radial-gradient(ellipse at 20% 10%, rgba(201,162,39,.15), transparent 60%),
+      radial-gradient(ellipse at 80% 90%, rgba(123,45,38,.2), transparent 60%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='60' height='60'><path d='M0 30h60M30 0v60' stroke='rgba(201,162,39,.04)' stroke-width='1'/></svg>");
+    color:var(--ink);
+    min-height:100vh;
+    padding-bottom:90px;
+    position:relative;
+  }
+  /* Виньетка по краям */
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,.55) 100%);
+  }
+  header, nav, main{position:relative; z-index:2;}
+
+  /* Шапка-герб */
+  header{
+    padding:14px 16px 12px;
+    background:
+      linear-gradient(180deg, #4a3826, #2b1f14),
+      repeating-linear-gradient(90deg, transparent 0 40px, rgba(201,162,39,.05) 40px 41px);
+    border-bottom:4px double var(--gold);
+    position:sticky; top:0; z-index:20;
+    box-shadow:0 4px 12px rgba(0,0,0,.5);
+  }
+  header h1{
+    margin:0; font-size:20px; letter-spacing:2px;
+    text-align:center; color:var(--gold2);
+    font-family:"Georgia", serif; font-weight:bold;
+    text-shadow:2px 2px 0 #000, 0 0 12px rgba(201,162,39,.6);
+    font-variant:small-caps;
+  }
+  header h1::before, header h1::after{
+    content:"❦"; color:var(--gold); margin:0 8px; font-size:16px;
+  }
+  header .heroes{
+    font-size:13px; color:var(--parch3); text-align:center; margin-top:4px;
+    font-style:italic;
+  }
+  header .heroes b{color:var(--gold2);}
+
+  .hud{
+    display:flex; gap:8px; justify-content:center; margin-top:8px; flex-wrap:wrap;
+  }
+  .hud .chip{
+    background:linear-gradient(180deg, var(--parch2), var(--parch3));
+    border:2px solid var(--gold);
+    border-radius:4px; padding:3px 12px; font-size:12px; color:var(--ink);
+    font-weight:bold; box-shadow:inset 0 1px 0 rgba(255,255,255,.4), 0 2px 4px rgba(0,0,0,.3);
+    font-family:"Georgia", serif;
+  }
+
+  /* Прогресс — свечи */
+  .candle-track{
+    display:flex; justify-content:center; gap:2px; margin-top:10px; flex-wrap:wrap;
+    padding:4px; background:rgba(0,0,0,.3); border-radius:8px;
+    border:1px solid rgba(201,162,39,.2);
+  }
+  .candle-track .c{
+    width:6px; height:16px; background:#3a2a1a; border-radius:2px 2px 0 0;
+    position:relative;
+  }
+  .candle-track .c.lit{
+    background:linear-gradient(180deg, #ffe08a, #ffb347);
+    box-shadow:0 0 8px #ffb347, 0 0 14px rgba(255,179,71,.6);
+  }
+  .candle-track .c.lit::after{
+    content:""; position:absolute; top:-6px; left:50%; transform:translateX(-50%);
+    width:4px; height:6px; background:radial-gradient(circle, #fff, #ffb347 60%, transparent);
+    border-radius:50%;
+    animation:flicker 1s infinite alternate;
+  }
+  @keyframes flicker{from{opacity:.7;} to{opacity:1;}}
+
+  /* Навигация — свитки */
+  nav{
+    display:flex; flex-wrap:wrap; gap:6px; padding:10px; justify-content:center;
+    background:linear-gradient(180deg, var(--parch), var(--parch2));
+    border-bottom:3px double var(--gold);
+    position:sticky; top:126px; z-index:19;
+    box-shadow:0 4px 8px rgba(0,0,0,.4);
+  }
+  nav button{
+    background:linear-gradient(180deg, #f8f0d8, #e0cba0);
+    border:2px solid var(--gold);
+    color:var(--ink); padding:6px 12px; border-radius:4px;
+    font-size:12px; cursor:pointer; font-family:"Georgia", serif;
+    font-weight:bold; transition:all .15s;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.5), 0 2px 3px rgba(0,0,0,.25);
+  }
+  nav button:hover{background:linear-gradient(180deg, #fff8e0, #ecd9b0);}
+  nav button.active{
+    background:linear-gradient(180deg, var(--wine2), var(--wine));
+    color:var(--parch); border-color:var(--gold2);
+    text-shadow:1px 1px 0 rgba(0,0,0,.5);
+  }
+
+  main{padding:16px; max-width:960px; margin:0 auto;}
+  section{display:none; animation:fade .35s;}
+  section.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;}}
+
+  h2{
+    font-size:19px; margin:0 0 8px; color:var(--wine);
+    font-variant:small-caps; letter-spacing:1px;
+    border-bottom:2px solid var(--gold);
+    padding-bottom:6px;
+  }
+  h2::before{content:"❧ "; color:var(--gold);}
+  .sub{color:var(--ink2); font-size:13px; margin:-4px 0 12px; font-style:italic;}
+
+  /* Пергаментный лист */
+  .parchment{
+    background:
+      linear-gradient(180deg, var(--parch), var(--parch2));
+    border:2px solid var(--gold);
+    border-radius:6px;
+    padding:16px;
+    box-shadow:
+      inset 0 0 30px rgba(123,45,38,.15),
+      0 6px 18px rgba(0,0,0,.5);
+    position:relative;
+  }
+  .parchment::before, .parchment::after{
+    content:""; position:absolute; width:20px; height:20px;
+    background:radial-gradient(circle, var(--gold) 40%, transparent 60%);
+    border-radius:50%;
+  }
+  .parchment::before{top:-10px; left:-10px;}
+  .parchment::after{bottom:-10px; right:-10px;}
+
+  /* Алфавит — свечи/башни */
+  .alphabet-grid{
+    display:grid; gap:10px;
+    grid-template-columns:repeat(auto-fill, minmax(72px, 1fr));
+  }
+  .tower{
+    position:relative; aspect-ratio:1;
+    background:linear-gradient(180deg, var(--stone2), var(--stone));
+    border:3px solid var(--ink2);
+    border-radius:6px 6px 2px 2px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:28px; font-weight:bold; color:var(--parch);
+    cursor:pointer; user-select:none;
+    transition:all .2s;
+    text-shadow:2px 2px 0 rgba(0,0,0,.6);
+    box-shadow:inset 0 -4px 0 rgba(0,0,0,.3), inset 0 4px 0 rgba(255,255,255,.15);
+  }
+  .tower::before{
+    content:""; position:absolute; top:-10px; left:-3px; right:-3px;
+    height:10px;
+    background:repeating-linear-gradient(90deg, var(--ink2) 0 6px, transparent 6px 12px);
+    border-radius:4px 4px 0 0;
+  }
+  .tower:hover{
+    transform:translateY(-3px);
+    background:linear-gradient(180deg, var(--parch3), var(--gold));
+    border-color:var(--wine);
+  }
+  .tower.visited{
+    background:linear-gradient(180deg, #d9c896, #c9a227);
+    border-color:var(--gold);
+  }
+  .tower.master{
+    background:linear-gradient(180deg, #ffe08a, #c9a227);
+    border-color:var(--wine);
+    box-shadow:inset 0 -4px 0 rgba(123,45,38,.4), 0 0 12px rgba(232,197,71,.7);
+  }
+  .tower .prog{
+    position:absolute; bottom:6px; left:14px; right:14px;
+    height:3px; background:rgba(0,0,0,.3); border-radius:2px; overflow:hidden;
+  }
+  .tower .prog > i{
+    display:block; height:100%; background:var(--wine2); width:0%;
+    transition:width .3s;
+  }
+
+  /* Модальное окно — свиток */
+  .modal{
+    position:fixed; inset:0; background:rgba(20,15,8,.85);
+    display:none; align-items:center; justify-content:center;
+    z-index:50; padding:12px;
+  }
+  .modal.open{display:flex;}
+  .modal-content{
+    background:linear-gradient(180deg, var(--parch), var(--parch2));
+    border:3px double var(--gold);
+    border-radius:6px;
+    width:100%; max-width:560px; max-height:94vh; overflow:auto;
+    padding:18px;
+    box-shadow:inset 0 0 40px rgba(123,45,38,.15), 0 0 60px rgba(0,0,0,.7);
+    position:relative;
+  }
+  .modal-content::before{
+    content:""; position:absolute; top:0; left:0; right:0; height:6px;
+    background:repeating-linear-gradient(90deg, var(--wine) 0 20px, var(--gold) 20px 40px);
+    border-radius:6px 6px 0 0;
+  }
+  .scroll-header{
+    display:flex; align-items:center; gap:14px; margin-bottom:12px;
+    padding-bottom:10px; border-bottom:2px dashed var(--gold);
+  }
+  .scroll-header .glyph{
+    font-size:64px; font-weight:bold; color:var(--wine);
+    min-width:110px; text-align:center;
+    text-shadow:3px 3px 0 var(--gold2), 5px 5px 0 rgba(0,0,0,.15);
+  }
+  .scroll-header .glyph small{color:var(--forest); font-size:42px; text-shadow:2px 2px 0 var(--gold2);}
+  .scroll-header .info{flex:1;}
+  .scroll-header .info .em{font-size:38px;}
+  .scroll-header .info .word{font-size:18px; margin-top:2px; font-weight:bold; color:var(--wine);}
+  .scroll-header .info .note{font-size:13px; color:var(--ink2); margin-top:4px; font-style:italic;}
+
+  .xp-bar{
+    height:12px; background:rgba(43,31,20,.25); border-radius:6px; overflow:hidden;
+    border:2px solid var(--ink2);
+    box-shadow:inset 0 2px 4px rgba(0,0,0,.3);
+  }
+  .xp-bar > div{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, var(--wine), var(--gold2));
+    transition:width .4s;
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.3);
+  }
+  .xp-text{font-size:12px; color:var(--ink2); text-align:center; margin:4px 0 10px; font-style:italic;}
+
+  .mech-grid{
+    display:grid; gap:8px;
+    grid-template-columns:repeat(auto-fill, minmax(105px, 1fr));
+    margin:10px 0;
+  }
+  .mech-tile{
+    background:linear-gradient(180deg, #f8f0d8, #e0cba0);
+    border:2px solid var(--gold);
+    border-radius:4px; padding:10px 6px; text-align:center;
+    cursor:pointer; font-size:12px; color:var(--ink);
+    font-family:"Georgia", serif; font-weight:bold;
+    transition:all .15s;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.6), 0 2px 3px rgba(0,0,0,.2);
+  }
+  .mech-tile:hover{background:linear-gradient(180deg, #fff8e0, #ecd9b0); transform:translateY(-2px);}
+  .mech-tile.done{
+    background:linear-gradient(180deg, #9bc99b, #6a9a6a);
+    color:#1a2a1a; border-color:var(--forest);
+  }
+  .mech-tile .ico{font-size:22px; display:block; margin-bottom:2px;}
+
+  .mech-body{
+    background:rgba(255,255,255,.35);
+    border:2px dashed var(--stone);
+    border-radius:6px; padding:14px; min-height:170px; margin-top:8px;
+  }
+
+  /* Кнопки — восковые печати */
+  .btn{
+    background:radial-gradient(circle at 30% 30%, var(--wine2), var(--wine));
+    color:var(--parch); border:2px solid var(--gold2);
+    padding:10px 18px;
+    border-radius:4px; font-size:14px; font-family:"Georgia", serif;
+    cursor:pointer; margin:4px;
+    font-weight:bold;
+    box-shadow:
+      inset 0 -3px 0 rgba(0,0,0,.3),
+      inset 0 3px 0 rgba(255,255,255,.15),
+      0 4px 8px rgba(0,0,0,.4);
+    transition:all .15s;
+    font-variant:small-caps;
+    letter-spacing:1px;
+  }
+  .btn:hover{transform:translateY(-2px); box-shadow:inset 0 -3px 0 rgba(0,0,0,.3), 0 6px 12px rgba(0,0,0,.5);}
+  .btn.gold{
+    background:radial-gradient(circle at 30% 30%, var(--gold2), var(--gold));
+    color:var(--ink); border-color:var(--wine);
+  }
+  .btn.forest{
+    background:radial-gradient(circle at 30% 30%, var(--forest2), var(--forest));
+    border-color:var(--gold2);
+  }
+  .btn.ghost{
+    background:transparent; color:var(--wine);
+    border:2px solid var(--wine); box-shadow:none;
+  }
+  .center{text-align:center;}
+
+  /* Карточки-свитки */
+  .scroll-grid{
+    display:grid; gap:12px;
+    grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+  }
+  .scroll-card{
+    position:relative; padding:14px 12px; border-radius:4px;
+    background:linear-gradient(180deg, var(--parch), var(--parch2));
+    border:2px solid var(--gold);
+    cursor:pointer; transition:all .2s;
+    box-shadow:inset 0 0 20px rgba(123,45,38,.1), 0 3px 8px rgba(0,0,0,.3);
+  }
+  .scroll-card::before, .scroll-card::after{
+    content:""; position:absolute; left:0; right:0; height:8px;
+    background:linear-gradient(180deg, var(--gold), var(--wine));
+    border-radius:3px;
+  }
+  .scroll-card::before{top:-6px;}
+  .scroll-card::after{bottom:-6px;}
+  .scroll-card:hover{transform:translateY(-3px); box-shadow:inset 0 0 20px rgba(123,45,38,.15), 0 6px 14px rgba(0,0,0,.4);}
+  .scroll-card .up{font-size:36px; color:var(--wine); font-weight:bold;}
+  .scroll-card .low{font-size:22px; color:var(--forest); margin-left:6px;}
+  .scroll-card .em{font-size:32px; margin:6px 0;}
+  .scroll-card .w{font-size:13px; color:var(--ink2); font-style:italic;}
+
+  .task{
+    background:linear-gradient(180deg, var(--parch), var(--parch2));
+    border:2px solid var(--gold);
+    border-radius:6px; padding:14px; margin-bottom:12px;
+    box-shadow:inset 0 0 20px rgba(123,45,38,.1), 0 3px 8px rgba(0,0,0,.3);
+  }
+  .task .q{font-size:16px; margin-bottom:10px; color:var(--ink);}
+  .options{display:flex; flex-wrap:wrap; gap:8px; justify-content:center;}
+  .opt{
+    background:linear-gradient(180deg, #f8f0d8, #e0cba0);
+    border:2px solid var(--gold);
+    border-radius:4px; padding:10px 16px;
+    font-size:20px; font-weight:bold; color:var(--wine);
+    cursor:pointer; font-family:"Georgia", serif; min-width:58px;
+    transition:all .15s;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.6), 0 2px 3px rgba(0,0,0,.2);
+  }
+  .opt:hover{background:linear-gradient(180deg, #fff8e0, #ecd9b0); transform:translateY(-2px);}
+  .opt.correct{
+    background:linear-gradient(180deg, #9bc99b, #6a9a6a);
+    color:#1a2a1a; border-color:var(--forest);
+  }
+  .opt.wrong{
+    background:linear-gradient(180deg, #d97a7a, var(--wine2));
+    color:#fff; border-color:var(--wine);
+    animation:shake .3s;
+  }
+  @keyframes shake{
+    0%,100%{transform:translateX(0);} 25%{transform:translateX(-5px);}
+    75%{transform:translateX(5px);}
+  }
+  .fb{margin-top:8px; font-size:15px; min-height:20px; text-align:center; font-style:italic; color:var(--ink2);}
+
+  /* Свечи (зажги все) */
+  .candles-scene{
+    display:flex; justify-content:center; gap:10px; padding:20px 0;
+    flex-wrap:wrap; min-height:180px;
+    background:linear-gradient(180deg, rgba(0,0,0,.3), rgba(0,0,0,.5));
+    border-radius:8px; border:2px solid var(--gold);
+  }
+  .candle-item{
+    position:relative; width:40px; height:80px;
+    display:flex; flex-direction:column; align-items:center;
+    cursor:pointer;
+  }
+  .candle-item .flame{
+    width:14px; height:20px;
+    background:radial-gradient(circle at 50% 70%, #fff 10%, #ffd166 40%, transparent 70%);
+    border-radius:50% 50% 30% 30%;
+    opacity:.2;
+    transition:opacity .3s;
+  }
+  .candle-item.lit .flame{opacity:1; animation:flicker .8s infinite alternate;}
+  .candle-item .body{
+    width:16px; flex:1; background:linear-gradient(180deg, #f8f0d8, #d4b878);
+    border:1px solid var(--ink2); border-radius:4px 4px 2px 2px;
+    margin-top:2px;
+  }
+  .candle-item .letter{
+    position:absolute; bottom:-2px; left:0; right:0;
+    text-align:center; font-weight:bold; color:var(--ink); font-size:14px;
+  }
+
+  /* Ключи и замки */
+  .locks-area{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
+    gap:12px;
+  }
+  .lock-box{
+    background:linear-gradient(180deg, var(--parch2), var(--parch3));
+    border:2px solid var(--gold); border-radius:6px; padding:12px; text-align:center;
+    box-shadow:inset 0 0 20px rgba(123,45,38,.1);
+  }
+  .lock-box .lock-icon{font-size:34px;}
+  .lock-box .lock-letter{font-size:28px; font-weight:bold; color:var(--wine);}
+  .lock-box.open{background:linear-gradient(180deg, #9bc99b, #6a9a6a);}
+  .key-pool{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:12px;}
+  .key{
+    background:linear-gradient(180deg, var(--gold2), var(--gold));
+    border:2px solid var(--wine); border-radius:50% 50% 4px 4px;
+    padding:10px 12px; font-size:20px; font-weight:bold; color:var(--ink);
+    cursor:pointer; font-family:"Georgia", serif;
+    min-width:44px;
+    box-shadow:inset 0 -2px 0 rgba(0,0,0,.2), 0 2px 4px rgba(0,0,0,.3);
+  }
+  .key.used{opacity:.3; pointer-events:none;}
+
+  /* Котёл */
+  .cauldron{
+    width:200px; height:140px; margin:20px auto 0;
+    background:radial-gradient(ellipse at 50% 30%, #3a2a1a, #1a1008);
+    border-radius:50% 50% 30% 30%;
+    position:relative;
+    box-shadow:inset 0 -20px 30px rgba(0,0,0,.7), 0 8px 20px rgba(0,0,0,.5);
+    border:3px solid var(--ink);
+  }
+  .cauldron::after{
+    content:""; position:absolute; top:-8px; left:10%; right:10%; height:20px;
+    background:radial-gradient(ellipse, rgba(155,201,155,.7), transparent 70%);
+    border-radius:50%; filter:blur(6px);
+    animation:bubble 3s infinite alternate;
+  }
+  @keyframes bubble{
+    from{transform:scale(.9); opacity:.6;}
+    to{transform:scale(1.1); opacity:.9;}
+  }
+  .ingredients{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:16px;}
+  .ingredient{
+    background:linear-gradient(180deg, #9bc99b, #6a9a6a);
+    border:2px solid var(--forest); border-radius:50%;
+    width:50px; height:50px; display:flex; align-items:center; justify-content:center;
+    font-weight:bold; color:#1a2a1a; cursor:pointer; font-family:"Georgia", serif;
+    font-size:20px;
+    box-shadow:inset 0 -3px 0 rgba(0,0,0,.2);
+  }
+  .ingredient.used{opacity:.3; pointer-events:none;}
+
+  /* Маски */
+  .masks-area{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(80px,1fr));
+    gap:12px;
+  }
+  .mask{
+    aspect-ratio:1;
+    background:radial-gradient(ellipse at 50% 40%, var(--parch), var(--parch3));
+    border:2px solid var(--gold);
+    border-radius:50% 50% 40% 40%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; font-weight:bold; color:var(--wine);
+    cursor:pointer; font-family:"Georgia", serif;
+    transition:all .2s;
+    box-shadow:inset 0 0 20px rgba(123,45,38,.15);
+  }
+  .mask:hover{transform:scale(1.05);}
+  .mask.selected{border-color:var(--wine); background:radial-gradient(ellipse at 50% 40%, var(--gold2), var(--gold));}
+  .mask.done{background:linear-gradient(180deg, #9bc99b, #6a9a6a); color:#1a2a1a; cursor:default;}
+
+  /* Волшебная палочка */
+  .wand-canvas{
+    width:100%; height:200px;
+    background:linear-gradient(180deg, rgba(244,228,193,.4), rgba(232,211,160,.6));
+    border:2px dashed var(--gold); border-radius:6px;
+    cursor:crosshair; touch-action:none;
+  }
+
+  /* Дракон */
+  .dragon-area{
+    position:relative; height:240px;
+    background:linear-gradient(180deg, #4a3826, #2b1f14);
+    border:3px double var(--gold); border-radius:8px;
+    overflow:hidden;
+  }
+  .dragon-food{
+    position:absolute;
+    background:linear-gradient(180deg, #9bc99b, #6a9a6a);
+    border:2px solid var(--forest); border-radius:50%;
+    width:44px; height:44px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:20px; font-weight:bold; color:#1a2a1a;
+    cursor:pointer; font-family:"Georgia", serif;
+    box-shadow:inset 0 -3px 0 rgba(0,0,0,.2);
+    animation:float 3s infinite alternate;
+  }
+  @keyframes float{from{transform:translateY(0);} to{transform:translateY(-8px);}}
+  .dragon{position:absolute; right:20px; bottom:10px; font-size:70px; transition:transform .3s;}
+
+  /* Мишени лучника */
+  .targets-area{
+    display:flex; justify-content:center; gap:20px; flex-wrap:wrap;
+    padding:20px; background:linear-gradient(180deg, var(--parch2), var(--parch3));
+    border:2px solid var(--gold); border-radius:8px;
+  }
+  .target{
+    width:70px; height:70px; border-radius:50%;
+    background:radial-gradient(circle, #fff 0 15%, var(--wine) 15% 30%, #fff 30% 45%, var(--wine) 45% 60%, #fff 60% 75%, var(--wine) 75% 100%);
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px; font-weight:bold; color:var(--ink);
+    cursor:pointer; font-family:"Georgia", serif;
+    box-shadow:0 4px 8px rgba(0,0,0,.3);
+    transition:all .15s;
+  }
+  .target:hover{transform:scale(1.08);}
+  .target.hit{opacity:.3; pointer-events:none;}
+
+  /* Карта сокровищ */
+  .map-area{
+    position:relative; height:260px;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(201,162,39,.3), transparent 40%),
+      linear-gradient(180deg, var(--parch), var(--parch2));
+    border:3px double var(--gold); border-radius:8px;
+    overflow:hidden;
+  }
+  .map-point{
+    position:absolute; width:36px; height:36px;
+    background:radial-gradient(circle, var(--gold2), var(--wine));
+    border:2px solid var(--ink); border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; font-weight:bold; color:#fff;
+    cursor:pointer; font-family:"Georgia", serif;
+    box-shadow:0 4px 8px rgba(0,0,0,.4);
+    transition:all .2s;
+  }
+  .map-point.visited{background:radial-gradient(circle, #9bc99b, var(--forest));}
+  .map-point.chest{background:radial-gradient(circle, var(--gold2), var(--gold)); font-size:22px;}
+
+  /* Башни */
+  .build-area{
+    display:flex; justify-content:center; align-items:flex-end; gap:14px;
+    padding:20px; min-height:220px;
+    background:linear-gradient(180deg, #4a3826, #2b1f14);
+    border:2px solid var(--gold); border-radius:8px;
+  }
+  .build-slot{
+    width:50px; height:180px;
+    display:flex; flex-direction:column-reverse; gap:2px;
+    border-bottom:3px solid var(--gold);
+    padding:0 4px;
+  }
+  .build-block{
+    height:34px;
+    background:linear-gradient(180deg, var(--stone2), var(--stone));
+    border:2px solid var(--ink); border-radius:4px;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:bold; color:var(--parch); font-family:"Georgia", serif;
+    font-size:18px;
+    text-shadow:1px 1px 0 rgba(0,0,0,.6);
+    animation:dropIn .3s;
+  }
+  @keyframes dropIn{from{transform:translateY(-40px); opacity:0;} to{transform:none; opacity:1;}}
+  .build-pool{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-top:14px;}
+  .build-pool button{
+    width:44px; height:44px;
+    background:linear-gradient(180deg, var(--stone2), var(--stone));
+    border:2px solid var(--ink); border-radius:6px;
+    color:var(--parch); font-weight:bold; font-size:18px; font-family:"Georgia", serif;
+    cursor:pointer;
+    text-shadow:1px 1px 0 rgba(0,0,0,.6);
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.15);
+  }
+  .build-pool button.used{opacity:.3; pointer-events:none;}
+
+  /* Карусель */
+  .carousel{
+    position:relative; width:220px; height:220px; margin:20px auto;
+    border-radius:50%;
+    border:4px double var(--gold);
+    background:
+      conic-gradient(
+        var(--wine) 0 45deg, var(--gold) 45deg 90deg,
+        var(--forest) 90deg 135deg, var(--wine2) 135deg 180deg,
+        var(--gold2) 180deg 225deg, var(--forest2) 225deg 270deg,
+        var(--wine) 270deg 315deg, var(--gold) 315deg 360deg
+      );
+    box-shadow:inset 0 0 40px rgba(0,0,0,.4), 0 0 30px rgba(0,0,0,.5);
+  }
+  .carousel .letter-seg{
+    position:absolute; top:50%; left:50%;
+    font-size:22px; font-weight:bold; color:var(--parch);
+    text-shadow:2px 2px 0 rgba(0,0,0,.7);
+    font-family:"Georgia", serif;
+    transform-origin:0 0;
+  }
+  .carousel .needle{
+    position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
+    font-size:60px; color:var(--gold2);
+    text-shadow:0 0 10px var(--gold);
+    transition:transform 1s cubic-bezier(.2,.8,.4,1);
+  }
+  .carousel .center{
+    position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);
+    width:60px; height:60px; border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, var(--gold2), var(--gold));
+    border:3px solid var(--wine);
+    z-index:3;
+  }
+
+  /* Витраж */
+  .stained-area{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:4px;
+    max-width:340px; margin:0 auto;
+    background:var(--ink); padding:6px; border:4px solid var(--gold); border-radius:4px;
+  }
+  .stained-piece{
+    aspect-ratio:1;
+    border:2px solid var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; font-weight:bold; font-family:"Georgia", serif;
+    color:#fff; text-shadow:2px 2px 0 rgba(0,0,0,.6);
+    cursor:pointer; transition:all .15s;
+  }
+  .stained-piece:hover{filter:brightness(1.3);}
+  .stained-piece.ok{box-shadow:inset 0 0 20px rgba(255,255,255,.6);}
+
+  /* Книга сказок */
+  .book{
+    background:linear-gradient(180deg, var(--parch), var(--parch2));
+    border:3px double var(--gold); border-radius:6px;
+    padding:20px; font-size:16px; line-height:1.8;
+    box-shadow:inset 0 0 40px rgba(123,45,38,.12);
+  }
+  .book .first-letter{
+    float:left; font-size:56px; line-height:1; margin:4px 8px 0 0;
+    color:var(--wine); font-weight:bold;
+    font-family:"Georgia", serif;
+  }
+  .book .hl{
+    background:linear-gradient(180deg, transparent 60%, var(--gold2) 60%);
+    font-weight:bold; cursor:pointer; color:var(--wine);
+  }
+
+  /* Магический шар */
+  .orb{
+    width:200px; height:200px; margin:0 auto;
+    border-radius:50%;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(255,255,255,.8) 0 5%, transparent 15%),
+      radial-gradient(circle at 50% 50%, var(--parch3) 0 60%, var(--wine) 100%);
+    box-shadow:inset -10px -20px 40px rgba(0,0,0,.4), 0 0 40px rgba(201,162,39,.6);
+    display:flex; align-items:center; justify-content:center;
+    font-size:80px; font-weight:bold; color:var(--wine);
+    font-family:"Georgia", serif;
+    text-shadow:0 0 20px var(--gold);
+    cursor:pointer;
+    transition:transform .4s;
+  }
+  .orb:hover{transform:scale(1.05);}
+
+  /* Травник */
+  .herbs-area{
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center;
+  }
+  .herb{
+    width:70px; height:70px; border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, #9bc99b, #4a6a4a);
+    border:2px solid var(--forest);
+    display:flex; align-items:center; justify-content:center;
+    font-size:24px; font-weight:bold; color:#fff;
+    text-shadow:1px 1px 0 rgba(0,0,0,.5);
+    cursor:pointer; font-family:"Georgia", serif;
+    transition:all .2s;
+  }
+  .herb:hover{transform:scale(1.08);}
+  .herb.placed{background:radial-gradient(circle at 30% 30%, var(--gold2), var(--gold)); color:var(--ink); cursor:default;}
+
+  /* Badges — щиты */
+  .badge-grid{
+    display:grid; gap:14px;
+    grid-template-columns:repeat(auto-fill, minmax(120px, 1fr));
+  }
+  .shield{
+    aspect-ratio:1/1.15;
+    background:linear-gradient(180deg, var(--stone2), var(--stone));
+    border:3px solid var(--gold);
+    border-radius:6px 6px 50% 50% / 6px 6px 40% 40%;
+    padding:12px; text-align:center;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    opacity:.45; filter:grayscale(.7);
+    box-shadow:inset 0 0 20px rgba(0,0,0,.3);
+    transition:all .3s;
+    position:relative;
+  }
+  .shield::before{
+    content:""; position:absolute; inset:6px;
+    border:1px dashed rgba(201,162,39,.5); border-radius:inherit;
+  }
+  .shield.earned{
+    opacity:1; filter:none;
+    background:linear-gradient(180deg, var(--gold2), var(--gold));
+    border-color:var(--wine);
+    box-shadow:inset 0 0 20px rgba(255,255,255,.3), 0 0 20px rgba(201,162,39,.6);
+  }
+  .shield .icon{font-size:38px; text-shadow:2px 2px 0 rgba(0,0,0,.3);}
+  .shield .title{font-size:11px; margin-top:4px; color:var(--ink2); font-weight:bold; text-align:center;}
+  .shield.earned .title{color:var(--wine);}
+
+  /* Ярмарка */
+  .fair-grid{
+    display:grid; gap:12px;
+    grid-template-columns:repeat(auto-fill, minmax(150px, 1fr));
+  }
+  .fair-tent{
+    background:linear-gradient(180deg, var(--parch), var(--parch2));
+    border:2px solid var(--wine); border-radius:4px;
+    padding:14px; text-align:center; cursor:pointer;
+    box-shadow:0 4px 8px rgba(0,0,0,.3);
+    transition:all .2s;
+    position:relative;
+  }
+  .fair-tent::before{
+    content:""; position:absolute; top:-8px; left:-8px; right:-8px; height:16px;
+    background:repeating-linear-gradient(90deg, var(--wine) 0 12px, var(--gold) 12px 24px);
+    border-radius:8px 8px 0 0;
+  }
+  .fair-tent:hover{transform:translateY(-4px);}
+  .fair-tent .ico{font-size:36px;}
+  .fair-tent .name{font-weight:bold; color:var(--wine); margin-top:4px; font-size:14px;}
+  .fair-tent .desc{font-size:12px; color:var(--ink2); font-style:italic; margin-top:2px;}
+
+  /* Диалог персонажей */
+  .dialogue{
+    display:flex; align-items:flex-start; gap:10px;
+    background:rgba(255,255,255,.4);
+    border:2px solid var(--gold); border-radius:8px;
+    padding:10px 12px; margin:10px 0;
+    font-style:italic;
+  }
+  .dialogue .avatar{font-size:32px;}
+  .dialogue .bubble{flex:1; font-size:14px; line-height:1.5;}
+  .dialogue .bubble b{color:var(--wine); font-style:normal;}
+
+  @media (max-width:520px){
+    header h1{font-size:16px;}
+    header h1::before, header h1::after{display:none;}
+    nav{top:auto; position:relative;}
+    .tower{font-size:22px;}
+    .scroll-header .glyph{font-size:52px; min-width:90px;}
+    .scroll-header .glyph small{font-size:34px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Волшебный Замок Букв</h1>
+  <div class="heroes">🏰 Рыцарь <b>Гайк</b> и волшебник <b>Моне</b> учат 33 буквы</div>
+  <div class="hud">
+    <div class="chip" id="hudLetters">📜 Свитков: 0/33</div>
+    <div class="chip" id="hudStars">⭐ Печатей: 0</div>
+    <div class="chip" id="hudCandles">🕯️ Свечей: 0</div>
+  </div>
+  <div class="candle-track" id="candleTrack"></div>
+</header>
+
+<nav id="nav"></nav>
+
+<main>
+
+<!-- КАРТА ЗАМКА -->
+<section id="sec-map" class="active">
+  <h2>🏰 Карта замка</h2>
+  <p class="sub">Каждая буква — башня замка. Нажми на башню, чтобы изучить букву.</p>
+  <div class="parchment">
+    <div class="alphabet-grid" id="alphabetGrid"></div>
+  </div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn ghost" onclick="resetAll()">Сжечь все свитки</button>
+  </div>
+</section>
+
+<!-- СВИТКИ -->
+<section id="sec-cards">
+  <h2>📜 Старинные свитки</h2>
+  <p class="sub">Все 33 буквы на пергаменте с примерами.</p>
+  <div class="scroll-grid" id="scrollGrid"></div>
+</section>
+
+<!-- СВЕЧИ -->
+<section id="sec-candles">
+  <h2>🕯️ Зажги свечи</h2>
+  <p class="sub">Зажги свечу для каждой изученной буквы. Нажми на свечу, чтобы зажечь.</p>
+  <div class="candles-scene" id="candlesScene"></div>
+  <div class="fb" id="candlesFb"></div>
+</section>
+
+<!-- ТУРНИР -->
+<section id="sec-tournament">
+  <h2>⚔️ Рыцарский турнир</h2>
+  <p class="sub">Сразись с драконом! Отвечай правильно — дракон теряет силы.</p>
+  <div class="dialogue">
+    <div class="avatar">🐉</div>
+    <div class="bubble"><b>Дракон:</b> Ха-ха! Одолеть меня сможет лишь тот, кто знает все буквы!</div>
+  </div>
+  <div class="task" id="tournamentTask"></div>
+  <div class="center">
+    <button class="btn gold" onclick="startTournament()">⚔️ В бой!</button>
+  </div>
+  <div class="fb" id="tournamentFb"></div>
+</section>
+
+<!-- КЛЮЧИ -->
+<section id="sec-locks">
+  <h2>🗝️ Ключи и замки</h2>
+  <p class="sub">Подбери ключ к каждому замку.</p>
+  <div class="locks-area" id="locksArea"></div>
+  <div class="key-pool" id="keyPool"></div>
+  <div class="fb" id="locksFb"></div>
+  <div class="center"><button class="btn forest" onclick="newLocks()">Новые замки</button></div>
+</section>
+
+<!-- ЗЕЛЬЕ -->
+<section id="sec-potion">
+  <h2>🧪 Зельеварение</h2>
+  <p class="sub">Собери ингредиенты-буквы и свари зелье-слово.</p>
+  <div class="dialogue">
+    <div class="avatar">🐰</div>
+    <div class="bubble"><b>Моне:</b> Брось в котёл буквы в правильном порядке!</div>
+  </div>
+  <div class="cauldron"></div>
+  <div class="center" style="margin-top:10px;">
+    <div id="potionSlots" style="font-size:28px; font-weight:bold; color:var(--wine); min-height:40px; letter-spacing:6px;">_ _ _</div>
+  </div>
+  <div class="ingredients" id="potionIngredients"></div>
+  <div class="fb" id="potionFb"></div>
+  <div class="center"><button class="btn" onclick="newPotion()">Новое зелье</button></div>
+</section>
+
+<!-- МАСКАРАД -->
+<section id="sec-masquerade">
+  <h2>🎭 Маскарад</h2>
+  <p class="sub">Найди пару масок: заглавную и строчную букву.</p>
+  <div class="masks-area" id="masksArea"></div>
+  <div class="fb" id="masqFb"></div>
+  <div class="center"><button class="btn" onclick="newMasquerade()">Новый бал</button></div>
+</section>
+
+<!-- ПАЛОЧКА -->
+<section id="sec-wand">
+  <h2>🪄 Волшебная палочка</h2>
+  <p class="sub">Проведи палочкой по контуру — буква появится!</p>
+  <div class="dialogue">
+    <div class="avatar">🐰</div>
+    <div class="bubble"><b>Моне:</b> Произнеси заклинание и обведи букву <b id="wandLetterName">А</b>!</div>
+  </div>
+  <svg viewBox="0 0 400 200" class="wand-canvas" id="wandSvg">
+    <text id="wandOutline" x="200" y="150" text-anchor="middle" font-size="150" font-family="Georgia, serif" font-weight="bold" fill="none" stroke="rgba(123,45,38,.25)" stroke-width="6"></text>
+    <path id="wandPath" fill="none" stroke="#7b2d26" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+    <defs>
+      <filter id="glow">
+        <feGaussianBlur stdDeviation="2" result="blur"/>
+        <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+      </filter>
+    </defs>
+  </svg>
+  <div class="center">
+    <button class="btn ghost" onclick="clearWand()">Стереть</button>
+    <button class="btn" onclick="newWandLetter()">Новая буква</button>
+  </div>
+  <div class="fb" id="wandFb"></div>
+</section>
+
+<!-- ЗАКЛИНАНИЯ -->
+<section id="sec-spells">
+  <h2>🧙 Заклинания</h2>
+  <p class="sub">Собери слово-заклинание из букв.</p>
+  <div class="task">
+    <div class="q" id="spellQuestion"></div>
+    <div class="center" style="font-size:30px; letter-spacing:8px; margin:12px 0; min-height:40px; color:var(--wine); font-weight:bold;" id="spellSlots"></div>
+    <div class="options" id="spellLetters"></div>
+    <div class="fb" id="spellFb"></div>
+  </div>
+  <div class="center"><button class="btn" onclick="newSpell()">Новое заклинание</button></div>
+</section>
+
+<!-- ДРАКОН -->
+<section id="sec-dragon">
+  <h2>🐉 Покорми дракона</h2>
+  <p class="sub">Дракон ест только буквы из своего имени.</p>
+  <div class="task">
+    <div class="q" id="dragonHint">—</div>
+  </div>
+  <div class="dragon-area" id="dragonArea">
+    <div class="dragon" id="dragonEmoji">🐉</div>
+  </div>
+  <div class="fb" id="dragonFb"></div>
+  <div class="center"><button class="btn pink" onclick="newDragonFood()">🐉 Покормить</button></div>
+</section>
+
+<!-- ЛУЧНИК -->
+<section id="sec-archer">
+  <h2>🏹 Лучник</h2>
+  <p class="sub">Попади стрелой в мишень с нужной буквой.</p>
+  <div class="task">
+    <div class="q" id="archerHint">—</div>
+  </div>
+  <div class="targets-area" id="targetsArea"></div>
+  <div class="fb" id="archerFb"></div>
+  <div class="center"><button class="btn" onclick="newArcher()">🏹 Новые мишени</button></div>
+</section>
+
+<!-- КАРТА СОКРОВИЩ -->
+<section id="sec-treasure">
+  <h2>🗺️ Карта сокровищ</h2>
+  <p class="sub">Пройди по буквам в алфавитном порядке и найди клад.</p>
+  <div class="map-area" id="mapArea"></div>
+  <div class="fb" id="treasureFb"></div>
+  <div class="center"><button class="btn gold" onclick="newTreasure()">🗺️ Новая карта</button></div>
+</section>
+
+<!-- БАШНЯ -->
+<section id="sec-build">
+  <h2>🏰 Построй башню</h2>
+  <p class="sub">Поставь буквы в алфавитном порядке — снизу вверх.</p>
+  <div class="build-area">
+    <div class="build-slot" id="buildSlot"></div>
+  </div>
+  <div class="build-pool" id="buildPool"></div>
+  <div class="fb" id="buildFb"></div>
+  <div class="center"><button class="btn" onclick="newBuild()">🏰 Новая башня</button></div>
+</section>
+
+<!-- КАРУСЕЛЬ -->
+<section id="sec-carousel">
+  <h2>🎠 Карусель</h2>
+  <p class="sub">Крути карусель и останови на нужной букве.</p>
+  <div class="task">
+    <div class="q" id="carouselHint">—</div>
+  </div>
+  <div class="carousel" id="carousel">
+    <div class="center"></div>
+    <div class="needle" id="carouselNeedle">↑</div>
+  </div>
+  <div class="center" style="margin-top:14px;">
+    <button class="btn gold" onclick="spinCarousel()">🎠 Крутить</button>
+  </div>
+  <div class="fb" id="carouselFb"></div>
+</section>
+
+<!-- ВИТРАЖ -->
+<section id="sec-stained">
+  <h2>🧩 Витраж</h2>
+  <p class="sub">Собери витраж — расставь осколки в правильном порядке.</p>
+  <div class="task">
+    <div class="q" id="stainedHint">—</div>
+  </div>
+  <div class="stained-area" id="stainedArea"></div>
+  <div class="fb" id="stainedFb"></div>
+  <div class="center"><button class="btn" onclick="newStained()">🧩 Новый витраж</button></div>
+</section>
+
+<!-- КНИГА СКАЗОК -->
+<section id="sec-book">
+  <h2>📖 Книга сказок</h2>
+  <p class="sub">Нажми на выделенные буквы, чтобы услышать их.</p>
+  <div class="book" id="bookPage"></div>
+  <div class="center" style="margin-top:12px;">
+    <button class="btn" onclick="newBookPage()">📖 Другая страница</button>
+    <button class="btn ghost" onclick="readBook()">🔊 Прочитать</button>
+  </div>
+</section>
+
+<!-- ШАР -->
+<section id="sec-orb">
+  <h2>🔮 Магический шар</h2>
+  <p class="sub">Угадай букву по силуэту в шаре.</p>
+  <div class="center">
+    <div class="orb" id="orbGlyph" onclick="revealOrb()">?</div>
+  </div>
+  <div class="options" id="orbOptions" style="margin-top:14px;"></div>
+  <div class="fb" id="orbFb"></div>
+  <div class="center"><button class="btn" onclick="newOrb()">🔮 Новое предсказание</button></div>
+</section>
+
+<!-- ТРАВНИК -->
+<section id="sec-herbs">
+  <h2>🌿 Травник</h2>
+  <p class="sub">Собери травы с буквами из слова.</p>
+  <div class="task">
+    <div class="q" id="herbsHint">—</div>
+  </div>
+  <div class="herbs-area" id="herbsArea"></div>
+  <div class="fb" id="herbsFb"></div>
+  <div class="center"><button class="btn forest" onclick="newHerbs()">🌿 Новый сбор</button></div>
+</section>
+
+<!-- ОСОБЫЕ -->
+<section id="sec-special">
+  <h2>🌟 Особые руны: Ё, Й, Ъ, Ы, Ь</h2>
+  <div class="dialogue">
+    <div class="avatar">🐻</div>
+    <div class="bubble"><b>Гайк:</b> Это необычные руны! <b>Ё</b> — всегда ударная, <b>Й</b> — короткая «и», <b>Ы</b> — не бывает в начале слова, а <b>Ъ</b> и <b>Ь</b> — вообще не дают звука, они помогают читать: подъезд, семья.</div>
+  </div>
+  <div class="scroll-grid" id="specialGrid"></div>
+  <div id="specialQuiz"></div>
+</section>
+
+<!-- ЯРМАРКА -->
+<section id="sec-fair">
+  <h2>🎪 Ярмарка</h2>
+  <p class="sub">Мини-игры на каждой площади замка.</p>
+  <div class="fair-grid" id="fairGrid"></div>
+</section>
+
+<!-- НАГРАДЫ -->
+<section id="sec-badges">
+  <h2>🏅 Гербовые щиты</h2>
+  <div class="badge-grid" id="badgeGrid"></div>
+</section>
+
+</main>
+
+<!-- МОДАЛКА СВИТКА -->
+<div class="modal" id="letterModal">
+  <div class="modal-content" id="letterModalContent"></div>
+</div>
+
+<script>
+/* ==================== АЛФАВИТ ==================== */
+const A = [
+  {up:'А',low:'а',em:'🍎',w:'Арбуз',n:'Гласная, поётся: «а-а-а».',rhyme:'А — арбуз и апельсин, А — начало всех картин.',sim:['О','Я','Л','М']},
+  {up:'Б',low:'б',em:'🐿️',w:'Белка',n:'Согласная, звонкая.',rhyme:'Б — белка на ветке, Б — бублик в руке.',sim:['В','Ь','Ъ','Р']},
+  {up:'В',low:'в',em:'🐺',w:'Волк',n:'Согласная, звонкая.',rhyme:'В — волк в лесу, В — ворона на носу.',sim:['Б','Ф','Ь','Ъ']},
+  {up:'Г',low:'г',em:'🍄',w:'Гриб',n:'Согласная, звонкая.',rhyme:'Г — гриб под ёлкой, Г — гном в футболке.',sim:['Т','П','Р','К']},
+  {up:'Д',low:'д',em:'🏠',w:'Дом',n:'Согласная, звонкая.',rhyme:'Д — дом с трубой, Д — дождик грибной.',sim:['А','Л','Ц','Ч']},
+  {up:'Е',low:'е',em:'🌲',w:'Ель',n:'Гласная, поётся.',rhyme:'Е — ель в снегу, Е — енот на лугу.',sim:['Ё','З','С','Э']},
+  {up:'Ё',low:'ё',em:'🎄',w:'Ёлка',n:'Гласная, ВСЕГДА ударная!',rhyme:'Ё — ёлка в огнях, Ё — ёжик в кустах.',sim:['Е','О','Э','Ю']},
+  {up:'Ж',low:'ж',em:'🐞',w:'Жук',n:'Согласная, всегда твёрдая.',rhyme:'Ж — жук жужжит, Ж — жираф бежит.',sim:['Х','К','Ш','Щ']},
+  {up:'З',low:'з',em:'🐰',w:'Заяц',n:'Согласная, звонкая.',rhyme:'З — заяц в лесу, З — зебра в полоску.',sim:['Е','Э','В','Ы']},
+  {up:'И',low:'и',em:'🧸',w:'Игрушка',n:'Гласная, поётся: «и-и-и».',rhyme:'И — иголка, ирис, ива. И — всегда такая мила!',sim:['Й','Н','П','М']},
+  {up:'Й',low:'й',em:'🥛',w:'Йогурт',n:'Согласная, короткая. Есть слова на Й: йогурт, йод.',rhyme:'Й — йогурт в стакане, Й — йод в пузырьке.',sim:['И','Н','Ы','Е']},
+  {up:'К',low:'к',em:'🐱',w:'Кот',n:'Согласная, глухая.',rhyme:'К — кот и кит, К — кран открыт.',sim:['Ж','Х','Н','М']},
+  {up:'Л',low:'л',em:'🦊',w:'Лиса',n:'Согласная, звонкая.',rhyme:'Л — лиса и лев, Л — лампа и лук.',sim:['А','Д','И','М']},
+  {up:'М',low:'м',em:'🐻',w:'Медведь',n:'Согласная, звонкая. Это Гайк!',rhyme:'М — мишка Гайк, М — мёд и май.',sim:['И','Л','Н','Ш']},
+  {up:'Н',low:'н',em:'👃',w:'Нос',n:'Согласная, звонкая.',rhyme:'Н — нос и нога, Н — нитка в руках.',sim:['И','П','М','К']},
+  {up:'О',low:'о',em:'☁️',w:'Облако',n:'Гласная, поётся: «о-о-о».',rhyme:'О — облако, окно, оса. О — круглая краса!',sim:['А','Ф','С','Э']},
+  {up:'П',low:'п',em:'🐧',w:'Пингвин',n:'Согласная, глухая.',rhyme:'П — пингвин на льдине, П — печенье в корзине.',sim:['Н','Г','Т','И']},
+  {up:'Р',low:'р',em:'🐟',w:'Рыба',n:'Согласная, звонкая.',rhyme:'Р — рыба и рак, Р — ромашка в руках.',sim:['Г','Ф','Ь','Ъ']},
+  {up:'С',low:'с',em:'🐘',w:'Слон',n:'Согласная, глухая.',rhyme:'С — слон и сова, С — солнце-краса.',sim:['Е','Э','О','З']},
+  {up:'Т',low:'т',em:'🐯',w:'Тигр',n:'Согласная, глухая.',rhyme:'Т — тигр в полоску, Т — торт на столе.',sim:['Г','П','Ч','Ь']},
+  {up:'У',low:'у',em:'🦆',w:'Утка',n:'Гласная, поётся: «у-у-у».',rhyme:'У — утка в пруду, У — улитка в саду.',sim:['Ч','О','И','Х']},
+  {up:'Ф',low:'ф',em:'📷',w:'Фото',n:'Согласная, глухая.',rhyme:'Ф — фото и флаг, Ф — фокусник-маг.',sim:['О','Р','В','Ь']},
+  {up:'Х',low:'х',em:'🍞',w:'Хлеб',n:'Согласная, глухая.',rhyme:'Х — хлеб и хомяк, Х — хоккей и халат.',sim:['Ж','К','У','Н']},
+  {up:'Ц',low:'ц',em:'🌸',w:'Цветок',n:'Согласная, всегда твёрдая.',rhyme:'Ц — цветок и цапля, Ц — цирк и цыплёнок.',sim:['Ч','Ш','Щ','У']},
+  {up:'Ч',low:'ч',em:'🫖',w:'Чайник',n:'Согласная, всегда мягкая.',rhyme:'Ч — чайник и чайка, Ч — чашка и час.',sim:['У','Ц','Т','Ь']},
+  {up:'Ш',low:'ш',em:'🎈',w:'Шар',n:'Согласная, всегда твёрдая.',rhyme:'Ш — шар и шарф, Ш — шум и шакал.',sim:['Щ','Ж','М','Ц']},
+  {up:'Щ',low:'щ',em:'🐕',w:'Щенок',n:'Согласная, всегда мягкая.',rhyme:'Щ — щенок и щётка, Щ — щи и щука.',sim:['Ш','Ц','Ч','М']},
+  {up:'Ъ',low:'ъ',em:'🚪',w:'Подъезд',n:'Твёрдый знак. Звука не даёт, помогает читать.',rhyme:'Твёрдый знак — серьёзный знак. Он не звук, а так — пустяк!',sim:['Ь','Ы','Б','В']},
+  {up:'Ы',low:'ы',em:'🧀',w:'Сыр',n:'Гласная. В начале слов не бывает, только внутри.',rhyme:'Ы — сыр и мышка, Ы — дым и шишка.',sim:['Ъ','Ь','И','Й']},
+  {up:'Ь',low:'ь',em:'👨‍👩‍👧',w:'Семья',n:'Мягкий знак. Звука не даёт, делает букву мягкой.',rhyme:'Мягкий знак — пушистый знак. Делает он мягко так!',sim:['Ъ','Ы','Б','Р']},
+  {up:'Э',low:'э',em:'🦉',w:'Эхо',n:'Гласная, поётся: «э-э-э».',rhyme:'Э — эхо в горах, Э — экскаватор в руках.',sim:['Е','Ё','З','С']},
+  {up:'Ю',low:'ю',em:'🌀',w:'Юла',n:'Гласная, поётся.',rhyme:'Ю — юла и юбка, Ю — Юра и юг.',sim:['О','У','Я','Ё']},
+  {up:'Я',low:'я',em:'🍓',w:'Ягода',n:'Гласная, поётся.',rhyme:'Я — ягода и яблоко, Я — яхта и Яна.',sim:['А','Р','Ю','Е']},
+];
+const SPECIAL = ['Ё','Й','Ъ','Ы','Ь'];
+const VOWELS = ['А','Е','Ё','И','О','У','Ы','Э','Ю','Я'];
+
+const WORDS = [
+  {w:'МАМА',em:'👩',syl:['МА','МА']},{w:'ПАПА',em:'👨',syl:['ПА','ПА']},
+  {w:'КОТ',em:'🐱',syl:['КОТ']},{w:'РЫБА',em:'🐟',syl:['РЫ','БА']},
+  {w:'ЛУНА',em:'🌙',syl:['ЛУ','НА']},{w:'ДОМ',em:'🏠',syl:['ДОМ']},
+  {w:'ЛИСА',em:'🦊',syl:['ЛИ','СА']},{w:'РОЗА',em:'🌹',syl:['РО','ЗА']},
+  {w:'УТКА',em:'🦆',syl:['УТ','КА']},{w:'СЛОН',em:'🐘',syl:['СЛОН']},
+  {w:'ЗИМА',em:'❄️',syl:['ЗИ','МА']},{w:'ЛЕТО',em:'☀️',syl:['ЛЕ','ТО']},
+  {w:'ВОДА',em:'💧',syl:['ВО','ДА']},{w:'НЕБО',em:'☁️',syl:['НЕ','БО']},
+  {w:'ГОРА',em:'⛰️',syl:['ГО','РА']},{w:'ЁЖИК',em:'🦔',syl:['Ё','ЖИК']},
+  {w:'ЙОГУРТ',em:'🥛',syl:['ЙО','ГУРТ']},{w:'СЫР',em:'🧀',syl:['СЫР']},
+  {w:'СЕМЬЯ',em:'👨‍👩‍👧',syl:['СЕМЬ','Я']},{w:'ПОДЪЕЗД',em:'🚪',syl:['ПОДЪ','ЕЗД']},
+];
+
+/* ==================== ПРОГРЕСС ==================== */
+const KEY = 'castle_alpha_v1';
+const DEFAULT = {letters:{}, badges:{}, stars:0, candles:0, tournaments:0, treasures:0, potions:0};
+let P = load();
+
+function load(){
+  try{
+    const r = localStorage.getItem(KEY);
+    if(r){ const p = JSON.parse(r); return Object.assign({}, DEFAULT, p, {letters:p.letters||{}, badges:p.badges||{}}); }
+  }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT));
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(P)); }catch(e){} }
+
+function getLP(up){ return P.letters[up] || {mech:{}, lvl:0}; }
+function setMech(up, key, done=true){
+  if(!P.letters[up]) P.letters[up] = {mech:{}, lvl:0};
+  P.letters[up].mech[key] = done;
+  P.letters[up].lvl = Object.values(P.letters[up].mech).filter(Boolean).length;
+  save(); renderMap(); renderHUD(); checkBadges();
+}
+function addStar(n=1){ P.stars+=n; save(); renderHUD(); checkBadges(); }
+function earnBadge(id,title,icon){
+  if(!P.badges[id]){ P.badges[id]={title,icon}; renderBadges(); save(); }
+}
+function learnedCount(){ return Object.values(P.letters).filter(l=>l.lvl>0).length; }
+function fullCount(){ return Object.values(P.letters).filter(l=>l.lvl>=5).length; }
+function checkBadges(){
+  const l = learnedCount(); const f = fullCount();
+  if(l>=1) earnBadge('first','Первый свиток','📜');
+  if(l>=5) earnBadge('five','5 свитков','📚');
+  if(l>=15) earnBadge('fifteen','15 свитков','📖');
+  if(l>=25) earnBadge('twenty5','25 свитков','🎓');
+  if(l>=33) earnBadge('all','33 свитка','🏆');
+  if(f>=3) earnBadge('full3','3 мастера','⭐');
+  if(f>=10) earnBadge('full10','10 мастеров','👑');
+  if(f>=33) earnBadge('fullAll','Хранитель замка','🏰');
+  if(SPECIAL.every(u=>P.letters[u]?.lvl>0)) earnBadge('special','Знаток рун','🌟');
+  if(P.stars>=30) earnBadge('s30','30 печатей','🔴');
+  if(P.stars>=100) earnBadge('s100','100 печатей','💫');
+  if(P.candles>=10) earnBadge('cand10','10 свечей','🕯️');
+  if(P.candles>=33) earnBadge('candAll','Все свечи','🔥');
+  if(P.tournaments>=3) earnBadge('tour3','Рыцарь','⚔️');
+  if(P.treasures>=3) earnBadge('tres3','Кладоискатель','🗺️');
+  if(P.potions>=3) earnBadge('pot3','Алхимик','🧪');
+}
+function renderHUD(){
+  document.getElementById('hudLetters').textContent = `📜 Свитков: ${learnedCount()}/33`;
+  document.getElementById('hudStars').textContent = `⭐ Печатей: ${P.stars}`;
+  document.getElementById('hudCandles').textContent = `🕯️ Свечей: ${P.candles}`;
+  renderCandleTrack();
+}
+function renderCandleTrack(){
+  const t = document.getElementById('candleTrack');
+  t.innerHTML = '';
+  for(let i=0;i<33;i++){
+    const c = document.createElement('div');
+    c.className = 'c' + (i<P.candles?' lit':'');
+    t.appendChild(c);
+  }
+}
+
+/* ==================== НАВИГАЦИЯ ==================== */
+const SECTIONS = [
+  ['map','🏰 Карта'],
+  ['cards','📜 Свитки'],
+  ['candles','🕯️ Свечи'],
+  ['tournament','⚔️ Турнир'],
+  ['locks','🗝️ Замки'],
+  ['potion','🧪 Зелье'],
+  ['masquerade','🎭 Бал'],
+  ['wand','🪄 Палочка'],
+  ['spells','🧙 Заклинания'],
+  ['dragon','🐉 Дракон'],
+  ['archer','🏹 Лучник'],
+  ['treasure','🗺️ Клад'],
+  ['build','🏰 Башня'],
+  ['carousel','🎠 Карусель'],
+  ['stained','🧩 Витраж'],
+  ['book','📖 Сказки'],
+  ['orb','🔮 Шар'],
+  ['herbs','🌿 Травник'],
+  ['special','🌟 Руны'],
+  ['fair','🎪 Ярмарка'],
+  ['badges','🏅 Щиты'],
+];
+
+function buildNav(){
+  const n = document.getElementById('nav');
+  n.innerHTML = '';
+  SECTIONS.forEach(([id,label],i)=>{
+    const b = document.createElement('button');
+    b.textContent = label;
+    b.onclick = ()=>show('sec-'+id, b);
+    if(i===0) b.classList.add('active');
+    n.appendChild(b);
+  });
+}
+function show(id, btn){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+/* ==================== КАРТА ЗАМКА ==================== */
+function renderMap(){
+  const g = document.getElementById('alphabetGrid');
+  if(!g) return;
+  g.innerHTML = '';
+  A.forEach(a=>{
+    const p = getLP(a.up);
+    const pct = Math.min(100, Math.round(p.lvl / 5 * 100));
+    const cls = 'tower' + (p.lvl>0?' visited':'') + (p.lvl>=5?' master':'');
+    const el = document.createElement('div');
+    el.className = cls;
+    el.innerHTML = `${a.up}${a.low}<div class="prog"><i style="width:${pct}%"></i></div>`;
+    el.onclick = ()=>openScroll(a.up);
+    g.appendChild(el);
+  });
+}
+
+/* ==================== МОДАЛКА СВИТКА ==================== */
+let curLetter = null;
+function openScroll(up){
+  curLetter = A.find(x=>x.up===up);
+  setMech(up, 'visit', true);
+  renderScrollModal('intro');
+  document.getElementById('letterModal').classList.add('open');
+}
+function closeModal(){
+  document.getElementById('letterModal').classList.remove('open');
+  curLetter = null;
+}
+document.getElementById('letterModal').addEventListener('click', e=>{
+  if(e.target.id==='letterModal') closeModal();
+});
+
+const MECHS = [
+  ['intro','📖','Свиток'],['trace','✏️','Обведи'],['similar','🔍','Похожие'],
+  ['first','1️⃣','Первая'],['puzzle','🧩','Пазл'],['draw','🖌️','Перо'],
+];
+
+function renderScrollModal(active){
+  const a = curLetter;
+  const p = getLP(a.up);
+  const pct = Math.min(100, Math.round(p.lvl/5*100));
+  const c = document.getElementById('letterModalContent');
+  c.innerHTML = `
+    <div class="scroll-header">
+      <div class="glyph">${a.up}<small>${a.low}</small></div>
+      <div class="info">
+        <div class="em">${a.em}</div>
+        <div class="word">${a.w}</div>
+        <div class="note">${a.n}</div>
+      </div>
+    </div>
+    <div class="xp-bar"><div style="width:${pct}%"></div></div>
+    <div class="xp-text">Свиток развёрнут на ${p.lvl}/5</div>
+    <div class="mech-grid">
+      ${MECHS.map(([id,ico,label])=>{
+        const done = p.mech[id];
+        return `<div class="mech-tile${done?' done':''}" data-m="${id}">
+          <span class="ico">${ico}</span>${label}
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="mech-body" id="mechBody"></div>
+    <div class="center" style="margin-top:10px;">
+      <button class="btn ghost" onclick="closeModal()">Свернуть свиток</button>
+    </div>
+  `;
+  c.querySelectorAll('.mech-tile').forEach(t=>{
+    t.onclick = ()=>renderMech(t.dataset.m);
+  });
+  renderMech(active);
+}
+
+function renderMech(mech){
+  const a = curLetter;
+  const b = document.getElementById('mechBody');
+  if(!b) return;
+  if(mech==='intro'){
+    b.innerHTML = `
+      <div class="dialogue"><div class="avatar">🐰</div><div class="bubble">${a.rhyme}</div></div>
+      <div class="center"><button class="btn" onclick="complete('intro')">✅ Запомнил</button></div>
+    `;
+  }
+  else if(mech==='trace'){
+    b.innerHTML = `
+      <div class="dialogue"><div class="avatar">🐻</div><div class="bubble">Обведи букву пальцем, как пером по пергаменту.</div></div>
+      <svg viewBox="0 0 200 180" id="traceSvg" style="width:100%; height:180px; background:rgba(255,255,255,.4); border:2px dashed var(--gold); border-radius:6px; touch-action:none;">
+        <text x="100" y="140" text-anchor="middle" font-size="160" font-family="Georgia, serif" font-weight="bold" fill="none" stroke="rgba(123,45,38,.3)" stroke-width="8">${a.up}</text>
+        <path id="traceUser" fill="none" stroke="#7b2d26" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="center"><button class="btn ghost" onclick="clearTrace()">Стереть</button></div>
+    `;
+    setupTrace();
+  }
+  else if(mech==='similar'){
+    const opts = shuffle([a.up, ...a.sim]).slice(0,6);
+    b.innerHTML = `
+      <div class="dialogue"><div class="avatar">🐰</div><div class="bubble">Найди руну <b>${a.up}</b> среди похожих.</div></div>
+      <div class="options">
+        ${opts.map(o=>`<button class="opt" data-c="${o===a.up}">${o}</button>`).join('')}
+      </div>
+      <div class="fb" id="simFb"></div>
+    `;
+    b.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick = ()=>{
+        const ok = btn.dataset.c==='true';
+        btn.classList.add(ok?'correct':'wrong');
+        document.getElementById('simFb').textContent = ok?'✅ Верно!':'❌ Не она.';
+        if(ok){ addStar(); complete('similar'); }
+      };
+    });
+  }
+  else if(mech==='first'){
+    const others = shuffle(A.filter(x=>x.up!==a.up && !['Ъ','Ь','Ы'].includes(x.up))).slice(0,3);
+    const opts = shuffle([a, ...others]);
+    b.innerHTML = `
+      <div class="dialogue"><div class="avatar">🐻</div><div class="bubble">С какой руны начинается «<b>${a.w}</b>» ${a.em}?</div></div>
+      <div class="options">
+        ${opts.map(o=>`<button class="opt" data-c="${o.up===a.up}">${o.up}</button>`).join('')}
+      </div>
+      <div class="fb" id="fFb"></div>
+    `;
+    b.querySelectorAll('.opt').forEach(btn=>{
+      btn.onclick = ()=>{
+        const ok = btn.dataset.c==='true';
+        btn.classList.add(ok?'correct':'wrong');
+        document.getElementById('fFb').textContent = ok?'✅ Верно!':'❌ Не та.';
+        if(ok){ addStar(); complete('first'); }
+      };
+    });
+  }
+  else if(mech==='puzzle'){
+    const pieces = shuffle([a.up,a.low,a.up,a.low,a.up,a.low]);
+    b.innerHTML = `
+      <div class="dialogue"><div class="avatar">🐰</div><div class="bubble">Собери руну из осколков.</div></div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; max-width:240px; margin:0 auto;">
+        ${pieces.map(p=>`<div class="puzzle-piece" data-p="${p}" style="aspect-ratio:1; background:linear-gradient(180deg, var(--parch), var(--parch3)); border:2px solid var(--gold); border-radius:4px; display:flex; align-items:center; justify-content:center; font-size:28px; font-weight:bold; color:var(--wine); cursor:pointer;">${p}</div>`).join('')}
+      </div>
+      <div class="fb" id="pzFb"></div>
+    `;
+    let picked = 0;
+    b.querySelectorAll('.puzzle-piece').forEach(p=>{
+      p.onclick = ()=>{
+        if(p.dataset.done) return;
+        if(p.dataset.p===a.up || p.dataset.p===a.low){
+          p.style.background = 'linear-gradient(180deg, #9bc99b, #6a9a6a)';
+          p.dataset.done = '1';
+          picked++;
+          if(picked>=4){ document.getElementById('pzFb').textContent='🎉 Собрано!'; addStar(2); complete('puzzle'); }
+        }else{
+          p.style.background = 'linear-gradient(180deg, #d97a7a, #7b2d26)';
+          setTimeout(()=>p.style.background='',400);
+        }
+      };
+    });
+  }
+  else if(mech==='draw'){
+    b.innerHTML = `
+      <div class="dialogue"><div class="avatar">🐰</div><div class="bubble">Напиши руну «${a.up}» гусиным пером.</div></div>
+      <canvas id="drawCanvas" style="width:100%; height:180px; background:rgba(255,255,255,.5); border:2px dashed var(--gold); border-radius:6px; touch-action:none; cursor:crosshair;"></canvas>
+      <div class="center">
+        <button class="btn ghost" onclick="clearCanvas()">Стереть</button>
+        <button class="btn" onclick="complete('draw')">✅ Готово</button>
+      </div>
+    `;
+    setupCanvas();
+  }
+}
+function complete(mech){
+  if(!curLetter) return;
+  setMech(curLetter.up, mech, true);
+  addStar();
+  renderScrollModal(mech);
+}
+
+/* Трассировка */
+function setupTrace(){
+  const svg = document.getElementById('traceSvg');
+  const user = document.getElementById('traceUser');
+  let drawing = false, d = '';
+  const p = e=>{
+    const r = svg.getBoundingClientRect();
+    const t = e.touches? e.touches[0] : e;
+    return {x:(t.clientX-r.left)/r.width*200, y:(t.clientY-r.top)/r.height*180};
+  };
+  const start = e=>{ drawing=true; const q=p(e); d=`M ${q.x} ${q.y}`; user.setAttribute('d',d); };
+  const move = e=>{ if(!drawing) return; e.preventDefault(); const q=p(e); d+=` L ${q.x} ${q.y}`; user.setAttribute('d',d); };
+  const end = ()=>{ if(!drawing) return; drawing=false; if(d.length>40){ addStar(); complete('trace'); } };
+  svg.addEventListener('mousedown',start); svg.addEventListener('mousemove',move);
+  svg.addEventListener('mouseup',end); svg.addEventListener('mouseleave',end);
+  svg.addEventListener('touchstart',start,{passive:false});
+  svg.addEventListener('touchmove',move,{passive:false});
+  svg.addEventListener('touchend',end);
+}
+function clearTrace(){ document.getElementById('traceUser')?.setAttribute('d',''); }
+
+let cx = null, cdraw = false;
+function setupCanvas(){
+  const c = document.getElementById('drawCanvas');
+  const r = c.getBoundingClientRect();
+  c.width = r.width; c.height = 180;
+  cx = c.getContext('2d');
+  cx.lineWidth = 6; cx.lineCap='round'; cx.strokeStyle='#2b1f14';
+  const pt = e=>{ const rr=c.getBoundingClientRect(); const t=e.touches?e.touches[0]:e; return {x:t.clientX-rr.left, y:t.clientY-rr.top}; };
+  c.addEventListener('mousedown', e=>{ cdraw=true; const q=pt(e); cx.beginPath(); cx.moveTo(q.x,q.y); });
+  c.addEventListener('mousemove', e=>{ if(!cdraw) return; const q=pt(e); cx.lineTo(q.x,q.y); cx.stroke(); });
+  c.addEventListener('mouseup', ()=>cdraw=false);
+  c.addEventListener('mouseleave', ()=>cdraw=false);
+  c.addEventListener('touchstart', e=>{ e.preventDefault(); cdraw=true; const q=pt(e); cx.beginPath(); cx.moveTo(q.x,q.y); },{passive:false});
+  c.addEventListener('touchmove', e=>{ e.preventDefault(); if(!cdraw) return; const q=pt(e); cx.lineTo(q.x,q.y); cx.stroke(); },{passive:false});
+  c.addEventListener('touchend', ()=>cdraw=false);
+}
+function clearCanvas(){ if(cx){ const c=document.getElementById('drawCanvas'); cx.clearRect(0,0,c.width,c.height); } }
+
+/* ==================== СВИТКИ ==================== */
+function renderCards(){
+  const g = document.getElementById('scrollGrid');
+  if(!g) return;
+  g.innerHTML = '';
+  A.forEach(a=>{
+    const el = document.createElement('div');
+    el.className = 'scroll-card';
+    el.innerHTML = `<span class="up">${a.up}</span><span class="low">${a.low}</span>
+      <div class="em">${a.em}</div><div class="w">${a.w}</div>`;
+    el.onclick = ()=>openScroll(a.up);
+    g.appendChild(el);
+  });
+}
+
+/* ==================== СВЕЧИ ==================== */
+function renderCandles(){
+  const s = document.getElementById('candlesScene');
+  if(!s) return;
+  s.innerHTML = '';
+  A.forEach((a,i)=>{
+    const l = P.letters[a.up];
+    const lit = l && l.lvl>0;
+    const c = document.createElement('div');
+    c.className = 'candle-item' + (lit?' lit':'');
+    c.innerHTML = `
+      <div class="flame"></div>
+      <div class="body"></div>
+      <div class="letter">${a.up}</div>
+    `;
+    c.onclick = ()=>{
+      if(lit){
+        document.getElementById('candlesFb').textContent = `🕯️ Свеча «${a.up}» уже горит!`;
+      }else{
+        document.getElementById('candlesFb').textContent = `❌ Изучи букву «${a.up}» в замке — тогда свеча загорится.`;
+      }
+    };
+    s.appendChild(c);
+  });
+}
+
+/* ==================== ТУРНИР ==================== */
+let tourHP = 0, tourQ = 0;
+function startTournament(){
+  tourHP = 5; tourQ = 0;
+  nextTourQ();
+}
+function nextTourQ(){
+  if(tourHP<=0){
+    P.tournaments++; save(); checkBadges();
+    document.getElementById('tournamentTask').innerHTML = `<div class="q">🎉 Дракон побеждён! Ты настоящий рыцарь!</div>`;
+    document.getElementById('tournamentFb').textContent = '⚔️ Победа!';
+    addStar(5);
+    return;
+  }
+  if(tourQ>=10){
+    document.getElementById('tournamentTask').innerHTML = `<div class="q">🐉 Дракон улетел. Попробуй ещё!</div>`;
+    return;
+  }
+  tourQ++;
+  const target = A[Math.floor(Math.random()*A.length)];
+  const others = shuffle(A.filter(x=>x.up!==target.up)).slice(0,3);
+  const opts = shuffle([target, ...others]);
+  const t = document.getElementById('tournamentTask');
+  t.innerHTML = `
+    <div class="q">🐉 Дракон (HP ${tourHP}/5) спрашивает: найди <b>${target.up}</b></div>
+    <div class="options">
+      ${opts.map(o=>`<button class="opt" data-c="${o.up===target.up}">${o.up}${o.low}</button>`).join('')}
+    </div>
+  `;
+  t.querySelectorAll('.opt').forEach(b=>{
+    b.onclick = ()=>{
+      const ok = b.dataset.c==='true';
+      if(ok){
+        b.classList.add('correct');
+        tourHP--;
+        addStar();
+        setTimeout(nextTourQ, 700);
+      }else{
+        b.classList.add('wrong');
+        tourHP++;
+        document.getElementById('tournamentFb').textContent = '❌ Дракон атакует!';
+      }
+    };
+  });
+}
+
+/* ==================== КЛЮЧИ ==================== */
+let lockState = null;
+function newLocks(){
+  const pool = shuffle(A).slice(0,4);
+  lockState = {targets:pool.map(a=>a.up), solved:0, selected:null};
+  const la = document.getElementById('locksArea');
+  const kp = document.getElementById('keyPool');
+  la.innerHTML = '';
+  kp.innerHTML = '';
+  shuffle([...pool]).forEach(a=>{
+    const l = document.createElement('div');
+    l.className = 'lock-box';
+    l.dataset.up = a.up;
+    l.innerHTML = `<div class="lock-icon">🔒</div><div class="lock-letter">?</div>`;
+    la.appendChild(l);
+  });
+  shuffle([...pool]).forEach(a=>{
+    const k = document.createElement('div');
+    k.className = 'key';
+    k.textContent = a.up;
+    k.dataset.up = a.up;
+    k.onclick = ()=>tryKey(k);
+    kp.appendChild(k);
+  });
+  document.getElementById('locksFb').textContent = 'Подбери ключ к каждому замку — нажми ключ, он сам подойдёт.';
+}
+function tryKey(k){
+  const up = k.dataset.up;
+  const locks = document.querySelectorAll('#locksArea .lock-box');
+  const lock = [...locks].find(l=>l.dataset.up===up);
+  if(lock && !lock.classList.contains('open')){
+    lock.classList.add('open');
+    lock.querySelector('.lock-icon').textContent = '🔓';
+    lock.querySelector('.lock-letter').textContent = up;
+    k.classList.add('used');
+    lockState.solved++;
+    addStar();
+    if(lockState.solved >= lockState.targets.length){
+      document.getElementById('locksFb').textContent = '🗝️ Все замки открыты!';
+      earnBadge('locks','Ключник','🗝️');
+      setTimeout(newLocks, 1300);
+    }
+  }
+}
+
+/* ==================== ЗЕЛЬЕ ==================== */
+let potionState = null;
+function newPotion(){
+  const w = WORDS[Math.floor(Math.random()*WORDS.length)];
+  potionState = {word:w.w, picked:[], em:w.em};
+  document.getElementById('potionSlots').textContent = w.w.split('').map(()=>'_').join(' ');
+  document.getElementById('potionFb').textContent = `Свари: ${w.em} — ${w.w}`;
+  const ing = document.getElementById('potionIngredients');
+  ing.innerHTML = '';
+  const used = [...new Set(w.w.split(''))];
+  const distract = shuffle(A.filter(a=>!used.includes(a.up))).slice(0,3).map(a=>a.up);
+  shuffle([...used, ...distract]).forEach(ch=>{
+    const el = document.createElement('div');
+    el.className = 'ingredient';
+    el.textContent = ch;
+    el.onclick = ()=>{
+      if(el.classList.contains('used')) return;
+      potionState.picked.push(ch);
+      el.classList.add('used');
+      document.getElementById('potionSlots').textContent = potionState.picked.join(' ');
+      const cur = potionState.picked.join('');
+      if(cur === potionState.word){
+        document.getElementById('potionFb').textContent = '🧪 Зелье сварено!';
+        addStar(3);
+        P.potions++; save(); checkBadges();
+        earnBadge('potion','Алхимик','🧪');
+        setTimeout(newPotion, 1300);
+      }else if(!potionState.word.startsWith(cur)){
+        document.getElementById('potionFb').textContent = '💥 Зелье взорвалось! Попробуй ещё.';
+        setTimeout(newPotion, 900);
+      }
+    };
+    ing.appendChild(el);
+  });
+}
+
+/* ==================== МАСКАРАД ==================== */
+let masqState = null;
+function newMasquerade(){
+  const pool = shuffle(A).slice(0,6);
+  masqState = {pool, selected:null, matched:0};
+  const area = document.getElementById('masksArea');
+  area.innerHTML = '';
+  const cards = shuffle([...pool.map(a=>({ch:a.up, key:a.up})), ...pool.map(a=>({ch:a.low, key:a.up}))]);
+  cards.forEach(c=>{
+    const m = document.createElement('div');
+    m.className = 'mask';
+    m.textContent = c.ch;
+    m.dataset.key = c.key;
+    m.onclick = ()=>pickMask(m);
+    area.appendChild(m);
+  });
+  document.getElementById('masqFb').textContent = '';
+}
+function pickMask(m){
+  if(m.classList.contains('done')) return;
+  if(!masqState.selected){
+    m.classList.add('selected');
+    masqState.selected = m;
+  }else{
+    const a = masqState.selected;
+    if(a===m){ m.classList.remove('selected'); masqState.selected = null; return; }
+    if(a.dataset.key === m.dataset.key){
+      a.classList.remove('selected');
+      a.classList.add('done');
+      m.classList.add('done');
+      masqState.selected = null;
+      masqState.matched++;
+      addStar();
+      document.getElementById('masqFb').textContent = '✅ Пара найдена!';
+      if(masqState.matched >= masqState.pool.length){
+        document.getElementById('masqFb').textContent = '🎭 Бал окончен!';
+        earnBadge('masq','Маскарад','🎭');
+      }
+    }else{
+      m.classList.add('wrong');
+      setTimeout(()=>{ a.classList.remove('selected'); m.classList.remove('wrong'); masqState.selected=null; }, 500);
+    }
+  }
+}
+
+/* ==================== ПАЛОЧКА ==================== */
+function newWandLetter(){
+  const a = A[Math.floor(Math.random()*A.length)];
+  document.getElementById('wandLetterName').textContent = a.up;
+  document.getElementById('wandOutline').textContent = a.up;
+  document.getElementById('wandPath').setAttribute('d','');
+  document.getElementById('wandFb').textContent = `Обведи букву «${a.up}»!`;
+  setupWand();
+}
+let wandSetup = false;
+function setupWand(){
+  const svg = document.getElementById('wandSvg');
+  const path = document.getElementById('wandPath');
+  if(wandSetup) return;
+  wandSetup = true;
+  let drawing = false, d = '';
+  const p = e=>{
+    const r = svg.getBoundingClientRect();
+    const t = e.touches? e.touches[0] : e;
+    return {x:(t.clientX-r.left)/r.width*400, y:(t.clientY-r.top)/r.height*200};
+  };
+  const start = e=>{ drawing=true; const q=p(e); d=`M ${q.x} ${q.y}`; path.setAttribute('d',d); };
+  const move = e=>{ if(!drawing) return; e.preventDefault(); const q=p(e); d+=` L ${q.x} ${q.y}`; path.setAttribute('d',d); };
+  const end = ()=>{
+    if(!drawing) return;
+    drawing=false;
+    if(d.length>60){
+      document.getElementById('wandFb').textContent = '🪄 Магия сработала!';
+      addStar();
+    }
+  };
+  svg.addEventListener('mousedown',start); svg.addEventListener('mousemove',move);
+  svg.addEventListener('mouseup',end); svg.addEventListener('mouseleave',end);
+  svg.addEventListener('touchstart',start,{passive:false});
+  svg.addEventListener('touchmove',move,{passive:false});
+  svg.addEventListener('touchend',end);
+}
+function clearWand(){ document.getElementById('wandPath').setAttribute('d',''); }
+
+/* ==================== ЗАКЛИНАНИЯ ==================== */
+let spellState = null;
+function newSpell(){
+  const w = WORDS[Math.floor(Math.random()*WORDS.length)];
+  spellState = {word:w.w, picked:[], em:w.em};
+  document.getElementById('spellQuestion').textContent = `Собери заклинание: ${w.em} ${w.w}`;
+  document.getElementById('spellSlots').textContent = w.w.split('').map(()=>'_').join(' ');
+  const letters = document.getElementById('spellLetters');
+  letters.innerHTML = '';
+  const used = w.w.split('');
+  const distract = shuffle(A.filter(a=>!used.includes(a.up))).slice(0,3).map(a=>a.up);
+  shuffle([...used, ...distract]).forEach(ch=>{
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = ch;
+    b.onclick = ()=>{
+      if(b.dataset.used) return;
+      b.dataset.used = '1';
+      spellState.picked.push(ch);
+      document.getElementById('spellSlots').textContent = spellState.picked.join(' ');
+      if(spellState.picked.join('') === spellState.word){
+        document.getElementById('spellFb').textContent = '✨ Заклинание произнесено!';
+        addStar(3);
+        earnBadge('spell','Чародей','🧙');
+        setTimeout(newSpell, 1300);
+      }else if(!spellState.word.startsWith(spellState.picked.join(''))){
+        document.getElementById('spellFb').textContent = '💥 Ошибка в заклинании!';
+        setTimeout(newSpell, 900);
+      }
+    };
+    letters.appendChild(b);
+  });
+  document.getElementById('spellFb').textContent = '';
+}
+
+/* ==================== ДРАКОН ==================== */
+let dragonState = null;
+function newDragonFood(){
+  const name = ['ДРАКОН','ДРАКОША','ДРАКОНЧИК'][Math.floor(Math.random()*3)];
+  dragonState = {letters:name.split(''), eaten:0, total:new Set(name.split('')).size};
+  document.getElementById('dragonHint').innerHTML = `Дракона зовут <b>${name}</b>. Он ест только буквы из своего имени.`;
+  const area = document.getElementById('dragonArea');
+  area.querySelectorAll('.dragon-food').forEach(x=>x.remove());
+  document.getElementById('dragonFb').textContent = '';
+  const used = [...new Set(dragonState.letters)];
+  const distract = shuffle(A.filter(a=>!used.includes(a.up))).slice(0,4).map(a=>a.up);
+  const all = shuffle([...used, ...distract]);
+  all.forEach(ch=>{
+    const el = document.createElement('div');
+    el.className = 'dragon-food';
+    el.textContent = ch;
+    el.style.left = (5 + Math.random()*70) + '%';
+    el.style.top = (5 + Math.random()*60) + '%';
+    el.onclick = ()=>{
+      if(dragonState.letters.includes(ch)){
+        el.remove();
+        dragonState.eaten++;
+        addStar();
+        const dragon = document.getElementById('dragonEmoji');
+        dragon.style.transform = 'scale(1.15)';
+        setTimeout(()=>dragon.style.transform='',300);
+        if(dragonState.eaten >= dragonState.total){
+          document.getElementById('dragonFb').textContent = '🐉 Дракон наелся и подобрел!';
+          earnBadge('dragon','Друид','🐉');
+          setTimeout(newDragonFood, 1300);
+        }
+      }else{
+        document.getElementById('dragonFb').textContent = '❌ Дракон плюётся: не та буква!';
+      }
+    };
+    area.appendChild(el);
+  });
+}
+
+/* ==================== ЛУЧНИК ==================== */
+function newArcher(){
+  const target = A[Math.floor(Math.random()*A.length)];
+  document.getElementById('archerHint').innerHTML = `Попади в мишень с буквой <b>${target.up}</b> ${target.em}`;
+  const area = document.getElementById('targetsArea');
+  area.innerHTML = '';
+  document.getElementById('archerFb').textContent = '';
+  const all = shuffle([target, ...shuffle(A.filter(a=>a.up!==target.up)).slice(0,4)]);
+  all.forEach(a=>{
+    const t = document.createElement('div');
+    t.className = 'target';
+    t.textContent = a.up;
+    t.onclick = ()=>{
+      if(a.up===target.up){
+        t.classList.add('hit');
+        document.getElementById('archerFb').textContent = '🎯 В яблочко!';
+        addStar(2);
+        earnBadge('archer','Снайпер','🏹');
+        setTimeout(newArcher, 900);
+      }else{
+        t.style.transform = 'scale(0.9)';
+        setTimeout(()=>t.style.transform='',400);
+        document.getElementById('archerFb').textContent = '❌ Мимо!';
+      }
+    };
+    area.appendChild(t);
+  });
+}
+
+/* ==================== КЛАД ==================== */
+let treasureState = null;
+function newTreasure(){
+  const start = Math.floor(Math.random()*26);
+  const slice = A.slice(start, start+6);
+  treasureState = {slice, next:0};
+  const area = document.getElementById('mapArea');
+  area.innerHTML = '';
+  const w = area.clientWidth || 500, h = 260;
+  slice.forEach((a,i)=>{
+    const p = document.createElement('div');
+    p.className = 'map-point';
+    p.textContent = a.up;
+    p.style.left = (30 + Math.random()*(w-80)) + 'px';
+    p.style.top = (30 + Math.random()*(h-80)) + 'px';
+    p.onclick = ()=>clickTreasure(a.up, p);
+    area.appendChild(p);
+  });
+  // Клад в конце
+  const chest = document.createElement('div');
+  chest.className = 'map-point chest';
+  chest.textContent = '💎';
+  chest.style.left = (30 + Math.random()*(w-80)) + 'px';
+  chest.style.top = (30 + Math.random()*(h-80)) + 'px';
+  chest.dataset.chest = '1';
+  area.appendChild(chest);
+  document.getElementById('treasureFb').textContent = `Начни с буквы: ${slice[0].up}`;
+}
+function clickTreasure(up, el){
+  if(!treasureState) return;
+  const want = treasureState.slice[treasureState.next].up;
+  if(up === want){
+    el.classList.add('visited');
+    treasureState.next++;
+    addStar();
+    if(treasureState.next >= treasureState.slice.length){
+      document.getElementById('treasureFb').textContent = '💎 Клад найден!';
+      P.treasures++; save(); checkBadges();
+      earnBadge('treasure','Кладоискатель','💎');
+      addStar(5);
+      setTimeout(newTreasure, 1500);
+    }else{
+      document.getElementById('treasureFb').textContent = `Дальше: ${treasureState.slice[treasureState.next].up}`;
+    }
+  }else{
+    el.style.background = 'rgba(217,122,122,.7)';
+    setTimeout(()=>el.style.background='', 500);
+    document.getElementById('treasureFb').textContent = '❌ Не туда!';
+  }
+}
+
+/* ==================== БАШНЯ ==================== */
+function newBuild(){
+  const start = Math.floor(Math.random()*28);
+  const slice = A.slice(start, start+5);
+  const pool = [...slice];
+  const slot = document.getElementById('buildSlot');
+  const poolEl = document.getElementById('buildPool');
+  slot.innerHTML = '';
+  poolEl.innerHTML = '';
+  document.getElementById('buildFb').textContent = `Построй башню в порядке: снизу — ${slice[0].up}, сверху — ${slice[slice.length-1].up}`;
+  shuffle(pool).forEach(a=>{
+    const b = document.createElement('button');
+    b.textContent = a.up;
+    b.dataset.up = a.up;
+    b.onclick = ()=>{
+      const built = slot.querySelectorAll('.build-block');
+      const idx = built.length;
+      if(idx >= slice.length) return;
+      if(slice[idx].up === a.up){
+        const block = document.createElement('div');
+        block.className = 'build-block';
+        block.textContent = a.up;
+        slot.appendChild(block);
+        b.classList.add('used');
+        addStar();
+        if(slot.querySelectorAll('.build-block').length === slice.length){
+          document.getElementById('buildFb').textContent = '🏰 Башня построена!';
+          earnBadge('build','Зодчий','🏰');
+          addStar(3);
+        }
+      }else{
+        b.style.background = 'linear-gradient(180deg, #d97a7a, #7b2d26)';
+        setTimeout(()=>b.style.background='', 500);
+        document.getElementById('buildFb').textContent = '❌ Не та буква для этого этажа.';
+      }
+    };
+    poolEl.appendChild(b);
+  });
+}
+
+/* ==================== КАРУСЕЛЬ ==================== */
+let carState = null;
+function newCarouselTarget(){
+  const target = A[Math.floor(Math.random()*A.length)];
+  carState = {target, spinning:false};
+  document.getElementById('carouselHint').innerHTML = `Останови на букве <b>${target.up}</b> ${target.em}`;
+  document.getElementById('carouselFb').textContent = '';
+  const c = document.getElementById('carousel');
+  c.querySelectorAll('.letter-seg').forEach(x=>x.remove());
+  const letters = shuffle(A).slice(0,8);
+  letters.forEach((a,i)=>{
+    const angle = (i * 45) - 90;
+    const el = document.createElement('div');
+    el.className = 'letter-seg';
+    el.textContent = a.up;
+    el.dataset.up = a.up;
+    const rad = angle * Math.PI / 180;
+    el.style.left = (50 + Math.cos(rad) * 40) + '%';
+    el.style.top = (50 + Math.sin(rad) * 40) + '%';
+    el.style.transform = 'translate(-50%,-50%)';
+    c.appendChild(el);
+  });
+}
+function spinCarousel(){
+  if(!carState || carState.spinning) return;
+  carState.spinning = true;
+  const needle = document.getElementById('carouselNeedle');
+  const targetAngle = Math.random() * 360;
+  needle.style.transform = `translate(-50%,-50%) rotate(${targetAngle}deg)`;
+  setTimeout(()=>{
+    carState.spinning = false;
+    // Определим букву, на которую указывает стрелка
+    const angle = targetAngle;
+    const letters = document.querySelectorAll('#carousel .letter-seg');
+    let found = null, best = 999;
+    letters.forEach(l=>{
+      const cx = parseFloat(l.style.left);
+      const cy = parseFloat(l.style.top);
+      const la = (Math.atan2(cy-50, cx-50) * 180 / Math.PI + 360) % 360;
+      const diff = Math.min(Math.abs(la-angle), 360-Math.abs(la-angle));
+      if(diff<best){ best = diff; found = l; }
+    });
+    if(found && found.dataset.up === carState.target.up){
+      document.getElementById('carouselFb').textContent = '🎠 Точно в цель!';
+      addStar(2);
+      earnBadge('carousel','Карусельщик','🎠');
+      setTimeout(newCarouselTarget, 1000);
+    }else{
+      document.getElementById('carouselFb').textContent = `🎠 Выпало ${found?.dataset.up}, а нужно ${carState.target.up}. Крути ещё!`;
+    }
+  }, 1100);
+}
+
+/* ==================== ВИТРАЖ ==================== */
+function newStained(){
+  const start = Math.floor(Math.random()*29);
+  const slice = A.slice(start, start+4);
+  const area = document.getElementById('stainedArea');
+  area.innerHTML = '';
+  document.getElementById('stainedHint').innerHTML = `Найди в витраже буквы: ${slice.map(s=>s.up).join(', ')}`;
+  document.getElementById('stainedFb').textContent = '';
+  const distract = shuffle(A.filter(a=>!slice.find(s=>s.up===a.up))).slice(0,12);
+  const pool = shuffle([...slice, ...distract]);
+  pool.forEach(a=>{
+    const p = document.createElement('div');
+    p.className = 'stained-piece';
+    p.textContent = a.up;
+    const colors = ['#7b2d26','#c9a227','#3d5a3d','#4a3826','#8a7d6b','#a13b32','#5a7a5a'];
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.dataset.correct = slice.find(s=>s.up===a.up) ? '1' : '0';
+    p.onclick = ()=>{
+      if(p.dataset.correct==='1'){
+        p.classList.add('ok');
+        p.style.boxShadow = 'inset 0 0 30px rgba(255,255,255,.8)';
+        addStar();
+        p.dataset.done = '1';
+        const done = [...area.querySelectorAll('.stained-piece[data-done="1"]')].length;
+        if(done >= slice.length){
+          document.getElementById('stainedFb').textContent = '🧩 Витраж собран!';
+          earnBadge('stained','Витражник','🧩');
+        }
+      }else{
+        p.style.transform = 'scale(0.9)';
+        setTimeout(()=>p.style.transform='',400);
+      }
+    };
+    area.appendChild(p);
+  });
+}
+
+/* ==================== КНИГА ==================== */
+const STORIES = [
+  {t:'В старом замке жил медвежонок Гайк. Он очень любил <HL>А</HL>рбузы и <HL>Б</HL>ублики.', hl:['А','Б']},
+  {t:'Зайчик Моне нашёл волшебную <HL>В</HL>олшебную палочку и <HL>Г</HL>риб в лесу.', hl:['В','Г']},
+  {t:'Однажды <HL>Д</HL>ракон прилетел к <HL>Е</HL>ли и попросил <HL>Ё</HL>лку на праздник.', hl:['Д','Е','Ё']},
+  {t:'<HL>Ж</HL>ук и <HL>З</HL>аяц дружили и вместе играли в <HL>И</HL>грушки.', hl:['Ж','З','И']},
+  {t:'В замке зажгли <HL>Й</HL>ольскую свечу и сварили <HL>К</HL>омпот из <HL>Л</HL>имона.', hl:['Й','К','Л']},
+  {t:'<HL>М</HL>едведь и <HL>Н</HL>осорог построили <HL>О</HL>громный дворец.', hl:['М','Н','О']},
+  {t:'<HL>П</HL>ингвин подарил <HL>Р</HL>ыбе <HL>С</HL>виток с секретом.', hl:['П','Р','С']},
+  {t:'<HL>Т</HL>игр и <HL>У</HL>тка нашли <HL>Ф</HL>онарь в <HL>Х</HL>леву.', hl:['Т','У','Ф','Х']},
+  {t:'<HL>Ц</HL>веток распустился, и <HL>Ч</HL>айник закипел для <HL>Ш</HL>ара и <HL>Щ</HL>енка.', hl:['Ц','Ч','Ш','Щ']},
+  {t:'<HL>Ъ</HL> и <HL>Ь</HL> — это знаки-помощники. С ними читаем: подъезд и семья. А <HL>Ы</HL> живёт в слове «сыр».', hl:['Ъ','Ы','Ь']},
+  {t:'<HL>Э</HL>хо разнеслось по замку, а <HL>Ю</HL>ла крутилась у <HL>Я</HL>блони.', hl:['Э','Ю','Я']},
+];
+function newBookPage(){
+  const s = STORIES[Math.floor(Math.random()*STORIES.length)];
+  const html = s.t.replace(/<HL>(.)<\/HL>/g, '<span class="hl" data-l="$1">$1</span>');
+  document.getElementById('bookPage').innerHTML = `<div class="first-letter">${s.hl[0]}</div>${html}`;
+  document.querySelectorAll('#bookPage .hl').forEach(el=>{
+    el.onclick = ()=>{
+      speak(el.dataset.l);
+      addStar();
+    };
+  });
+}
+function readBook(){ speak(document.getElementById('bookPage').textContent.slice(0,120)); }
+
+/* ==================== ШАР ==================== */
+let orbTarget = null;
+function newOrb(){
+  orbTarget = A[Math.floor(Math.random()*A.length)];
+  const orb = document.getElementById('orbGlyph');
+  orb.textContent = '?';
+  orb.style.color = 'var(--wine)';
+  const others = shuffle(A.filter(a=>a.up!==orbTarget.up)).slice(0,3);
+  const opts = shuffle([orbTarget, ...others]);
+  const cont = document.getElementById('orbOptions');
+  cont.innerHTML = '';
+  document.getElementById('orbFb').textContent = 'Нажми на шар, чтобы увидеть силуэт.';
+  opts.forEach(a=>{
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = a.up;
+    b.onclick = ()=>{
+      if(a.up===orbTarget.up){
+        b.classList.add('correct');
+        document.getElementById('orbFb').textContent = '🔮 Верно!';
+        addStar(2);
+        earnBadge('orb','Провидец','🔮');
+        setTimeout(newOrb, 1000);
+      }else{
+        b.classList.add('wrong');
+      }
+    };
+    cont.appendChild(b);
+  });
+}
+function revealOrb(){
+  const orb = document.getElementById('orbGlyph');
+  if(orbTarget){
+    orb.textContent = orbTarget.up;
+    orb.style.color = 'var(--gold)';
+  }
+}
+
+/* ==================== ТРАВНИК ==================== */
+function newHerbs(){
+  const w = WORDS[Math.floor(Math.random()*WORDS.length)];
+  document.getElementById('herbsHint').innerHTML = `Собери травы для «${w.w}» ${w.em}`;
+  const area = document.getElementById('herbsArea');
+  area.innerHTML = '';
+  const used = [...new Set(w.w.split(''))];
+  const distract = shuffle(A.filter(a=>!used.includes(a.up))).slice(0,3).map(a=>a.up);
+  const all = shuffle([...used, ...distract]);
+  let picked = 0;
+  all.forEach(ch=>{
+    const h = document.createElement('div');
+    h.className = 'herb';
+    h.textContent = ch;
+    h.onclick = ()=>{
+      if(w.w.includes(ch)){
+        h.classList.add('placed');
+        picked++;
+        addStar();
+        if(picked >= used.length){
+          document.getElementById('herbsFb').textContent = '🌿 Травы собраны!';
+          earnBadge('herbs','Травник','🌿');
+          setTimeout(newHerbs, 1200);
+        }
+      }else{
+        h.style.background = 'radial-gradient(circle at 30% 30%, #d97a7a, #7b2d26)';
+        setTimeout(()=>h.style.background='',400);
+        document.getElementById('herbsFb').textContent = '❌ Не эта трава.';
+      }
+    };
+    area.appendChild(h);
+  });
+  document.getElementById('herbsFb').textContent = '';
+}
+
+/* ==================== ОСОБЫЕ ==================== */
+function renderSpecial(){
+  const g = document.getElementById('specialGrid');
+  if(!g) return;
+  g.innerHTML = '';
+  A.filter(a=>SPECIAL.includes(a.up)).forEach(a=>{
+    const el = document.createElement('div');
+    el.className = 'scroll-card';
+    el.innerHTML = `<span class="up">${a.up}</span><span class="low">${a.low}</span>
+      <div class="em">${a.em}</div><div class="w">${a.w}</div>`;
+    el.onclick = ()=>openScroll(a.up);
+    g.appendChild(el);
+  });
+  newSpecialQuiz();
+}
+function newSpecialQuiz(){
+  const qs = [
+    {q:'Какая буква не даёт звука?', o:['Ъ','А','К'], c:'Ъ'},
+    {q:'Какая делает согласную мягкой?', o:['Ь','Ы','Э'], c:'Ь'},
+    {q:'Какая всегда ударная?', o:['Ё','О','А'], c:'Ё'},
+    {q:'В каком слове есть Й?', o:['Йогурт','Сыр','Мышка'], c:'Йогурт'},
+    {q:'Бывает ли Ы в начале слова?', o:['Нет','Да','Иногда'], c:'Нет'},
+    {q:'Сколько звуков в слове «семья»?', o:['5','4','6'], c:'5'},
+  ];
+  const t = qs[Math.floor(Math.random()*qs.length)];
+  const box = document.getElementById('specialQuiz');
+  box.innerHTML = `
+    <div class="task">
+      <div class="q">${t.q}</div>
+      <div class="options">
+        ${shuffle([...t.o]).map(x=>`<button class="opt" data-c="${x===t.c}">${x}</button>`).join('')}
+      </div>
+      <div class="fb" id="spFb"></div>
+    </div>
+  `;
+  box.querySelectorAll('.opt').forEach(b=>{
+    b.onclick = ()=>{
+      const ok = b.dataset.c==='true';
+      b.classList.add(ok?'correct':'wrong');
+      document.getElementById('spFb').textContent = ok?'✅ Верно!':'❌ Подумай.';
+      if(ok){ addStar(); setTimeout(newSpecialQuiz, 1000); }
+    };
+  });
+}
+
+/* ==================== ЯРМАРКА ==================== */
+function renderFair(){
+  const g = document.getElementById('fairGrid');
+  if(!g) return;
+  const games = [
+    {i:'⚔️', n:'Турнир', d:'Сразись с драконом', id:'tournament'},
+    {i:'🗝️', n:'Замки', d:'Подбери ключи', id:'locks'},
+    {i:'🧪', n:'Зелье', d:'Свари слово', id:'potion'},
+    {i:'🎭', n:'Маскарад', d:'Найди пары', id:'masquerade'},
+    {i:'🐉', n:'Дракон', d:'Покорми дракона', id:'dragon'},
+    {i:'🏹', n:'Лучник', d:'Попади в цель', id:'archer'},
+    {i:'🗺️', n:'Клад', d:'Найди сокровище', id:'treasure'},
+    {i:'🏰', n:'Башня', d:'Построй башню', id:'build'},
+    {i:'🎠', n:'Карусель', d:'Крути и угадывай', id:'carousel'},
+    {i:'🧩', n:'Витраж', d:'Собери витраж', id:'stained'},
+    {i:'📖', n:'Сказки', d:'Читай книгу', id:'book'},
+    {i:'🔮', n:'Шар', d:'Предсказания', id:'orb'},
+    {i:'🌿', n:'Травник', d:'Собери травы', id:'herbs'},
+  ];
+  g.innerHTML = '';
+  games.forEach(gm=>{
+    const el = document.createElement('div');
+    el.className = 'fair-tent';
+    el.innerHTML = `<div class="ico">${gm.i}</div><div class="name">${gm.n}</div><div class="desc">${gm.d}</div>`;
+    el.onclick = ()=>{
+      document.querySelectorAll('#nav button').forEach(b=>{
+        if(b.textContent.includes(gm.n) || (gm.id==='masquerade' && b.textContent.includes('Бал'))){
+          b.click();
+        }
+      });
+    };
+    g.appendChild(el);
+  });
+}
+
+/* ==================== НАГРАДЫ ==================== */
+const BADGES = [
+  {id:'first',t:'Первый свиток',i:'📜'},
+  {id:'five',t:'5 свитков',i:'📚'},
+  {id:'fifteen',t:'15 свитков',i:'📖'},
+  {id:'twenty5',t:'25 свитков',i:'🎓'},
+  {id:'all',t:'33 свитка',i:'🏆'},
+  {id:'full3',t:'3 мастера',i:'⭐'},
+  {id:'full10',t:'10 мастеров',i:'👑'},
+  {id:'fullAll',t:'Хранитель замка',i:'🏰'},
+  {id:'special',t:'Знаток рун',i:'🌟'},
+  {id:'cand10',t:'10 свечей',i:'🕯️'},
+  {id:'candAll',t:'Все свечи',i:'🔥'},
+  {id:'tour3',t:'Рыцарь',i:'⚔️'},
+  {id:'locks',t:'Ключник',i:'🗝️'},
+  {id:'potion',t:'Алхимик',i:'🧪'},
+  {id:'masq',t:'Маскарад',i:'🎭'},
+  {id:'spell',t:'Чародей',i:'🧙'},
+  {id:'dragon',t:'Друид',i:'🐉'},
+  {id:'archer',t:'Снайпер',i:'🏹'},
+  {id:'treasure',t:'Кладоискатель',i:'💎'},
+  {id:'build',t:'Зодчий',i:'🏰'},
+  {id:'carousel',t:'Карусельщик',i:'🎠'},
+  {id:'stained',t:'Витражник',i:'🧩'},
+  {id:'orb',t:'Провидец',i:'🔮'},
+  {id:'herbs',t:'Травник',i:'🌿'},
+  {id:'s30',t:'30 печатей',i:'🔴'},
+  {id:'s100',t:'100 печатей',i:'💫'},
+];
+function renderBadges(){
+  const g = document.getElementById('badgeGrid');
+  if(!g) return;
+  g.innerHTML = '';
+  BADGES.forEach(b=>{
+    const earned = !!P.badges[b.id];
+    const d = document.createElement('div');
+    d.className = 'shield' + (earned?' earned':'');
+    d.innerHTML = `<div class="icon">${b.i}</div><div class="title">${b.t}</div>`;
+    g.appendChild(d);
+  });
+}
+
+/* ==================== ОБЩЕЕ ==================== */
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function speak(text){
+  if('speechSynthesis' in window){
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ru-RU'; u.rate = 0.85;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  }
+}
+function resetAll(){
+  if(!confirm('Сжечь все свитки и начать заново?')) return;
+  P = JSON.parse(JSON.stringify(DEFAULT)); save();
+  renderMap(); renderHUD(); renderBadges(); renderCandles(); renderSpecial();
+}
+
+/* ==================== СТАРТ ==================== */
+function init(){
+  buildNav();
+  renderMap();
+  renderCards();
+  renderBadges();
+  renderSpecial();
+  renderCandles();
+  renderFair();
+  renderHUD();
+  // Инициализация игр
+  newLocks();
+  newPotion();
+  newMasquerade();
+  newWandLetter();
+  newSpell();
+  newDragonFood();
+  newArcher();
+  newTreasure();
+  newBuild();
+  newCarouselTarget();
+  newStained();
+  newBookPage();
+  newOrb();
+  newHerbs();
+}
+init();
+</script>
+</body>
+</html>

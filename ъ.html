@@ -1,0 +1,1495 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Буква Ъ — Гайк и Моне</title>
+<style>
+  :root{
+    --brick1:#ffab91;--brick2:#e64a19;--brick3:#bf360c;--brick4:#870000;
+    --wood1:#d7a86e;--wood2:#b8894e;--wood3:#8d6234;--wood4:#4a2e10;
+    --sand1:#fff59d;--sand2:#ffd54f;--sand3:#fbc02d;
+    --cream:#fffaf0;--cream2:#ffe0b2;--cream-bg:#fff5e6;
+    --text:#2a1808;--text2:#5a3a1a;
+    --green:#66bb6a;--sky:#64b5f6;--purple:#7e57c2;--pink:#f48fb1;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0; padding:0;}
+  body{
+    font-family:"Nunito","Comic Sans MS","Trebuchet MS",sans-serif;
+    background:linear-gradient(180deg, var(--brick1) 0%, var(--cream2) 40%, var(--cream-bg) 100%);
+    background-attachment:fixed; color:var(--text);
+    min-height:100vh; padding-bottom:90px; overflow-x:hidden;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:
+      radial-gradient(circle 6px at 15% 20%, rgba(191,54,12,.4), transparent 70%),
+      radial-gradient(circle 5px at 75% 15%, rgba(184,137,78,.5), transparent 70%),
+      radial-gradient(circle 7px at 40% 55%, rgba(255,213,79,.5), transparent 70%),
+      radial-gradient(circle 5px at 85% 75%, rgba(230,74,25,.45), transparent 70%),
+      radial-gradient(circle 6px at 25% 85%, rgba(141,98,52,.5), transparent 70%),
+      radial-gradient(circle 4px at 60% 40%, rgba(255,171,145,.5), transparent 70%),
+      radial-gradient(circle 3px at 50% 10%, rgba(255,255,255,.9), transparent 70%),
+      radial-gradient(circle 3px at 90% 45%, rgba(255,213,79,.5), transparent 70%);
+    animation:brickFloat 22s ease-in-out infinite alternate;
+  }
+  @keyframes brickFloat{
+    from{transform:translate(0,0) rotate(0deg);}
+    to{transform:translate(20px,-25px) rotate(8deg);}
+  }
+  header, nav, main{position:relative; z-index:2;}
+  header{
+    padding:14px 16px 12px;
+    background:linear-gradient(180deg, rgba(255,250,240,.95), rgba(255,224,178,.85));
+    border-bottom:4px solid var(--brick2);
+    box-shadow:0 8px 24px rgba(135,0,0,.25);
+    position:sticky; top:0; z-index:20; backdrop-filter:blur(10px);
+  }
+  header h1{
+    margin:0; font-size:22px; text-align:center; color:var(--brick4);
+    font-weight:900;
+    text-shadow:0 2px 0 rgba(255,255,255,.9), 0 4px 10px rgba(230,74,25,.4);
+    display:flex; align-items:center; justify-content:center; gap:10px;
+  }
+  header h1 .bridge{
+    font-size:32px; animation:bridgeWobble 3s ease-in-out infinite; display:inline-block;
+  }
+  @keyframes bridgeWobble{
+    0%,100%{transform:rotate(-6deg) scale(1);}
+    50%{transform:rotate(6deg) scale(1.1);}
+  }
+  header .heroes{font-size:13px; color:var(--text2); text-align:center; margin-top:4px; font-weight:700;}
+  header .heroes b{color:var(--brick4);}
+  .hud{display:flex; gap:8px; justify-content:center; margin-top:10px; flex-wrap:wrap;}
+  .hud .chip{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:2px solid rgba(135,0,0,.15);
+    border-radius:20px; padding:5px 14px; font-size:12px;
+    font-weight:800;
+    box-shadow:0 3px 0 rgba(135,0,0,.15), 0 6px 12px rgba(135,0,0,.12), inset 0 2px 0 rgba(255,255,255,.9);
+  }
+  .path-progress{
+    height:26px; background:linear-gradient(180deg, #ffd0b8, #ffb090);
+    border-radius:14px; margin-top:10px; overflow:hidden;
+    box-shadow:inset 0 2px 4px rgba(0,0,0,.15);
+    position:relative; border:2px solid rgba(135,0,0,.2);
+  }
+  .path-progress > div{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, var(--brick2), var(--wood2), var(--sand2), var(--brick2));
+    background-size:200% 100%; border-radius:12px;
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.5), inset 0 -2px 0 rgba(0,0,0,.1);
+    transition:width .6s cubic-bezier(.34,1.56,.64,1);
+    animation:brickShift 5s linear infinite;
+    position:relative; display:flex; align-items:center; justify-content:flex-end;
+    padding-right:8px; color:#fff; font-size:12px; font-weight:900;
+    text-shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+  .path-progress > div::after{
+    content:"🚪"; position:absolute; right:-4px; top:-1px; font-size:24px;
+    filter:drop-shadow(0 2px 3px rgba(0,0,0,.2));
+  }
+  @keyframes brickShift{from{background-position:0 0;} to{background-position:200% 0;}}
+  nav{
+    display:flex; flex-wrap:wrap; gap:6px; padding:12px; justify-content:center;
+    background:rgba(255,250,240,.75);
+    border-bottom:2px solid rgba(135,0,0,.1);
+    position:sticky; top:120px; z-index:19; backdrop-filter:blur(10px);
+  }
+  nav button{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:2px solid rgba(135,0,0,.15);
+    color:var(--text); padding:6px 12px; border-radius:18px;
+    font-size:12px; cursor:pointer; font-family:inherit; font-weight:800;
+    box-shadow:0 3px 0 rgba(135,0,0,.15), 0 5px 10px rgba(135,0,0,.1), inset 0 2px 0 rgba(255,255,255,.9);
+    transition:all .2s cubic-bezier(.34,1.56,.64,1);
+  }
+  nav button:hover{transform:translateY(-2px);}
+  nav button.active{
+    background:linear-gradient(180deg, var(--brick1), var(--brick2));
+    color:#fff; border-color:transparent;
+    box-shadow:0 3px 0 var(--brick4), 0 6px 14px rgba(230,74,25,.5), inset 0 2px 0 rgba(255,255,255,.4);
+  }
+  main{padding:20px 16px; max-width:900px; margin:0 auto;}
+  section{display:none; animation:fadeIn .4s cubic-bezier(.34,1.56,.64,1);}
+  section.active{display:block;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(20px) scale(.98);} to{opacity:1; transform:none;}}
+  h2{font-size:22px; margin:0 0 6px; color:var(--brick4); font-weight:900; display:flex; align-items:center; gap:8px; text-shadow:0 2px 0 rgba(255,255,255,.8);}
+  .sub{color:var(--text2); font-size:14px; margin:0 0 16px; font-weight:600;}
+  .task{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(135,0,0,.15); border-radius:24px;
+    padding:18px; margin-bottom:16px;
+    box-shadow:0 6px 0 rgba(135,0,0,.12), 0 12px 24px rgba(135,0,0,.1), inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .task .q{font-size:18px; font-weight:800; margin-bottom:12px; text-align:center;}
+  .character{display:flex; align-items:flex-start; gap:10px; margin-bottom:14px;}
+  .character.mone-bubble{flex-direction:row-reverse;}
+  .character .avatar{
+    width:54px; height:54px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:32px; flex-shrink:0;
+    box-shadow:0 4px 0 rgba(0,0,0,.1), 0 8px 16px rgba(0,0,0,.15), inset 0 3px 0 rgba(255,255,255,.6), inset 0 -3px 8px rgba(0,0,0,.15);
+    animation:breathe 3s ease-in-out infinite;
+  }
+  .character .avatar.gayk{background:radial-gradient(circle at 35% 30%, #d9a878, #8b5a3c);}
+  .character .avatar.mone{background:radial-gradient(circle at 35% 30%, #f5f5f5, #c4c4c4);}
+  @keyframes breathe{0%,100%{transform:scale(1);} 50%{transform:scale(1.05) translateY(-3px);}}
+  .character .bubble{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:2px solid rgba(135,0,0,.15);
+    border-radius:20px 20px 20px 6px;
+    padding:12px 16px; font-size:15px; font-weight:600;
+    box-shadow:0 4px 10px rgba(135,0,0,.12);
+    line-height:1.5; flex:1;
+  }
+  .character.mone-bubble .bubble{border-radius:20px 20px 6px 20px;}
+  .character .bubble b{color:var(--brick4); font-weight:900;}
+  .big-letter-display{
+    text-align:center; padding:20px; font-size:180px; font-weight:900;
+    color:var(--brick4); line-height:1;
+    text-shadow:0 4px 0 rgba(255,255,255,.9), 0 8px 0 rgba(230,74,25,.4), 0 16px 30px rgba(135,0,0,.4);
+    animation:pulseBig 2s ease-in-out infinite; user-select:none;
+  }
+  .big-letter-display .low{color:var(--brick2); font-size:100px;}
+  @keyframes pulseBig{0%,100%{transform:scale(1);} 50%{transform:scale(1.03);}}
+  .btn{
+    background:linear-gradient(180deg, var(--brick1), var(--brick2));
+    color:#fff; border:none; padding:12px 24px;
+    border-radius:22px; font-size:15px; font-family:inherit;
+    font-weight:900; cursor:pointer; margin:4px;
+    box-shadow:0 5px 0 var(--brick4), 0 10px 20px rgba(230,74,25,.4), inset 0 2px 0 rgba(255,255,255,.3);
+    transition:all .15s cubic-bezier(.34,1.56,.64,1);
+    text-shadow:0 1px 2px rgba(0,0,0,.2);
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn:active{transform:translateY(3px);}
+  .btn.wood{
+    background:linear-gradient(180deg, var(--wood1), var(--wood2));
+    box-shadow:0 5px 0 var(--wood4), 0 10px 20px rgba(184,137,78,.4), inset 0 2px 0 rgba(255,255,255,.3);
+  }
+  .btn.sand{
+    background:linear-gradient(180deg, var(--sand2), var(--sand3));
+    color:#5a3d00;
+    box-shadow:0 5px 0 #c9a227, 0 10px 20px rgba(255,213,79,.4), inset 0 2px 0 rgba(255,255,255,.6);
+    text-shadow:none;
+  }
+  .btn.green{
+    background:linear-gradient(180deg, #a5d6a7, var(--green));
+    color:#1b5e20;
+    box-shadow:0 5px 0 #2e7d32, 0 10px 20px rgba(102,187,106,.4), inset 0 2px 0 rgba(255,255,255,.5);
+  }
+  .btn.ghost{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    color:var(--text); border:2px solid rgba(135,0,0,.2);
+    box-shadow:0 4px 0 rgba(135,0,0,.15), 0 8px 16px rgba(135,0,0,.1), inset 0 2px 0 rgba(255,255,255,.9);
+  }
+  .center{text-align:center;}
+  .options{display:flex; flex-wrap:wrap; gap:10px; justify-content:center;}
+  .opt{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(135,0,0,.15);
+    border-radius:18px; padding:12px 20px;
+    font-size:22px; font-weight:900; color:var(--brick4);
+    cursor:pointer; font-family:inherit; min-width:64px;
+    transition:all .2s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 4px 0 rgba(135,0,0,.15), 0 8px 16px rgba(135,0,0,.1), inset 0 2px 0 rgba(255,255,255,.9);
+  }
+  .opt:hover{transform:translateY(-3px);}
+  .opt.correct{
+    background:linear-gradient(180deg, #c8e6c9, var(--green));
+    color:#1b5e20; border-color:transparent;
+    box-shadow:0 4px 0 #2e7d32, 0 8px 16px rgba(102,187,106,.4), inset 0 2px 0 rgba(255,255,255,.5);
+    animation:pop .4s;
+  }
+  .opt.wrong{
+    background:linear-gradient(180deg, #fca5a5, #f87171);
+    color:#7f1d1d; border-color:transparent; animation:shake .4s;
+  }
+  @keyframes pop{0%{transform:scale(.9);} 60%{transform:scale(1.08);} 100%{transform:scale(1);}}
+  @keyframes shake{0%,100%{transform:translateX(0);} 25%{transform:translateX(-6px);} 75%{transform:translateX(6px);}}
+  .fb{margin-top:10px; font-size:15px; min-height:22px; text-align:center; font-weight:700; color:var(--text2);}
+  .letter-house{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:4px solid var(--brick2); border-radius:20px;
+    padding:20px; text-align:center; position:relative;
+    box-shadow:0 6px 0 rgba(230,74,25,.3), 0 12px 24px rgba(230,74,25,.2);
+  }
+  .letter-house::before{
+    content:""; position:absolute; top:-16px; left:50%; transform:translateX(-50%);
+    width:80%; height:20px;
+    background:repeating-linear-gradient(90deg, var(--brick1) 0 12px, var(--sand2) 12px 24px);
+    border-radius:10px 10px 0 0;
+  }
+  .syllables-row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin:16px 0;}
+  .syl-card{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(135,0,0,.15);
+    border-radius:20px; padding:16px 22px;
+    font-size:38px; font-weight:900; color:var(--brick4);
+    cursor:pointer; font-family:inherit;
+    transition:all .25s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 5px 0 rgba(135,0,0,.15), 0 10px 20px rgba(135,0,0,.1), inset 0 3px 0 rgba(255,255,255,.9);
+    min-width:90px; text-align:center;
+  }
+  .syl-card .t-hi{color:var(--sand3); font-size:42px; text-shadow:0 0 8px rgba(255,213,79,.5);}
+  .syl-card:hover{transform:translateY(-4px);}
+  .syl-card.active{
+    background:linear-gradient(180deg, #ffe082, var(--sand2));
+    color:#5a3d00;
+    box-shadow:0 5px 0 var(--sand3), 0 10px 20px rgba(255,213,79,.5);
+    transform:scale(1.08);
+  }
+  .syl-card.done{
+    background:linear-gradient(180deg, #b2dfdb, var(--brick1));
+    color:var(--brick4);
+    box-shadow:0 5px 0 var(--brick4), 0 10px 20px rgba(255,171,145,.5);
+  }
+  .word-cards{display:grid; gap:14px; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr));}
+  .word-card{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(135,0,0,.15); border-radius:24px;
+    padding:16px; text-align:center; cursor:pointer;
+    transition:all .25s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 6px 0 rgba(135,0,0,.15), 0 12px 24px rgba(135,0,0,.1), inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .word-card:hover{transform:translateY(-4px);}
+  .word-card .em{font-size:52px;}
+  .word-card .word{
+    font-size:22px; font-weight:900; color:var(--brick4);
+    margin:8px 0 4px; letter-spacing:1px;
+  }
+  .word-card .word .t-hi{color:var(--sand3); font-size:24px; text-shadow:0 0 8px rgba(255,213,79,.4);}
+  .word-card .syls{font-size:14px; color:var(--text2); font-weight:700;}
+  .word-position{display:flex; justify-content:center; gap:6px; margin:16px 0;}
+  .letter-box{
+    width:56px; height:56px;
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(135,0,0,.15); border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:28px; font-weight:900; color:var(--text);
+    box-shadow:inset 0 3px 0 rgba(255,255,255,.9), 0 3px 0 rgba(135,0,0,.12);
+  }
+  .letter-box.t-letter{
+    background:linear-gradient(180deg, #ffe082, var(--sand2));
+    color:#5a3d00; border-color:var(--sand3);
+    box-shadow:0 3px 0 var(--sand3), 0 6px 12px rgba(255,213,79,.4), inset 0 3px 0 rgba(255,255,255,.5);
+    animation:pop .4s;
+  }
+  .sentence-reader{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(135,0,0,.15); border-radius:24px;
+    padding:24px; text-align:center;
+    box-shadow:0 6px 0 rgba(135,0,0,.12), 0 12px 24px rgba(135,0,0,.1), inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .sentence-reader .pic{font-size:80px; margin-bottom:8px;}
+  .sentence-reader .sentence{font-size:26px; font-weight:900; line-height:1.5; color:var(--text); margin:12px 0;}
+  .sentence-reader .word{
+    display:inline-block; padding:2px 8px; margin:2px;
+    border-radius:10px; cursor:pointer; transition:all .2s;
+    background:rgba(135,0,0,.05);
+  }
+  .sentence-reader .word:hover{background:var(--brick2); color:#fff;}
+  .sentence-reader .word.read{
+    background:linear-gradient(180deg, #ffe082, var(--sand2)); color:#5a3d00;
+  }
+  .build-slots{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:16px 0; min-height:56px;}
+  .build-slot{
+    background:rgba(135,0,0,.06);
+    border:3px dashed rgba(135,0,0,.3);
+    border-radius:14px; padding:8px 16px;
+    font-size:22px; font-weight:900; min-width:60px;
+    display:flex; align-items:center; justify-content:center;
+    transition:all .2s; color:var(--text2);
+  }
+  .build-slot.filled{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border-style:solid; border-color:var(--brick2);
+    color:var(--brick4); box-shadow:0 3px 0 rgba(135,0,0,.15);
+  }
+  .letter-pool{display:flex; gap:8px; justify-content:center; flex-wrap:wrap;}
+  .letter-pool button{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(135,0,0,.15);
+    border-radius:14px; padding:10px 16px;
+    font-size:22px; font-weight:900; color:var(--brick4);
+    cursor:pointer; font-family:inherit;
+    box-shadow:0 3px 0 rgba(135,0,0,.15), inset 0 2px 0 rgba(255,255,255,.9);
+    transition:all .15s; min-width:50px;
+  }
+  .letter-pool button:hover{transform:translateY(-2px);}
+  .letter-pool button.used{opacity:.3; pointer-events:none;}
+  .trace-svg{
+    width:100%; height:240px; background:rgba(255,255,255,.7);
+    border-radius:16px; touch-action:none;
+    border:3px dashed rgba(135,0,0,.25);
+  }
+  .draw-canvas{
+    width:100%; height:240px;
+    background:rgba(255,255,255,.7);
+    border:3px dashed rgba(135,0,0,.25);
+    border-radius:16px; touch-action:none; cursor:crosshair;
+  }
+  .paint-area{text-align:center; padding:20px;}
+  .paint-letter{
+    font-size:160px; font-weight:900; color:#ddd; line-height:1;
+    transition:color .3s, text-shadow .3s; user-select:none;
+  }
+  .color-picker{display:flex; gap:10px; justify-content:center; flex-wrap:wrap; margin-top:16px;}
+  .color-dot{
+    width:44px; height:44px; border-radius:50%;
+    cursor:pointer; border:3px solid #fff;
+    box-shadow:0 3px 0 rgba(135,0,0,.2), 0 6px 12px rgba(0,0,0,.15);
+    transition:all .2s;
+  }
+  .color-dot:hover{transform:scale(1.15);}
+  .color-dot.selected{border-color:var(--brick4); transform:scale(1.15); box-shadow:0 0 0 3px var(--cream), 0 4px 12px rgba(230,74,25,.5);}
+  .catch-area{
+    position:relative; height:300px; overflow:hidden;
+    background:linear-gradient(180deg, var(--brick1), var(--cream-bg));
+    border-radius:20px; border:3px solid rgba(135,0,0,.15);
+    box-shadow:inset 0 0 30px rgba(135,0,0,.1);
+  }
+  .catch-target{
+    position:absolute; top:10px; left:50%; transform:translateX(-50%);
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    padding:6px 16px; border-radius:16px;
+    font-weight:900; font-size:18px;
+    box-shadow:0 4px 8px rgba(0,0,0,.15); z-index:5; color:var(--brick4);
+  }
+  .falling{
+    position:absolute; top:-50px;
+    width:52px; height:52px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; font-weight:900; cursor:pointer;
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(135,0,0,.15);
+    box-shadow:0 4px 8px rgba(0,0,0,.15), inset 0 2px 0 rgba(255,255,255,.9);
+    transition:transform .15s;
+  }
+  .falling:hover{transform:scale(1.1);}
+  .falling.is-t{
+    background:linear-gradient(180deg, #ffe082, var(--sand2));
+    color:#5a3d00; border-color:var(--sand3);
+  }
+  .falling.caught{opacity:0; pointer-events:none; transform:scale(1.5); transition:all .3s;}
+  .compare-area{display:flex; justify-content:center; gap:24px; flex-wrap:wrap; margin:16px 0;}
+  .compare-card{
+    width:130px; height:130px;
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(135,0,0,.15); border-radius:20px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:64px; font-weight:900; color:var(--brick4);
+    cursor:pointer; transition:all .2s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 5px 0 rgba(135,0,0,.15), 0 10px 20px rgba(135,0,0,.1), inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .compare-card:hover{transform:translateY(-4px);}
+  .compare-card.correct{
+    background:linear-gradient(180deg, #c8e6c9, var(--green));
+    color:#1b5e20; box-shadow:0 5px 0 #2e7d32, 0 10px 20px rgba(102,187,106,.5); animation:pop .4s;
+  }
+  .compare-card.wrong{
+    background:linear-gradient(180deg, #fca5a5, #f87171);
+    color:#7f1d1d; animation:shake .4s;
+  }
+  .rule-box{
+    background:linear-gradient(180deg, rgba(255,213,79,.35), rgba(255,213,79,.15));
+    border:3px solid var(--sand3); border-radius:14px;
+    padding:16px; font-size:16px; color:var(--text);
+    font-weight:700; line-height:1.6; margin:12px 0;
+  }
+  .rule-box b{color:var(--brick2); font-size:18px;}
+  .badge-grid{display:grid; gap:14px; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr));}
+  .badge{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(135,0,0,.15); border-radius:22px;
+    padding:14px; text-align:center; opacity:.4; filter:grayscale(.8);
+    transition:all .3s cubic-bezier(.34,1.56,.64,1);
+    box-shadow:0 5px 0 rgba(135,0,0,.12), 0 10px 20px rgba(135,0,0,.1), inset 0 3px 0 rgba(255,255,255,.9);
+  }
+  .badge.earned{
+    opacity:1; filter:none;
+    background:linear-gradient(180deg, #ffe082, var(--sand2));
+    border-color:var(--sand3);
+    box-shadow:0 5px 0 var(--sand3), 0 12px 24px rgba(255,213,79,.5), inset 0 3px 0 rgba(255,255,255,.5);
+  }
+  .badge .icon{font-size:44px;}
+  .badge .title{font-size:13px; margin-top:6px; font-weight:800;}
+  .hint-box{
+    background:linear-gradient(180deg, rgba(255,213,79,.35), rgba(255,213,79,.15));
+    border-left:5px solid var(--sand3);
+    padding:10px 14px; border-radius:14px;
+    font-size:14px; margin:10px 0; font-weight:600;
+  }
+  .note-box{
+    background:linear-gradient(180deg, rgba(230,74,25,.15), rgba(230,74,25,.06));
+    border-left:5px solid var(--brick2);
+    padding:12px 14px; border-radius:14px;
+    font-size:14px; margin:12px 0; font-weight:600; line-height:1.5;
+  }
+  .story-card{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(135,0,0,.15); border-radius:24px;
+    padding:20px; margin-bottom:14px;
+    box-shadow:0 6px 0 rgba(135,0,0,.1), 0 12px 24px rgba(135,0,0,.1);
+  }
+  .story-card .pic{font-size:64px; text-align:center; margin-bottom:10px;}
+  .story-card .text{font-size:17px; font-weight:700; line-height:1.6; text-align:center;}
+  .story-card .text .word{
+    display:inline-block; padding:2px 6px; margin:1px;
+    border-radius:8px; cursor:pointer; transition:all .2s;
+  }
+  .story-card .text .word:hover{background:var(--sand2);}
+  .story-card .text .word.read{
+    background:linear-gradient(180deg, #ffe082, var(--sand2)); color:#5a3d00;
+  }
+  .dialogue-role{display:flex; flex-direction:column; gap:12px; margin:16px 0;}
+  .role-line{display:flex; align-items:flex-start; gap:10px; cursor:pointer; transition:all .2s;}
+  .role-line .avatar{
+    width:48px; height:48px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:26px; flex-shrink:0;
+    box-shadow:0 4px 0 rgba(0,0,0,.1), inset 0 2px 0 rgba(255,255,255,.5);
+  }
+  .role-line .avatar.gayk{background:radial-gradient(circle at 35% 30%, #d9a878, #8b5a3c);}
+  .role-line .avatar.mone{background:radial-gradient(circle at 35% 30%, #f5f5f5, #c4c4c4);}
+  .role-line .line{
+    flex:1;
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:2px solid rgba(135,0,0,.15);
+    border-radius:18px; padding:10px 14px;
+    font-size:16px; font-weight:700;
+    box-shadow:0 3px 6px rgba(135,0,0,.1);
+  }
+  .role-line.active .line{
+    background:linear-gradient(180deg, #ffe082, var(--sand2)); transform:scale(1.02);
+  }
+  .role-line.read .line{
+    background:linear-gradient(180deg, #ffccbc, var(--brick1)); color:var(--brick4);
+  }
+  .marathon-levels{display:grid; gap:12px; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr));}
+  .level-card{
+    background:linear-gradient(180deg, #fff, var(--cream-bg));
+    border:3px solid rgba(135,0,0,.15); border-radius:22px;
+    padding:14px; text-align:center;
+    box-shadow:0 5px 0 rgba(135,0,0,.12), 0 10px 20px rgba(135,0,0,.1), inset 0 3px 0 rgba(255,255,255,.9);
+    transition:all .25s; cursor:pointer;
+  }
+  .level-card:hover{transform:translateY(-4px);}
+  .level-card.locked{opacity:.5; filter:grayscale(.7); cursor:not-allowed;}
+  .level-card.done{
+    background:linear-gradient(180deg, #ffe082, var(--sand2)); border-color:var(--sand3);
+  }
+  .level-card .lvl-num{font-size:32px; font-weight:900; color:var(--brick2);}
+  .level-card.done .lvl-num{color:var(--sand3);}
+  .level-card .lvl-name{font-size:14px; font-weight:800; margin-top:4px;}
+  .level-card .lvl-desc{font-size:12px; color:var(--text2); margin-top:4px;}
+  /* Крепостная стена */
+  .wall{
+    display:flex; justify-content:center; gap:6px; padding:20px;
+    background:repeating-linear-gradient(90deg, rgba(191,54,12,.15) 0 30px, rgba(191,54,12,.25) 30px 32px);
+    border-radius:20px; border:3px dashed var(--brick2);
+    flex-wrap:wrap;
+  }
+  .wall-slot{
+    width:50px; height:50px;
+    background:linear-gradient(180deg, var(--brick1), var(--brick2));
+    border:2px solid var(--brick4);
+    border-radius:4px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:22px; color:#fff;
+    transition:all .4s cubic-bezier(.34,1.56,.64,1);
+  }
+  .wall-slot::before{
+    content:"🧱"; font-size:24px;
+  }
+  .wall-slot.built{
+    background:linear-gradient(180deg, #ffe082, var(--sand2));
+    border-color:var(--sand3);
+    box-shadow:0 0 15px rgba(255,213,79,.7);
+    animation:pop .4s;
+  }
+  .wall-slot.built::before{content:"🏰";}
+  /* Мостик */
+  .bridge-area{
+    display:flex; justify-content:center; align-items:center; gap:4px;
+    padding:20px; background:linear-gradient(180deg, #d7a86e, #8d6234);
+    border-radius:12px; border:3px solid var(--wood4);
+    flex-wrap:wrap;
+  }
+  .bridge-plank{
+    background:linear-gradient(180deg, var(--wood1), var(--wood2));
+    border:2px solid var(--wood3);
+    padding:10px 14px; border-radius:6px;
+    font-weight:900; color:#fff;
+    font-size:20px;
+    box-shadow:inset 0 2px 0 rgba(255,255,255,.3);
+  }
+  .bridge-plank.gap{
+    background:repeating-linear-gradient(45deg, #8d6234 0 6px, #4a2e10 6px 12px);
+    color:transparent;
+  }
+  @media (max-width:520px){
+    header h1{font-size:18px;}
+    nav{top:auto; position:relative;}
+    .big-letter-display{font-size:130px;}
+    .big-letter-display .low{font-size:80px;}
+    .letter-box{width:44px; height:44px; font-size:22px;}
+    .compare-card{width:100px; height:100px; font-size:52px;}
+    .wall-slot{width:40px; height:40px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1><span class="bridge">🚪</span> Буква Ъ <span class="bridge">🚪</span></h1>
+  <div class="heroes">🐻 <b>Гайк</b> и 🐰 <b>Моне</b> учат букву Ъ — твёрдый знак!</div>
+  <div class="hud">
+    <div class="chip" id="hudPoints">🚪 Очки: 0</div>
+    <div class="chip" id="hudTasks">✅ Заданий: 0</div>
+    <div class="chip" id="hudLevel">🎓 Уровень: 1</div>
+  </div>
+  <div class="path-progress"><div id="pathFill">0%</div></div>
+</header>
+
+<nav id="nav"></nav>
+
+<main>
+
+<!-- 1. ЗНАКОМСТВО -->
+<section id="sec-intro" class="active">
+  <h2>👋 Знакомься — буква Ъ</h2>
+  <p class="sub">Двадцать восьмая буква алфавита! Она особенная — <b>не обозначает звука!</b></p>
+  <div class="letter-house">
+    <div class="big-letter-display">Ъ<span class="low">ъ</span></div>
+    <div class="character">
+      <div class="avatar gayk">🐻</div>
+      <div class="bubble"><b>Гайк:</b> Это буква <b>Ъ</b> — твёрдый знак! Он <b>не звучит</b>, но очень важен. Он как маленький <b>мостик</b> 🌉 между буквами!</div>
+    </div>
+    <div class="character mone-bubble">
+      <div class="avatar mone">🐰</div>
+      <div class="bubble"><b>Моне:</b> Ъ стоит только <b>в середине слова</b>! И всегда между согласной и гласными <b>Е, Ё, Ю, Я</b>. Например: ПОДЪЕЗД, ОБЪЯВЛЕНИЕ, СЪЁМКА!</div>
+    </div>
+    <div class="rule-box">
+      🌟 <b>Секрет буквы Ъ:</b> она <b>не обозначает звука</b>! Это буква-помощник. Она разделяет согласную и гласную, как маленький мостик. Похожа на <b>молоточек</b> 🔨!
+    </div>
+  </div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn" onclick="speak('Твёрдый знак'); completeTask('sound');">🔊 Назвать букву</button>
+    <button class="btn sand" onclick="completeTask('intro');">✅ Запомнил!</button>
+  </div>
+  <div class="fb" id="introFb"></div>
+</section>
+
+<!-- 2. ЗВУК -->
+<section id="sec-sound">
+  <h2>🎵 Особый звук Ъ</h2>
+  <p class="sub">Буква Ъ не звучит сама, но помогает другим буквам!</p>
+  <div id="soundGame"></div>
+</section>
+
+<!-- 3. ФОРМА -->
+<section id="sec-shape">
+  <h2>🔷 Форма буквы Ъ</h2>
+  <p class="sub">Заглавная Ъ — как молоточек или ковшик: палочка с чашечкой вверху и хвостиком слева.</p>
+  <div class="letter-house">
+    <div style="font-size:140px; font-weight:900; color:var(--brick4); line-height:1; text-shadow:0 4px 0 rgba(255,255,255,.9), 0 8px 20px rgba(230,74,25,.4);">Ъ</div>
+    <div class="hint-box" style="text-align:left;">
+      ⌣ <b>Верхняя часть</b> — как маленькая чашечка<br>
+      📏 <b>Столбик</b> — вертикальная палочка<br>
+      ↙️ <b>Хвостик</b> — небольшая черточка слева сверху<br>
+      🔨 Похожа на молоточек или ковшик!
+    </div>
+    <div style="font-size:100px; font-weight:900; color:var(--brick2); line-height:1; text-shadow:0 4px 0 rgba(255,255,255,.9);">ъ</div>
+    <div class="hint-box" style="text-align:left;">
+      Строчная <b>ъ</b> — та же форма, но меньше.
+    </div>
+  </div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn sand" onclick="completeTask('shape');">✅ Я вижу форму!</button>
+  </div>
+</section>
+
+<!-- 4. ЗАГЛАВНАЯ/СТРОЧНАЯ -->
+<section id="sec-case">
+  <h2>Ъ Заглавная и строчная</h2>
+  <p class="sub">Найди пару: большая Ъ — маленькая ъ.</p>
+  <div id="caseGame"></div>
+</section>
+
+<!-- 5. ОБВОДИЛКА -->
+<section id="sec-trace">
+  <h2>✏️ Обведи букву Ъ</h2>
+  <p class="sub">Проведи пальцем по контуру — как будто рисуешь молоточек!</p>
+  <svg viewBox="0 0 400 260" class="trace-svg" id="traceSvg">
+    <text x="200" y="210" text-anchor="middle" font-size="220" font-family="Georgia, serif" font-weight="900" fill="none" stroke="rgba(230,74,25,.3)" stroke-width="14" stroke-linejoin="round">Ъ</text>
+    <path id="tracePath" fill="none" stroke="#870000" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+  <div class="center" style="margin-top:12px;">
+    <button class="btn ghost" onclick="clearTrace()">Стереть</button>
+    <button class="btn" onclick="completeTask('trace');">✅ Готово</button>
+  </div>
+  <div class="fb" id="traceFb"></div>
+</section>
+
+<!-- 6. НАЙДИ Ъ -->
+<section id="sec-find">
+  <h2>🔍 Найди букву Ъ</h2>
+  <p class="sub">Среди других букв найди все Ъ!</p>
+  <div id="findGame"></div>
+</section>
+
+<!-- 7. Ъ ИЛИ Ь -->
+<section id="sec-compare">
+  <h2>🔤 Ъ или Ь?</h2>
+  <p class="sub">Ъ и Ь похожи, но Ъ — твёрдый, а Ь — мягкий знак!</p>
+  <div id="compareGame"></div>
+</section>
+
+<!-- 8. МЕСТО В СЛОВЕ -->
+<section id="sec-position">
+  <h2>📍 Где спрятался Ъ?</h2>
+  <p class="sub">Ъ может быть <b>только в середине слова</b> — между согласной и Е, Ё, Ю, Я!</p>
+  <div id="positionGame"></div>
+</section>
+
+<!-- 9. РАЗДЕЛИТЕЛЬ -->
+<section id="sec-syllables">
+  <h2>🌉 Ъ — мостик между буквами</h2>
+  <p class="sub">Ъ разделяет согласную и гласную. Нажми на слово, чтобы услышать!</p>
+  <div id="syllableGame"></div>
+</section>
+
+<!-- 10. СЛОВА С Ъ -->
+<section id="sec-words">
+  <h2>📚 Слова с буквой Ъ</h2>
+  <p class="sub">Нажимай на слова, чтобы услышать. Буква Ъ подсвечена.</p>
+  <div class="word-cards" id="wordCards"></div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn sand" onclick="completeTask('words');">✅ Я прочитал!</button>
+  </div>
+</section>
+
+<!-- 11. ЧИТАЕМ ПРЕДЛОЖЕНИЯ -->
+<section id="sec-sentences">
+  <h2>🐢 Читаем предложения</h2>
+  <p class="sub">Нажимай на слова по порядку и читай вслух.</p>
+  <div id="sentenceGame"></div>
+</section>
+
+<!-- 12. ИСТОРИИ -->
+<section id="sec-stories">
+  <h2>📖 Мини-истории про Ъ</h2>
+  <p class="sub">Короткие истории с Ъ-словами. Нажимай на слова.</p>
+  <div id="storyGame"></div>
+  <div class="center" style="margin-top:12px;">
+    <button class="btn wood" onclick="newStory()">📖 Другая история</button>
+  </div>
+</section>
+
+<!-- 13. ПО РОЛЯМ -->
+<section id="sec-roles">
+  <h2>🎭 Читаем по ролям</h2>
+  <p class="sub">Нажимай на реплику, чтобы прочитать её вслух.</p>
+  <div id="rolesGame"></div>
+  <div class="center"><button class="btn" onclick="newRole()">🎭 Другой диалог</button></div>
+</section>
+
+<!-- 14. КРЕПОСТНАЯ СТЕНА -->
+<section id="sec-wall">
+  <h2>🏰 Крепостная стена</h2>
+  <p class="sub">За правильные ответы строится новый кусочек стены!</p>
+  <div class="wall" id="wallArea"></div>
+  <div id="wallGame" style="margin-top:16px;"></div>
+</section>
+
+<!-- 15. СОБЕРИ СЛОВО -->
+<section id="sec-build">
+  <h2>🧩 Собери слово с Ъ</h2>
+  <p class="sub">Расставь буквы по порядку. Не забудь про Ъ — он в середине!</p>
+  <div id="buildGame"></div>
+</section>
+
+<!-- 16. ПИШЕМ Ъ -->
+<section id="sec-write">
+  <h2>🖌️ Пишем букву Ъ</h2>
+  <p class="sub">Напиши букву Ъ пальцем или мышкой.</p>
+  <canvas class="draw-canvas" id="writeCanvas"></canvas>
+  <div class="center" style="margin-top:12px;">
+    <button class="btn ghost" onclick="clearWrite()">Стереть</button>
+    <button class="btn sand" onclick="completeTask('write');">✅ Готово</button>
+  </div>
+</section>
+
+<!-- 17. РАСКРАСЬ Ъ -->
+<section id="sec-paint">
+  <h2>🎨 Раскрась букву Ъ</h2>
+  <p class="sub">Выбери крепостной цвет — буква Ъ засияет!</p>
+  <div class="paint-area">
+    <div class="paint-letter" id="paintLetter">Ъ</div>
+    <div class="color-picker" id="colorPicker"></div>
+  </div>
+</section>
+
+<!-- 18. НАГРАДЫ -->
+<section id="sec-badges">
+  <h2>🏅 Награды за букву Ъ</h2>
+  <p class="sub">Собери все награды — стань мастером буквы Ъ!</p>
+  <div class="badge-grid" id="badgeGrid"></div>
+  <div class="center" style="margin-top:20px;">
+    <button class="btn ghost" onclick="resetAll()">Начать заново</button>
+  </div>
+</section>
+
+</main>
+
+<script>
+/* ==================== ДАННЫЕ ==================== */
+const WORDS_T = [
+  {w:'ПОДЪЕЗД',syls:['ПОДЪ','ЕЗД'],em:'🚪',pos:'middle'},
+  {w:'ОБЪЯВЛЕНИЕ',syls:['ОБЪ','ЯВ','ЛЕ','НИ','Е'],em:'📢',pos:'middle'},
+  {w:'СЪЁМКА',syls:['СЪЁМ','КА'],em:'🎬',pos:'middle'},
+  {w:'ВЪЕЗД',syls:['ВЪЕЗД'],em:'🛣️',pos:'middle'},
+  {w:'ОБЪЁМ',syls:['ОБЪ','ЁМ'],em:'📦',pos:'middle'},
+  {w:'СЪЕЛ',syls:['СЪЕЛ'],em:'🍽️',pos:'middle'},
+  {w:'ПОДЪЁМ',syls:['ПОДЪ','ЁМ'],em:'⬆️',pos:'middle'},
+  {w:'ОБЪЕХАЛ',syls:['ОБЪ','Е','ХАЛ'],em:'🚗',pos:'middle'},
+  {w:'СЪЕЗД',syls:['СЪЕЗД'],em:'🚙',pos:'middle'},
+  {w:'ИЗЪЯН',syls:['ИЗЪ','ЯН'],em:'🔧',pos:'middle'},
+  {w:'ОБЪЯСНИЛ',syls:['ОБЪ','ЯС','НИЛ'],em:'💬',pos:'middle'},
+  {w:'СЪЁЖИЛСЯ',syls:['СЪЁ','ЖИЛ','СЯ'],em:'😣',pos:'middle'},
+  {w:'РАЗЪЯРЁННЫЙ',syls:['РАЗЪ','Я','РЁН','НЫЙ'],em:'😡',pos:'middle'},
+  {w:'ОБЪЕДИНИЛ',syls:['ОБЪ','Е','ДИ','НИЛ'],em:'🤝',pos:'middle'},
+  {w:'СЪЁМЩИК',syls:['СЪЁМ','ЩИК'],em:'📸',pos:'middle'},
+  {w:'ПРЕДЪЯВИЛ',syls:['ПРЕДЪ','Я','ВИЛ'],em:'📄',pos:'middle'},
+  {w:'ОБЪЯТИЯ',syls:['ОБЪ','Я','ТИ','Я'],em:'🤗',pos:'middle'},
+  {w:'СЪЕДОБНЫЙ',syls:['СЪЕ','ДОБ','НЫЙ'],em:'🍄',pos:'middle'},
+  {w:'НЕОБЪЯТНЫЙ',syls:['НЕ','ОБЪ','ЯТ','НЫЙ'],em:'🌌',pos:'middle'},
+  {w:'СЪЁМ',syls:['СЪЁМ'],em:'📷',pos:'middle'},
+  {w:'ВЪЕХАЛ',syls:['ВЪЕ','ХАЛ'],em:'🚙',pos:'middle'},
+  {w:'ОТЪЕХАЛ',syls:['ОТЪ','Е','ХАЛ'],em:'🚗',pos:'middle'},
+  {w:'ПОДЪЕХАЛ',syls:['ПОДЪ','Е','ХАЛ'],em:'🚕',pos:'middle'},
+  {w:'СЪЁМОЧНЫЙ',syls:['СЪЁ','МОЧ','НЫЙ'],em:'🎥',pos:'middle'},
+  {w:'ОБЪЕКТ',syls:['ОБЪ','ЕКТ'],em:'🏢',pos:'middle'},
+  {w:'СУБЪЕКТ',syls:['СУБЪ','ЕКТ'],em:'📚',pos:'middle'},
+  {w:'ИНЪЕКЦИЯ',syls:['ИНЪ','ЕК','ЦИ','Я'],em:'💉',pos:'middle'},
+  {w:'КОНЪЮНКТУРА',syls:['КОНЪ','ЮНК','ТУ','РА'],em:'📈',pos:'middle'},
+  {w:'АДЪЮТАНТ',syls:['АДЪ','Ю','ТАНТ'],em:'🎖️',pos:'middle'},
+  {w:'ОБЪЯВИЛ',syls:['ОБЪ','Я','ВИЛ'],em:'📣',pos:'middle'},
+  {w:'СЪЁМКА',syls:['СЪЁМ','КА'],em:'📸',pos:'middle'},
+  {w:'ОБЪЁМНЫЙ',syls:['ОБЪ','ЁМ','НЫЙ'],em:'🧊',pos:'middle'},
+  {w:'СЪЁЖИЛ',syls:['СЪЁ','ЖИЛ'],em:'🤏',pos:'middle'},
+  {w:'РАЗЪЕХАЛСЯ',syls:['РАЗЪ','Е','ХАЛ','СЯ'],em:'🌫️',pos:'middle'},
+  {w:'СЪЁРЗНУЛ',syls:['СЪЁРЗ','НУЛ'],em:'⛸️',pos:'middle'},
+  {w:'ОБЪЯСНЕНИЕ',syls:['ОБЪ','ЯС','НЕ','НИ','Е'],em:'💡',pos:'middle'},
+  {w:'СЪЁМЩИЦА',syls:['СЪЁМ','ЩИ','ЦА'],em:'🎥',pos:'middle'},
+  {w:'ПОДЪЯЗЫЧНЫЙ',syls:['ПОДЪ','Я','ЗЫЧ','НЫЙ'],em:'👅',pos:'middle'},
+  {w:'ОБЪЕДИНЕНИЕ',syls:['ОБЪ','Е','ДИ','НЕ','НИ','Е'],em:'⚙️',pos:'middle'},
+  {w:'СЪЁМЩИК',syls:['СЪЁМ','ЩИК'],em:'📹',pos:'middle'},
+];
+
+/* Примеры слов со звуком Ъ (для игры «Особый звук») */
+const SOUND_EXAMPLES = [
+  {pair:'СЕЛ — СЪЕЛ',desc:'С Ъ слово звучит как два: «с-ел»',emoji:'🍽️'},
+  {pair:'ЕЗД — СЪЕЗД',desc:'Ъ разделяет: «с-езд»',emoji:'🚙'},
+  {pair:'ЕМ — СЪЁМ',desc:'Ъ делает паузу: «с-ём»',emoji:'📷'},
+  {pair:'ЕХАЛ — ОТЪЕХАЛ',desc:'Ъ разделяет: «от-ехал»',emoji:'🚗'},
+  {pair:'ЯВИТ — ОБЪЯВИЛ',desc:'Ъ разделяет: «об-явил»',emoji:'📣'},
+  {pair:'ЁМ — ПОДЪЁМ',desc:'Ъ разделяет: «под-ём»',emoji:'⬆️'},
+];
+
+/* Слоги с Ъ (разделительные) */
+const SYL_T = ['ПОДЪ','ЕЗД','ОБЪ','ЯВ','СЪЁМ','ВЪЕЗД','СЪЕЛ','ОБЪ','ЕМ','СЪЕЗД','ОБЪ','ЁМ'];
+
+/* Предложения */
+const SENTENCES = [
+  {pic:'🚪',words:['ГАЙК','ВОШЁЛ','В','ПОДЪЕЗД']},
+  {pic:'📢',words:['НА','СТЕНЕ','ВИСИТ','ОБЪЯВЛЕНИЕ']},
+  {pic:'🎬',words:['ИДЁТ','СЪЁМКА','ФИЛЬМА']},
+  {pic:'📦',words:['БОЛЬШОЙ','ОБЪЁМ','КОРОБКИ']},
+  {pic:'🚙',words:['МАШИНА','ВЪЕХАЛА','В','ДВОР']},
+  {pic:'🍽️',words:['МОНЕ','СЪЕЛ','ПИРОГ']},
+  {pic:'⬆️',words:['КРУТОЙ','ПОДЪЁМ','В','ГОРУ']},
+  {pic:'📸',words:['ИДЁТ','ФОТОСЪЁМКА']},
+  {pic:'💬',words:['ГАЙК','ОБЪЯСНИЛ','ЗАДАЧУ']},
+  {pic:'🤗',words:['ДРУЗЬЯ','РАСКРЫЛИ','ОБЪЯТИЯ']},
+  {pic:'🚗',words:['ПАПА','ОТЪЕХАЛ','ОТ','ДОМА']},
+  {pic:'📣',words:['МОНЕ','ОБЪЯВИЛ','НОВОСТЬ']},
+  {pic:'💡',words:['УЧИТЕЛЬ','ДАЛ','ОБЪЯСНЕНИЕ']},
+  {pic:'🤝',words:['КОМАНДА','ОБЪЕДИНИЛАСЬ']},
+  {pic:'⛸️',words:['МАЛЬЧИК','СЪЁРЗНУЛ','С','ГОРКИ']},
+];
+
+/* Диалоги по ролям */
+const ROLES = [
+  {lines:[
+    {who:'gayk',text:'Привет, Моне! Что это за буква?'},
+    {who:'mone',text:'Привет, Гайк! Это буква Ъ — твёрдый знак!'},
+    {who:'gayk',text:'А она звучит?'},
+    {who:'mone',text:'Нет! Она не звучит, но помогает другим буквам!'},
+  ]},
+  {lines:[
+    {who:'mone',text:'Гайк, ты знаешь, где стоит Ъ?'},
+    {who:'gayk',text:'В середине слова! Например, в слове ПОДЪЕЗД.'},
+    {who:'mone',text:'Верно! И ещё в словах СЪЁМКА, ОБЪЯВЛЕНИЕ.'},
+    {who:'gayk',text:'Он как мостик между согласной и гласной!'},
+  ]},
+  {lines:[
+    {who:'gayk',text:'Моне, чем отличается Ъ от Ь?'},
+    {who:'mone',text:'Ъ — твёрдый знак, Ь — мягкий знак!'},
+    {who:'gayk',text:'А когда пишут Ъ?'},
+    {who:'mone',text:'Перед Е, Ё, Ю, Я после приставки: СЪЕЛ, ОБЪЁМ, СЪЁМКА!'},
+  ]},
+];
+
+/* ==================== ПРОГРЕСС ==================== */
+const KEY = 'letter_hard_v1';
+const DEFAULT = {tasks:{}, points:0, badges:{}, compareScore:0, stories:[], roles:[], bricks:0};
+let P = load();
+function load(){
+  try{
+    const r = localStorage.getItem(KEY);
+    if(r){ return Object.assign({}, DEFAULT, JSON.parse(r)); }
+  }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT));
+}
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(P)); }catch(e){} }
+function completeTask(name){
+  if(!P.tasks[name]){
+    P.tasks[name] = true;
+    P.points += 5; addPoints(0); save(); checkBadges();
+    document.querySelectorAll('.fb').forEach(f=>{ if(!f.textContent) f.textContent = '✅ Молодец!'; });
+  }
+  updateHUD();
+}
+function addPoints(n=1){ P.points += n; save(); updateHUD(); checkBadges(); }
+function earnBadge(id,title,icon){
+  if(!P.badges[id]){ P.badges[id]={title,icon}; renderBadges(); save(); }
+}
+function updateHUD(){
+  document.getElementById('hudPoints').textContent = `🚪 Очки: ${P.points}`;
+  const t = Object.keys(P.tasks).length;
+  document.getElementById('hudTasks').textContent = `✅ Заданий: ${t}`;
+  const lvl = Math.min(5, 1 + Math.floor(P.points/20));
+  document.getElementById('hudLevel').textContent = `🎓 Уровень: ${lvl}`;
+  const pct = Math.min(100, Math.round(P.points/120*100));
+  const fill = document.getElementById('pathFill');
+  fill.style.width = pct + '%';
+  fill.textContent = pct > 10 ? pct+'%' : '';
+}
+function checkBadges(){
+  const t = Object.keys(P.tasks).length;
+  if(t>=1) earnBadge('start','Первый шаг','👣');
+  if(t>=3) earnBadge('three','3 задания','🥉');
+  if(t>=6) earnBadge('six','6 заданий','🥈');
+  if(t>=10) earnBadge('ten','10 заданий','🥇');
+  if(t>=14) earnBadge('fourteen','14 заданий','🏆');
+  if(P.points>=30) earnBadge('p30','30 очков','⭐');
+  if(P.points>=60) earnBadge('p60','60 очков','🌟');
+  if(P.points>=120) earnBadge('p120','120 очков','✨');
+  if(P.compareScore>=5) earnBadge('compare5','Различаю Ъ и Ь','🔤');
+  if(P.tasks.syllables && P.tasks.words) earnBadge('reader','Читатель','📖');
+  if(P.tasks.trace && P.tasks.write) earnBadge('writer','Писатель','✏️');
+  if(P.tasks.sound && P.tasks.intro) earnBadge('knower','Знаток Ъ','🎓');
+  if(P.stories.length >= 3) earnBadge('story3','3 истории','📖');
+  if(P.stories.length >= 5) earnBadge('storyAll','Все истории','📚');
+  if(P.roles.length >= 2) earnBadge('role2','Актёр','🎭');
+  if(P.bricks >= 5) earnBadge('brick5','Строитель','🧱');
+  if(P.bricks >= 10) earnBadge('brick10','Крепость','🏰');
+  if(t >= 15) earnBadge('master','Мастер Ъ','🏆');
+}
+
+/* ==================== НАВИГАЦИЯ ==================== */
+const SECTIONS = [
+  ['intro','👋 Знакомство'],['sound','🎵 Особый'],['shape','🔷 Форма'],
+  ['case','Ъ Пара'],['trace','✏️ Обведи'],['find','🔍 Найди'],
+  ['compare','🔤 Ъ или Ь'],['position','📍 Место'],['syllables','🌉 Мостик'],
+  ['words','📚 Слова'],['sentences','🐢 Предложения'],['stories','📖 Истории'],
+  ['roles','🎭 По ролям'],['wall','🏰 Стена'],
+  ['build','🧩 Собери'],['write','🖌️ Пиши'],
+  ['paint','🎨 Раскрась'],['badges','🏅 Награды'],
+];
+function buildNav(){
+  const n = document.getElementById('nav');
+  n.innerHTML = '';
+  SECTIONS.forEach(([id,label],i)=>{
+    const b = document.createElement('button');
+    b.textContent = label;
+    b.onclick = ()=>show('sec-'+id, b);
+    if(i===0) b.classList.add('active');
+    n.appendChild(b);
+  });
+}
+function show(id, btn){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+/* ==================== ОСОБЫЙ ЗВУК ==================== */
+function renderSound(){
+  const c = document.getElementById('soundGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character"><div class="avatar gayk">🐻</div><div class="bubble"><b>Гайк:</b> Ъ — <b>особая буква</b>! Она не звучит сама, но разделяет согласную и гласную. Нажми и послушай!</div></div>
+      <div class="word-cards" id="soundCards"></div>
+    </div>
+  `;
+  const cards = document.getElementById('soundCards');
+  SOUND_EXAMPLES.forEach(s=>{
+    const el = document.createElement('div');
+    el.className = 'word-card';
+    el.innerHTML = `<div class="em">${s.emoji}</div>
+      <div class="word">${s.pair}</div>
+      <div class="syls">${s.desc}</div>`;
+    el.onclick = ()=>{
+      // Произносим оба слова, чтобы ребёнок услышал разницу
+      speak(s.pair.replace('—', '. Теперь '));
+      addPoints(1);
+      completeTask('sound');
+    };
+    cards.appendChild(el);
+  });
+}
+
+/* ==================== ПАРА ==================== */
+function newCaseGame(){
+  const opts = shuffle([
+    {ch:'Ъ', isT:true},{ch:'ъ', isT:true},
+    {ch:'Ь', isT:false},{ch:'б', isT:false},
+    {ch:'В', isT:false},{ch:'ы', isT:false},
+  ]);
+  const c = document.getElementById('caseGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character mone-bubble"><div class="avatar mone">🐰</div><div class="bubble"><b>Моне:</b> Найди <b>заглавный Ъ</b>!</div></div>
+      <div class="options" id="caseOpts"></div>
+      <div class="fb" id="caseFb"></div>
+    </div>
+    <div class="center"><button class="btn ghost" onclick="newCaseGame()">Ещё</button></div>
+  `;
+  const optsEl = document.getElementById('caseOpts');
+  opts.forEach(o=>{
+    const b = document.createElement('button');
+    b.className = 'opt'; b.textContent = o.ch; b.style.fontSize = '28px';
+    b.onclick = ()=>{
+      const ok = o.ch === 'Ъ';
+      b.classList.add(ok?'correct':'wrong');
+      if(ok){ document.getElementById('caseFb').textContent = '🎉 Верно!'; speak('Твёрдый знак'); addPoints(2); completeTask('case'); setTimeout(newCaseGame, 1200); }
+      else document.getElementById('caseFb').textContent = '❌ Не заглавный Ъ.';
+    };
+    optsEl.appendChild(b);
+  });
+}
+
+/* ==================== ТРАССИРОВКА ==================== */
+let traceReady = false;
+function setupTrace(){
+  const svg = document.getElementById('traceSvg');
+  const path = document.getElementById('tracePath');
+  if(traceReady) return;
+  traceReady = true;
+  let drawing = false, d = '';
+  const pt = e=>{ const r = svg.getBoundingClientRect(); const t = e.touches? e.touches[0] : e;
+    return {x:(t.clientX-r.left)/r.width*400, y:(t.clientY-r.top)/r.height*260}; };
+  const start = e=>{ drawing=true; const q=pt(e); d=`M ${q.x} ${q.y}`; path.setAttribute('d', d); };
+  const move = e=>{ if(!drawing) return; e.preventDefault(); const q=pt(e); d+=` L ${q.x} ${q.y}`; path.setAttribute('d', d); };
+  const end = ()=>{ if(!drawing) return; drawing=false;
+    if(d.length > 80){ document.getElementById('traceFb').textContent = '✏️ Молодец!'; addPoints(3); completeTask('trace'); } };
+  svg.addEventListener('mousedown', start); svg.addEventListener('mousemove', move);
+  svg.addEventListener('mouseup', end); svg.addEventListener('mouseleave', end);
+  svg.addEventListener('touchstart', start, {passive:false});
+  svg.addEventListener('touchmove', move, {passive:false});
+  svg.addEventListener('touchend', end);
+}
+function clearTrace(){ document.getElementById('tracePath')?.setAttribute('d',''); }
+
+/* ==================== НАЙДИ ==================== */
+function newFindGame(){
+  const letters = ['Ъ','А','Б','Ъ','В','Г','Ъ','Е','Ж','Ъ','З','Ъ'];
+  const shuffled = shuffle(letters);
+  const c = document.getElementById('findGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character"><div class="avatar gayk">🐻</div><div class="bubble"><b>Гайк:</b> Найди <b>все буквы Ъ</b>! Их 5.</div></div>
+      <div class="options" id="findOpts" style="gap:8px;"></div>
+      <div class="fb" id="findFb">Найдено: 0 из 5</div>
+    </div>
+    <div class="center"><button class="btn ghost" onclick="newFindGame()">Новая</button></div>
+  `;
+  let found = 0;
+  const opts = document.getElementById('findOpts');
+  shuffled.forEach(ch=>{
+    const b = document.createElement('button');
+    b.className = 'opt'; b.textContent = ch; b.style.fontSize = '30px'; b.style.minWidth = '60px';
+    b.onclick = ()=>{
+      if(b.dataset.done) return;
+      if(ch === 'Ъ'){
+        b.classList.add('correct'); b.dataset.done = '1';
+        found++; speak('Твёрдый знак'); addPoints(2);
+        document.getElementById('findFb').textContent = `Найдено: ${found} из 5`;
+        if(found >= 5){
+          document.getElementById('findFb').textContent = '🎉 Все найдены!';
+          completeTask('find'); earnBadge('find','Искатель','🔍');
+          setTimeout(newFindGame, 1500);
+        }
+      } else { b.classList.add('wrong'); setTimeout(()=>b.classList.remove('wrong'), 500); }
+    };
+    opts.appendChild(b);
+  });
+}
+
+/* ==================== Ъ ИЛИ Ь ==================== */
+const COMPARE_Q = [
+  {q:'Какая буква называется «твёрдый знак»?', o:['Ъ','Ь'], c:'Ъ'},
+  {q:'Какая буква называется «мягкий знак»?', o:['Ь','Ъ'], c:'Ь'},
+  {q:'В слове «подъезд» — какая буква?', o:['Ъ','Ь'], c:'Ъ'},
+  {q:'В слове «семья» — какая буква?', o:['Ь','Ъ'], c:'Ь'},
+  {q:'В слове «объём» — какая буква?', o:['Ъ','Ь'], c:'Ъ'},
+];
+function newCompareGame(){
+  const t = COMPARE_Q[Math.floor(Math.random()*COMPARE_Q.length)];
+  const c = document.getElementById('compareGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character mone-bubble"><div class="avatar mone">🐰</div><div class="bubble"><b>Моне:</b> ${t.q}</div></div>
+      <div class="compare-area" id="cmpArea"></div>
+      <div class="fb" id="cmpFb">Счёт: ${P.compareScore}</div>
+    </div>
+  `;
+  const area = document.getElementById('cmpArea');
+  shuffle([...t.o]).forEach(ch=>{
+    const card = document.createElement('div');
+    card.className = 'compare-card'; card.textContent = ch;
+    card.onclick = ()=>{
+      const ok = ch === t.c;
+      card.classList.add(ok?'correct':'wrong');
+      if(ok){
+        P.compareScore++; save();
+        document.getElementById('cmpFb').textContent = `Счёт: ${P.compareScore}`;
+        speak(ch === 'Ъ' ? 'Твёрдый знак' : 'Мягкий знак');
+        addPoints(3); completeTask('compare'); checkBadges();
+        setTimeout(newCompareGame, 1200);
+      } else {
+        document.getElementById('cmpFb').textContent = '❌ Не та. Счёт: '+P.compareScore;
+        setTimeout(()=>card.classList.remove('wrong'), 600);
+      }
+    };
+    area.appendChild(card);
+  });
+}
+
+/* ==================== МЕСТО ==================== */
+function newPositionGame(){
+  const w = WORDS_T[Math.floor(Math.random()*WORDS_T.length)];
+  const letters = w.w.split('');
+  const c = document.getElementById('positionGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character mone-bubble"><div class="avatar mone">🐰</div><div class="bubble"><b>Моне:</b> Где в слове <b>${w.w}</b> ${w.em} стоит <b>Ъ</b>?</div></div>
+      <div class="word-position" id="posLetters"></div>
+      <div class="options" id="posOpts">
+        <button class="opt" data-c="true" style="font-size:16px;">2️⃣ В середине</button>
+        <button class="opt" data-c="false" style="font-size:16px;">1️⃣ В начале</button>
+        <button class="opt" data-c="false" style="font-size:16px;">3️⃣ В конце</button>
+      </div>
+      <div class="fb" id="posFb">Правильный ответ: <b>Ъ стоит только в середине слова!</b></div>
+    </div>
+    <div class="center"><button class="btn ghost" onclick="newPositionGame()">Ещё</button></div>
+  `;
+  const posLetters = document.getElementById('posLetters');
+  letters.forEach(ch=>{
+    const el = document.createElement('div');
+    el.className = 'letter-box' + (ch === 'Ъ' ? ' t-letter' : '');
+    el.textContent = ch;
+    posLetters.appendChild(el);
+  });
+  c.querySelectorAll('#posOpts .opt').forEach(b=>{
+    b.onclick = ()=>{
+      const ok = b.dataset.c==='true';
+      b.classList.add(ok?'correct':'wrong');
+      if(ok){ document.getElementById('posFb').textContent = '🎉 Верно! Ъ стоит только в середине!'; speak(w.w); addPoints(3); completeTask('position'); setTimeout(newPositionGame, 1600); }
+      else document.getElementById('posFb').textContent = '❌ Ъ не может быть в начале или в конце! Он только в середине.';
+    };
+  });
+}
+
+/* ==================== МОСТИК ==================== */
+function renderSyllables(){
+  const c = document.getElementById('syllableGame');
+  const sample = WORDS_T[Math.floor(Math.random()*WORDS_T.length)];
+  const parts = sample.w.split('Ъ');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character"><div class="avatar gayk">🐻</div><div class="bubble"><b>Гайк:</b> Ъ — как мостик! Он разделяет слово на две части. Послушай: <b>${parts[0]}Ъ + ${parts[1]}</b></div></div>
+      <div style="text-align:center; margin:16px 0;">
+        <div style="display:inline-flex; align-items:center; gap:12px; font-size:24px; font-weight:900;">
+          <span style="color:var(--brick2);">${parts[0]}</span>
+          <span style="color:var(--sand3); font-size:32px;">Ъ</span>
+          <span style="color:var(--wood3);">${parts[1]}</span>
+        </div>
+      </div>
+      <div class="bridge-area">
+        <div class="bridge-plank">${parts[0]}</div>
+        <div class="bridge-plank gap">Ъ</div>
+        <div class="bridge-plank">${parts[1]}</div>
+      </div>
+      <div class="fb" id="sylFb">Нажми, чтобы услышать слово!</div>
+    </div>
+    <div class="center">
+      <button class="btn sand" onclick="speak('${sample.w}'); addPoints(1); completeTask('syllables');">🔊 Прочитать «${sample.w}»</button>
+      <button class="btn ghost" onclick="renderSyllables()">Другое слово</button>
+    </div>
+  `;
+}
+
+/* ==================== СЛОВА ==================== */
+function renderWords(){
+  const g = document.getElementById('wordCards');
+  g.innerHTML = '';
+  WORDS_T.forEach(w=>{
+    const el = document.createElement('div');
+    el.className = 'word-card';
+    const wordHi = w.w.split('').map(ch=>ch==='Ъ'?'<span class="t-hi">Ъ</span>':ch).join('');
+    el.innerHTML = `<div class="em">${w.em}</div>
+      <div class="word">${wordHi}</div>
+      <div class="syls">${w.syls.join(' • ')}</div>`;
+    el.onclick = ()=>{ speak(w.w); addPoints(1); completeTask('words'); };
+    g.appendChild(el);
+  });
+}
+
+/* ==================== ПРЕДЛОЖЕНИЯ ==================== */
+let sentState = null;
+function newSentence(){
+  const s = SENTENCES[Math.floor(Math.random()*SENTENCES.length)];
+  sentState = {s, idx:0};
+  const c = document.getElementById('sentenceGame');
+  c.innerHTML = `
+    <div class="sentence-reader">
+      <div class="pic">${s.pic}</div>
+      <div class="sentence" id="sentRow">
+        ${s.words.map((w,i)=>`<span class="word" data-i="${i}" data-w="${w}">${w}</span>`).join(' ')}
+      </div>
+      <div class="fb" id="sentFb">Нажимай слова по порядку.</div>
+    </div>
+    <div class="center" style="margin-top:14px;">
+      <button class="btn wood" onclick="readAll()">🔊 Прочитать всё</button>
+      <button class="btn ghost" onclick="newSentence()">Другое</button>
+    </div>
+  `;
+  c.querySelectorAll('#sentRow .word').forEach(el=>{
+    el.onclick = ()=>{
+      speak(el.dataset.w); addPoints(1); el.classList.add('read');
+      const i = +el.dataset.i;
+      if(i === sentState.idx){
+        sentState.idx++;
+        if(sentState.idx >= s.words.length){
+          document.getElementById('sentFb').textContent = '🎉 Прочитано!';
+          completeTask('sentences'); addPoints(3);
+          setTimeout(newSentence, 2000);
+        }
+      }
+    };
+  });
+}
+function readAll(){
+  if(!sentState) return;
+  speak(sentState.s.words.join(' '));
+  document.querySelectorAll('#sentRow .word').forEach(el=>el.classList.add('read'));
+  completeTask('sentences'); addPoints(3);
+}
+
+/* ==================== ИСТОРИИ ==================== */
+const STORIES = [
+  {pic:'🚪',text:'Гайк пришёл домой. Он вошёл в подъезд. В подъезде горит свет. Гайк поднялся на свой этаж.',
+   tWords:['подъезд','подъезде']},
+  {pic:'📢',text:'На стене висит объявление. В нём написано про концерт. Моне прочитал объявление вслух. Он объявил новость друзьям!',
+   tWords:['объявление','объявление','объявил']},
+  {pic:'🎬',text:'На площадке идёт съёмка. Режиссёр объявил: «Начали!» Съёмочная группа работает дружно. Фильм будет интересный!',
+   tWords:['съёмка','объявил','Съёмочная']},
+  {pic:'🚙',text:'Папа въехал во двор. Он объехал лужу. Машина подъехала к дому. Папа съел вкусный ужин!',
+   tWords:['въехал','объехал','подъехала','съел']},
+  {pic:'📦',text:'У коробки большой объём. Моне измерил её. Он объяснил Гайку: «Это объёмная коробка!»',
+   tWords:['объём','объяснил','объёмная']},
+];
+function newStory(){
+  const s = STORIES[Math.floor(Math.random()*STORIES.length)];
+  const words = s.text.split(' ');
+  const c = document.getElementById('storyGame');
+  c.innerHTML = `
+    <div class="story-card">
+      <div class="pic">${s.pic}</div>
+      <div class="text" id="storyText">
+        ${words.map(w=>`<span class="word" data-w="${w.replace(/[.,!?—:«»]/g,'')}">${w}</span>`).join(' ')}
+      </div>
+    </div>
+    <div class="center">
+      <button class="btn wood" onclick="readStory()">🔊 Прочитать всё</button>
+    </div>
+  `;
+  c.querySelectorAll('#storyText .word').forEach(el=>{
+    el.onclick = ()=>{ el.classList.add('read'); speak(el.dataset.w); addPoints(1); };
+  });
+  window._curStory = s;
+}
+function readStory(){
+  const el = document.getElementById('storyText');
+  if(!el) return;
+  const text = el.textContent;
+  speak(text);
+  el.querySelectorAll('.word').forEach(w=>w.classList.add('read'));
+  if(window._curStory && !P.stories.includes(window._curStory.text)){
+    P.stories.push(window._curStory.text); save(); checkBadges();
+  }
+  completeTask('stories'); addPoints(3);
+}
+
+/* ==================== ПО РОЛЯМ ==================== */
+let roleState = null;
+function newRole(){
+  const r = ROLES[Math.floor(Math.random()*ROLES.length)];
+  roleState = r;
+  const c = document.getElementById('rolesGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="dialogue-role" id="roleLines">
+        ${r.lines.map((l,i)=>`
+          <div class="role-line" data-i="${i}">
+            <div class="avatar ${l.who}">${l.who==='gayk'?'🐻':'🐰'}</div>
+            <div class="line">${l.text}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="fb" id="roleFb">Нажимай реплики и читай вслух.</div>
+    </div>
+    <div class="center"><button class="btn" onclick="readAllRoles()">🔊 Прочитать всё</button></div>
+  `;
+  c.querySelectorAll('.role-line').forEach(el=>{
+    el.onclick = ()=>{
+      const i = +el.dataset.i;
+      el.classList.add('read'); speak(r.lines[i].text);
+      addPoints(1);
+      if(i === roleState.lines.length - 1){
+        const idx = ROLES.indexOf(r);
+        if(idx >= 0 && !P.roles.includes(idx)){ P.roles.push(idx); save(); checkBadges(); }
+        completeTask('roles');
+      }
+    };
+  });
+}
+function readAllRoles(){
+  if(!roleState) return;
+  roleState.lines.forEach((l,i)=>{
+    setTimeout(()=>{
+      speak(l.text);
+      document.querySelector(`#roleLines .role-line[data-i="${i}"]`)?.classList.add('read');
+    }, i*1500);
+  });
+  const idx = ROLES.indexOf(roleState);
+  if(idx >= 0 && !P.roles.includes(idx)){ P.roles.push(idx); save(); checkBadges(); }
+  completeTask('roles'); addPoints(3);
+}
+
+/* ==================== КРЕПОСТНАЯ СТЕНА ==================== */
+function renderWall(){
+  const g = document.getElementById('wallArea');
+  g.innerHTML = '';
+  for(let i=0;i<10;i++){
+    const s = document.createElement('div');
+    s.className = 'wall-slot' + (i < P.bricks ? ' built' : '');
+    g.appendChild(s);
+  }
+  const c = document.getElementById('wallGame');
+  const target = WORDS_T[Math.floor(Math.random()*WORDS_T.length)];
+  const others = shuffle(WORDS_T.filter(w=>w.w!==target.w)).slice(0,3);
+  const opts = shuffle([target, ...others]);
+  c.innerHTML = `
+    <div class="task">
+      <div class="character"><div class="avatar gayk">🐻</div><div class="bubble"><b>Гайк:</b> В каком слове есть Ъ?</div></div>
+      <div style="font-size:80px; text-align:center; margin:12px 0;">${target.em}</div>
+      <div class="options">
+        ${opts.map(o=>`<button class="opt" data-c="${o.w===target.w}" style="font-size:16px;">${o.w}</button>`).join('')}
+      </div>
+      <div class="fb" id="wfFb">Построено кусочков стены: ${P.bricks}</div>
+    </div>
+    <div class="center"><button class="btn wood" onclick="renderWall()">🏰 Ещё</button></div>
+  `;
+  c.querySelectorAll('.opt').forEach(b=>{
+    b.onclick = ()=>{
+      const ok = b.dataset.c==='true';
+      b.classList.add(ok?'correct':'wrong');
+      if(ok){
+        P.bricks = Math.min(10, P.bricks + 1);
+        save(); renderWall(); updateHUD(); checkBadges();
+        speak(target.w); addPoints(2);
+        earnBadge('brick','Первая стена','🧱');
+      }
+    };
+  });
+}
+
+/* ==================== СОБЕРИ ==================== */
+let buildState = null;
+function newBuild(){
+  const pool = WORDS_T.filter(w=>w.w.length <= 8);
+  const target = pool[Math.floor(Math.random()*pool.length)];
+  buildState = {target, picked:[]};
+  const c = document.getElementById('buildGame');
+  c.innerHTML = `
+    <div class="task">
+      <div class="character mone-bubble"><div class="avatar mone">🐰</div><div class="bubble"><b>Моне:</b> Собери слово: ${target.em} — <b>${target.w}</b></div></div>
+      <div class="build-slots" id="buildSlots">
+        ${target.w.split('').map(()=>`<div class="build-slot"></div>`).join('')}
+      </div>
+      <div class="letter-pool" id="buildPool"></div>
+      <div class="fb" id="buildFb"></div>
+    </div>
+    <div class="center"><button class="btn ghost" onclick="newBuild()">Новое</button></div>
+  `;
+  const pool2 = document.getElementById('buildPool');
+  const letters = target.w.split('');
+  const distract = ['О','У','И'].filter(l=>!letters.includes(l)).slice(0,2);
+  shuffle([...letters, ...distract]).forEach(ch=>{
+    const b = document.createElement('button');
+    b.textContent = ch;
+    b.onclick = ()=>{
+      if(b.dataset.used) return;
+      b.dataset.used = '1'; b.classList.add('used');
+      const slot = [...document.querySelectorAll('#buildSlots .build-slot')].find(s=>!s.classList.contains('filled'));
+      if(!slot) return;
+      slot.textContent = ch; slot.classList.add('filled');
+      buildState.picked.push(ch);
+      if(buildState.picked.length === target.w.length){
+        const built = buildState.picked.join('');
+        if(built === target.w){
+          document.getElementById('buildFb').textContent = '🎉 Правильно!';
+          speak(target.w); addPoints(3); completeTask('build');
+          earnBadge('build','Строитель слов','🧩');
+          setTimeout(newBuild, 1500);
+        } else {
+          document.getElementById('buildFb').textContent = `❌ Получилось «${built}».`;
+          setTimeout(newBuild, 1400);
+        }
+      }
+    };
+    pool2.appendChild(b);
+  });
+}
+
+/* ==================== ПИШЕМ ==================== */
+let writeCtx = null, writeDrawing = false;
+function setupWrite(){
+  const c = document.getElementById('writeCanvas');
+  const r = c.getBoundingClientRect();
+  c.width = r.width; c.height = 240;
+  writeCtx = c.getContext('2d');
+  writeCtx.lineWidth = 10; writeCtx.lineCap = 'round';
+  writeCtx.strokeStyle = '#870000'; writeCtx.shadowColor = '#870000'; writeCtx.shadowBlur = 8;
+  const pt = e=>{ const rr = c.getBoundingClientRect(); const t = e.touches? e.touches[0] : e;
+    return {x: t.clientX - rr.left, y: t.clientY - rr.top}; };
+  c.addEventListener('mousedown', e=>{ writeDrawing=true; const q=pt(e); writeCtx.beginPath(); writeCtx.moveTo(q.x,q.y); });
+  c.addEventListener('mousemove', e=>{ if(!writeDrawing) return; const q=pt(e); writeCtx.lineTo(q.x,q.y); writeCtx.stroke(); });
+  c.addEventListener('mouseup', ()=>writeDrawing=false);
+  c.addEventListener('mouseleave', ()=>writeDrawing=false);
+  c.addEventListener('touchstart', e=>{ e.preventDefault(); writeDrawing=true; const q=pt(e); writeCtx.beginPath(); writeCtx.moveTo(q.x,q.y); }, {passive:false});
+  c.addEventListener('touchmove', e=>{ e.preventDefault(); if(!writeDrawing) return; const q=pt(e); writeCtx.lineTo(q.x,q.y); writeCtx.stroke(); }, {passive:false});
+  c.addEventListener('touchend', ()=>writeDrawing=false);
+}
+function clearWrite(){ if(writeCtx){ const c=document.getElementById('writeCanvas'); writeCtx.clearRect(0,0,c.width,c.height); } }
+
+/* ==================== РАСКРАСЬ ==================== */
+const PAINT_COLORS = ['#ffab91','#e64a19','#bf360c','#870000','#d7a86e','#b8894e','#ffd54f','#66bb6a','#7e57c2'];
+function renderPaint(){
+  const picker = document.getElementById('colorPicker');
+  picker.innerHTML = '';
+  PAINT_COLORS.forEach(c=>{
+    const d = document.createElement('div');
+    d.className = 'color-dot'; d.style.background = c;
+    d.onclick = ()=>{
+      document.querySelectorAll('.color-dot').forEach(x=>x.classList.remove('selected'));
+      d.classList.add('selected');
+      const el = document.getElementById('paintLetter');
+      el.style.color = c;
+      el.style.textShadow = `0 4px 0 rgba(255,255,255,.9), 0 8px 20px ${c}66`;
+      speak('Твёрдый знак'); addPoints(2); completeTask('paint');
+    };
+    picker.appendChild(d);
+  });
+}
+
+/* ==================== НАГРАДЫ ==================== */
+const BADGES = [
+  {id:'start',t:'Первый шаг',i:'👣'},{id:'three',t:'3 задания',i:'🥉'},
+  {id:'six',t:'6 заданий',i:'🥈'},{id:'ten',t:'10 заданий',i:'🥇'},
+  {id:'fourteen',t:'14 заданий',i:'🏆'},{id:'p30',t:'30 очков',i:'⭐'},
+  {id:'p60',t:'60 очков',i:'🌟'},{id:'p120',t:'120 очков',i:'✨'},
+  {id:'find',t:'Искатель',i:'🔍'},{id:'compare5',t:'Различаю Ъ и Ь',i:'🔤'},
+  {id:'knower',t:'Знаток Ъ',i:'🎓'},{id:'build',t:'Строитель слов',i:'🧩'},
+  {id:'reader',t:'Читатель',i:'📖'},{id:'writer',t:'Писатель',i:'✏️'},
+  {id:'story3',t:'3 истории',i:'📖'},{id:'storyAll',t:'Все истории',i:'📚'},
+  {id:'role2',t:'Актёр',i:'🎭'},{id:'brick',t:'Первая стена',i:'🧱'},
+  {id:'brick5',t:'Строитель',i:'🏗️'},{id:'brick10',t:'Крепость',i:'🏰'},
+  {id:'master',t:'Мастер Ъ',i:'🏆'},
+];
+function renderBadges(){
+  const g = document.getElementById('badgeGrid');
+  if(!g) return;
+  g.innerHTML = '';
+  BADGES.forEach(b=>{
+    const earned = !!P.badges[b.id];
+    const d = document.createElement('div');
+    d.className = 'badge' + (earned?' earned':'');
+    d.innerHTML = `<div class="icon">${b.i}</div><div class="title">${b.t}</div>`;
+    g.appendChild(d);
+  });
+}
+
+/* ==================== ОБЩЕЕ ==================== */
+function shuffle(a){ a=[...a]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function speak(text){
+  if('speechSynthesis' in window){
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'ru-RU'; u.rate = 0.8; u.pitch = 1.15;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  }
+}
+function resetAll(){
+  if(!confirm('Начать заново с буквой Ъ?')) return;
+  P = JSON.parse(JSON.stringify(DEFAULT));
+  save(); updateHUD(); renderBadges(); renderWall();
+  newCaseGame(); newFindGame(); newCompareGame();
+  newPositionGame(); newSentence(); newBuild(); newStory(); newRole();
+  renderSyllables();
+}
+
+/* ==================== СТАРТ ==================== */
+function init(){
+  buildNav();
+  renderSound();
+  renderSyllables();
+  renderWords();
+  renderPaint();
+  renderBadges();
+  renderWall();
+  updateHUD();
+  setupTrace();
+  setupWrite();
+  newCaseGame();
+  newFindGame();
+  newCompareGame();
+  newPositionGame();
+  newSentence();
+  newBuild();
+  newStory();
+  newRole();
+}
+init();
+</script>
+</body>
+</html>

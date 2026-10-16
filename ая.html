@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Русский алфавит с Гайком и Моне</title>
+<style>
+  :root{
+    --bg:#fff7e6; --card:#ffffff; --accent:#ff8c42; --accent2:#4a90d9;
+    --good:#4caf50; --bad:#e53935; --text:#2b2b2b;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  body{
+    margin:0; font-family:"Comic Sans MS","Segoe UI",sans-serif;
+    background:var(--bg); color:var(--text); padding-bottom:80px;
+  }
+  header{
+    background:linear-gradient(135deg,#ff8c42,#ffb347);
+    color:#fff; padding:14px 16px; text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,.15); position:sticky; top:0; z-index:20;
+  }
+  header h1{margin:0; font-size:20px;}
+  header .heroes{font-size:14px; opacity:.95; margin-top:4px;}
+  .progress-bar{
+    height:10px; background:rgba(255,255,255,.4); border-radius:6px;
+    margin-top:8px; overflow:hidden;
+  }
+  .progress-bar > div{
+    height:100%; background:#fff; width:0%; transition:width .4s;
+  }
+  nav{
+    display:flex; flex-wrap:wrap; gap:6px; padding:10px; justify-content:center;
+    background:#fff2d9; border-bottom:2px dashed #ffcf99;
+  }
+  nav button{
+    border:none; background:#fff; padding:8px 12px; border-radius:20px;
+    font-size:13px; cursor:pointer; box-shadow:0 2px 4px rgba(0,0,0,.1);
+    font-family:inherit; color:var(--text);
+  }
+  nav button.active{background:var(--accent); color:#fff;}
+  main{padding:16px; max-width:900px; margin:0 auto;}
+  section{display:none; animation:fade .3s;}
+  section.active{display:block;}
+  @keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+  h2{color:var(--accent); font-size:20px; margin-top:0;}
+  .grid{
+    display:grid; gap:10px;
+    grid-template-columns:repeat(auto-fill,minmax(70px,1fr));
+  }
+  .letter-btn{
+    background:var(--card); border:3px solid #ffd9a8; border-radius:14px;
+    padding:12px 4px; font-size:26px; font-weight:bold; cursor:pointer;
+    font-family:inherit; color:var(--accent2); transition:transform .15s;
+  }
+  .letter-btn:hover{transform:scale(1.08); border-color:var(--accent);}
+  .letter-btn.learned{background:#e8f5e9; border-color:var(--good);}
+
+  .modal{
+    position:fixed; inset:0; background:rgba(0,0,0,.5);
+    display:none; align-items:center; justify-content:center; z-index:50; padding:16px;
+  }
+  .modal.open{display:flex;}
+  .modal-content{
+    background:#fff; border-radius:20px; padding:20px; max-width:420px; width:100%;
+    text-align:center;
+  }
+  .modal-content .big-letter{font-size:80px; color:var(--accent2); margin:6px 0;}
+  .modal-content .pair{font-size:52px; display:flex; justify-content:center; gap:24px;}
+  .modal-content .pair span{color:var(--accent2);}
+  .modal-content .pair span:last-child{color:var(--accent);}
+  .modal-content .emoji{font-size:60px; margin:10px 0;}
+  .modal-content .word{font-size:20px; margin-bottom:10px;}
+  .modal-content .note{font-size:14px; color:#777; background:#fff7e6; padding:8px; border-radius:10px;}
+
+  .card-grid{
+    display:grid; gap:12px;
+    grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  }
+  .card{
+    background:#fff; border-radius:16px; padding:12px; text-align:center;
+    box-shadow:0 3px 8px rgba(0,0,0,.08); cursor:pointer;
+    border:3px solid transparent;
+  }
+  .card:hover{border-color:var(--accent);}
+  .card .l{font-size:38px; color:var(--accent2); font-weight:bold;}
+  .card .e{font-size:36px;}
+  .card .w{font-size:14px; color:#555;}
+
+  .task{
+    background:#fff; border-radius:16px; padding:16px; margin-bottom:14px;
+    box-shadow:0 3px 8px rgba(0,0,0,.08);
+  }
+  .task .question{font-size:17px; margin-bottom:10px;}
+  .options{display:flex; flex-wrap:wrap; gap:10px; justify-content:center;}
+  .opt{
+    background:#fff7e6; border:3px solid #ffd9a8; border-radius:12px;
+    padding:10px 18px; font-size:22px; font-weight:bold; cursor:pointer;
+    font-family:inherit; color:var(--accent2); min-width:60px;
+  }
+  .opt:hover{background:#ffeccc;}
+  .opt.correct{background:#e8f5e9; border-color:var(--good); color:var(--good);}
+  .opt.wrong{background:#ffebee; border-color:var(--bad); color:var(--bad);}
+  .feedback{margin-top:8px; font-size:16px; min-height:22px; text-align:center;}
+
+  .pair-area{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .pair-col{display:flex; flex-direction:column; gap:8px;}
+  .pair-item{
+    background:#fff; border:3px solid #ffd9a8; border-radius:12px; padding:10px;
+    text-align:center; font-size:26px; font-weight:bold; cursor:pointer;
+    color:var(--accent2); font-family:inherit;
+  }
+  .pair-item.selected{background:#fff0d6; border-color:var(--accent);}
+  .pair-item.done{background:#e8f5e9; border-color:var(--good); color:#999; cursor:default;}
+  .pair-item.pic{font-size:34px;}
+
+  .memory-grid{
+    display:grid; gap:8px; grid-template-columns:repeat(4,1fr);
+    max-width:420px; margin:0 auto;
+  }
+  .mem-card{
+    aspect-ratio:1; background:var(--accent2); border-radius:12px; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-size:28px; color:#fff; font-weight:bold; user-select:none;
+    transition:transform .2s;
+  }
+  .mem-card.flipped{background:#fff; color:var(--accent2); border:3px solid var(--accent2);}
+  .mem-card.matched{background:#e8f5e9; color:var(--good); border:3px solid var(--good); cursor:default;}
+
+  .order-area{display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:12px 0;}
+  .order-slot{
+    width:54px; height:54px; border:3px dashed #ccc; border-radius:12px;
+    display:flex; align-items:center; justify-content:center; font-size:26px;
+    font-weight:bold; color:var(--accent2);
+  }
+  .order-slot.filled{border-style:solid; border-color:var(--accent); background:#fff7e6;}
+  .order-slot.correct{border-color:var(--good); background:#e8f5e9;}
+  .pool{display:flex; flex-wrap:wrap; gap:8px; justify-content:center;}
+  .pool button{
+    width:54px; height:54px; font-size:26px; font-weight:bold; font-family:inherit;
+    background:#fff; border:3px solid #ffd9a8; border-radius:12px; cursor:pointer;
+    color:var(--accent2);
+  }
+  .pool button.used{opacity:.3; pointer-events:none;}
+
+  .word-build{text-align:center;}
+  .word-build .slots{display:flex; gap:8px; justify-content:center; margin:12px 0;}
+  .word-build .slots .order-slot{width:50px; height:50px;}
+  .word-build .letters{display:flex; gap:8px; justify-content:center; flex-wrap:wrap;}
+  .word-build .letters button{
+    width:50px; height:50px; font-size:24px; font-weight:bold; font-family:inherit;
+    background:#fff; border:3px solid #ffd9a8; border-radius:10px; cursor:pointer;
+    color:var(--accent2);
+  }
+  .word-build .letters button.used{opacity:.3; pointer-events:none;}
+  .word-build .target-emoji{font-size:56px;}
+
+  .badge-grid{
+    display:grid; gap:12px;
+    grid-template-columns:repeat(auto-fill,minmax(130px,1fr));
+  }
+  .badge{
+    background:#fff; border-radius:16px; padding:12px; text-align:center;
+    box-shadow:0 3px 8px rgba(0,0,0,.08); opacity:.4; filter:grayscale(1);
+  }
+  .badge.earned{opacity:1; filter:none; border:3px solid gold;}
+  .badge .icon{font-size:40px;}
+  .badge .title{font-size:13px; margin-top:6px; font-weight:bold;}
+
+  .btn{
+    background:var(--accent); color:#fff; border:none; padding:10px 20px;
+    border-radius:20px; font-size:15px; font-family:inherit; cursor:pointer;
+    box-shadow:0 3px 6px rgba(0,0,0,.15); margin:4px;
+  }
+  .btn:hover{background:#e67a30;}
+  .btn.secondary{background:var(--accent2);}
+  .center{text-align:center;}
+  .note-box{
+    background:#fff7e6; border-left:5px solid var(--accent);
+    padding:10px 12px; border-radius:8px; font-size:14px; margin:10px 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔤 Русский алфавит — А до Я</h1>
+  <div class="heroes">🐻 Гайк и 🐰 Моне учат буквы!</div>
+  <div class="progress-bar"><div id="globalProgress"></div></div>
+</header>
+
+<nav id="nav"></nav>
+
+<main>
+
+<!-- 1. АЛФАВИТ -->
+<section id="sec-alphabet" class="active">
+  <h2>1. Интерактивный алфавит</h2>
+  <p>Нажми на любую букву — Гайк и Моне расскажут о ней! Изученные буквы станут зелёными.</p>
+  <div class="grid" id="alphabetGrid"></div>
+  <div class="center" style="margin-top:16px;">
+    <button class="btn secondary" onclick="resetProgress()">Сбросить прогресс</button>
+  </div>
+</section>
+
+<!-- 2. КАРТОЧКИ -->
+<section id="sec-cards">
+  <h2>2. Карточки букв</h2>
+  <p>Рассмотри буквы, слова и картинки.</p>
+  <div class="card-grid" id="cardsGrid"></div>
+</section>
+
+<!-- 3. ЗАГЛАВНЫЕ/СТРОЧНЫЕ -->
+<section id="sec-case">
+  <h2>3. Заглавные и строчные буквы</h2>
+  <p>Большая буква называется <b>заглавной</b>, маленькая — <b>строчной</b>. Найди пару!</p>
+  <div id="caseTask"></div>
+</section>
+
+<!-- 4. НАЙДИ БУКВУ -->
+<section id="sec-find">
+  <h2>4. Найди букву по образцу</h2>
+  <p>Гайк показывает букву — найди такую же среди других.</p>
+  <div id="findTask"></div>
+</section>
+
+<!-- 5. ПЕРВАЯ БУКВА -->
+<section id="sec-first">
+  <h2>5. Определи первую букву слова</h2>
+  <p>Моне называет слово — выбери первую букву.</p>
+  <div id="firstTask"></div>
+</section>
+
+<!-- 6. ПАРЫ -->
+<section id="sec-pairs">
+  <h2>6. Найди пары «буква — картинка»</h2>
+  <p>Соедини букву со словом, которое с неё начинается.</p>
+  <div class="pair-area">
+    <div class="pair-col" id="pairLetters"></div>
+    <div class="pair-col" id="pairPics"></div>
+  </div>
+  <div class="feedback" id="pairFeedback"></div>
+  <div class="center"><button class="btn" onclick="newPairsGame()">Новая игра</button></div>
+</section>
+
+<!-- 7. ПАМЯТЬ -->
+<section id="sec-memory">
+  <h2>7. Игра на память</h2>
+  <p>Найди пары одинаковых букв.</p>
+  <div class="memory-grid" id="memoryGrid"></div>
+  <div class="feedback" id="memoryFeedback"></div>
+  <div class="center"><button class="btn" onclick="newMemoryGame()">Новая игра</button></div>
+</section>
+
+<!-- 8. ПОРЯДОК -->
+<section id="sec-order">
+  <h2>8. Расставь буквы по порядку</h2>
+  <p>Перетащи буквы в правильном алфавитном порядке.</p>
+  <div id="orderArea"></div>
+  <div class="center">
+    <button class="btn" onclick="checkOrder()">Проверить</button>
+    <button class="btn secondary" onclick="newOrderGame()">Новая игра</button>
+  </div>
+  <div class="feedback" id="orderFeedback"></div>
+</section>
+
+<!-- 9. ПРОПУЩЕННАЯ -->
+<section id="sec-missing">
+  <h2>9. Найди пропущенную букву</h2>
+  <p>В цепочке букв пропала одна. Какая?</p>
+  <div id="missingTask"></div>
+</section>
+
+<!-- 10. СБОРКА СЛОВ -->
+<section id="sec-words">
+  <h2>10. Сборка слов из букв</h2>
+  <p>Собери слово по картинке из букв.</p>
+  <div class="word-build" id="wordBuild"></div>
+  <div class="center"><button class="btn" onclick="newWordGame()">Новое слово</button></div>
+</section>
+
+<!-- 11. СЛОЖНЫЕ БУКВЫ -->
+<section id="sec-special">
+  <h2>11. Повторение сложных букв</h2>
+  <div class="note-box">
+    <b>Ё, Й, Ъ, Ы, Ь</b> — особые буквы.<br>
+    • <b>Ё</b> всегда ударная: ёлка, ёжик.<br>
+    • <b>Й</b> — короткий «и»: йогурт, йод.<br>
+    • <b>Ы</b> не бывает в начале слова: сыр, мышка.<br>
+    • <b>Ъ</b> и <b>Ь</b> — «буквы‑помощники». Они <u>не обозначают отдельного звука</u>, а помогают читать: подъезд, семья.
+  </div>
+  <div class="card-grid" id="specialCards"></div>
+  <div id="specialTask"></div>
+</section>
+
+<!-- 12. НАГРАДЫ -->
+<section id="sec-badges">
+  <h2>12. Коллекция наград</h2>
+  <p>Изучай буквы и играй — получай значки!</p>
+  <div class="badge-grid" id="badgeGrid"></div>
+</section>
+
+</main>
+
+<!-- МОДАЛЬНОЕ ОКНО БУКВЫ -->
+<div class="modal" id="letterModal">
+  <div class="modal-content">
+    <div class="pair"><span id="mUpper">А</span><span id="mLower">а</span></div>
+    <div class="emoji" id="mEmoji">🍎</div>
+    <div class="word" id="mWord">Яблоко</div>
+    <div class="note" id="mNote"></div>
+    <button class="btn" onclick="closeModal()">Понятно!</button>
+  </div>
+</div>
+
+<script>
+/* ===================== ДАННЫЕ АЛФАВИТА ===================== */
+const ALPHABET = [
+  {up:'А', low:'а', emoji:'🍎', word:'Арбуз',  note:'А — гласная, поётся: «а-а-а».'},
+  {up:'Б', low:'б', emoji:'🐿️', word:'Белка',  note:'Б — согласная, звонкая.'},
+  {up:'В', low:'в', emoji:'🐺', word:'Волк',   note:'В — согласная, звонкая.'},
+  {up:'Г', low:'г', emoji:'🍄', word:'Гриб',   note:'Г — согласная, звонкая.'},
+  {up:'Д', low:'д', emoji:'🏠', word:'Дом',    note:'Д — согласная, звонкая.'},
+  {up:'Е', low:'е', emoji:'🌲', word:'Ель',    note:'Е — гласная, поётся.'},
+  {up:'Ё', low:'ё', emoji:'🎄', word:'Ёлка',   note:'Ё — гласная, всегда ударная! Слов на Ё мало, но они есть: ёлка, ёжик.'},
+  {up:'Ж', low:'ж', emoji:'🐞', word:'Жук',    note:'Ж — согласная, всегда твёрдая.'},
+  {up:'З', low:'з', emoji:'🐰', word:'Заяц',   note:'З — согласная, звонкая.'},
+  {up:'И', low:'и', emoji:'🧸', word:'Игрушка',note:'И — гласная, поётся: «и-и-и».'},
+  {up:'Й', low:'й', emoji:'🥛', word:'Йогурт', note:'Й — согласная, короткая. Есть слова на Й: йогурт, йод.'},
+  {up:'К', low:'к', emoji:'🐱', word:'Кот',    note:'К — согласная, глухая.'},
+  {up:'Л', low:'л', emoji:'🦊', word:'Лиса',   note:'Л — согласная, звонкая.'},
+  {up:'М', low:'м', emoji:'🐻', word:'Медведь',note:'М — согласная, звонкая. Это Гайк!'},
+  {up:'Н', low:'н', emoji:'👃', word:'Нос',    note:'Н — согласная, звонкая.'},
+  {up:'О', low:'о', emoji:'☁️', word:'Облако', note:'О — гласная, поётся: «о-о-о».'},
+  {up:'П', low:'п', emoji:'🐧', word:'Пингвин',note:'П — согласная, глухая.'},
+  {up:'Р', low:'р', emoji:'🐟', word:'Рыба',   note:'Р — согласная, звонкая.'},
+  {up:'С', low:'с', emoji:'🐘', word:'Слон',   note:'С — согласная, глухая.'},
+  {up:'Т', low:'т', emoji:'🐯', word:'Тигр',   note:'Т — согласная, глухая.'},
+  {up:'У', low:'у', emoji:'🦆', word:'Утка',   note:'У — гласная, поётся: «у-у-у».'},
+  {up:'Ф', low:'ф', emoji:'📷', word:'Фото',   note:'Ф — согласная, глухая.'},
+  {up:'Х', low:'х', emoji:'🍞', word:'Хлеб',   note:'Х — согласная, глухая.'},
+  {up:'Ц', low:'ц', emoji:'🌸', word:'Цветок', note:'Ц — согласная, всегда твёрдая.'},
+  {up:'Ч', low:'ч', emoji:'🫖', word:'Чайник', note:'Ч — согласная, всегда мягкая.'},
+  {up:'Ш', low:'ш', emoji:'🎈', word:'Шар',    note:'Ш — согласная, всегда твёрдая.'},
+  {up:'Щ', low:'щ', emoji:'🐕', word:'Щенок',  note:'Щ — согласная, всегда мягкая.'},
+  {up:'Ъ', low:'ъ', emoji:'🚪', word:'Подъезд',note:'Ъ — «твёрдый знак». Сам звука не даёт, а помогает читать: подъ-езд. Стоит только в середине слова.'},
+  {up:'Ы', low:'ы', emoji:'🧀', word:'Сыр',    note:'Ы — гласная. В начале слов не бывает, только внутри: сыр, мышка.'},
+  {up:'Ь', low:'ь', emoji:'👨‍👩‍👧', word:'Семья',note:'Ь — «мягкий знак». Звука не даёт, а делает букву мягкой: соль, семья.'},
+  {up:'Э', low:'э', emoji:'🦉', word:'Эхо',    note:'Э — гласная, поётся: «э-э-э».'},
+  {up:'Ю', low:'ю', emoji:'🌀', word:'Юла',    note:'Ю — гласная, поётся.'},
+  {up:'Я', low:'я', emoji:'🍓', word:'Ягода',  note:'Я — гласная, поётся.'},
+];
+
+const SPECIAL = ['Ё','Й','Ъ','Ы','Ь'];
+
+/* ===================== ПРОГРЕСС ===================== */
+const DEFAULT_PROGRESS = {learned:[], badges:{}, stars:0};
+let progress = loadProgress();
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem('gayk_mone_progress');
+    if(raw) return Object.assign({}, DEFAULT_PROGRESS, JSON.parse(raw));
+  }catch(e){}
+  return JSON.parse(JSON.stringify(DEFAULT_PROGRESS));
+}
+function saveProgress(){
+  try{ localStorage.setItem('gayk_mone_progress', JSON.stringify(progress)); }catch(e){}
+}
+function markLearned(letter){
+  if(!progress.learned.includes(letter)){
+    progress.learned.push(letter);
+    updateProgressUI();
+    checkBadges();
+    saveProgress();
+  }
+}
+function addStar(n=1){
+  progress.stars += n;
+  updateProgressUI();
+  checkBadges();
+  saveProgress();
+}
+function earnBadge(id, title, icon){
+  if(!progress.badges[id]){
+    progress.badges[id] = {title, icon, date:Date.now()};
+    renderBadges();
+    saveProgress();
+  }
+}
+function checkBadges(){
+  const learned = progress.learned.length;
+  if(learned >= 1)  earnBadge('first','Первая буква','⭐');
+  if(learned >= 10) earnBadge('ten','10 букв','🔟');
+  if(learned >= 20) earnBadge('twenty','20 букв','🎯');
+  if(learned >= 33) earnBadge('all','Весь алфавит!','🏆');
+  if(SPECIAL.every(l=>progress.learned.includes(l)))
+    earnBadge('special','Знаток Ё, Й, Ъ, Ы, Ь','🧠');
+  if(progress.stars >= 20) earnBadge('stars20','20 звёзд','🌟');
+  if(progress.stars >= 50) earnBadge('stars50','50 звёзд','✨');
+}
+
+/* ===================== НАВИГАЦИЯ ===================== */
+const SECTIONS = [
+  ['alphabet','🔤 Алфавит'],
+  ['cards','🃏 Карточки'],
+  ['case','Aa Регистр'],
+  ['find','🔍 Найди букву'],
+  ['first','1️⃣ Первая буква'],
+  ['pairs','🔗 Пары'],
+  ['memory','🧠 Память'],
+  ['order','📏 Порядок'],
+  ['missing','❓ Пропуск'],
+  ['words','🧩 Слова'],
+  ['special','🌟 Сложные'],
+  ['badges','🏅 Награды'],
+];
+
+function buildNav(){
+  const nav = document.getElementById('nav');
+  nav.innerHTML = '';
+  SECTIONS.forEach(([id,label])=>{
+    const b = document.createElement('button');
+    b.textContent = label;
+    b.dataset.target = 'sec-'+id;
+    b.onclick = ()=>showSection('sec-'+id, b);
+    nav.appendChild(b);
+  });
+  nav.firstChild.classList.add('active');
+}
+function showSection(id, btn){
+  document.querySelectorAll('section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('#nav button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+/* ===================== 1. АЛФАВИТ ===================== */
+function renderAlphabet(){
+  const g = document.getElementById('alphabetGrid');
+  g.innerHTML = '';
+  ALPHABET.forEach(l=>{
+    const b = document.createElement('button');
+    b.className = 'letter-btn' + (progress.learned.includes(l.up)?' learned':'');
+    b.textContent = l.up + l.low;
+    b.onclick = ()=>openLetterModal(l);
+    g.appendChild(b);
+  });
+}
+function openLetterModal(l){
+  document.getElementById('mUpper').textContent = l.up;
+  document.getElementById('mLower').textContent = l.low;
+  document.getElementById('mEmoji').textContent = l.emoji;
+  document.getElementById('mWord').textContent = l.word;
+  document.getElementById('mNote').textContent = l.note;
+  document.getElementById('letterModal').classList.add('open');
+  markLearned(l.up);
+  renderAlphabet();
+  renderSpecialCards();
+}
+function closeModal(){
+  document.getElementById('letterModal').classList.remove('open');
+}
+document.getElementById('letterModal').addEventListener('click', e=>{
+  if(e.target.id === 'letterModal') closeModal();
+});
+
+/* ===================== 2. КАРТОЧКИ ===================== */
+function renderCards(){
+  const g = document.getElementById('cardsGrid');
+  g.innerHTML = '';
+  ALPHABET.forEach(l=>{
+    const c = document.createElement('div');
+    c.className = 'card';
+    c.innerHTML = `<div class="l">${l.up}${l.low}</div>
+                   <div class="e">${l.emoji}</div>
+                   <div class="w">${l.word}</div>`;
+    c.onclick = ()=>openLetterModal(l);
+    g.appendChild(c);
+  });
+}
+
+/* ===================== 3. РЕГИСТР ===================== */
+let caseScore = 0;
+function newCaseTask(){
+  const letters = ALPHABET.filter(l=>l.up!==l.low);
+  const correct = letters[Math.floor(Math.random()*letters.length)];
+  const pool = shuffle(letters.filter(l=>l.up!==correct.up)).slice(0,3);
+  const options = shuffle([correct, ...pool]);
+  const container = document.getElementById('caseTask');
+  container.innerHTML = `
+    <div class="task">
+      <div class="question">Гайк показывает заглавную букву <b style="font-size:28px;color:#4a90d9">${correct.up}</b>. Найди строчную (маленькую)!</div>
+      <div class="options">
+        ${options.map(o=>`<button class="opt" data-low="${o.low}" data-correct="${o.low===correct.low}">${o.low}</button>`).join('')}
+      </div>
+      <div class="feedback" id="caseFb"></div>
+    </div>
+    <div class="center"><button class="btn secondary" onclick="newCaseTask()">Ещё задание</button></div>
+  `;
+  container.querySelectorAll('.opt').forEach(b=>{
+    b.onclick = ()=>{
+      const ok = b.dataset.correct === 'true';
+      b.classList.add(ok?'correct':'wrong');
+      document.getElementById('caseFb').textContent = ok?'✅ Молодец!':'❌ Попробуй ещё.';
+      if(ok){ addStar(); setTimeout(newCaseTask, 900); }
+    };
+  });
+}
+
+/* ===================== 4. НАЙДИ БУКВУ ===================== */
+function newFindTask(){
+  const target = ALPHABET[Math.floor(Math.random()*ALPHABET.length)];
+  const pool = shuffle(ALPHABET.filter(l=>l.up!==target.up)).slice(0,5);
+  const options = shuffle([target, ...pool]);
+  const c = document.getElementById('findTask');
+  c.innerHTML = `
+    <div class="task">
+      <div class="question">Найди букву <b style="font-size:28px;color:#4a90d9">${target.up}</b> (${target.low})</div>
+      <div class="options">
+        ${options.map(o=>`<button class="opt" data-up="${o.up}" data-correct="${o.up===target.up}">${o.up}${o.low}</button>`).join('')}
+      </div>
+      <div class="feedback" id="findFb"></div>
+    </div>
+    <div class="center"><button class="btn secondary" onclick="newFindTask()">Ещё</button></div>
+  `;
+  c.querySelectorAll('.opt').forEach(b=>{
+    b.onclick = ()=>{
+      const ok = b.dataset.correct === 'true';
+      b.classList.add(ok?'correct':'wrong');
+      document.getElementById('findFb').textContent = ok?'✅ Верно!':'❌ Это другая буква.';
+      if(ok){ addStar(); setTimeout(newFindTask, 900); }
+    };
+  });
+}
+
+/* ===================== 5. ПЕРВАЯ БУКВА ===================== */
+function newFirstTask(){
+  // Не используем Ъ, Ь, Ы как первую букву
+  const pool = ALPHABET.filter(l=>!['Ъ','Ь','Ы'].includes(l.up));
+  const target = pool[Math.floor(Math.random()*pool.length)];
+  const distract = shuffle(pool.filter(l=>l.up!==target.up)).slice(0,3);
+  const options = shuffle([target, ...distract]);
+  const c = document.getElementById('firstTask');
+  c.innerHTML = `
+    <div class="task">
+      <div class="question">Моне говорит: «<b>${target.word}</b>» ${target.emoji}. С какой буквы начинается?</div>
+      <div class="options">
+        ${options.map(o=>`<button class="opt" data-up="${o.up}" data-correct="${o.up===target.up}">${o.up}</button>`).join('')}
+      </div>
+      <div class="feedback" id="firstFb"></div>
+    </div>
+    <div class="center"><button class="btn secondary" onclick="newFirstTask()">Ещё</button></div>
+  `;
+  c.querySelectorAll('.opt').forEach(b=>{
+    b.onclick = ()=>{
+      const ok = b.dataset.correct === 'true';
+      b.classList.add(ok?'correct':'wrong');
+      document.getElementById('firstFb').textContent = ok?'✅ Точно!':'❌ Подумай ещё.';
+      if(ok){ addStar(); setTimeout(newFirstTask, 900); }
+    };
+  });
+}
+
+/* ===================== 6. ПАРЫ ===================== */
+let pairState = null;
+function newPairsGame(){
+  const pool = shuffle(ALPHABET.filter(l=>!['Ъ','Ь','Ы'].includes(l.up))).slice(0,4);
+  pairState = {letters:pool, selectedLetter:null, done:0};
+  const lc = document.getElementById('pairLetters');
+  const pc = document.getElementById('pairPics');
+  lc.innerHTML = ''; pc.innerHTML = '';
+  shuffle([...pool]).forEach(l=>{
+    const b = document.createElement('button');
+    b.className = 'pair-item';
+    b.textContent = l.up + l.low;
+    b.dataset.up = l.up;
+    b.onclick = ()=>selectPairLetter(b);
+    lc.appendChild(b);
+  });
+  shuffle([...pool]).forEach(l=>{
+    const b = document.createElement('button');
+    b.className = 'pair-item pic';
+    b.textContent = l.emoji;
+    b.dataset.up = l.up;
+    b.onclick = ()=>selectPairPic(b);
+    pc.appendChild(b);
+  });
+  document.getElementById('pairFeedback').textContent = '';
+}
+function selectPairLetter(b){
+  if(b.classList.contains('done')) return;
+  document.querySelectorAll('#pairLetters .pair-item').forEach(x=>x.classList.remove('selected'));
+  b.classList.add('selected');
+  pairState.selectedLetter = b;
+}
+function selectPairPic(b){
+  if(b.classList.contains('done') || !pairState.selectedLetter) return;
+  const l = pairState.selectedLetter;
+  if(l.dataset.up === b.dataset.up){
+    l.classList.remove('selected');
+    l.classList.add('done');
+    b.classList.add('done');
+    pairState.done++;
+    document.getElementById('pairFeedback').textContent = '✅ Правильно!';
+    addStar();
+    if(pairState.done === pairState.letters.length){
+      document.getElementById('pairFeedback').textContent = '🎉 Все пары найдены!';
+      earnBadge('pairs','Мастер пар','🔗');
+    }
+  }else{
+    b.classList.add('wrong');
+    document.getElementById('pairFeedback').textContent = '❌ Не совпадает.';
+    setTimeout(()=>b.classList.remove('wrong'), 600);
+  }
+}
+
+/* ===================== 7. ПАМЯТЬ ===================== */
+let memState = {first:null, lock:false, matched:0, total:0};
+function newMemoryGame(){
+  const pool = shuffle(ALPHABET).slice(0,6);
+  const cards = shuffle([...pool, ...pool]);
+  memState = {first:null, lock:false, matched:0, total:cards.length};
+  const g = document.getElementById('memoryGrid');
+  g.innerHTML = '';
+  cards.forEach((l,i)=>{
+    const d = document.createElement('div');
+    d.className = 'mem-card';
+    d.dataset.up = l.up;
+    d.dataset.index = i;
+    d.textContent = '?';
+    d.onclick = ()=>flipMem(d);
+    g.appendChild(d);
+  });
+  document.getElementById('memoryFeedback').textContent = '';
+}
+function flipMem(card){
+  if(memState.lock || card.classList.contains('flipped') || card.classList.contains('matched')) return;
+  card.classList.add('flipped');
+  card.textContent = card.dataset.up;
+  if(!memState.first){
+    memState.first = card;
+  }else{
+    const a = memState.first, b = card;
+    if(a.dataset.up === b.dataset.up){
+      a.classList.add('matched'); b.classList.add('matched');
+      a.textContent = a.dataset.up; b.textContent = b.dataset.up;
+      memState.first = null;
+      memState.matched += 2;
+      addStar();
+      if(memState.matched === memState.total){
+        document.getElementById('memoryFeedback').textContent = '🎉 Отлично! Все пары найдены!';
+        earnBadge('memory','Суперпамять','🧠');
+      }
+    }else{
+      memState.lock = true;
+      setTimeout(()=>{
+        a.classList.remove('flipped'); b.classList.remove('flipped');
+        a.textContent = '?'; b.textContent = '?';
+        memState.first = null; memState.lock = false;
+      }, 800);
+    }
+  }
+}
+
+/* ===================== 8. ПОРЯДОК ===================== */
+let orderState = null;
+function newOrderGame(){
+  const start = Math.floor(Math.random()*28); // 0..27, чтобы взять 5 букв
+  const slice = ALPHABET.slice(start, start+5);
+  orderState = {correct:slice, filled:[]};
+  const area = document.getElementById('orderArea');
+  area.innerHTML = `
+    <div style="width:100%;">
+      <div class="order-area" id="orderSlots">
+        ${slice.map((_,i)=>`<div class="order-slot" data-idx="${i}"></div>`).join('')}
+      </div>
+      <div class="pool" id="orderPool">
+        ${shuffle([...slice]).map(l=>`<button data-up="${l.up}">${l.up}</button>`).join('')}
+      </div>
+    </div>
+  `;
+  document.querySelectorAll('#orderPool button').forEach(b=>{
+    b.onclick = ()=>placeOrderLetter(b);
+  });
+  document.getElementById('orderFeedback').textContent = '';
+}
+function placeOrderLetter(btn){
+  const slots = document.querySelectorAll('#orderSlots .order-slot');
+  const empty = [...slots].find(s=>!s.classList.contains('filled'));
+  if(!empty) return;
+  empty.textContent = btn.dataset.up;
+  empty.dataset.up = btn.dataset.up;
+  empty.classList.add('filled');
+  btn.classList.add('used');
+}
+function checkOrder(){
+  if(!orderState) return;
+  const slots = document.querySelectorAll('#orderSlots .order-slot');
+  let ok = true;
+  slots.forEach((s,i)=>{
+    if(s.dataset.up === orderState.correct[i].up){
+      s.classList.add('correct');
+    }else{
+      ok = false;
+    }
+  });
+  const fb = document.getElementById('orderFeedback');
+  if(ok){
+    fb.textContent = '✅ Правильный порядок!';
+    addStar(2);
+    earnBadge('order','Знаток порядка','📏');
+  }else{
+    fb.textContent = '❌ Не всё верно. Попробуй ещё!';
+  }
+}
+
+/* ===================== 9. ПРОПУЩЕННАЯ ===================== */
+function newMissingTask(){
+  const start = Math.floor(Math.random()*27);
+  const slice = ALPHABET.slice(start, start+6);
+  const missIdx = Math.floor(Math.random()*slice.length);
+  const missing = slice[missIdx];
+  const distract = shuffle(ALPHABET.filter(l=>l.up!==missing.up)).slice(0,3);
+  const options = shuffle([missing, ...distract]);
+  const c = document.getElementById('missingTask');
+  c.innerHTML = `
+    <div class="task">
+      <div class="question" style="font-size:24px; letter-spacing:4px;">
+        ${slice.map((l,i)=> i===missIdx ? '<span style="color:#e53935">❓</span>' : l.up).join(' ')}
+      </div>
+      <div style="margin:8px 0;">Какая буква пропала?</div>
+      <div class="options">
+        ${options.map(o=>`<button class="opt" data-up="${o.up}" data-correct="${o.up===missing.up}">${o.up}</button>`).join('')}
+      </div>
+      <div class="feedback" id="missFb"></div>
+    </div>
+    <div class="center"><button class="btn secondary" onclick="newMissingTask()">Ещё</button></div>
+  `;
+  c.querySelectorAll('.opt').forEach(b=>{
+    b.onclick = ()=>{
+      const ok = b.dataset.correct === 'true';
+      b.classList.add(ok?'correct':'wrong');
+      document.getElementById('missFb').textContent = ok?'✅ Верно!':'❌ Это не она.';
+      if(ok){ addStar(); setTimeout(newMissingTask, 900); }
+    };
+  });
+}
+
+/* ===================== 10. СБОРКА СЛОВ ===================== */
+let wordState = null;
+function newWordGame(){
+  // Берём слова из 3-5 букв
+  const candidates = ALPHABET.filter(l=>l.word.length>=3 && l.word.length<=6 && !['Ъ','Ь','Ы','Ё','Й'].includes(l.up));
+  const target = candidates[Math.floor(Math.random()*candidates.length)];
+  const word = target.word.toUpperCase();
+  const letters = word.split('');
+  wordState = {word, letters, placed:[]};
+  const c = document.getElementById('wordBuild');
+  c.innerHTML = `
+    <div class="target-emoji">${target.emoji}</div>
+    <div style="font-size:18px;">Собери слово: <b>${target.word}</b></div>
+    <div class="slots" id="wordSlots">
+      ${letters.map(()=>`<div class="order-slot"></div>`).join('')}
+    </div>
+    <div class="letters" id="wordLetters">
+      ${shuffle([...letters]).map((ch,i)=>`<button data-ch="${ch}">${ch}</button>`).join('')}
+    </div>
+    <div class="feedback" id="wordFb"></div>
+  `;
+  document.querySelectorAll('#wordLetters button').forEach(b=>{
+    b.onclick = ()=>placeWordLetter(b);
+  });
+  document.getElementById('wordFb').textContent = '';
+}
+function placeWordLetter(btn){
+  const slots = document.querySelectorAll('#wordSlots .order-slot');
+  const empty = [...slots].find(s=>!s.textContent);
+  if(!empty) return;
+  empty.textContent = btn.dataset.ch;
+  empty.dataset.ch = btn.dataset.ch;
+  btn.classList.add('used');
+  // Проверка
+  const allFilled = [...slots].every(s=>s.textContent);
+  if(allFilled){
+    const built = [...slots].map(s=>s.textContent).join('');
+    const fb = document.getElementById('wordFb');
+    if(built === wordState.word){
+      fb.textContent = '🎉 Правильно!';
+      slots.forEach(s=>s.classList.add('correct'));
+      addStar(2);
+      earnBadge('word','Сборщик слов','🧩');
+      setTimeout(newWordGame, 1400);
+    }else{
+      fb.textContent = '❌ Не то слово. Попробуй ещё!';
+      setTimeout(()=>{
+        slots.forEach(s=>{s.textContent=''; delete s.dataset.ch; s.classList.remove('correct');});
+        document.querySelectorAll('#wordLetters button').forEach(b=>b.classList.remove('used'));
+      }, 900);
+    }
+  }
+}
+
+/* ===================== 11. СЛОЖНЫЕ БУКВЫ ===================== */
+function renderSpecialCards(){
+  const g = document.getElementById('specialCards');
+  if(!g) return;
+  g.innerHTML = '';
+  ALPHABET.filter(l=>SPECIAL.includes(l.up)).forEach(l=>{
+    const c = document.createElement('div');
+    c.className = 'card';
+    c.innerHTML = `<div class="l">${l.up}${l.low}</div>
+                   <div class="e">${l.emoji}</div>
+                   <div class="w">${l.word}</div>`;
+    c.onclick = ()=>openLetterModal(l);
+    g.appendChild(c);
+  });
+}
+function newSpecialTask(){
+  const tasks = [
+    {q:'Какая буква НЕ обозначает отдельного звука?', opts:['Ъ','А','М','О'], correct:'Ъ'},
+    {q:'Какая буква делает согласную мягкой?', opts:['Ь','Ы','Э','У'], correct:'Ь'},
+    {q:'В каком слове есть буква Ё?', opts:['Ёлка','Сыр','Дом','Кот'], correct:'Ёлка'},
+    {q:'Какая буква всегда ударная?', opts:['Ё','О','А','У'], correct:'Ё'},
+    {q:'В каком слове есть Й?', opts:['Йогурт','Сыр','Мышка','Кот'], correct:'Йогурт'},
+    {q:'Бывает ли Ы в начале слова?', opts:['Нет','Да','Иногда','Всегда'], correct:'Нет'},
+  ];
+  const t = tasks[Math.floor(Math.random()*tasks.length)];
+  const opts = shuffle([...t.opts]);
+  const c = document.getElementById('specialTask');
+  c.innerHTML = `
+    <div class="task">
+      <div class="question">${t.q}</div>
+      <div class="options">
+        ${opts.map(o=>`<button class="opt" data-correct="${o===t.correct}">${o}</button>`).join('')}
+      </div>
+      <div class="feedback" id="specFb"></div>
+    </div>
+    <div class="center"><button class="btn secondary" onclick="newSpecialTask()">Ещё</button></div>
+  `;
+  c.querySelectorAll('.opt').forEach(b=>{
+    b.onclick = ()=>{
+      const ok = b.dataset.correct === 'true';
+      b.classList.add(ok?'correct':'wrong');
+      document.getElementById('specFb').textContent = ok?'✅ Верно!':'❌ Подумай ещё.';
+      if(ok){ addStar(); setTimeout(newSpecialTask, 1000); }
+    };
+  });
+}
+
+/* ===================== 12. НАГРАДЫ ===================== */
+const ALL_BADGES = [
+  {id:'first', title:'Первая буква', icon:'⭐'},
+  {id:'ten', title:'10 букв', icon:'🔟'},
+  {id:'twenty', title:'20 букв', icon:'🎯'},
+  {id:'all', title:'Весь алфавит', icon:'🏆'},
+  {id:'special', title:'Знаток Ё, Й, Ъ, Ы, Ь', icon:'🧠'},
+  {id:'pairs', title:'Мастер пар', icon:'🔗'},
+  {id:'memory', title:'Суперпамять', icon:'🧠'},
+  {id:'order', title:'Знаток порядка', icon:'📏'},
+  {id:'word', title:'Сборщик слов', icon:'🧩'},
+  {id:'stars20', title:'20 звёзд', icon:'🌟'},
+  {id:'stars50', title:'50 звёзд', icon:'✨'},
+];
+function renderBadges(){
+  const g = document.getElementById('badgeGrid');
+  g.innerHTML = '';
+  ALL_BADGES.forEach(b=>{
+    const earned = !!progress.badges[b.id];
+    const d = document.createElement('div');
+    d.className = 'badge' + (earned?' earned':'');
+    d.innerHTML = `<div class="icon">${b.icon}</div><div class="title">${b.title}</div>`;
+    g.appendChild(d);
+  });
+}
+
+/* ===================== ОБЩЕЕ ===================== */
+function shuffle(arr){
+  const a = [...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function updateProgressUI(){
+  const pct = Math.round(progress.learned.length / 33 * 100);
+  document.getElementById('globalProgress').style.width = pct + '%';
+  renderAlphabet();
+}
+function resetProgress(){
+  if(!confirm('Сбросить весь прогресс?')) return;
+  progress = JSON.parse(JSON.stringify(DEFAULT_PROGRESS));
+  saveProgress();
+  updateProgressUI();
+  renderBadges();
+  renderSpecialCards();
+}
+
+/* ===================== СТАРТ ===================== */
+function init(){
+  buildNav();
+  renderAlphabet();
+  renderCards();
+  renderSpecialCards();
+  renderBadges();
+  updateProgressUI();
+  newCaseTask();
+  newFindTask();
+  newFirstTask();
+  newPairsGame();
+  newMemoryGame();
+  newOrderGame();
+  newMissingTask();
+  newWordGame();
+  newSpecialTask();
+}
+init();
+</script>
+</body>
+</html>
